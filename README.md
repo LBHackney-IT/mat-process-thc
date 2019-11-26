@@ -1,14 +1,9 @@
-# React template
-
-TODO: Replace the above heading with the project name.
+# Manage a Tenancy - Tenancy and Household Check
 
 ## Using this template
 
 Search for `TODO` across the project to customise the template to a specific
 project.
-
-TODO: Change the `name` field of the [`package.json`](package.json) and run
-`npm install` to update the [`package-lock.json`](package-lock.json).
 
 TODO: Remove this section when all TODOs are resolved.
 
