@@ -1,0 +1,16 @@
+**/*
+!/components/
+!/helpers/
+!/layouts/
+!/pages/
+!/public/
+!/types/
+!/babel.config.js
+!/Dockerfile
+!/LICENCE
+!/next-env.d.ts
+!/next.config.js
+!/package-lock.json
+!/package.json
+!/README.md
+!/tsconfig.json

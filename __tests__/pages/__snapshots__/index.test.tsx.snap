@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+Array [
+  <h1>
+    Welcome to dxw's React template!
+  </h1>,
+  <style
+    global={true}
+    jsx={true}
+  >
+    
+        body {
+          font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+            "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+        }
+      
+  </style>,
+]
+`;
