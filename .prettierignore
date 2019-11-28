@@ -1,5 +1,6 @@
 .vscode/
 
+.github/CODEOWNERS
 node_modules/
 
 /.next/
