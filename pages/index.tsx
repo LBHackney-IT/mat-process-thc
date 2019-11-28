@@ -4,14 +4,13 @@ import React from "react";
 
 import MainLayout from "../layouts/MainLayout";
 
-// TODO: Replace this with a real index page.
 const IndexPage: NextPage = () => (
   <MainLayout>
     <Head>
-      <title>React template - Index</title>
+      <title>Tenancy & Household Check - Index</title>
     </Head>
 
-    <h1>Welcome to dxw&apos;s React template!</h1>
+    <h1>This will be a start page!</h1>
   </MainLayout>
 );
 
