@@ -1,6 +1,5 @@
-# TODO: Update this to refer to your service.
-# This Dockerfile is part of dxw's React template:
-#   https://github.com/dxw/react-template/
+# This Dockerfile is part of London Borough of Hackney's Tenancy & Household
+# Check process: https://github.com/LBHackney-IT/mat-process-thc
 #
 
 # ------------------------------------------------------------------------------

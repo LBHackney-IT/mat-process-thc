@@ -1,0 +1,37 @@
+version: 2.1
+
+environment:
+  CI: true
+  TEST_DOCKER_IMAGE: mat-process-thc
+
+jobs:
+  build:
+    steps:
+      - checkout
+      - run:
+          name: Build Docker Image
+          command: docker build --tag ${TEST_DOCKER_IMAGE} .
+  install-and-test:
+    docker:
+      - image: circleci/node:12.13.0
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: npm ci
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build
+          command: docker build --tag ${TEST_DOCKER_IMAGE} .
+      - run:
+          name: Run Tests in Chrome
+          command: TEST_BROWSER=chrome npm run test:docker
+      - run:
+          name: Run Tests in Firefox
+          command: TEST_BROWSER=firefox npm run test:docker
+
+workflows:
+  ci:
+    jobs:
+      - install-and-test
