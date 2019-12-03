@@ -4,25 +4,29 @@ import Given from "../helpers/steps/Given";
 import Then from "../helpers/steps/Then";
 import When from "../helpers/steps/When";
 
-defineFeature(loadFeature("./index-page.feature"), test => {
-  test("Page is the index page", ({ when, then, and }) => {
+defineFeature(loadFeature("./submit-page.feature"), test => {
+  test("Page is the submit page", ({ when, then, and }) => {
     When.iVisitX(when);
     Then.thePageTitleShouldBeX(then);
     Then.iShouldSeeXOnThePage(and);
   });
 
-  test("Go button is disabled when offline", ({ given, when, then }) => {
+  test("Page indicates that it's offline", ({ given, when, then }) => {
     Given.iAmOffline(given);
     When.iVisitX(when);
+    Then.iShouldSeeXOnThePage(then);
+  });
 
-    then('the "Go" button is disabled', async () => {
+  test("Page indicates that it's online", ({ given, when, then, and }) => {
+    Given.iAmOnline(given);
+    When.iVisitX(when);
+
+    and("I wait for the data to sync", async () => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const button = browser!.findElement({
-        css: "[data-prevent-double-click=true]"
-      });
-
-      await expect(button.isEnabled()).resolves.toEqual(false);
+      await browser!.sleep(4000);
     });
+
+    Then.iShouldSeeXOnThePage(then);
   });
 
   test("Page has no accessibility violations", ({ when, then }) => {
