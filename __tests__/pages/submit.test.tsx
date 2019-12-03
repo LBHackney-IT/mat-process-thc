@@ -133,22 +133,33 @@ it("renders correctly when offline", async () => {
             <p
               className="lbh-body"
             >
+<<<<<<< HEAD
               The Tenancy and Household Check for the tenancy at 
               1 Mare Street, London, E8 3AA
               , occupied by 
               Jane Doe, John Doe
                has been saved to your device ready to be sent to your manager for review.
+=======
+              The Tenancy and Household Check for the tenancy at 121 East Street, occupied by John Doe needs to saved when next online.
+>>>>>>> Create start and end pages with fake requests
             </p>
             <p
               className="lbh-body"
             >
               <strong>
+<<<<<<< HEAD
                 You need to be online on this device to continue.
               </strong>
+=======
+                Do not
+              </strong>
+               close your web browser or log out of your iPad until this has been done.
+>>>>>>> Create start and end pages with fake requests
             </p>
             <p
               className="lbh-body"
             >
+<<<<<<< HEAD
               If you can't go online now, when you are next online on this device, please come back to this Tenancy and Household Check from your work tray and click on the ‘Save and submit to manager’ button that will become available to be clicked.
             </p>
           </div>
@@ -162,6 +173,25 @@ it("renders correctly when offline", async () => {
         >
           Waiting for connectivity...
         </button>
+=======
+              When you are next online on your iPad (4G or wi-fi), please come back to this Tenancy and Household Check from your work tray and click on the 'Save' button that will be available on this page when you are online.
+            </p>
+          </div>
+        </section>
+        <div
+          data-testid="submit"
+        >
+          <button
+            aria-disabled={true}
+            className="govuk-button lbh-button"
+            data-prevent-double-click={true}
+            disabled={true}
+            onClick={[Function]}
+          >
+            Save and submit to manager
+          </button>
+        </div>
+>>>>>>> Create start and end pages with fake requests
       </div>
     </main>
   `);
