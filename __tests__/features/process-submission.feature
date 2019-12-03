@@ -1,14 +1,14 @@
 Feature: Process submission
 
-  As a user
-  I want to know when the process has been submitted
-  So that I know it's safe to close it
+    As a user
+    I want to know when the process has been submitted
+    So that I know it's safe to close it
 
-  Scenario: Submitting while online
-    Given I am at the end of the process
-    And I am online
-    When I submit the process
-    Then I should see that the process has been submitted
+    Scenario: Submitting while online
+        Given I am at the end of the process
+        And I am online
+        When I submit the process
+        Then I should see that the process has been submitted
 
 # Scenario: Waiting for connection
 #   Given I am at the end of the process
