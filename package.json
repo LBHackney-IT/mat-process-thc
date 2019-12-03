@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@zeit/next-css": "^1.0.1",
+    "lbh-frontend-react": "0.0.4",
     "next": "^9.1.1",
     "react": "^16.11.0",
     "react-dom": "^16.11.0"
@@ -39,6 +40,7 @@
     "@types/styled-jsx": "^2.2.8",
     "@typescript-eslint/eslint-plugin": "^2.10.0",
     "@typescript-eslint/parser": "^2.6.1",
+    "babel-plugin-module-resolver": "^3.2.0",
     "codeowners-enforcer": "^1.0.3",
     "concurrently": "^5.0.0",
     "eslint": "^6.6.0",

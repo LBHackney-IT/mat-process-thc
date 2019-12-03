@@ -12,7 +12,11 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "lbh-frontend-react/*": ["./node_modules/lbh-frontend-react/dist/esm/*"]
+    }
   },
   "exclude": ["**/node_modules/**/*", "__tests__/**/*"]
 }
