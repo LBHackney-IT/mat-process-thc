@@ -1,37 +1,82 @@
 version: 2.1
 
-environment:
-  CI: true
-  TEST_DOCKER_IMAGE: mat-process-thc
+orbs:
+  aws-ecr: circleci/aws-ecr@6.5.0
+  aws-cli: circleci/aws-cli@0.1.18
+
+commands:
+  deploy-env:
+    description: Deploys a Docker image from ECR to ECS
+    parameters:
+      cluster-name:
+        type: string
+      service-name:
+        type: string
+      image-tag:
+        type: string
+    steps:
+      - run:
+          name: Install ecs-deploy
+          command: sudo pip install ecs-deploy
+      - run:
+          name: Promote image
+          command: |
+            ecs deploy \
+              --no-deregister \
+              --access-key-id $AWS_ACCESS_KEY_ID \
+              --secret-access-key $AWS_SECRET_ACCESS_KEY \
+              --timeout 1800 \
+              --region $AWS_REGION \
+              <<parameters.cluster-name>> \
+              <<parameters.service-name>> \
+              -t <<parameters.image-tag>>
+          no_output_timeout: 30m
 
 jobs:
-  build:
-    steps:
-      - checkout
-      - run:
-          name: Build Docker Image
-          command: docker build --tag ${TEST_DOCKER_IMAGE} .
   install-and-test:
     docker:
-      - image: circleci/node:12.13.0
+      - image: circleci/node:12.13.1-browsers
     steps:
       - checkout
       - run:
-          name: Install Dependencies
+          name: Install dependencies
           command: npm ci
-      - setup_remote_docker:
-          docker_layer_caching: true
       - run:
-          name: Build
-          command: docker build --tag ${TEST_DOCKER_IMAGE} .
+          name: Run tests in Chrome
+          command: TEST_BROWSER=chrome npm test
       - run:
-          name: Run Tests in Chrome
-          command: TEST_BROWSER=chrome npm run test:docker
-      - run:
-          name: Run Tests in Firefox
-          command: TEST_BROWSER=firefox npm run test:docker
+          name: Run tests in Firefox
+          command: TEST_BROWSER=firefox npm test
+
+  deploy-to-development:
+    docker:
+      - image: circleci/python:3.7
+    steps:
+      - deploy-env:
+          cluster-name: $AWS_CLUSTER_DEV
+          service-name: $AWS_SERVICE_DEV
+          image-tag: $CIRCLE_SHA1
 
 workflows:
-  ci:
+  build-test-and-deploy:
     jobs:
       - install-and-test
+      - aws-ecr/build-and-push-image:
+          name: build-and-push-to-development
+          account-url: AWS_ECR_HOST
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          region: AWS_REGION
+          repo: $AWS_ECR_PATH_DEV
+          tag: $CIRCLE_SHA1
+          requires:
+            - install-and-test
+          filters:
+            branches:
+              only: master
+      - deploy-to-development:
+          requires:
+            - build-and-push-to-development
+          filters:
+            branches:
+              only: master
