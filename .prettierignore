@@ -1,3 +1,4 @@
+.terraform/
 .vscode/
 
 .github/CODEOWNERS
@@ -13,6 +14,7 @@ Dockerfile
 LICENCE
 *.feature
 *.snap
+*.tf
 .*
 !.*.*
 !.*/
