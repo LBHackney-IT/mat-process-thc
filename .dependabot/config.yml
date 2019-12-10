@@ -24,6 +24,6 @@ update_configs:
           dependency_type: all
           update_type: semver:patch
       - match:
-          dependency_type: "@babel/*"
+          dependency_name: "@babel/*"
           update_type: semver:minor
     version_requirement_updates: increase_versions
