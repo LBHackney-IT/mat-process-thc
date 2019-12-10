@@ -6,7 +6,8 @@ orbs:
 
 commands:
   deploy-env:
-    description: Deploys a Docker image from ECR to ECS
+    description: Deploys a Docker image to ECS
+
     parameters:
       cluster-name:
         type: string
@@ -14,12 +15,14 @@ commands:
         type: string
       image-tag:
         type: string
+
     steps:
       - run:
           name: Install ecs-deploy
           command: sudo pip install ecs-deploy
+
       - run:
-          name: Promote image
+          name: Deploy image to ECS
           command: |
             ecs deploy \
               --no-deregister \
@@ -36,11 +39,14 @@ jobs:
   install-and-test:
     docker:
       - image: circleci/node:12.13.1-browsers
+
     steps:
       - checkout
+
       - run:
           name: Install dependencies
           command: npm ci
+
       - run:
           name: Run tests in Chrome
           command: TEST_BROWSER=chrome npm test
@@ -48,35 +54,56 @@ jobs:
           name: Run tests in Firefox
           command: TEST_BROWSER=firefox npm test
 
-  deploy-to-development:
+  deploy:
+    parameters:
+      cluster-name:
+        type: string
+      service-name:
+        type: string
+      image-tag:
+        type: string
+
     docker:
       - image: circleci/python:3.7
+
     steps:
       - deploy-env:
-          cluster-name: $AWS_CLUSTER_DEV
-          service-name: $AWS_SERVICE_DEV
-          image-tag: $CIRCLE_SHA1
+          cluster-name: <<parameters.cluster-name>>
+          service-name: <<parameters.service-name>>
+          image-tag: <<parameters.image-tag>>
 
 workflows:
-  build-test-and-deploy:
+  check:
     jobs:
-      - install-and-test
+      - install-and-test:
+          name: install-and-test-branch
+          filters:
+            branches:
+              ignore: master
+
+  check-and-deploy-to-development:
+    jobs:
+      - install-and-test:
+          name: install-and-test-master
+          filters:
+            branches:
+              only: master
+
       - aws-ecr/build-and-push-image:
           name: build-and-push-to-development
+          requires:
+            - install-and-test-master
           account-url: AWS_ECR_HOST
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           region: AWS_REGION
           repo: $AWS_ECR_PATH_DEV
           tag: $CIRCLE_SHA1
-          requires:
-            - install-and-test
-          filters:
-            branches:
-              only: master
-      - deploy-to-development:
+
+      - deploy:
+          name: deploy-to-development
           requires:
             - build-and-push-to-development
-          filters:
-            branches:
-              only: master
+          cluster-name: $AWS_CLUSTER_DEV
+          service-name: $AWS_SERVICE_DEV
+          image-tag: $CIRCLE_SHA1
