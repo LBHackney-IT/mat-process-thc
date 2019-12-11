@@ -26,10 +26,11 @@
   "dependencies": {
     "@zeit/next-css": "^1.0.1",
     "cross-fetch": "^3.0.4",
-    "lbh-frontend-react": "file:../lbh-frontend-react",
+    "lbh-frontend-react": "^0.0.4",
     "next": "^9.1.1",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
+    "remultiform": "0.0.1",
     "swr": "^0.1.12"
   },
   "devDependencies": {

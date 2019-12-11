@@ -22,9 +22,7 @@ export const IndexPage: NextPage = () => {
   );
 
   return (
-    <MainLayout>
-      <Heading level={HeadingLevels.H1}>Tenancy & Household Check</Heading>
-
+    <MainLayout title="Previsit step" heading="Tenancy & Household Check">
       {data ? (
         <TenancySummary
           address="1 Mare Street, London, E8 3AA"
@@ -48,7 +46,7 @@ export const IndexPage: NextPage = () => {
 
       <Button
         disabled={!data}
-        onClick={(): Promise<boolean> => Router.push("/submit")}
+        onClick={(): Promise<boolean> => Router.push("/1234")}
         preventDoubleClick={true}
       >
         {data ? "Go" : "Loading..."}
