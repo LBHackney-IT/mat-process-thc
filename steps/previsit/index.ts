@@ -1,3 +1,3 @@
-import start from "./start";
+import attemptVisit from "./attempt-visit";
 
-export default [start]
+export default [attemptVisit]

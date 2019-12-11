@@ -29,7 +29,7 @@ it("renders correctly for all props", () => {
 
 it("renders correctly without optional props", () => {
   const component = create(
-    <MainLayout>
+    <MainLayout title="Test Title">
       <p>Test content</p>
     </MainLayout>
   );

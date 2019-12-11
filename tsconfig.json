@@ -15,7 +15,8 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "lbh-frontend-react/*": ["./node_modules/lbh-frontend-react/dist/esm/*"]
+      "lbh-frontend-react/*": ["./node_modules/lbh-frontend-react/dist/esm/*"],
+      "remultiform/*": ["./node_modules/remultiform/dist/esm/*"]
     }
   },
   "exclude": ["**/node_modules/**/*", "__tests__/**/*"]

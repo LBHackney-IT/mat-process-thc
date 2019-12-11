@@ -3,25 +3,53 @@ import React from "react";
 
 import { Main } from "lbh-frontend-react/components/Main";
 import { Container } from "lbh-frontend-react/components/Container";
+import {
+  Heading,
+  HeadingLevels
+} from "lbh-frontend-react/components/typography/Heading";
+import { Header } from "lbh-frontend-react/components/Header";
 
-interface Props {
+interface BaseProps {
   title?: string | null;
+  heading?: string | null;
   children: React.ReactNode;
 }
 
-const MainLayout = ({ title, children }: Props): React.ReactElement => (
-  <>
-    <Head>
-      <title>Tenancy and Household Check{title ? ` - ${title}` : ""}</title>
-      <link
-        href="https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,700&display=swap"
-        rel="stylesheet"
-      />
-    </Head>
-    <Main>
-      <Container>{children}</Container>
-    </Main>
-  </>
-);
+interface TitledProps extends BaseProps {
+  title: string;
+}
+
+interface HeadedProps extends BaseProps {
+  heading: string;
+}
+
+type Props = TitledProps | HeadedProps;
+
+const MainLayout = ({
+  title,
+  heading,
+  children
+}: Props): React.ReactElement => {
+  const fullTitle = `Tenancy & Household Check - ${title || heading}`;
+
+  return (
+    <>
+      <Head>
+        <title>{fullTitle}</title>
+        <link
+          href="https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,700&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
+      <Header serviceName="Manage a tenancy"></Header>
+      <Main>
+        <Container>
+          {heading && <Heading level={HeadingLevels.H1}>{heading}</Heading>}
+          {children}
+        </Container>
+      </Main>
+    </>
+  );
+};
 
 export default MainLayout;
