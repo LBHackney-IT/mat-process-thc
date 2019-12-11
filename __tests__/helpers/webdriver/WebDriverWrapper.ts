@@ -1,24 +1,6 @@
-/* eslint-disable @typescript-eslint/camelcase */
-import {
-  Actions,
-  Browser,
-  Builder,
-  Capabilities,
-  FileDetector,
-  Locator,
-  Navigation,
-  Options,
-  Session,
-  TargetLocator,
-  WebDriver,
-  WebElement,
-  WebElementCondition,
-  WebElementPromise
-} from "selenium-webdriver";
+import { Browser, Builder, WebDriver } from "selenium-webdriver";
 import chrome from "selenium-webdriver/chrome";
 import firefox from "selenium-webdriver/firefox";
-import { Executor } from "selenium-webdriver/http";
-import { Command } from "selenium-webdriver/lib/command";
 
 type WebDriverWrapperCreateOptions = {
   browser?: string;
@@ -53,9 +35,65 @@ class WebDriverWrapper implements WebDriver {
   readonly driver: WebDriver;
   readonly baseUrl?: string;
 
+  /* WebDriver methods */
+
+  readonly execute: WebDriver["execute"];
+  readonly setFileDetector: WebDriver["setFileDetector"];
+  readonly getExecutor: WebDriver["getExecutor"];
+  readonly getSession: WebDriver["getSession"];
+  readonly getCapabilities: WebDriver["getCapabilities"];
+  readonly quit: WebDriver["quit"];
+  readonly actions: WebDriver["actions"];
+  readonly executeScript: WebDriver["executeScript"];
+  readonly executeAsyncScript: WebDriver["executeAsyncScript"];
+  readonly wait: WebDriver["wait"];
+  readonly sleep: WebDriver["sleep"];
+  readonly getWindowHandle: WebDriver["getWindowHandle"];
+  readonly getAllWindowHandles: WebDriver["getAllWindowHandles"];
+  readonly getPageSource: WebDriver["getPageSource"];
+  readonly getCurrentUrl: WebDriver["getCurrentUrl"];
+  readonly close: WebDriver["close"];
+  readonly get: WebDriver["get"];
+  readonly getTitle: WebDriver["getTitle"];
+  readonly findElement: WebDriver["findElement"];
+  readonly findElements: WebDriver["findElements"];
+  readonly takeScreenshot: WebDriver["takeScreenshot"];
+  readonly manage: WebDriver["manage"];
+  readonly navigate: WebDriver["navigate"];
+  readonly switchTo: WebDriver["switchTo"];
+
   constructor(driver: WebDriver, baseUrl?: string) {
     this.driver = driver;
     this.baseUrl = baseUrl;
+
+    /* WebDriver methods */
+
+    this.execute = this.driver.execute.bind(this.driver);
+    this.setFileDetector = this.driver.setFileDetector.bind(this.driver);
+    this.getExecutor = this.driver.getExecutor.bind(this.driver);
+    this.getSession = this.driver.getSession.bind(this.driver);
+    this.getCapabilities = this.driver.getCapabilities.bind(this.driver);
+    this.quit = this.driver.quit.bind(this.driver);
+    this.actions = this.driver.actions.bind(this.driver);
+    this.executeScript = this.driver.executeScript.bind(this.driver);
+    this.executeAsyncScript = this.driver.executeAsyncScript.bind(this.driver);
+    this.wait = this.driver.wait.bind(this.driver);
+    this.sleep = this.driver.sleep.bind(this.driver);
+    this.getWindowHandle = this.driver.getWindowHandle.bind(this.driver);
+    this.getAllWindowHandles = this.driver.getAllWindowHandles.bind(
+      this.driver
+    );
+    this.getPageSource = this.driver.getPageSource.bind(this.driver);
+    this.getCurrentUrl = this.driver.getCurrentUrl.bind(this.driver);
+    this.close = this.driver.close.bind(this.driver);
+    this.get = this.driver.get.bind(this.driver);
+    this.getTitle = this.driver.getTitle.bind(this.driver);
+    this.findElement = this.driver.findElement.bind(this.driver);
+    this.findElements = this.driver.findElements.bind(this.driver);
+    this.takeScreenshot = this.driver.takeScreenshot.bind(this.driver);
+    this.manage = this.driver.manage.bind(this.driver);
+    this.navigate = this.driver.navigate.bind(this.driver);
+    this.switchTo = this.driver.switchTo.bind(this.driver);
   }
 
   async getRelative(relativeUrl: string): Promise<void> {
@@ -66,122 +104,6 @@ class WebDriverWrapper implements WebDriver {
     const url = new URL(relativeUrl, this.baseUrl).href;
 
     return this.get(url);
-  }
-
-  /* WebDriver methods */
-
-  async execute<T>(command: Command, description?: string): Promise<T> {
-    return this.driver.execute(command, description);
-  }
-
-  setFileDetector(detector: FileDetector): void {
-    this.driver.setFileDetector(detector);
-  }
-
-  getExecutor(): Executor {
-    return this.driver.getExecutor();
-  }
-
-  async getSession(): Promise<Session> {
-    return this.driver.getSession();
-  }
-
-  async getCapabilities(): Promise<Capabilities> {
-    return this.driver.getCapabilities();
-  }
-
-  async quit(): Promise<void> {
-    return this.driver.quit();
-  }
-
-  actions(
-    options?:
-      | { async: boolean; bridge: boolean }
-      | { async: boolean }
-      | { bridge: boolean }
-      | undefined
-  ): Actions {
-    return this.driver.actions(options);
-  }
-
-  executeScript<T>(
-    script: string | Function,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ...var_args: any[]
-  ): Promise<T> {
-    return this.driver.executeScript(script, var_args);
-  }
-
-  executeAsyncScript<T>(
-    script: string | Function,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ...var_args: any[]
-  ): Promise<T> {
-    return this.driver.executeAsyncScript(script, var_args);
-  }
-
-  wait(
-    condition: WebElementCondition,
-    opt_timeout?: number | undefined,
-    opt_message?: string | undefined
-  ): WebElementPromise {
-    return this.driver.wait(condition, opt_timeout, opt_message);
-  }
-
-  async sleep(ms: number): Promise<void> {
-    return this.driver.sleep(ms);
-  }
-
-  async getWindowHandle(): Promise<string> {
-    return this.driver.getWindowHandle();
-  }
-
-  async getAllWindowHandles(): Promise<string[]> {
-    return this.driver.getAllWindowHandles();
-  }
-
-  async getPageSource(): Promise<string> {
-    return this.driver.getPageSource();
-  }
-
-  async getCurrentUrl(): Promise<string> {
-    return this.driver.getCurrentUrl();
-  }
-
-  async close(): Promise<void> {
-    return this.driver.close();
-  }
-
-  async get(url: string): Promise<void> {
-    return this.driver.get(url);
-  }
-
-  async getTitle(): Promise<string> {
-    return this.driver.getTitle();
-  }
-
-  findElement(locator: Locator): WebElementPromise {
-    return this.driver.findElement(locator);
-  }
-
-  async findElements(locator: Locator): Promise<WebElement[]> {
-    return this.driver.findElements(locator);
-  }
-
-  async takeScreenshot(): Promise<string> {
-    return this.driver.takeScreenshot();
-  }
-
-  manage(): Options {
-    return this.driver.manage();
-  }
-
-  navigate(): Navigation {
-    return this.driver.navigate();
-  }
-
-  switchTo(): TargetLocator {
-    return this.driver.switchTo();
   }
 }
 
