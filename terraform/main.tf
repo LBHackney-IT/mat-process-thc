@@ -7,6 +7,15 @@ provider "template" {
   version = "~> 2.0"
 }
 
+terraform {
+  backend "s3" {
+    bucket  = "hackney-mat-state-storage-s3"
+    encrypt = true
+    region  = "eu-west-2"
+    key     = "services/thc/state"
+  }
+}
+
 data "aws_iam_role" "ec2_container_service_role" {
   name = "ecsServiceRole"
 }
