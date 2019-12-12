@@ -16,7 +16,7 @@
     "test:feature": "NEXT_DIST_DIR=.next-test PORT=3001 concurrently --names 'server,test' 'NODE_ENV=production npm run build && npm start -- --port ${PORT}' 'wait-for-localhost ${PORT} && npm run test:feature:noserver' --kill-others --success first",
     "test:feature:noserver": "jest --config jest.config.feature.js --runInBand",
     "test:feature:update": "NEXT_DIST_DIR=.next-test PORT=3001 concurrently --names 'server,test' 'NODE_ENV=production npm run build && npm start -- --port ${PORT}' 'wait-for-localhost ${PORT} && npm run test:feature:noserver -- --updateSnapshot' --kill-others --success first",
-    "test:feature:watch": "NEXT_DIST_DIR=.next-test PORT=3001 concurrently --names 'server,test' 'NODE_ENV=production npm run build && npm start -- --port ${PORT}' 'wait-for-localhost ${PORT} && npm run test:feature:noserver -- --watch' --kill-others --success first",
+    "test:feature:watch": "NEXT_DIST_DIR=.next-test PORT=3001 concurrently --names 'server,test' 'npm run dev -- --port ${PORT}' 'wait-for-localhost ${PORT} && npm run test:feature:noserver -- --watch' --kill-others --success first",
     "lint": "eslint --report-unused-disable-directives --config ./.eslintrc.full.js '**/*.{js,jsx,ts,tsx}'",
     "lint:fix": "npm run lint -- --fix",
     "lint:codeowners": "codeowners-enforcer -i 'package.json' -i 'package-lock.json'",
@@ -25,9 +25,14 @@
   },
   "dependencies": {
     "@zeit/next-css": "^1.0.1",
+    "cross-fetch": "^3.0.4",
+    "is-online": "^8.2.1",
+    "lbh-frontend-react": "0.0.4",
     "next": "^9.1.1",
     "react": "^16.11.0",
-    "react-dom": "^16.11.0"
+    "react-async-hook": "^3.6.1",
+    "react-dom": "^16.11.0",
+    "swr": "^0.1.12"
   },
   "devDependencies": {
     "@types/jest": "^24.0.20",
@@ -39,7 +44,7 @@
     "@types/styled-jsx": "^2.2.8",
     "@typescript-eslint/eslint-plugin": "^2.10.0",
     "@typescript-eslint/parser": "^2.6.1",
-    "chromedriver": "^77.0.0",
+    "babel-plugin-module-resolver": "^3.2.0",
     "codeowners-enforcer": "^1.0.3",
     "concurrently": "^5.0.0",
     "eslint": "^6.6.0",
@@ -47,7 +52,6 @@
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-react": "^7.16.0",
     "eslint-plugin-react-hooks": "^2.3.0",
-    "geckodriver": "^1.19.1",
     "husky": "^3.0.9",
     "jest": "^24.9.0",
     "jest-axe": "^3.2.0",

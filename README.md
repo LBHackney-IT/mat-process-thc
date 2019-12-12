@@ -1,4 +1,4 @@
-# Manage a Tenancy - Tenancy & Household Check
+# Manage a Tenancy - Tenancy and Household Check
 
 ## Technical overview
 
@@ -27,9 +27,12 @@ We use:
   [`node-build-update-defs`](https://github.com/nodenv/node-build-update-defs)
   to manage Node.js versions.
 
-- Google Chrome or Firefox
+- Google Chrome and
+  [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/home) or
+  Firefox and [geckodriver](https://github.com/mozilla/geckodriver)
 
-  We use these for running feature tests locally.
+  We use these for running feature tests locally. Make sure your installed
+  versions match each other.
 
 ## Getting started
 
@@ -83,7 +86,8 @@ To run the feature tests, updating changed snapshots:
 npm run test:feature:update
 ```
 
-To run the feature tests in watch mode:
+To run the feature tests in watch mode (running against a development server for
+code change watching):
 
 ```bash
 npm run test:feature:watch
