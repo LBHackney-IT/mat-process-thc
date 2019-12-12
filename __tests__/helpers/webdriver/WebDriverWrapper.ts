@@ -105,6 +105,15 @@ class WebDriverWrapper implements WebDriver {
 
     return this.get(url);
   }
+
+  async submit(): Promise<void> {
+    const submitButton = await this.findElement({
+      tagName: "button"
+      // css: '[data-testid="submit"]'
+    });
+
+    await submitButton.click();
+  }
 }
 
 export default WebDriverWrapper;

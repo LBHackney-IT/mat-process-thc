@@ -16,7 +16,7 @@
     "test:feature": "NEXT_DIST_DIR=.next-test PORT=3001 concurrently --names 'server,test' 'NODE_ENV=production npm run build && npm start -- --port ${PORT}' 'wait-for-localhost ${PORT} && npm run test:feature:noserver' --kill-others --success first",
     "test:feature:noserver": "jest --config jest.config.feature.js --runInBand",
     "test:feature:update": "NEXT_DIST_DIR=.next-test PORT=3001 concurrently --names 'server,test' 'NODE_ENV=production npm run build && npm start -- --port ${PORT}' 'wait-for-localhost ${PORT} && npm run test:feature:noserver -- --updateSnapshot' --kill-others --success first",
-    "test:feature:watch": "NEXT_DIST_DIR=.next-test PORT=3001 concurrently --names 'server,test' 'NODE_ENV=production npm run build && npm start -- --port ${PORT}' 'wait-for-localhost ${PORT} && npm run test:feature:noserver -- --watch' --kill-others --success first",
+    "test:feature:watch": "NEXT_DIST_DIR=.next-test PORT=3001 concurrently --names 'server,test' 'npm run dev -- --port ${PORT}' 'wait-for-localhost ${PORT} && npm run test:feature:noserver -- --watch' --kill-others --success first",
     "lint": "eslint --report-unused-disable-directives --config ./.eslintrc.full.js '**/*.{js,jsx,ts,tsx}'",
     "lint:fix": "npm run lint -- --fix",
     "lint:codeowners": "codeowners-enforcer -i 'package.json' -i 'package-lock.json'",
@@ -25,10 +25,14 @@
   },
   "dependencies": {
     "@zeit/next-css": "^1.0.1",
+    "cross-fetch": "^3.0.4",
+    "is-online": "^8.2.1",
     "lbh-frontend-react": "0.0.4",
     "next": "^9.1.1",
     "react": "^16.11.0",
-    "react-dom": "^16.11.0"
+    "react-async-hook": "^3.6.1",
+    "react-dom": "^16.11.0",
+    "swr": "^0.1.12"
   },
   "devDependencies": {
     "@types/jest": "^24.0.20",

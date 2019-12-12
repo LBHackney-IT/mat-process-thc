@@ -1,17 +1,26 @@
 import Head from "next/head";
-import React, { ReactNode } from "react";
+import React from "react";
 
-type LayoutProps = {
-  children: ReactNode;
-};
+import { Main } from "lbh-frontend-react/components/Main";
+import { Container } from "lbh-frontend-react/components/Container";
 
-const MainLayout = ({ children }: LayoutProps): JSX.Element => (
+interface Props {
+  title?: string | null;
+  children: React.ReactNode;
+}
+
+const MainLayout = ({ title, children }: Props): React.ReactElement => (
   <>
     <Head>
-      <title>Tenancy & Household Check</title>
+      <title>Tenancy and Household Check{title ? ` - ${title}` : ""}</title>
+      <link
+        href="https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,700&display=swap"
+        rel="stylesheet"
+      />
     </Head>
-
-    {children}
+    <Main>
+      <Container>{children}</Container>
+    </Main>
   </>
 );
 

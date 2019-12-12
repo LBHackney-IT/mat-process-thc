@@ -5,7 +5,7 @@ declare global {
   declare var browser: WebDriverWrapper | undefined;
 
   namespace NodeJS {
-    interface Global {
+    interface Global extends GlobalWithFetchMock {
       browser?: WebDriverWrapper;
     }
   }

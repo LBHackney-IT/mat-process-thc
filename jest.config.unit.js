@@ -13,6 +13,7 @@ module.exports = {
   testMatch: ["<rootDir>/__tests__/**/?(*.)+(spec|steps|test).[jt]s?(x)"],
   testPathIgnorePatterns: ["<rootDir>/__tests__/features/"],
   moduleFileExtensions: ["js", "jsx", "ts", "tsx"],
+  restoreMocks: true,
   globals: {
     "ts-jest": {
       tsConfig: "<rootDir>/__tests__/tsconfig.json",

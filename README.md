@@ -1,4 +1,4 @@
-# Manage a Tenancy - Tenancy & Household Check
+# Manage a Tenancy - Tenancy and Household Check
 
 ## Technical overview
 
@@ -86,7 +86,8 @@ To run the feature tests, updating changed snapshots:
 npm run test:feature:update
 ```
 
-To run the feature tests in watch mode:
+To run the feature tests in watch mode (running against a development server for
+code change watching):
 
 ```bash
 npm run test:feature:watch
