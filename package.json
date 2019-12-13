@@ -62,7 +62,7 @@
     "pretty-quick": "^2.0.0",
     "react-test-renderer": "^16.11.0",
     "selenium-webdriver": "^4.0.0-alpha.5",
-    "styled-jsx": "^3.2.3",
+    "styled-jsx": "^3.2.4",
     "ts-jest": "^24.1.0",
     "typescript": "^3.6.4",
     "wait-for-localhost-cli": "^1.1.0",
