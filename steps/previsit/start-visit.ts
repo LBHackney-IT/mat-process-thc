@@ -19,8 +19,11 @@ const step: StepDefinition = {
   slug: "start-visit",
   heading: "Start Tenancy and Household Check",
   title: "Start visit",
-  nextSlug: "submit",
-  Submit: makeSubmit({ href: "/submit", value: "Start visit with tenant" }),
+  nextSlug: "about-visit",
+  Submit: makeSubmit({
+    href: "/about-visit",
+    value: "Start visit with tenant"
+  }),
   componentWrappers: [
     ComponentWrapper.wrapStatic(
       new StaticComponent({
