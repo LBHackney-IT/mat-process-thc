@@ -9,6 +9,11 @@ Feature: Accessibility
     Then the page should be accessible
     And the page should have a descriptive title
 
+  Scenario: Start visit page is accessible
+    When I visit /start-visit
+    Then the page should be accessible
+    And the page should have a descriptive title
+
   Scenario: Submit page is accessible
     When I visit /submit
     Then the page should be accessible

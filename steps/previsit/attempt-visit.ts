@@ -23,10 +23,10 @@ import processId from "../../store/processId";
 
 const step: StepDefinition = {
   slug: "attempt-visit",
-  title: "start",
+  title: "Attempt visit",
   heading: "Tenancy and Household Check",
-  nextSlug: "submit",
-  Submit: makeSubmit({ href: "/submit", value: "Enter the property" }),
+  nextSlug: "start-visit",
+  Submit: makeSubmit({ href: "/start-visit", value: "Enter the property" }),
   componentWrappers: [
     ComponentWrapper.wrapStatic(
       new StaticComponent({
