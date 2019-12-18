@@ -81,7 +81,7 @@ export const IndexPage: NextPage = () => {
       {content}
 
       <Link href="/attempt-visit">
-        <Button preventDoubleClick={true} disabled={!data}>
+        <Button preventDoubleClick={true} disabled={!data} data-testid="submit">
           {data ? "Go" : "Loading..."}
         </Button>
       </Link>

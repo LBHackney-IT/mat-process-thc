@@ -108,8 +108,7 @@ class WebDriverWrapper implements WebDriver {
 
   async submit(): Promise<void> {
     const submitButton = await this.findElement({
-      tagName: "button"
-      // css: '[data-testid="submit"]'
+      css: '[data-testid="submit"]'
     });
 
     await submitButton.click();

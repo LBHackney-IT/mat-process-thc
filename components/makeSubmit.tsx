@@ -26,12 +26,14 @@ export const makeSubmit = (
                   : "submit-button"
               }
               onClick={(): void => {
-                onSubmit().catch(reason => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                onSubmit().catch((reason: any): void => {
                   // This is invisible to the user, so we should do something to
                   // display it to them.
                   console.error(reason);
                 });
               }}
+              data-testid={i > 0 ? undefined : "submit"}
             >
               {value}
             </Button>
