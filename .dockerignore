@@ -5,6 +5,7 @@
 !/pages/
 !/public/
 !/steps/
+!/storage/
 !/types/
 !/babel.config.js
 !/Dockerfile
