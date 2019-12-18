@@ -59,7 +59,7 @@ it("renders correctly when online", async () => {
               >
                 <svg
                   className="lbh-header__logo"
-                  focusable={false}
+                  focusable="false"
                   height="37px"
                   role="presentation"
                   viewBox="0 0 208 37"
@@ -264,7 +264,7 @@ it("renders correctly when offline", async () => {
               >
                 <svg
                   className="lbh-header__logo"
-                  focusable={false}
+                  focusable="false"
                   height="37px"
                   role="presentation"
                   viewBox="0 0 208 37"

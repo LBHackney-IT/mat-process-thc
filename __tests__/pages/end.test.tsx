@@ -26,7 +26,7 @@ it("renders correctly", () => {
               >
                 <svg
                   className="lbh-header__logo"
-                  focusable={false}
+                  focusable="false"
                   height="37px"
                   role="presentation"
                   viewBox="0 0 208 37"
