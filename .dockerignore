@@ -4,6 +4,7 @@
 !/layouts/
 !/pages/
 !/public/
+!/steps/
 !/types/
 !/babel.config.js
 !/Dockerfile
