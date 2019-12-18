@@ -24,10 +24,10 @@ const step: ProcessStepDefinition = {
   heading: "Tenancy and Household Check",
   step: {
     slug: "attempt-visit",
-    nextSlug: "submit",
+    nextSlug: "start-visit",
     Submit: makeSubmit([
       {
-        href: "/submit",
+        href: "/start-visit",
         value: "Enter the property"
       },
       {

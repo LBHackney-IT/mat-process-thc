@@ -1,3 +1,4 @@
 import attemptVisit from "./attempt-visit";
+import startVisit from "./start-visit";
 
-export default [attemptVisit];
+export default [attemptVisit, startVisit];
