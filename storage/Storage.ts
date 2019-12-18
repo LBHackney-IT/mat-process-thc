@@ -14,6 +14,10 @@ export default class Storage {
         if (version === 0) {
           upgrade.createStore("outsidePropertyImages");
           upgrade.createStore("metalGateImages");
+          upgrade.createStore("unannouncedVisit");
+          upgrade.createStore("unannouncedVisitNotes");
+          upgrade.createStore("insideProperty");
+          upgrade.createStore("insidePropertyNotes");
 
           version = 1;
         }
