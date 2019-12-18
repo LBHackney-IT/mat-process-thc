@@ -8,7 +8,7 @@ import {
 } from "lbh-frontend-react/components/typography/Heading";
 import { Paragraph } from "lbh-frontend-react/components/typography/Paragraph";
 import { NextPage } from "next";
-import Router from "next/router";
+import Link from "next/link";
 import React from "react";
 import { useAsync } from "react-async-hook";
 import useSWR from "swr";
@@ -80,13 +80,11 @@ export const IndexPage: NextPage = () => {
 
       {content}
 
-      <Button
-        preventDoubleClick={true}
-        disabled={!data}
-        onClick={(): Promise<boolean> => Router.push("/submit")}
-      >
-        {data ? "Go" : "Loading..."}
-      </Button>
+      <Link href="/attempt-visit">
+        <Button preventDoubleClick={true} disabled={!data}>
+          {data ? "Go" : "Loading..."}
+        </Button>
+      </Link>
     </MainLayout>
   );
 };

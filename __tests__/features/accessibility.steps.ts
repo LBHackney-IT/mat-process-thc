@@ -17,6 +17,18 @@ defineFeature(loadFeature("./accessibility.feature"), test => {
     });
   });
 
+  test("Attempt visit page is accessible", ({ defineStep, then }) => {
+    When.iVisitX(defineStep);
+
+    Then.thePageShouldBeAccessible(defineStep);
+
+    then("the page should have a descriptive title", async () => {
+      await expect(browser!.getTitle()).resolves.toEqual(
+        "Tenancy and Household Check - Attempt visit"
+      );
+    });
+  });
+
   test("Submit page is accessible", ({ defineStep, then }) => {
     When.iVisitX(defineStep);
 

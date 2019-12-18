@@ -29,9 +29,11 @@
     "is-online": "^8.2.1",
     "lbh-frontend-react": "0.0.4",
     "next": "^9.1.1",
+    "prop-types": "^15.7.2",
     "react": "^16.11.0",
     "react-async-hook": "^3.6.1",
     "react-dom": "^16.11.0",
+    "remultiform": "0.0.2",
     "swr": "^0.1.12"
   },
   "devDependencies": {
