@@ -1,5 +1,3 @@
-import "./helpers/setup/fetch";
-
 import { setJestCucumberConfiguration } from "jest-cucumber";
 import { Browser } from "selenium-webdriver";
 import yn from "yn";

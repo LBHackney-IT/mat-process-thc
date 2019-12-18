@@ -16,26 +16,33 @@ export const TenancySummary = (
   const loading = "Loading...";
 
   return (
-    <SummaryList
-      className="govuk-summary-list--no-border"
-      rows={[
-        {
-          key: "Address",
-          value: address ? address : loading
-        },
-        {
-          key: "Tenants",
-          value: tenants ? tenants.join(", ") : loading
-        },
-        {
-          key: "Tenure type",
-          value: tenureType ? tenureType : loading
-        },
-        {
-          key: "Tenancy start date",
-          value: startDate ? startDate : loading
+    <>
+      <SummaryList
+        className="govuk-summary-list--no-border mat-tenancy-summary"
+        rows={[
+          {
+            key: "Address",
+            value: address ? address : loading
+          },
+          {
+            key: "Tenants",
+            value: tenants ? tenants.join(", ") : loading
+          },
+          {
+            key: "Tenure type",
+            value: tenureType ? tenureType : loading
+          },
+          {
+            key: "Tenancy start date",
+            value: startDate ? startDate : loading
+          }
+        ]}
+      />
+      <style jsx>{`
+        :global(.mat-tenancy-summary dt, .mat-tenancy-summary dd) {
+          padding-bottom: 0 !important;
         }
-      ]}
-    />
+      `}</style>
+    </>
   );
 };

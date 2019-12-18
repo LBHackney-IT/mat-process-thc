@@ -6,7 +6,8 @@ module.exports = {
       "module-resolver",
       {
         alias: {
-          "lbh-frontend-react": ["./node_modules/lbh-frontend-react/dist/cjs"]
+          "lbh-frontend-react": ["./node_modules/lbh-frontend-react/dist/cjs"],
+          remultiform: ["./node_modules/remultiform/dist/cjs"]
         }
       }
     ]

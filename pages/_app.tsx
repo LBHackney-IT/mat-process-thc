@@ -1,5 +1,27 @@
-import App from "next/app";
+import React from "react";
+import NextApp from "next/app";
+import { DatabaseProvider } from "remultiform/database-context";
 
 import "normalize.css";
 
-export default App;
+import Storage from "../storage/Storage";
+
+// The user's data does not exist on the server, so there's no need to attempt
+// to access it if we're not on the client.
+if (process.browser) {
+  Storage.init();
+}
+
+export default class App extends NextApp {
+  render(): React.ReactElement {
+    const base = super.render();
+
+    if (Storage.Context) {
+      return (
+        <DatabaseProvider context={Storage.Context}>{base}</DatabaseProvider>
+      );
+    } else {
+      return base;
+    }
+  }
+}
