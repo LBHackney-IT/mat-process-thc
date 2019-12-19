@@ -29,6 +29,7 @@
     "is-online": "^8.2.1",
     "lbh-frontend-react": "0.0.5",
     "next": "^9.1.6",
+    "null-as-undefined": "^0.2.1",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-async-hook": "^3.6.1",
