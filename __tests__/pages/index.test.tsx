@@ -3,6 +3,7 @@ import React from "react";
 import { ReactTestRenderer, act, create } from "react-test-renderer";
 
 import { promiseToWaitForNextTick } from "../helpers/promise";
+import { spyOnConsoleError } from "../helpers/spies";
 
 import IndexPage from "../../pages/index";
 
@@ -199,10 +200,19 @@ it("renders correctly when online", async () => {
           >
             Please wait until the ‘Go’ button is available to be clicked before proceeding.
           </p>
+          <ul
+            className="govuk-list lbh-list"
+          >
+            <li>
+              Answers saved to the Hub... Loaded
+            </li>
+            <li>
+              Offline storage... More recent than the Hub
+            </li>
+          </ul>
           <button
             aria-disabled={false}
             className="govuk-button lbh-button"
-            data-prevent-double-click={true}
             data-testid="submit"
             disabled={false}
             onClick={[Function]}
@@ -219,6 +229,8 @@ it("renders correctly when offline", async () => {
   isOnlineMock.mockResolvedValue(false);
   fetchMock.mockReject(new Error("Request timed out"));
 
+  const consoleErrorSpy = spyOnConsoleError();
+
   let component: ReactTestRenderer | undefined = undefined;
 
   await act(async () => {
@@ -226,6 +238,19 @@ it("renders correctly when offline", async () => {
 
     await promiseToWaitForNextTick();
   });
+
+  expect(consoleErrorSpy.mock.calls).toMatchInlineSnapshot(`
+    Array [
+      Array [
+        [Error: Request timed out],
+      ],
+      Array [
+        [Error: Request timed out],
+      ],
+    ]
+  `);
+
+  consoleErrorSpy.mockRestore();
 
   expect(component).toMatchInlineSnapshot(`
     Array [
@@ -323,14 +348,10 @@ it("renders correctly when offline", async () => {
             You are offline. Please go online to continue.
           </p>
           <button
-            aria-disabled={true}
             className="govuk-button lbh-button"
-            data-prevent-double-click={true}
-            data-testid="submit"
-            disabled={true}
             onClick={[Function]}
           >
-            Loading...
+            Check again
           </button>
         </div>
       </main>,

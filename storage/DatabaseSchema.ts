@@ -10,6 +10,11 @@ type DatabaseSchema = NamedSchema<
   typeof databaseName,
   1,
   {
+    lastModified: {
+      key: ProcessRef;
+      value: Date;
+    };
+
     outsidePropertyImages: {
       key: ProcessRef;
       value: string[];

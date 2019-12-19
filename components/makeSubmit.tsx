@@ -25,13 +25,14 @@ export const makeSubmit = (
                   ? "submit-button lbh-button--secondary govuk-button--secondary"
                   : "submit-button"
               }
-              onClick={(): void => {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                onSubmit().catch((reason: any): void => {
+              onClick={async (): Promise<void> => {
+                try {
+                  await onSubmit();
+                } catch (error) {
                   // This is invisible to the user, so we should do something to
                   // display it to them.
-                  console.error(reason);
-                });
+                  console.error(error);
+                }
               }}
               data-testid={i > 0 ? undefined : "submit"}
             >
