@@ -16,9 +16,7 @@ const whenIWaitForTheDataToBeFetched = (
   defineStep: DefineStepFunction
 ): void => {
   defineStep("I wait for the data to be fetched", async () => {
-    // This waits for longer than the hardcoded delay. We should be able to
-    // improve it when we can control the API connection we're testing against.
-    await browser!.sleep(4000);
+    await browser!.sleep(2000);
   });
 };
 
