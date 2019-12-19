@@ -1,0 +1,10 @@
+Feature: End to end
+
+  As a user
+  I want to be able to perform a Tenancy and Household Check
+  So that I can check on a tenancy
+
+  Scenario: Performing a check while online
+    Given I am online
+    When I complete a process
+    Then I should see that the process has been submitted

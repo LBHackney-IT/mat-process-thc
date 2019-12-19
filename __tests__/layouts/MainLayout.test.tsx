@@ -30,7 +30,7 @@ it("renders correctly for all props", () => {
               >
                 <svg
                   className="lbh-header__logo"
-                  focusable={false}
+                  focusable="false"
                   height="37px"
                   role="presentation"
                   viewBox="0 0 208 37"
@@ -131,7 +131,7 @@ it("renders correctly without optional props", () => {
               >
                 <svg
                   className="lbh-header__logo"
-                  focusable={false}
+                  focusable="false"
                   height="37px"
                   role="presentation"
                   viewBox="0 0 208 37"

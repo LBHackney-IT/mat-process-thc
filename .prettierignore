@@ -12,6 +12,7 @@ package-lock.json
 Dockerfile
 LICENCE
 *.feature
+*.jpg
 *.snap
 .*
 !.*.*

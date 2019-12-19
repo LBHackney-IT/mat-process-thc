@@ -59,7 +59,7 @@ it("renders correctly when online", async () => {
               >
                 <svg
                   className="lbh-header__logo"
-                  focusable={false}
+                  focusable="false"
                   height="37px"
                   role="presentation"
                   viewBox="0 0 208 37"
@@ -217,6 +217,7 @@ it("renders correctly when online", async () => {
             aria-disabled={false}
             className="govuk-button lbh-button"
             data-prevent-double-click={true}
+            data-testid="submit"
             disabled={false}
             onClick={[Function]}
           >
@@ -264,7 +265,7 @@ it("renders correctly when offline", async () => {
               >
                 <svg
                   className="lbh-header__logo"
-                  focusable={false}
+                  focusable="false"
                   height="37px"
                   role="presentation"
                   viewBox="0 0 208 37"
@@ -422,6 +423,7 @@ it("renders correctly when offline", async () => {
             aria-disabled={true}
             className="govuk-button lbh-button"
             data-prevent-double-click={true}
+            data-testid="submit"
             disabled={true}
             onClick={[Function]}
           >
