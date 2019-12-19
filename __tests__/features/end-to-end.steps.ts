@@ -47,6 +47,11 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
+      // Sections page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
+
+      await browser!.submit({ css: '[href="/submit"]' });
+
       // Submit page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/submit");
 

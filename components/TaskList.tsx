@@ -26,6 +26,11 @@ export interface TaskListItem {
    * anything, pass an empty string.
    */
   status?: string | null;
+
+  /**
+   * @ignore
+   */
+  "data-testid"?: string | null;
 }
 
 export interface TaskListprops {
@@ -38,13 +43,15 @@ export const TaskList = (props: TaskListprops): JSX.Element => {
     <>
       <List
         className="task-list"
-        items={items.map(({ name, href, status }) => (
+        items={items.map(({ name, href, status, "data-testid": testId }) => (
           <>
             <span>{name}</span>
             {status !== "" && (
               <span>
                 {nullAsUndefined(status) === undefined ? (
-                  <Link href={href}>Start</Link>
+                  <Link href={href} data-testid={testId}>
+                    Start
+                  </Link>
                 ) : (
                   <Tag>Completed</Tag>
                 )}
@@ -65,12 +72,15 @@ export const TaskList = (props: TaskListprops): JSX.Element => {
   );
 };
 
+TaskList.displayName = "TaskList";
+
 TaskList.propTypes = {
   items: PropTypes.arrayOf(
     PropTypes.exact({
       name: PropTypes.string.isRequired,
       href: PropTypes.string.isRequired,
-      status: PropTypes.string
+      status: PropTypes.string,
+      "data-testid": PropTypes.string
     }).isRequired
   ).isRequired
 };
