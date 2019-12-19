@@ -1,4 +1,4 @@
-import { NamedSchema } from "remultiform/database/types";
+import { NamedSchema, StoreNames } from "remultiform/database";
 
 type ProcessRef = string;
 
@@ -26,5 +26,11 @@ type DatabaseSchema = NamedSchema<
     };
   }
 >;
+
+export const processStoreNames: StoreNames<DatabaseSchema["schema"]>[] = [
+  "lastModified",
+  "outsidePropertyImages",
+  "metalGateImages"
+];
 
 export default DatabaseSchema;

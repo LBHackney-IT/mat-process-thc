@@ -9,8 +9,12 @@ import { NextPage } from "next";
 import Router from "next/router";
 import React from "react";
 import { useAsync } from "react-async-hook";
+import { TransactionMode } from "remultiform/database";
 
 import MainLayout from "../layouts/MainLayout";
+import { processStoreNames } from "../storage/DatabaseSchema";
+import Storage from "../storage/Storage";
+import processRef from "../storage/processRef";
 
 const SubmitPage: NextPage = () => {
   // We need this to keep retrying itself until it's online (and even after
@@ -81,7 +85,25 @@ const SubmitPage: NextPage = () => {
       <Button
         disabled={disabled}
         preventDoubleClick={true}
-        onClick={(): Promise<boolean> => Router.push("/end")}
+        onClick={async (): Promise<void> => {
+          if (Storage.Context && Storage.Context.database) {
+            const database = await Storage.Context.database;
+
+            // We should push to the API before doing this, or data will be
+            // lost.
+            database.transaction(
+              processStoreNames,
+              async stores => {
+                await Promise.all(
+                  Object.values(stores).map(store => store.delete(processRef))
+                );
+              },
+              TransactionMode.ReadWrite
+            );
+          }
+
+          await Router.push("/end");
+        }}
         data-testid="submit"
       >
         {disabled
