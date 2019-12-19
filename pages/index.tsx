@@ -11,20 +11,19 @@ import { NextPage } from "next";
 import Link from "next/link";
 import React from "react";
 import { useAsync } from "react-async-hook";
-import useSWR from "swr";
 
+import useApi from "../api/useApi";
 import { TenancySummary } from "../components/TenancySummary";
-
 import MainLayout from "../layouts/MainLayout";
+import processId from "../storage/processId";
 
 export const IndexPage: NextPage = () => {
   // We need this to keep retrying itself until it's online (and even after
   // that in case we go back offline).
   const online = useAsync(async () => isOnline(), []);
-  const swr = useSWR(
-    "http://slowwly.robertomurray.co.uk/delay/3000/url/https://placekitten.com/200/200",
-    fetch
-  );
+  const processData = useApi({
+    url: `${process.env.PROCESS_API_URL}/v1/processData/${processId}`
+  });
 
   if (online.error) {
     // We should give the user some way to recover from this. Perhaps we should
@@ -32,7 +31,7 @@ export const IndexPage: NextPage = () => {
     console.error(online.error);
   }
 
-  let data: Response | undefined = undefined;
+  let data: {} | undefined = undefined;
   let content: React.ReactElement;
 
   if (online.loading) {
@@ -42,7 +41,7 @@ export const IndexPage: NextPage = () => {
       </Paragraph>
     );
   } else if (online.result) {
-    data = swr.data;
+    data = processData.loading ? undefined : processData.result;
 
     content = (
       <>
