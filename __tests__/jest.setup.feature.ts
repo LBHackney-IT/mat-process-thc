@@ -4,7 +4,11 @@ import yn from "yn";
 
 import WebDriverWrapper from "./helpers/webdriver/WebDriverWrapper";
 
-jest.setTimeout(60 * 1000);
+jest.setTimeout(10 * 1000);
+
+if (yn(process.env.CI)) {
+  jest.retryTimes(3);
+}
 
 setJestCucumberConfiguration({ loadRelativePath: true });
 
