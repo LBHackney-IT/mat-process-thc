@@ -15,14 +15,14 @@ import { useAsync } from "react-async-hook";
 import useApi from "../api/useApi";
 import { TenancySummary } from "../components/TenancySummary";
 import MainLayout from "../layouts/MainLayout";
-import processId from "../storage/processId";
+import processRef from "../storage/processRef";
 
 export const IndexPage: NextPage = () => {
   // We need this to keep retrying itself until it's online (and even after
   // that in case we go back offline).
   const online = useAsync(async () => isOnline(), []);
   const processData = useApi({
-    url: `${process.env.PROCESS_API_URL}/v1/processData/${processId}`
+    url: `${process.env.PROCESS_API_URL}/v1/processData/${processRef}`
   });
 
   if (online.error) {
