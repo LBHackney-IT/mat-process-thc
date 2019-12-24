@@ -28,7 +28,7 @@
     "cross-fetch": "^3.0.4",
     "is-online": "^8.2.1",
     "lbh-frontend-react": "0.0.5",
-    "next": "^9.1.1",
+    "next": "^9.1.6",
     "prop-types": "^15.7.2",
     "react": "^16.11.0",
     "react-async-hook": "^3.6.1",
