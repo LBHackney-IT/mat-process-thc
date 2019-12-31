@@ -26,22 +26,22 @@ type DatabaseSchema = NamedSchema<
     };
 
     unannouncedVisit: {
-      key: string;
+      key: ProcessRef;
       value: string;
     };
 
     unannouncedVisitNotes: {
-      key: string;
+      key: ProcessRef;
       value: string;
     };
 
     insideProperty: {
-      key: string;
+      key: ProcessRef;
       value: string;
     };
 
     insidePropertyNotes: {
-      key: string;
+      key: ProcessRef;
       value: string;
     };
   }
@@ -50,7 +50,11 @@ type DatabaseSchema = NamedSchema<
 export const processStoreNames: StoreNames<DatabaseSchema["schema"]>[] = [
   "lastModified",
   "outsidePropertyImages",
-  "metalGateImages"
+  "metalGateImages",
+  "unannouncedVisit",
+  "unannouncedVisitNotes",
+  "insideProperty",
+  "insidePropertyNotes"
 ];
 
 export default DatabaseSchema;

@@ -15,7 +15,7 @@ import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
 
 import DatabaseSchema from "../../storage/DatabaseSchema";
-import processId from "../../storage/processId";
+import processRef from "../../storage/processRef";
 
 const step: ProcessStepDefinition = {
   title: "About visit",
@@ -56,7 +56,7 @@ const step: ProcessStepDefinition = {
           },
           databaseMap: new DatabaseMap<DatabaseSchema, "unannouncedVisit">({
             storeName: "unannouncedVisit",
-            key: processId
+            key: processRef
           }),
           emptyValue: undefined
         })
@@ -72,7 +72,7 @@ const step: ProcessStepDefinition = {
           databaseMap: new DatabaseMap<DatabaseSchema, "unannouncedVisitNotes">(
             {
               storeName: "unannouncedVisitNotes",
-              key: processId
+              key: processRef
             }
           ),
           emptyValue: "",
@@ -110,7 +110,7 @@ const step: ProcessStepDefinition = {
           },
           databaseMap: new DatabaseMap<DatabaseSchema, "insideProperty">({
             storeName: "insideProperty",
-            key: processId
+            key: processRef
           }),
           emptyValue: undefined
         })
@@ -125,7 +125,7 @@ const step: ProcessStepDefinition = {
           },
           databaseMap: new DatabaseMap<DatabaseSchema, "insidePropertyNotes">({
             storeName: "insidePropertyNotes",
-            key: processId
+            key: processRef
           }),
           emptyValue: "",
           renderWhen: (values): boolean =>
