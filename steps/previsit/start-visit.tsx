@@ -19,10 +19,10 @@ const step: ProcessStepDefinition = {
   heading: "Start Tenancy and Household Check",
   step: {
     slug: "start-visit",
-    nextSlug: "sections",
+    nextSlug: "about-visit",
     Submit: makeSubmit([
       {
-        href: "/sections",
+        href: "/about-visit",
         value: "Start visit with tenant"
       },
       {

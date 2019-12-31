@@ -45,6 +45,42 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
+      // About visit page
+
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/about-visit");
+
+      await browser!
+        .findElement({
+          tagName: "input",
+          name: "unannounced-visit-radios",
+          value: "yes"
+        })
+        .click();
+
+      await browser!
+        .findElement({
+          tagName: "textarea",
+          name: "unannounced-visit-textarea"
+        })
+        .sendKeys("Unannounced visit text");
+
+      await browser!
+        .findElement({
+          tagName: "input",
+          name: "inside-propety-radios",
+          value: "yes"
+        })
+        .click();
+
+      await browser!
+        .findElement({
+          tagName: "textarea",
+          name: "inside-propety-textarea"
+        })
+        .sendKeys("Inside property text");
+
+      await browser!.submit();
+
       // Sections page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
 

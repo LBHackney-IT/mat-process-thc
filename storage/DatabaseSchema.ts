@@ -24,6 +24,26 @@ type DatabaseSchema = NamedSchema<
       key: ProcessRef;
       value: string[];
     };
+
+    unannouncedVisit: {
+      key: string;
+      value: string;
+    };
+
+    unannouncedVisitNotes: {
+      key: string;
+      value: string;
+    };
+
+    insideProperty: {
+      key: string;
+      value: string;
+    };
+
+    insidePropertyNotes: {
+      key: string;
+      value: string;
+    };
   }
 >;
 
