@@ -54,6 +54,17 @@ jobs:
           name: Run tests in Firefox
           command: TEST_BROWSER=firefox npm test
 
+  build:
+    docker:
+      - image: docker:stable-git
+    steps:
+      - checkout
+      - setup_remote_docker
+
+      - run:
+          name: Build Docker image
+          command: docker build .
+
   deploy:
     parameters:
       cluster-name:
@@ -80,6 +91,11 @@ workflows:
           filters:
             branches:
               ignore: master
+
+      - build:
+          name: build-image-on-branch
+          requires:
+            - install-and-test-branch
 
   check-and-deploy-to-development:
     jobs:
