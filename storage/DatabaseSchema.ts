@@ -1,4 +1,6 @@
-import { NamedSchema } from "remultiform/database/types";
+import { NamedSchema, StoreNames } from "remultiform/database";
+
+type ProcessRef = string;
 
 // We will replace this with a real name before release. It should be specific
 // to the environment it's running on to avoid clashes.
@@ -8,16 +10,27 @@ type DatabaseSchema = NamedSchema<
   typeof databaseName,
   1,
   {
+    lastModified: {
+      key: ProcessRef;
+      value: Date;
+    };
+
     outsidePropertyImages: {
-      key: string;
+      key: ProcessRef;
       value: string[];
     };
 
     metalGateImages: {
-      key: string;
+      key: ProcessRef;
       value: string[];
     };
   }
 >;
+
+export const processStoreNames: StoreNames<DatabaseSchema["schema"]>[] = [
+  "lastModified",
+  "outsidePropertyImages",
+  "metalGateImages"
+];
 
 export default DatabaseSchema;

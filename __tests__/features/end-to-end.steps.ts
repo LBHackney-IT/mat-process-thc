@@ -15,10 +15,8 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       // Index page
       await browser!.getRelative("/");
 
-      // This waits for longer than the hardcoded delay for data fetching. We
-      // should be able to improve it when we can control the API connection
-      // we're testing against.
-      await browser!.sleep(4000);
+      // Wait for data fetching.
+      await browser!.sleep(2000);
 
       await browser!.submit();
 

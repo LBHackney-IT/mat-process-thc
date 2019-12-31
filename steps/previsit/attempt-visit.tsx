@@ -15,7 +15,7 @@ import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 
 import DatabaseSchema from "../../storage/DatabaseSchema";
-import processId from "../../storage/processId";
+import processRef from "../../storage/processRef";
 
 import ProcessStepDefinition from "../../components/ProcessStepDefinition";
 
@@ -77,7 +77,7 @@ const step: ProcessStepDefinition = {
           databaseMap: new DatabaseMap<DatabaseSchema, "outsidePropertyImages">(
             {
               storeName: "outsidePropertyImages",
-              key: processId
+              key: processRef
             }
           ),
           emptyValue: []
@@ -114,7 +114,7 @@ const step: ProcessStepDefinition = {
           },
           databaseMap: new DatabaseMap<DatabaseSchema, "metalGateImages">({
             storeName: "metalGateImages",
-            key: processId
+            key: processRef
           }),
           emptyValue: []
         })
