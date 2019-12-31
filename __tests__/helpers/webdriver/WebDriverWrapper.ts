@@ -1,6 +1,7 @@
 import {
   Browser,
   Builder,
+  Locator,
   WebDriver,
   WebElement,
   WebElementPromise
@@ -112,10 +113,10 @@ class WebDriverWrapper implements WebDriver {
     return this.get(url);
   }
 
-  async submit(): Promise<void> {
-    const submitButton = await this.findElement({
-      css: '[data-testid="submit"]'
-    });
+  async submit(
+    locator: Locator = { css: '[data-testid="submit"]' }
+  ): Promise<void> {
+    const submitButton = await this.findElement(locator);
 
     await submitButton.click();
     await this.waitUntilStale(submitButton);
