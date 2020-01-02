@@ -21,19 +21,23 @@ export const RadioButtons = (props: RadioButtons): JSX.Element => {
   return (
     <div className="radio-buttons">
       {radios.map(
-        (radio: RadioButton, index): JSX.Element => (
-          <div key={index}>
-            <input
-              id={`${name}-${index}`}
-              type="radio"
-              name={name}
-              checked={value === radio.value}
-              value={radio.value}
-              onClick={(): void => onValueChange(radio.value)}
-            />
-            <label htmlFor={`${name}-${index}`}>{radio.label}</label>
-          </div>
-        )
+        (radio): JSX.Element => {
+          const id = `${name}-${radio.value}`;
+
+          return (
+            <span key={id}>
+              <input
+                id={id}
+                type="radio"
+                name={name}
+                value={radio.value}
+                checked={value === radio.value}
+                onChange={(): void => onValueChange(radio.value)}
+              />
+              <label htmlFor={id}>{radio.label}</label>
+            </span>
+          );
+        }
       )}
       <style jsx>
         {`

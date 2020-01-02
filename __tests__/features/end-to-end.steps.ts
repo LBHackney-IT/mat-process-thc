@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { defineFeature, loadFeature } from "jest-cucumber";
 import { join } from "path";
+import { until } from "selenium-webdriver";
 
 import Given from "../helpers/steps/Given";
 import Expect from "../helpers/Expect";
@@ -26,16 +27,10 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       );
 
       await browser!
-        .findElement({
-          tagName: "input",
-          name: "outside-property-images"
-        })
+        .findElement({ name: "outside-property-images" })
         .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
       await browser!
-        .findElement({
-          tagName: "input",
-          name: "metal-gates-images"
-        })
+        .findElement({ name: "metal-gate-images" })
         .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
 
       await browser!.submit();
@@ -49,35 +44,14 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await expect(browser!.getCurrentUrl()).resolves.toContain("/about-visit");
 
+      await browser!.findElement({ id: "unannounced-visit-radios-no" }).click();
       await browser!
-        .findElement({
-          tagName: "input",
-          name: "unannounced-visit-radios",
-          value: "yes"
-        })
-        .click();
-
+        .wait(until.elementLocated({ name: "unannounced-visit-notes" }), 500)
+        .sendKeys("Unannounced visit notes");
+      await browser!.findElement({ id: "inside-property-radios-no" }).click();
       await browser!
-        .findElement({
-          tagName: "textarea",
-          name: "unannounced-visit-textarea"
-        })
-        .sendKeys("Unannounced visit text");
-
-      await browser!
-        .findElement({
-          tagName: "input",
-          name: "inside-propety-radios",
-          value: "yes"
-        })
-        .click();
-
-      await browser!
-        .findElement({
-          tagName: "textarea",
-          name: "inside-propety-textarea"
-        })
-        .sendKeys("Inside property text");
+        .wait(until.elementLocated({ name: "inside-property-notes" }), 500)
+        .sendKeys("Inside property notes");
 
       await browser!.submit();
 
