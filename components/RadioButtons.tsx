@@ -58,9 +58,7 @@ export const RadioButtons = (props: RadioButtons): JSX.Element => {
 };
 
 RadioButtons.propTypes = {
-  ...DynamicComponent.controlledPropTypes(
-    PropTypes.arrayOf(PropTypes.string.isRequired)
-  ),
+  ...DynamicComponent.controlledPropTypes(PropTypes.string.isRequired),
   name: PropTypes.string.isRequired,
   radios: PropTypes.arrayOf(
     PropTypes.exact({

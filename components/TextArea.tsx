@@ -41,10 +41,8 @@ export const TextArea = (props: TextAreaProps): React.ReactElement => {
   );
 };
 
-TextArea.PropTypes = {
-  ...DynamicComponent.controlledPropTypes(
-    PropTypes.arrayOf(PropTypes.string.isRequired)
-  ),
+TextArea.propTypes = {
+  ...DynamicComponent.controlledPropTypes(PropTypes.string.isRequired),
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   rows: PropTypes.number

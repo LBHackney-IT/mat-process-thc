@@ -158,10 +158,10 @@ export const ImageInput = (props: ImageInputProps): React.ReactElement => {
 };
 
 ImageInput.propTypes = {
+  ...DynamicComponent.controlledPropTypes(
+    PropTypes.arrayOf(PropTypes.string.isRequired).isRequired
+  ),
   label: PropTypes.string.isRequired,
   buttonText: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  ...DynamicComponent.controlledPropTypes(
-    PropTypes.arrayOf(PropTypes.string.isRequired)
-  )
+  name: PropTypes.string.isRequired
 };
