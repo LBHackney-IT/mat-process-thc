@@ -122,36 +122,44 @@ export const ImageInput = (props: ImageInputProps): React.ReactElement => {
         <PhotoIcon className="photo-icon" />
         {buttonText}
       </Button>
+
       <style jsx>{`
         input,
         label {
           display: none;
         }
+
         .image-container {
           display: flex;
           flex-wrap: wrap;
         }
+
         .thumbnail {
           display: flex;
           flex-direction: column;
           margin-right: 10px;
         }
+
         .thumbnail img {
           max-height: 200px;
           width: auto;
           margin: auto;
           margin-bottom: -1.5em;
         }
+
         .photo-icon {
           background: white;
         }
-        :global(.input-button) {
+
+        :global(.lbh-button.input-button) {
           display: flex;
           align-items: center;
         }
+
         :global(.photo-icon) {
           margin-right: 15px;
         }
+
         :global(.remove-button) {
           vertical-align: bottom;
           margin-bottom: 6px;
