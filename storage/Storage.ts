@@ -69,7 +69,7 @@ export default class Storage {
           return;
         }
 
-        await stores.lastModified.put(lastModified, processRef);
+        await stores.lastModified.put(processRef, lastModified);
 
         // Update the rest of the data here.
       },

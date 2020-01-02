@@ -4,7 +4,7 @@ import {
 } from "lbh-frontend-react/components/Fieldset";
 import React from "react";
 import {
-  DatabaseMap,
+  ComponentDatabaseMap,
   ComponentWrapper,
   DynamicComponent
 } from "remultiform/component-wrapper";
@@ -54,11 +54,15 @@ const step: ProcessStepDefinition = {
               }
             ]
           },
-          databaseMap: new DatabaseMap<DatabaseSchema, "unannouncedVisit">({
+          defaultValue: "",
+          emptyValue: "",
+          databaseMap: new ComponentDatabaseMap<
+            DatabaseSchema,
+            "unannouncedVisit"
+          >({
             storeName: "unannouncedVisit",
             key: processRef
-          }),
-          emptyValue: undefined
+          })
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -69,15 +73,17 @@ const step: ProcessStepDefinition = {
             label: "Explain why this visit is pre-arranged.",
             name: "unannounced-visit-notes"
           },
-          databaseMap: new DatabaseMap<DatabaseSchema, "unannouncedVisitNotes">(
-            {
-              storeName: "unannouncedVisitNotes",
-              key: processRef
-            }
-          ),
-          emptyValue: "",
           renderWhen: (values): boolean =>
-            values["unannounced-visit-radios"] === "yes"
+            values["unannounced-visit-radios"] === "yes",
+          defaultValue: "",
+          emptyValue: "",
+          databaseMap: new ComponentDatabaseMap<
+            DatabaseSchema,
+            "unannouncedVisitNotes"
+          >({
+            storeName: "unannouncedVisitNotes",
+            key: processRef
+          })
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -108,11 +114,15 @@ const step: ProcessStepDefinition = {
               }
             ]
           },
-          databaseMap: new DatabaseMap<DatabaseSchema, "insideProperty">({
+          defaultValue: "",
+          emptyValue: "",
+          databaseMap: new ComponentDatabaseMap<
+            DatabaseSchema,
+            "insideProperty"
+          >({
             storeName: "insideProperty",
             key: processRef
-          }),
-          emptyValue: undefined
+          })
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -123,13 +133,17 @@ const step: ProcessStepDefinition = {
             label: "Explain why this visit is outside of tenant's home.",
             name: "inside-property-notes"
           },
-          databaseMap: new DatabaseMap<DatabaseSchema, "insidePropertyNotes">({
+          renderWhen: (values): boolean =>
+            values["inside-property-radios"] === "no",
+          defaultValue: "",
+          emptyValue: "",
+          databaseMap: new ComponentDatabaseMap<
+            DatabaseSchema,
+            "insidePropertyNotes"
+          >({
             storeName: "insidePropertyNotes",
             key: processRef
-          }),
-          emptyValue: "",
-          renderWhen: (values): boolean =>
-            values["inside-property-radios"] === "no"
+          })
         })
       )
     ]
