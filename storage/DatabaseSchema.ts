@@ -15,46 +15,46 @@ type DatabaseSchema = NamedSchema<
       value: Date;
     };
 
-    outsidePropertyImages: {
+    property: {
       key: ProcessRef;
-      value: string[];
+      value: {
+        outside: {
+          images: string[];
+        };
+      };
     };
 
-    metalGateImages: {
+    isUnannouncedVisit: {
       key: ProcessRef;
-      value: string[];
+      value: {
+        value: string;
+        notes: string;
+      };
     };
 
-    unannouncedVisit: {
+    isVisitInside: {
       key: ProcessRef;
-      value: string;
+      value: {
+        value: string;
+        notes: string;
+      };
     };
 
-    unannouncedVisitNotes: {
+    metalGates: {
       key: ProcessRef;
-      value: string;
-    };
-
-    insideProperty: {
-      key: ProcessRef;
-      value: string;
-    };
-
-    insidePropertyNotes: {
-      key: ProcessRef;
-      value: string;
+      value: {
+        images: string[];
+      };
     };
   }
 >;
 
 export const processStoreNames: StoreNames<DatabaseSchema["schema"]>[] = [
   "lastModified",
-  "outsidePropertyImages",
-  "metalGateImages",
-  "unannouncedVisit",
-  "unannouncedVisitNotes",
-  "insideProperty",
-  "insidePropertyNotes"
+  "property",
+  "isUnannouncedVisit",
+  "isVisitInside",
+  "metalGates"
 ];
 
 export default DatabaseSchema;

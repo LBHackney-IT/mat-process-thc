@@ -41,7 +41,6 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // About visit page
-
       await expect(browser!.getCurrentUrl()).resolves.toContain("/about-visit");
 
       await browser!.findElement({ id: "unannounced-visit-radios-no" }).click();

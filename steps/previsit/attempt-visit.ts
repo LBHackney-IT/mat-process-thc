@@ -76,12 +76,10 @@ const step: ProcessStepDefinition = {
           },
           defaultValue: [],
           emptyValue: [] as string[],
-          databaseMap: new ComponentDatabaseMap<
-            DatabaseSchema,
-            "outsidePropertyImages"
-          >({
-            storeName: "outsidePropertyImages",
-            key: processRef
+          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+            storeName: "property",
+            key: processRef,
+            property: ["outside", "images"]
           })
         })
       ),
@@ -115,12 +113,10 @@ const step: ProcessStepDefinition = {
           },
           defaultValue: [],
           emptyValue: [] as string[],
-          databaseMap: new ComponentDatabaseMap<
-            DatabaseSchema,
-            "metalGateImages"
-          >({
-            storeName: "metalGateImages",
-            key: processRef
+          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "metalGates">({
+            storeName: "metalGates",
+            key: processRef,
+            property: ["images"]
           })
         })
       ),
