@@ -100,7 +100,9 @@ export const ImageInput = (props: ImageInputProps): React.ReactElement => {
           if (inputRef.current) {
             inputRef.current.value = "";
           } else {
-            console.error("Input's ref is not populated, yet");
+            console.error(
+              "Input's ref is not populated and we're trying to set its value"
+            );
           }
         }}
       />
@@ -111,7 +113,9 @@ export const ImageInput = (props: ImageInputProps): React.ReactElement => {
           if (inputRef.current) {
             inputRef.current.click();
           } else {
-            console.error("Input's ref is not populated, yet");
+            console.error(
+              "Input's ref is not populated yet and we're trying to click it"
+            );
           }
         }}
       >
