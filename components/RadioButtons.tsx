@@ -39,24 +39,22 @@ export const RadioButtons = (props: RadioButtons): JSX.Element => {
           );
         }
       )}
-      <style jsx>
-        {`
-          .radio-buttons {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 20px;
-          }
+      <style jsx>{`
+        .radio-buttons {
+          display: flex;
+          flex-direction: column;
+          margin-bottom: 20px;
+        }
 
-          label {
-            font-family: "Montserrat";
-          }
+        label {
+          font-family: "Montserrat";
+        }
 
-          input {
-            margin-right: 10px;
-            margin-top: 10px;
-          }
-        `}
-      </style>
+        input {
+          margin-right: 10px;
+          margin-top: 10px;
+        }
+      `}</style>
     </div>
   );
 };
