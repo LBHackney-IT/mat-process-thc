@@ -34,6 +34,7 @@ defineFeature(loadFeature("./accessibility.feature"), test => {
   testAccessibility(test, "Residency");
   testAccessibility(test, "Tenant photo");
   testAccessibility(test, "Next of kin");
+  testAccessibility(test, "Carer");
   testAccessibility(test, "Submit");
   testAccessibility(test, "Confirmed");
 });

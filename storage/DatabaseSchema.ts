@@ -82,6 +82,18 @@ type DatabaseSchema = NamedSchema<
           email: string;
           address: string;
         };
+
+        carer: {
+          hasCarer: string;
+          type: string;
+          isLiveIn: string;
+          liveInStartDate: { month?: number; year?: number };
+          fullName: string;
+          phoneNumber: string;
+          relationship: string;
+          address: string;
+          notes: string;
+        };
       };
     };
   }
