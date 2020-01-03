@@ -32,6 +32,7 @@ defineFeature(loadFeature("./accessibility.feature"), test => {
   testAccessibility(test, "About visit");
   testAccessibility(test, "ID");
   testAccessibility(test, "Residency");
+  testAccessibility(test, "Tenant photo");
   testAccessibility(test, "Submit");
   testAccessibility(test, "Confirmed");
 });

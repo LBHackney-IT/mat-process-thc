@@ -100,6 +100,18 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
+      // Tenant photo page
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/tenant-photo"
+      );
+
+      await browser!.findElement({ id: "tenant-photo-willing-yes" }).click();
+      await browser!
+        .wait(until.elementLocated({ name: "tenant-photo" }), 500)
+        .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
+
+      await browser!.submit();
+
       // Submit page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/submit");
 
