@@ -35,7 +35,7 @@ const step: ProcessStepDefinition = {
     componentWrappers: [
       ComponentWrapper.wrapStatic(
         new StaticComponent({
-          key: "start-visit-heading",
+          key: "heading",
           Component: Heading,
           props: {
             level: HeadingLevels.H2,
@@ -78,7 +78,7 @@ const step: ProcessStepDefinition = {
       ),
       ComponentWrapper.wrapStatic(
         new StaticComponent({
-          key: "information-helps-us-list",
+          key: "paragraph-3-list",
           Component: List,
           props: {
             items: [

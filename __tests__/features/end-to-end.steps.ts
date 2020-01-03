@@ -46,11 +46,11 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       // About visit page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/about-visit");
 
-      await browser!.findElement({ id: "unannounced-visit-radios-no" }).click();
+      await browser!.findElement({ id: "unannounced-visit-no" }).click();
       await browser!
         .wait(until.elementLocated({ name: "unannounced-visit-notes" }), 500)
         .sendKeys("Unannounced visit notes");
-      await browser!.findElement({ id: "inside-property-radios-no" }).click();
+      await browser!.findElement({ id: "inside-property-no" }).click();
       await browser!
         .wait(until.elementLocated({ name: "inside-property-notes" }), 500)
         .sendKeys("Inside property notes");

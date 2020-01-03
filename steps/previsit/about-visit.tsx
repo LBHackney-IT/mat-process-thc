@@ -33,7 +33,7 @@ const step: ProcessStepDefinition = {
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "unannounced-visit-radios",
+          key: "unannounced-visit",
           Component(props): React.ReactElement {
             return (
               <Fieldset
@@ -46,7 +46,7 @@ const step: ProcessStepDefinition = {
             );
           },
           props: {
-            name: "unannounced-visit-radios",
+            name: "unannounced-visit",
             radios: [
               {
                 label: "Yes",
@@ -72,19 +72,19 @@ const step: ProcessStepDefinition = {
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "unannounced-visit-notes-textarea",
+          key: "unannounced-visit-notes",
           Component: TextArea,
           props: {
             label: "Explain why this visit was pre-arranged.",
             name: "unannounced-visit-notes"
           },
           renderWhen(stepValues: {
-            "unannounced-visit-radios"?: ComponentValue<
+            "unannounced-visit"?: ComponentValue<
               DatabaseSchema,
               "isVisitInside"
             >;
           }): boolean {
-            return stepValues["unannounced-visit-radios"] === "no";
+            return stepValues["unannounced-visit"] === "no";
           },
           defaultValue: "",
           emptyValue: "",
@@ -100,7 +100,7 @@ const step: ProcessStepDefinition = {
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "inside-property-radios",
+          key: "inside-property",
           // eslint-disable-next-line react/display-name
           Component: (props): React.ReactElement => (
             <Fieldset
@@ -114,7 +114,7 @@ const step: ProcessStepDefinition = {
             </Fieldset>
           ),
           props: {
-            name: "inside-property-radios",
+            name: "inside-property",
             radios: [
               {
                 label: "Yes",
@@ -140,7 +140,7 @@ const step: ProcessStepDefinition = {
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "inside-property-notes-textarea",
+          key: "inside-property-notes",
           Component: TextArea,
           props: {
             label:
@@ -148,12 +148,9 @@ const step: ProcessStepDefinition = {
             name: "inside-property-notes"
           },
           renderWhen(stepValues: {
-            "inside-property-radios"?: ComponentValue<
-              DatabaseSchema,
-              "isVisitInside"
-            >;
+            "inside-property"?: ComponentValue<DatabaseSchema, "isVisitInside">;
           }): boolean {
-            return stepValues["inside-property-radios"] === "no";
+            return stepValues["inside-property"] === "no";
           },
           defaultValue: "",
           emptyValue: "",
