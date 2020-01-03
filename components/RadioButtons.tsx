@@ -10,32 +10,38 @@ export interface RadioButton {
   value: string;
 }
 
-export type RadioButtons = DynamicComponentControlledProps<string> & {
+type Props = DynamicComponentControlledProps<string> & {
   name: string;
   radios: RadioButton[];
 };
 
-export const RadioButtons = (props: RadioButtons): JSX.Element => {
-  const { name, radios, value, onValueChange } = props;
+export const RadioButtons = (props: Props): JSX.Element => {
+  const { name, radios, value: currentValue, onValueChange } = props;
 
   return (
     <div className="radio-buttons">
       {radios.map(
         (radio): JSX.Element => {
-          const id = `${name}-${radio.value}`;
+          const labelId = `${name}-${radio.value.replace(/\s+/g, "-")}-label`;
+          const inputId = `${name}-${radio.value.replace(/\s+/g, "-")}`;
 
           return (
-            <span key={id}>
+            <div key={inputId}>
               <input
-                id={id}
-                type="radio"
+                id={inputId}
                 name={name}
+                type="radio"
                 value={radio.value}
-                checked={value === radio.value}
-                onChange={(): void => onValueChange(radio.value)}
+                checked={currentValue === radio.value}
+                onChange={(): void => {
+                  onValueChange(radio.value);
+                }}
+                aria-labelledby={labelId}
               />
-              <label htmlFor={id}>{radio.label}</label>
-            </span>
+              <label id={labelId} htmlFor={inputId}>
+                {radio.label}
+              </label>
+            </div>
           );
         }
       )}
