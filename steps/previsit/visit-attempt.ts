@@ -38,7 +38,7 @@ const step: ProcessStepDefinition = {
     componentWrappers: [
       ComponentWrapper.wrapStatic(
         new StaticComponent({
-          key: "visit-attempt-heading",
+          key: "heading",
           Component: Heading,
           props: {
             level: HeadingLevels.H2,
@@ -123,7 +123,7 @@ const step: ProcessStepDefinition = {
       ),
       ComponentWrapper.wrapStatic(
         new StaticComponent({
-          key: "do-next-heading",
+          key: "next-heading",
           Component: Heading,
           props: {
             level: HeadingLevels.H4,
