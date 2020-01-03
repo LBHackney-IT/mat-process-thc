@@ -1,6 +1,4 @@
-import { Link } from "lbh-frontend-react/components/Link";
-import { List } from "lbh-frontend-react/components/List";
-import { Tag } from "lbh-frontend-react/components/Tag";
+import { Link, List, Tag } from "lbh-frontend-react/components";
 import { nullAsUndefined } from "null-as-undefined";
 import PropTypes from "prop-types";
 import React from "react";
@@ -60,6 +58,7 @@ export const TaskList = (props: TaskListprops): JSX.Element => {
           </>
         ))}
       />
+
       <style jsx>{`
         :global(.task-list li) {
           display: flex;
