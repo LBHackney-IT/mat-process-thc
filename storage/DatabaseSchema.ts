@@ -55,6 +55,15 @@ type DatabaseSchema = NamedSchema<
         notes: string;
       };
     };
+
+    residency: {
+      key: ProcessRef;
+      value: {
+        type: string;
+        images: string[];
+        notes: string;
+      };
+    };
   }
 >;
 
@@ -64,7 +73,7 @@ export const processStoreNames: StoreNames<DatabaseSchema["schema"]>[] = [
   "isUnannouncedVisit",
   "isVisitInside",
   "metalGates",
-  "id"
+  "residency"
 ];
 
 export default DatabaseSchema;

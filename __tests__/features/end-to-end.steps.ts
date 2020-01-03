@@ -79,6 +79,27 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
+      // Residency page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/residency");
+
+      await browser!
+        .findElement({ id: "residency-proof-type-bank-statement" })
+        .click();
+      await browser!
+        .findElement({ name: "residency-proof-images" })
+        .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
+      await browser!.findElement({ id: "residency-notes-summary" }).click();
+      await browser!
+        .wait(
+          until.elementIsVisible(
+            browser!.findElement({ name: "residency-notes" })
+          ),
+          500
+        )
+        .sendKeys("Residency notes");
+
+      await browser!.submit();
+
       // Submit page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/submit");
 
