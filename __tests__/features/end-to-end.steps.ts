@@ -19,6 +19,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       // Wait for data fetching.
       await browser!.sleep(2000);
 
+      // Loading page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/loading");
+
       await browser!.submit();
 
       // Attempt visit page

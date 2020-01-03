@@ -1,5 +1,6 @@
 enum PageSlugs {
   // General
+  Index = "",
   Loading = "loading",
   Sections = "sections",
 

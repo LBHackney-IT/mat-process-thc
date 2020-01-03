@@ -4,8 +4,8 @@ Feature: Accessibility
   I want to have my needs met
   So that I can use the service
 
-  Scenario: Index page is accessible
-    When I visit /
+  Scenario: Loading page is accessible
+    When I visit /loading
     Then the page should be accessible
     And the page should have a descriptive title
 
