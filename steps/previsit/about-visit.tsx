@@ -1,7 +1,4 @@
-import {
-  Fieldset,
-  FieldsetLegend
-} from "lbh-frontend-react/components/Fieldset";
+import { FieldsetLegend } from "lbh-frontend-react/components";
 import React from "react";
 import {
   ComponentDatabaseMap,
@@ -34,19 +31,12 @@ const step: ProcessStepDefinition = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "unannounced-visit",
-          Component(props): React.ReactElement {
-            return (
-              <Fieldset
-                legend={
-                  <FieldsetLegend>Is this an unnanounced visit?</FieldsetLegend>
-                }
-              >
-                <RadioButtons {...props} />
-              </Fieldset>
-            );
-          },
+          Component: RadioButtons,
           props: {
             name: "unannounced-visit",
+            legend: (
+              <FieldsetLegend>Is this an unnanounced visit?</FieldsetLegend>
+            ) as React.ReactNode,
             radios: [
               {
                 label: "Yes",
@@ -101,20 +91,14 @@ const step: ProcessStepDefinition = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "inside-property",
-          // eslint-disable-next-line react/display-name
-          Component: (props): React.ReactElement => (
-            <Fieldset
-              legend={
-                <FieldsetLegend>
-                  Is it taking place inside a tenant&apos;s home?
-                </FieldsetLegend>
-              }
-            >
-              <RadioButtons {...props} />
-            </Fieldset>
-          ),
+          Component: RadioButtons,
           props: {
             name: "inside-property",
+            legend: (
+              <FieldsetLegend>
+                Is it taking place inside a tenant&apos;s home?
+              </FieldsetLegend>
+            ) as React.ReactNode,
             radios: [
               {
                 label: "Yes",

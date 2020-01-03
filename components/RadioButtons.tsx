@@ -1,3 +1,4 @@
+import { Fieldset } from "lbh-frontend-react/components";
 import PropTypes from "prop-types";
 import React from "react";
 import {
@@ -12,14 +13,15 @@ export interface RadioButton {
 
 type Props = DynamicComponentControlledProps<string> & {
   name: string;
+  legend?: React.ReactNode | null;
   radios: RadioButton[];
 };
 
 export const RadioButtons = (props: Props): JSX.Element => {
-  const { name, radios, value: currentValue, onValueChange } = props;
+  const { name, legend, radios, value: currentValue, onValueChange } = props;
 
   return (
-    <div className="radio-buttons">
+    <Fieldset className="radio-buttons" legend={legend}>
       {radios.map(
         (radio): JSX.Element => {
           const labelId = `${name}-${radio.value.replace(/\s+/g, "-")}-label`;
@@ -45,6 +47,7 @@ export const RadioButtons = (props: Props): JSX.Element => {
           );
         }
       )}
+
       <style jsx>{`
         .radio-buttons {
           display: flex;
@@ -61,13 +64,14 @@ export const RadioButtons = (props: Props): JSX.Element => {
           margin-top: 10px;
         }
       `}</style>
-    </div>
+    </Fieldset>
   );
 };
 
 RadioButtons.propTypes = {
   ...DynamicComponent.controlledPropTypes(PropTypes.string.isRequired),
   name: PropTypes.string.isRequired,
+  legend: PropTypes.node,
   radios: PropTypes.arrayOf(
     PropTypes.exact({
       label: PropTypes.string.isRequired,
