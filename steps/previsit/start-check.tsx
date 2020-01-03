@@ -11,18 +11,20 @@ import {
 import React from "react";
 
 import { makeSubmit } from "../../components/makeSubmit";
-
 import ProcessStepDefinition from "../../components/ProcessStepDefinition";
 
+import PageSlugs, { hrefForSlug } from "../PageSlugs";
+import PageTitles from "../PageTitles";
+
 const step: ProcessStepDefinition = {
-  title: "Start visit",
+  title: PageTitles.StartCheck,
   heading: "Start Tenancy and Household Check",
   step: {
-    slug: "start-visit",
-    nextSlug: "about-visit",
+    slug: PageSlugs.StartCheck,
+    nextSlug: PageSlugs.AboutVisit,
     Submit: makeSubmit([
       {
-        href: "/about-visit",
+        href: hrefForSlug(PageSlugs.AboutVisit),
         value: "Start visit with tenant"
       },
       {

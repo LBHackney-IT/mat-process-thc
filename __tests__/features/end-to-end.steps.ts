@@ -24,9 +24,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
-      // Attempt visit page
+      // Visit attempt page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/attempt-visit"
+        "/visit-attempt"
       );
 
       await browser!
@@ -38,8 +38,8 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
-      // Start visit page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/start-visit");
+      // Start check page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/start-check");
 
       await browser!.submit();
 
@@ -67,8 +67,8 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
-      // End page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/end");
+      // Confirmed page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/confirmed");
     });
 
     then("I should see that the process has been submitted", async () => {

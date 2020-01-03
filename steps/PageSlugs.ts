@@ -56,4 +56,6 @@ enum PageSlugs {
   Confirmed = "confirmed"
 }
 
+export const hrefForSlug = (slug: PageSlugs): string => `/${slug}`;
+
 export default PageSlugs;

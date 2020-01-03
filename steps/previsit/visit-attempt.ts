@@ -12,21 +12,22 @@ import {
 
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
-
 import DatabaseSchema from "../../storage/DatabaseSchema";
 import processRef from "../../storage/processRef";
-
 import ProcessStepDefinition from "../../components/ProcessStepDefinition";
 
+import PageSlugs, { hrefForSlug } from "../PageSlugs";
+import PageTitles from "../PageTitles";
+
 const step: ProcessStepDefinition = {
-  title: "Attempt visit",
+  title: PageTitles.VisitAttempt,
   heading: "Tenancy and Household Check",
   step: {
-    slug: "attempt-visit",
-    nextSlug: "start-visit",
+    slug: PageSlugs.VisitAttempt,
+    nextSlug: PageSlugs.StartCheck,
     Submit: makeSubmit([
       {
-        href: "/start-visit",
+        href: hrefForSlug(PageSlugs.StartCheck),
         value: "Enter the property"
       },
       {

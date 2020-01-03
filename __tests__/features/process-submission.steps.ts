@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { DefineStepFunction, defineFeature, loadFeature } from "jest-cucumber";
-import { until } from "selenium-webdriver";
 
 import Given from "../helpers/steps/Given";
 // import When from "../helpers/steps/When";
@@ -15,7 +14,6 @@ const givenIAmAtTheEndOfTheProcess = (defineStep: DefineStepFunction): void => {
 const whenISubmitTheProcess = (defineStep: DefineStepFunction): void => {
   defineStep("I submit the process", async () => {
     await browser!.submit();
-    await browser!.wait(until.urlMatches(/\/end$/));
   });
 };
 
