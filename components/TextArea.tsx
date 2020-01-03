@@ -8,35 +8,39 @@ import PropTypes from "prop-types";
 export type TextAreaProps = DynamicComponentControlledProps<string> & {
   label: string;
   name: string;
-  rows?: number;
+  rows?: number | null;
 };
 
 export const TextArea = (props: TextAreaProps): React.ReactElement => {
   const { label, name, rows, value, onValueChange } = props;
+
+  const labelId = `${name}-label`;
+  const inputId = `${name}-input`;
+
   return (
     <>
-      <label id={`${name}-label`} htmlFor={`${name}-textarea`}>
+      <label id={labelId} htmlFor={inputId}>
         {label}
       </label>
       <textarea
-        id={`${name}-textarea`}
+        id={inputId}
         name={name}
         rows={rows || 5}
-        value={value ? value : ""}
+        value={value}
         onChange={(event): void => {
           onValueChange(event.target.value);
         }}
+        aria-labelledby={labelId}
       >
         {value}
       </textarea>
-      <style jsx>
-        {`
-          textarea {
-            display: block;
-            margin: 10px 0;
-          }
-        `}
-      </style>
+
+      <style jsx>{`
+        textarea {
+          display: block;
+          margin: 10px 0;
+        }
+      `}</style>
     </>
   );
 };
