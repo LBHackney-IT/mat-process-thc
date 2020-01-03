@@ -1,6 +1,5 @@
 import "cross-fetch/polyfill";
 
-import isOnline from "is-online";
 import { Button } from "lbh-frontend-react/components/Button/Button";
 import { ErrorMessage } from "lbh-frontend-react/components/ErrorMessage";
 import { PageAnnouncement } from "lbh-frontend-react/components/PageAnnouncement";
@@ -8,27 +7,19 @@ import { Paragraph } from "lbh-frontend-react/components/typography/Paragraph";
 import { NextPage } from "next";
 import Router from "next/router";
 import React from "react";
-import { useAsync } from "react-async-hook";
 import { TransactionMode } from "remultiform/database";
 
+import useOnlineWithRetry from "../helpers/useOnlineWithRetry";
 import MainLayout from "../layouts/MainLayout";
 import { processStoreNames } from "../storage/DatabaseSchema";
 import Storage from "../storage/Storage";
 import processRef from "../storage/processRef";
 
 const SubmitPage: NextPage = () => {
-  // We need this to keep retrying itself until it's online (and even after
-  // that in case we go back offline).
-  const online = useAsync(async () => isOnline(), []);
+  const online = useOnlineWithRetry();
 
   const address = "1 Mare Street, London, E8 3AA";
   const tenants = ["Jane Doe", "John Doe"];
-
-  if (online.error) {
-    // We should give the user some way to recover from this. Perhaps we should
-    // retry in this case and dedupe the error?
-    console.error(online.error);
-  }
 
   let content: React.ReactElement;
 
@@ -58,7 +49,7 @@ const SubmitPage: NextPage = () => {
           If you can&apos;t go online now, when you are next online on this
           device, please come back to this Tenancy and Household Check from your
           work tray and click on the &lsquo;Save and submit to manager&rsquo;
-          button that will become available to be clicked.
+          button below that will become able to be clicked.
         </Paragraph>
         {!online.error && online.result && (
           <Paragraph>

@@ -144,7 +144,7 @@ it("renders correctly when online", async () => {
               <p
                 className="lbh-body"
               >
-                If you can't go online now, when you are next online on this device, please come back to this Tenancy and Household Check from your work tray and click on the ‘Save and submit to manager’ button that will become available to be clicked.
+                If you can't go online now, when you are next online on this device, please come back to this Tenancy and Household Check from your work tray and click on the ‘Save and submit to manager’ button below that will become able to be clicked.
               </p>
               <p
                 className="lbh-body"
@@ -303,7 +303,7 @@ it("renders correctly when offline", async () => {
               <p
                 className="lbh-body"
               >
-                If you can't go online now, when you are next online on this device, please come back to this Tenancy and Household Check from your work tray and click on the ‘Save and submit to manager’ button that will become available to be clicked.
+                If you can't go online now, when you are next online on this device, please come back to this Tenancy and Household Check from your work tray and click on the ‘Save and submit to manager’ button below that will become able to be clicked.
               </p>
             </div>
           </section>
