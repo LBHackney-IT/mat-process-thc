@@ -22,6 +22,7 @@ export default class Storage {
           upgrade.createStore("isUnannouncedVisit");
           upgrade.createStore("isVisitInside");
           upgrade.createStore("metalGates");
+          upgrade.createStore("id");
 
           version = 1;
         }

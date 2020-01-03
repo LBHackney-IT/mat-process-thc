@@ -181,7 +181,7 @@ it("renders correctly", () => {
                 <a
                   className="govuk-link lbh-link"
                   data-testid="start-id"
-                  href="/submit"
+                  href="/id"
                 >
                   Start
                 </a>

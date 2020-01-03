@@ -36,7 +36,7 @@ export const SectionsPage: NextPage = () => {
         items={[
           {
             name: "ID, residency, and tenant information",
-            href: hrefForSlug(PageSlugs.Submit),
+            href: hrefForSlug(PageSlugs.Id),
             status: idCheckCompleted ? "Completed" : undefined,
             "data-testid": "start-id"
           },

@@ -12,7 +12,7 @@ enum PageTitles {
   // ID, residency, and tenant information
   PresentForCheck = "Present for check",
   Verify = "Verify",
-  Id = "Id",
+  Id = "ID",
   Residency = "Residency",
   TenantPhoto = "Tenant photo",
   NextOfKin = "Next of kin",

@@ -60,7 +60,18 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       // Sections page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
 
-      await browser!.submit({ css: '[href="/submit"]' });
+      await browser!.submit({ css: '[href="/id"]' });
+
+      // Id page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/id");
+
+      await browser!.findElement({ id: "id-type-valid-passport" }).click();
+      await browser!
+        .findElement({ name: "id-proof-images" })
+        .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
+      await browser!.findElement({ name: "id-notes" }).sendKeys("ID notes");
+
+      await browser!.submit();
 
       // Submit page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/submit");
