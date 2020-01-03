@@ -8,15 +8,16 @@ import React from "react";
 
 import { TaskList } from "../components/TaskList";
 import { TenancySummary } from "../components/TenancySummary";
-
 import MainLayout from "../layouts/MainLayout";
+import PageSlugs, { hrefForSlug } from "../steps/PageSlugs";
+import PageTitles from "../steps/PageTitles";
 
 export const SectionsPage: NextPage = () => {
   // This needs to be derived from the current state of the process data.
   const idCheckCompleted = false;
 
   return (
-    <MainLayout title="Sections">
+    <MainLayout title={PageTitles.Sections}>
       <Heading level={HeadingLevels.H1}>
         Tenancy and Household Check sections
       </Heading>
@@ -35,31 +36,31 @@ export const SectionsPage: NextPage = () => {
         items={[
           {
             name: "ID, residency, and tenant information",
-            href: "/submit",
+            href: hrefForSlug(PageSlugs.Submit),
             status: idCheckCompleted ? "Completed" : undefined,
             "data-testid": "start-id"
           },
           {
             name: "Household",
-            href: "/submit",
+            href: hrefForSlug(PageSlugs.Submit),
             status: idCheckCompleted ? undefined : "",
             "data-testid": "start-household"
           },
           {
             name: "Property inspection",
-            href: "/submit",
+            href: hrefForSlug(PageSlugs.Submit),
             status: idCheckCompleted ? undefined : "",
             "data-testid": "start-property"
           },
           {
             name: "Wellbeing support",
-            href: "/submit",
+            href: hrefForSlug(PageSlugs.Submit),
             status: idCheckCompleted ? undefined : "",
             "data-testid": "start-wellbeing"
           },
           {
             name: "Review and submit",
-            href: "/submit",
+            href: hrefForSlug(PageSlugs.Submit),
             status: idCheckCompleted ? undefined : "",
             "data-testid": "start-review"
           }

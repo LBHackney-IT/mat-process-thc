@@ -1,5 +1,5 @@
-import attemptVisit from "./attempt-visit";
-import startVisit from "./start-visit";
+import visitAttempt from "./visit-attempt";
+import startCheck from "./start-check";
 import aboutVisit from "./about-visit";
 
-export default [attemptVisit, startVisit, aboutVisit];
+export default [visitAttempt, startCheck, aboutVisit];

@@ -15,6 +15,8 @@ import { useAsync } from "react-async-hook";
 import useApi from "../api/useApi";
 import { TenancySummary } from "../components/TenancySummary";
 import MainLayout from "../layouts/MainLayout";
+import PageSlugs, { hrefForSlug } from "../steps/PageSlugs";
+import PageTitles from "../steps/PageTitles";
 import processRef from "../storage/processRef";
 import Storage from "../storage/Storage";
 
@@ -87,7 +89,10 @@ export const LoadingPage: NextPage = () => {
   }
 
   return (
-    <MainLayout title="Loading" heading="Tenancy and Household Check">
+    <MainLayout
+      title={PageTitles.Loading}
+      heading="Tenancy and Household Check"
+    >
       {!processData.loading && processData.result ? (
         <TenancySummary
           address="1 Mare Street, London, E8 3AA"
@@ -117,7 +122,7 @@ export const LoadingPage: NextPage = () => {
         </Paragraph>
       )}
 
-      <Link href="/attempt-visit">
+      <Link href={hrefForSlug(PageSlugs.VisitAttempt)}>
         <Button disabled={!ready} data-testid="submit">
           {ready ? "Go" : "Loading..."}
         </Button>

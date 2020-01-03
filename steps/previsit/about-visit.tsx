@@ -14,18 +14,20 @@ import { makeSubmit } from "../../components/makeSubmit";
 import ProcessStepDefinition from "../../components/ProcessStepDefinition";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
-
 import DatabaseSchema from "../../storage/DatabaseSchema";
 import processRef from "../../storage/processRef";
 
+import PageSlugs, { hrefForSlug } from "../PageSlugs";
+import PageTitles from "../PageTitles";
+
 const step: ProcessStepDefinition = {
-  title: "About visit",
+  title: PageTitles.AboutVisit,
   heading: "About the visit",
   step: {
-    slug: "about-visit",
-    nextSlug: "sections",
+    slug: PageSlugs.AboutVisit,
+    nextSlug: PageSlugs.Sections,
     Submit: makeSubmit({
-      href: "/sections",
+      href: hrefForSlug(PageSlugs.Sections),
       value: "Save and continue"
     }),
     componentWrappers: [

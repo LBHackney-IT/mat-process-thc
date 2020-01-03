@@ -11,9 +11,31 @@ import { TransactionMode } from "remultiform/database";
 
 import useOnlineWithRetry from "../helpers/useOnlineWithRetry";
 import MainLayout from "../layouts/MainLayout";
+import PageSlugs, { hrefForSlug } from "../steps/PageSlugs";
+import PageTitles from "../steps/PageTitles";
 import { processStoreNames } from "../storage/DatabaseSchema";
 import Storage from "../storage/Storage";
 import processRef from "../storage/processRef";
+
+const submit = async (): Promise<void> => {
+  if (Storage.Context && Storage.Context.database) {
+    const database = await Storage.Context.database;
+
+    // We should push to the API before doing this, or data will be
+    // lost.
+    database.transaction(
+      processStoreNames,
+      async stores => {
+        await Promise.all(
+          Object.values(stores).map(store => store.delete(processRef))
+        );
+      },
+      TransactionMode.ReadWrite
+    );
+  }
+
+  await Router.push(hrefForSlug(PageSlugs.Confirmed));
+};
 
 const SubmitPage: NextPage = () => {
   const online = useOnlineWithRetry();
@@ -64,7 +86,7 @@ const SubmitPage: NextPage = () => {
   const disabled = online.loading || Boolean(online.error) || !online.result;
 
   return (
-    <MainLayout title="Submit">
+    <MainLayout title={PageTitles.Submit}>
       {online.error && (
         <ErrorMessage>
           Something went wrong while checking whether you are online or not.
@@ -76,25 +98,7 @@ const SubmitPage: NextPage = () => {
       <Button
         disabled={disabled}
         preventDoubleClick={true}
-        onClick={async (): Promise<void> => {
-          if (Storage.Context && Storage.Context.database) {
-            const database = await Storage.Context.database;
-
-            // We should push to the API before doing this, or data will be
-            // lost.
-            database.transaction(
-              processStoreNames,
-              async stores => {
-                await Promise.all(
-                  Object.values(stores).map(store => store.delete(processRef))
-                );
-              },
-              TransactionMode.ReadWrite
-            );
-          }
-
-          await Router.push("/end");
-        }}
+        onClick={submit}
         data-testid="submit"
       >
         {disabled

@@ -1,10 +1,10 @@
 import React from "react";
 import { create } from "react-test-renderer";
 
-import EndPage from "../../pages/end";
+import ConfirmedPage from "../../pages/confirmed";
 
 it("renders correctly", () => {
-  const component = create(<EndPage />);
+  const component = create(<ConfirmedPage />);
 
   expect(component).toMatchInlineSnapshot(`
     Array [
