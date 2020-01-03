@@ -15,7 +15,7 @@ type Props = DynamicComponentControlledProps<string> & {
 };
 
 export const TextArea = (props: Props): React.ReactElement => {
-  const { label, name, rows, value, onValueChange } = props;
+  const { label, name, rows, value, onValueChange, disabled } = props;
 
   const labelId = label.id || `${name}-label`;
   const inputId = `${name}-input`;
@@ -32,6 +32,7 @@ export const TextArea = (props: Props): React.ReactElement => {
         name={name}
         rows={rows || 5}
         value={value}
+        disabled={disabled}
         onChange={(event): void => {
           onValueChange(event.target.value);
         }}

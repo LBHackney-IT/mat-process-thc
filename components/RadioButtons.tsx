@@ -18,7 +18,14 @@ type Props = DynamicComponentControlledProps<string> & {
 };
 
 export const RadioButtons = (props: Props): JSX.Element => {
-  const { name, legend, radios, value: currentValue, onValueChange } = props;
+  const {
+    name,
+    legend,
+    radios,
+    value: currentValue,
+    onValueChange,
+    disabled
+  } = props;
 
   return (
     <Fieldset className="radio-buttons" legend={legend}>
@@ -35,6 +42,7 @@ export const RadioButtons = (props: Props): JSX.Element => {
                 type="radio"
                 value={radio.value}
                 checked={currentValue === radio.value}
+                disabled={disabled}
                 onChange={(): void => {
                   onValueChange(radio.value);
                 }}

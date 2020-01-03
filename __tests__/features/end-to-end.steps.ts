@@ -69,7 +69,13 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!
         .findElement({ name: "id-proof-images" })
         .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
-      await browser!.findElement({ name: "id-notes" }).sendKeys("ID notes");
+      await browser!.findElement({ id: "id-notes-summary" }).click();
+      await browser!
+        .wait(
+          until.elementIsVisible(browser!.findElement({ name: "id-notes" })),
+          500
+        )
+        .sendKeys("ID notes");
 
       await browser!.submit();
 
