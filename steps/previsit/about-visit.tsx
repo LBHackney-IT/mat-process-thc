@@ -65,7 +65,12 @@ const step: ProcessStepDefinition = {
           key: "unannounced-visit-notes",
           Component: TextArea,
           props: {
-            label: "Explain why this visit was pre-arranged.",
+            label: {
+              value: "Explain why this visit was pre-arranged." as
+                | string
+                | null
+                | undefined
+            },
             name: "unannounced-visit-notes"
           },
           renderWhen(stepValues: {
@@ -127,8 +132,12 @@ const step: ProcessStepDefinition = {
           key: "inside-property-notes",
           Component: TextArea,
           props: {
-            label:
-              "Explain why this visit is not happening inside a tenant's home.",
+            label: {
+              value: "Explain why this visit is not happening inside a tenant's home." as
+                | string
+                | null
+                | undefined
+            },
             name: "inside-property-notes"
           },
           renderWhen(stepValues: {

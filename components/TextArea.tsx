@@ -5,23 +5,28 @@ import {
 } from "remultiform/component-wrapper";
 import PropTypes from "prop-types";
 
-export type TextAreaProps = DynamicComponentControlledProps<string> & {
-  label: string;
+type Props = DynamicComponentControlledProps<string> & {
+  label: {
+    id?: string | null;
+    value?: string | null;
+  };
   name: string;
   rows?: number | null;
 };
 
-export const TextArea = (props: TextAreaProps): React.ReactElement => {
+export const TextArea = (props: Props): React.ReactElement => {
   const { label, name, rows, value, onValueChange } = props;
 
-  const labelId = `${name}-label`;
+  const labelId = label.id || `${name}-label`;
   const inputId = `${name}-input`;
 
   return (
     <>
-      <label id={labelId} htmlFor={inputId}>
-        {label}
-      </label>
+      {label.value && (
+        <label id={labelId} htmlFor={inputId}>
+          {label.value}
+        </label>
+      )}
       <textarea
         id={inputId}
         name={name}
@@ -47,7 +52,10 @@ export const TextArea = (props: TextAreaProps): React.ReactElement => {
 
 TextArea.propTypes = {
   ...DynamicComponent.controlledPropTypes(PropTypes.string.isRequired),
-  label: PropTypes.string.isRequired,
+  label: PropTypes.exact({
+    id: PropTypes.string,
+    value: PropTypes.string
+  }).isRequired,
   name: PropTypes.string.isRequired,
   rows: PropTypes.number
 };
