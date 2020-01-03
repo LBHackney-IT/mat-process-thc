@@ -218,6 +218,10 @@ it("renders correctly", () => {
               align-items: center;
               margin-bottom: 1em;
             }
+
+            :global(.task-list li .lbh-tag) {
+              margin-right: 2em;
+            }
           
           </style>
         </div>
