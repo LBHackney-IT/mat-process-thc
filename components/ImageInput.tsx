@@ -1,7 +1,6 @@
-import React, { useRef } from "react";
-
-import { Button } from "lbh-frontend-react/components/Button/Button";
+import { Button, Paragraph } from "lbh-frontend-react/components";
 import PropTypes from "prop-types";
+import React, { useRef } from "react";
 import {
   DynamicComponentControlledProps,
   DynamicComponent
@@ -9,10 +8,12 @@ import {
 
 import { PhotoIcon } from "../components/icons/PhotoIcon";
 
-export type ImageInputProps = DynamicComponentControlledProps<string[]> & {
+type Props = DynamicComponentControlledProps<string[]> & {
   label: string;
   name: string;
   buttonText: string;
+  hintText?: string | null;
+  maxCount?: number | null;
 };
 
 const toBase64 = (file: File): Promise<string> =>
@@ -31,21 +32,27 @@ const toBase64 = (file: File): Promise<string> =>
     reader.readAsDataURL(file);
   });
 
-export const ImageInput = (props: ImageInputProps): React.ReactElement => {
+export const ImageInput = (props: Props): React.ReactElement => {
   const {
     label,
     name,
     buttonText,
+    hintText,
+    maxCount,
     value: images,
     onValueChange,
     disabled
   } = props;
 
+  const id = `${name}-input`;
+
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
     <>
-      {images && (
+      {hintText && <Paragraph>{hintText}</Paragraph>}
+
+      {images.length > 0 && (
         <div className="image-container">
           {images.map((image, index) => (
             <div key={index} className="thumbnail">
@@ -65,18 +72,14 @@ export const ImageInput = (props: ImageInputProps): React.ReactElement => {
         </div>
       )}
 
-      <label id={`${name}-label`} htmlFor={`${name}-input`}>
-        {label}
-      </label>
-
+      <label htmlFor={id}>{label}</label>
       <input
         ref={inputRef}
-        id={`${name}-input`}
+        id={id}
         name={name}
         type="file"
         // We only want image files to be uploaded.
         accept="image/*"
-        aria-labelledby={`${name}-label`}
         onChange={async (event): Promise<void> => {
           if (!event.target.files || event.target.files.length === 0) {
             return;
@@ -107,7 +110,7 @@ export const ImageInput = (props: ImageInputProps): React.ReactElement => {
         }}
       />
       <Button
-        disabled={disabled}
+        disabled={disabled || Boolean(maxCount && images.length >= maxCount)}
         className="input-button"
         onClick={(): void => {
           if (inputRef.current) {
@@ -174,6 +177,8 @@ ImageInput.propTypes = {
     PropTypes.arrayOf(PropTypes.string.isRequired).isRequired
   ),
   label: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
   buttonText: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired
+  hintText: PropTypes.string,
+  maxImages: PropTypes.number
 };
