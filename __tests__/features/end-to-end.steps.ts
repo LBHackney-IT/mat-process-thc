@@ -16,11 +16,22 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       // Index page
       await browser!.getRelative("/");
 
-      // Wait for data fetching.
-      await browser!.sleep(2000);
+      // Wait for redirect.
+      await browser!.wait(
+        until.elementLocated({ css: '[data-testid="submit"]' }),
+        5000
+      );
 
       // Loading page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/loading");
+
+      // Wait for data fetching.
+      await browser!.wait(
+        until.elementIsEnabled(
+          await browser!.findElement({ css: '[data-testid="submit"]' })
+        ),
+        5000
+      );
 
       await browser!.submit();
 
@@ -59,6 +70,8 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Sections page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
+
+      await browser!.wait(until.elementLocated({ css: '[href="/id"]' }), 5000);
 
       await browser!.submit({ css: '[href="/id"]' });
 
