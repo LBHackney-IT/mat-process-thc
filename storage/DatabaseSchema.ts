@@ -1,6 +1,6 @@
 import { NamedSchema, StoreNames } from "remultiform/database";
 
-type ProcessRef = string;
+export type ProcessRef = string;
 
 // We will replace this with a real name before release. It should be specific
 // to the environment it's running on to avoid clashes.

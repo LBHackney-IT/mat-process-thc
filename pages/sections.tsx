@@ -4,58 +4,22 @@ import {
   Paragraph
 } from "lbh-frontend-react/components";
 import { NextPage } from "next";
-import React, { createContext } from "react";
-import { useAsync } from "react-async-hook";
-import { Database, StoreMap } from "remultiform/database";
-import { DatabaseContext, useDatabase } from "remultiform/database-context";
+import React from "react";
 
 import { TaskList } from "../components/TaskList";
 import { TenancySummary } from "../components/TenancySummary";
+import useProcessSectionComplete from "../helpers/useProcessSectionComplete";
 import MainLayout from "../layouts/MainLayout";
 import PageSlugs, { hrefForSlug } from "../steps/PageSlugs";
 import PageTitles from "../steps/PageTitles";
-import DatabaseSchema from "storage/DatabaseSchema";
 import processRef from "../storage/processRef";
-import Storage from "../storage/Storage";
 
 export const SectionsPage: NextPage = () => {
-  const database = useDatabase(
-    Storage.Context ||
-      // This is a bit of a hack to get around `Storage.Context` being
-      // undefined on the server, while still obeying the rules of hooks.
-      ({
-        context: createContext<Database<DatabaseSchema> | undefined>(undefined)
-      } as DatabaseContext<DatabaseSchema>)
-  );
-  const idAndResidencyComplete = useAsync(
-    async (db: typeof database) => {
-      if (!db) {
-        throw new Error("No database to check for status");
-      }
-
-      let result = true;
-
-      await db.transaction(
-        ["id", "residency", "tenant"],
-        async (
-          stores: StoreMap<
-            DatabaseSchema["schema"],
-            ("id" | "residency" | "tenant")[]
-          >
-        ) => {
-          const id = await stores.id.get(processRef);
-          const residency = await stores.residency.get(processRef);
-          const tenant = await stores.tenant.get(processRef);
-
-          result =
-            id !== undefined && residency !== undefined && tenant !== undefined;
-        }
-      );
-
-      return result;
-    },
-    [database]
-  );
+  const idAndResidencyComplete = useProcessSectionComplete(processRef, [
+    "id",
+    "residency",
+    "tenant"
+  ]);
 
   return (
     <MainLayout title={PageTitles.Sections}>
