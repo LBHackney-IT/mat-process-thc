@@ -40,6 +40,7 @@ defineFeature(loadFeature("./accessibility.feature"), test => {
   testAccessibility(test, "Structural changes");
   testAccessibility(test, "Damage");
   testAccessibility(test, "Roof");
+  testAccessibility(test, "Loft");
   testAccessibility(test, "Submit");
   testAccessibility(test, "Confirmed");
 });

@@ -47,6 +47,11 @@ type DatabaseSchema = NamedSchema<
           itemsStoredOnRoof: boolean;
           notes: string;
         };
+        loft: {
+          hasAccess: boolean;
+          itemsStored: boolean;
+          notes: string;
+        };
       };
     };
 

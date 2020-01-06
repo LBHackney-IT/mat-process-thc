@@ -260,6 +260,17 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
+      // Loft page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/loft");
+
+      await browser!.findElement({ id: "has-access-to-loft-yes" }).click();
+      await browser!.findElement({ id: "items-stored-in-loft-yes" }).click();
+      await browser!
+        .wait(until.elementLocated({ name: "loft-notes" }), 500)
+        .sendKeys("Loft notes");
+
+      await browser!.submit();
+
       // Submit page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/submit");
 

@@ -18,25 +18,25 @@ import PageSlugs, { hrefForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const step: ProcessStepDefinition = {
-  title: PageTitles.Roof,
-  heading: "Does the tenant have access to the roof?",
+  title: PageTitles.Loft,
+  heading: "Does the tenant have access to loft space?",
   step: {
-    slug: PageSlugs.Roof,
-    nextSlug: PageSlugs.Loft,
+    slug: PageSlugs.Loft,
+    nextSlug: PageSlugs.Submit,
     Submit: makeSubmit({
-      href: hrefForSlug(PageSlugs.Loft),
+      href: hrefForSlug(PageSlugs.Submit),
       value: "Save and continue"
     }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "has-access",
+          key: "has-access-to-loft",
           Component: RadioButtons,
           props: {
-            name: "has-access",
+            name: "has-access-to-loft",
             legend: (
               <FieldsetLegend>
-                Does the tenant have access to the roof?
+                Does the tenant have access to loft space?
               </FieldsetLegend>
             ) as React.ReactNode,
             radios: [
@@ -55,19 +55,19 @@ const step: ProcessStepDefinition = {
           databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
             storeName: "property",
             key: processRef,
-            property: ["roof", "hasAccess"]
+            property: ["loft", "hasAccess"]
           })
         })
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "items-stored-on-roof",
+          key: "items-stored-in-loft",
           Component: RadioButtons,
           props: {
-            name: "items-stored-on-roof",
+            name: "items-stored-in-loft",
             legend: (
               <FieldsetLegend>
-                Are items being stored on the roof?
+                Are items being stored in the loft space?
               </FieldsetLegend>
             ) as React.ReactNode,
             radios: [
@@ -82,43 +82,43 @@ const step: ProcessStepDefinition = {
             ]
           },
           renderWhen(stepValues: {
-            "has-access"?: ComponentValue<DatabaseSchema, "property">;
+            "has-access-to-loft"?: ComponentValue<DatabaseSchema, "property">;
           }): boolean {
-            return stepValues["has-access"] === "yes";
+            return stepValues["has-access-to-loft"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
             storeName: "property",
             key: processRef,
-            property: ["roof", "itemsStoredOnRoof"]
+            property: ["loft", "itemsStored"]
           })
         })
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "roof-notes",
+          key: "loft-notes",
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about roof if necessary." as
+              value: "Add note about loft space if necessary." as
                 | string
                 | null
                 | undefined
             },
-            name: "roof-notes"
+            name: "loft-notes"
           },
           renderWhen(stepValues: {
-            "has-access"?: ComponentValue<DatabaseSchema, "property">;
+            "has-access-to-loft"?: ComponentValue<DatabaseSchema, "property">;
           }): boolean {
-            return stepValues["has-access"] === "yes";
+            return stepValues["has-access-to-loft"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
             storeName: "property",
             key: processRef,
-            property: ["roof", "notes"]
+            property: ["loft", "notes"]
           })
         })
       )
