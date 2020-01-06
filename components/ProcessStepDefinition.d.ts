@@ -1,13 +1,15 @@
 import { StepDefinition } from "remultiform/step";
 
+import PageTitles from "../steps/PageTitles";
+
 export interface TitledStepDefinition {
-  title: string;
+  title: PageTitles;
   heading?: string;
   step: StepDefinition;
 }
 
 export interface HeadedStepDefinition {
-  title?: string;
+  title?: PageTitles;
   heading: string;
   step: StepDefinition;
 }

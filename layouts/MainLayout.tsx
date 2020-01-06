@@ -30,7 +30,7 @@ const MainLayout = ({
   heading,
   children
 }: Props): React.ReactElement => {
-  const fullTitle = `Tenancy and Household Check - ${title || heading}`;
+  const fullTitle = `${title || heading} - THC - Manage a tenancy`;
 
   return (
     <>

@@ -1,91 +1,35 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { defineFeature, loadFeature } from "jest-cucumber";
+import { DefineScenarioFunctionWithAliases } from "jest-cucumber/dist/src/feature-definition-creation";
 
 import Then from "../helpers/steps/Then";
 import When from "../helpers/steps/When";
 
+const testAccessibility = (
+  test: DefineScenarioFunctionWithAliases,
+  pageName: string,
+  pageTitle = pageName
+): void => {
+  test(`${pageName} page is accessible`, ({ defineStep, then }) => {
+    When.iVisitX(defineStep);
+
+    Then.thePageShouldBeAccessible(defineStep);
+
+    then("the page should have a descriptive title", async () => {
+      await expect(browser!.getTitle()).resolves.toEqual(
+        `${pageTitle} - THC - Manage a tenancy`
+      );
+    });
+  });
+};
+
 defineFeature(loadFeature("./accessibility.feature"), test => {
-  test("Loading page is accessible", ({ defineStep, then }) => {
-    When.iVisitX(defineStep);
-
-    Then.thePageShouldBeAccessible(defineStep);
-
-    then("the page should have a descriptive title", async () => {
-      await expect(browser!.getTitle()).resolves.toEqual(
-        "Tenancy and Household Check - Loading"
-      );
-    });
-  });
-
-  test("Attempt visit page is accessible", ({ defineStep, then }) => {
-    When.iVisitX(defineStep);
-
-    Then.thePageShouldBeAccessible(defineStep);
-
-    then("the page should have a descriptive title", async () => {
-      await expect(browser!.getTitle()).resolves.toEqual(
-        "Tenancy and Household Check - Attempt visit"
-      );
-    });
-  });
-
-  test("Start visit page is accessible", ({ defineStep, then }) => {
-    When.iVisitX(defineStep);
-
-    Then.thePageShouldBeAccessible(defineStep);
-
-    then("the page should have a descriptive title", async () => {
-      await expect(browser!.getTitle()).resolves.toEqual(
-        "Tenancy and Household Check - Start visit"
-      );
-    });
-  });
-
-  test("Sections page is accessible", ({ defineStep, then }) => {
-    When.iVisitX(defineStep);
-
-    Then.thePageShouldBeAccessible(defineStep);
-
-    then("the page should have a descriptive title", async () => {
-      await expect(browser!.getTitle()).resolves.toEqual(
-        "Tenancy and Household Check - Sections"
-      );
-    });
-  });
-
-  test("About visit page is accessible", ({ defineStep, then }) => {
-    When.iVisitX(defineStep);
-
-    Then.thePageShouldBeAccessible(defineStep);
-
-    then("the page should have a descriptive title", async () => {
-      await expect(browser!.getTitle()).resolves.toEqual(
-        "Tenancy and Household Check - About visit"
-      );
-    });
-  });
-
-  test("Submit page is accessible", ({ defineStep, then }) => {
-    When.iVisitX(defineStep);
-
-    Then.thePageShouldBeAccessible(defineStep);
-
-    then("the page should have a descriptive title", async () => {
-      await expect(browser!.getTitle()).resolves.toEqual(
-        "Tenancy and Household Check - Submit"
-      );
-    });
-  });
-
-  test("End page is accessible", ({ defineStep, then }) => {
-    When.iVisitX(defineStep);
-
-    Then.thePageShouldBeAccessible(defineStep);
-
-    then("the page should have a descriptive title", async () => {
-      await expect(browser!.getTitle()).resolves.toEqual(
-        "Tenancy and Household Check - Complete"
-      );
-    });
-  });
+  testAccessibility(test, "Index", "Loading");
+  testAccessibility(test, "Loading");
+  testAccessibility(test, "Sections");
+  testAccessibility(test, "Visit attempt");
+  testAccessibility(test, "Start check");
+  testAccessibility(test, "About visit");
+  testAccessibility(test, "Submit");
+  testAccessibility(test, "Confirmed");
 });

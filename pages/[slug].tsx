@@ -5,6 +5,7 @@ import { Orchestrator } from "remultiform/orchestrator";
 import { TenancySummary } from "../components/TenancySummary";
 import MainLayout from "../layouts/MainLayout";
 import steps from "../steps";
+import PageSlugs from "../steps/PageSlugs";
 import processRef from "../storage/processRef";
 import Storage from "../storage/Storage";
 
@@ -70,7 +71,7 @@ const ProcessPage: NextPage<Props> = ({ slug }: Props) => {
 ProcessPage.getInitialProps = ({ query }: NextPageContext): Props => {
   const { slug } = query;
 
-  return { slug: slug as string };
+  return { slug: slug as PageSlugs };
 };
 
 export default ProcessPage;

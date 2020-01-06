@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useAsync } from "react-async-hook";
 
-import PageSlugs from "../steps/PageSlugs";
+import PageSlugs, { hrefForSlug } from "../steps/PageSlugs";
 
 import useOnlineWithRetry from "./useOnlineWithRetry";
 
@@ -27,7 +27,7 @@ const useRedirectWhenOnline = (
   const redirect = useAsync(
     async (result: boolean | undefined) => {
       if (result) {
-        return await router[method](`/${slug}`);
+        return await router[method](hrefForSlug(slug));
       }
 
       return false;

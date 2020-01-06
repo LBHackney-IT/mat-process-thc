@@ -7,6 +7,7 @@ import React from "react";
 import useRedirectWhenOnline from "../helpers/useRedirectWhenOnline";
 import MainLayout from "../layouts/MainLayout";
 import PageSlugs from "../steps/PageSlugs";
+import PageTitles from "../steps/PageTitles";
 
 export const IndexPage: NextPage = () => {
   const online = useRedirectWhenOnline(PageSlugs.Loading, "push");
@@ -36,7 +37,7 @@ export const IndexPage: NextPage = () => {
   }
 
   return (
-    <MainLayout title="Loading" heading="Tenancy and Household Check">
+    <MainLayout title={PageTitles.Index} heading="Tenancy and Household Check">
       {content}
     </MainLayout>
   );
