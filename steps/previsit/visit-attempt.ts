@@ -38,7 +38,7 @@ const step: ProcessStepDefinition = {
     componentWrappers: [
       ComponentWrapper.wrapStatic(
         new StaticComponent({
-          key: "visit-attempt-heading",
+          key: "heading",
           Component: Heading,
           props: {
             level: HeadingLevels.H2,
@@ -62,7 +62,7 @@ const step: ProcessStepDefinition = {
           Component: Paragraph,
           props: {
             children:
-              "The photo of outside of the property should include as much as the front of the property as possible. If it is a flat, then try to take a photo of what you see when you are standing outside of the property itself."
+              "The photos of outside of the property should include as much as the front of the property as possible. If it is a flat, then try to take a photo of what you see when you are standing outside of the property itself."
           }
         })
       ),
@@ -71,9 +71,13 @@ const step: ProcessStepDefinition = {
           key: "outside-property-images",
           Component: ImageInput,
           props: {
-            label: "Upload an image",
-            buttonText: "Take a photo of outside the property",
-            name: "outside-property-images"
+            label: "Take a photo of the outside of the property",
+            name: "outside-property-images",
+            hintText: "You can take up to 5 different photos of the outside of the property." as
+              | string
+              | null
+              | undefined,
+            maxCount: 5
           },
           defaultValue: [],
           emptyValue: [] as string[],
@@ -94,23 +98,18 @@ const step: ProcessStepDefinition = {
           }
         })
       ),
-      ComponentWrapper.wrapStatic(
-        new StaticComponent({
-          key: "metal-gate-paragraph",
-          Component: Paragraph,
-          props: {
-            children: "This photo will also be displayed later in the process."
-          }
-        })
-      ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "metal-gate-images",
           Component: ImageInput,
           props: {
-            label: "Upload an image",
-            buttonText: "Take a photo of the metal gate",
-            name: "metal-gate-images"
+            label: "Take a photo of any metal gates",
+            name: "metal-gate-images",
+            hintText: "You can take up to 3 different photos of metal gates. These photos will also be displayed later in the process." as
+              | string
+              | null
+              | undefined,
+            maxCount: 3
           },
           defaultValue: [],
           emptyValue: [] as string[],
@@ -123,7 +122,7 @@ const step: ProcessStepDefinition = {
       ),
       ComponentWrapper.wrapStatic(
         new StaticComponent({
-          key: "do-next-heading",
+          key: "next-heading",
           Component: Heading,
           props: {
             level: HeadingLevels.H4,

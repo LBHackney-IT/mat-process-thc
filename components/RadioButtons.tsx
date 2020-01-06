@@ -1,3 +1,4 @@
+import { Fieldset } from "lbh-frontend-react/components";
 import PropTypes from "prop-types";
 import React from "react";
 import {
@@ -10,35 +11,51 @@ export interface RadioButton {
   value: string;
 }
 
-export type RadioButtons = DynamicComponentControlledProps<string> & {
+type Props = DynamicComponentControlledProps<string> & {
   name: string;
+  legend?: React.ReactNode | null;
   radios: RadioButton[];
 };
 
-export const RadioButtons = (props: RadioButtons): JSX.Element => {
-  const { name, radios, value, onValueChange } = props;
+export const RadioButtons = (props: Props): JSX.Element => {
+  const {
+    name,
+    legend,
+    radios,
+    value: currentValue,
+    onValueChange,
+    disabled
+  } = props;
 
   return (
-    <div className="radio-buttons">
+    <Fieldset className="radio-buttons" legend={legend}>
       {radios.map(
         (radio): JSX.Element => {
-          const id = `${name}-${radio.value}`;
+          const labelId = `${name}-${radio.value.replace(/\s+/g, "-")}-label`;
+          const inputId = `${name}-${radio.value.replace(/\s+/g, "-")}`;
 
           return (
-            <span key={id}>
+            <div key={inputId}>
               <input
-                id={id}
-                type="radio"
+                id={inputId}
                 name={name}
+                type="radio"
                 value={radio.value}
-                checked={value === radio.value}
-                onChange={(): void => onValueChange(radio.value)}
+                checked={currentValue === radio.value}
+                disabled={disabled}
+                onChange={(): void => {
+                  onValueChange(radio.value);
+                }}
+                aria-labelledby={labelId}
               />
-              <label htmlFor={id}>{radio.label}</label>
-            </span>
+              <label id={labelId} htmlFor={inputId}>
+                {radio.label}
+              </label>
+            </div>
           );
         }
       )}
+
       <style jsx>{`
         .radio-buttons {
           display: flex;
@@ -55,13 +72,14 @@ export const RadioButtons = (props: RadioButtons): JSX.Element => {
           margin-top: 10px;
         }
       `}</style>
-    </div>
+    </Fieldset>
   );
 };
 
 RadioButtons.propTypes = {
   ...DynamicComponent.controlledPropTypes(PropTypes.string.isRequired),
   name: PropTypes.string.isRequired,
+  legend: PropTypes.node,
   radios: PropTypes.arrayOf(
     PropTypes.exact({
       label: PropTypes.string.isRequired,

@@ -1,4 +1,4 @@
-import { Button } from "lbh-frontend-react/components/Button";
+import { Button } from "lbh-frontend-react/components";
 import Link from "next/link";
 import PropTypes from "prop-types";
 import React from "react";

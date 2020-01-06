@@ -1,7 +1,4 @@
-import {
-  Fieldset,
-  FieldsetLegend
-} from "lbh-frontend-react/components/Fieldset";
+import { FieldsetLegend } from "lbh-frontend-react/components";
 import React from "react";
 import {
   ComponentDatabaseMap,
@@ -33,20 +30,13 @@ const step: ProcessStepDefinition = {
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "unannounced-visit-radios",
-          Component(props): React.ReactElement {
-            return (
-              <Fieldset
-                legend={
-                  <FieldsetLegend>Is this an unnanounced visit?</FieldsetLegend>
-                }
-              >
-                <RadioButtons {...props} />
-              </Fieldset>
-            );
-          },
+          key: "unannounced-visit",
+          Component: RadioButtons,
           props: {
-            name: "unannounced-visit-radios",
+            name: "unannounced-visit",
+            legend: (
+              <FieldsetLegend>Is this an unnanounced visit?</FieldsetLegend>
+            ) as React.ReactNode,
             radios: [
               {
                 label: "Yes",
@@ -72,19 +62,24 @@ const step: ProcessStepDefinition = {
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "unannounced-visit-notes-textarea",
+          key: "unannounced-visit-notes",
           Component: TextArea,
           props: {
-            label: "Explain why this visit was pre-arranged.",
+            label: {
+              value: "Explain why this visit was pre-arranged." as
+                | string
+                | null
+                | undefined
+            },
             name: "unannounced-visit-notes"
           },
           renderWhen(stepValues: {
-            "unannounced-visit-radios"?: ComponentValue<
+            "unannounced-visit"?: ComponentValue<
               DatabaseSchema,
               "isVisitInside"
             >;
           }): boolean {
-            return stepValues["unannounced-visit-radios"] === "no";
+            return stepValues["unannounced-visit"] === "no";
           },
           defaultValue: "",
           emptyValue: "",
@@ -100,21 +95,15 @@ const step: ProcessStepDefinition = {
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "inside-property-radios",
-          // eslint-disable-next-line react/display-name
-          Component: (props): React.ReactElement => (
-            <Fieldset
-              legend={
-                <FieldsetLegend>
-                  Is it taking place inside a tenant&apos;s home?
-                </FieldsetLegend>
-              }
-            >
-              <RadioButtons {...props} />
-            </Fieldset>
-          ),
+          key: "inside-property",
+          Component: RadioButtons,
           props: {
-            name: "inside-property-radios",
+            name: "inside-property",
+            legend: (
+              <FieldsetLegend>
+                Is it taking place inside a tenant&apos;s home?
+              </FieldsetLegend>
+            ) as React.ReactNode,
             radios: [
               {
                 label: "Yes",
@@ -140,20 +129,21 @@ const step: ProcessStepDefinition = {
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "inside-property-notes-textarea",
+          key: "inside-property-notes",
           Component: TextArea,
           props: {
-            label:
-              "Explain why this visit is not happening inside a tenant's home.",
+            label: {
+              value: "Explain why this visit is not happening inside a tenant's home." as
+                | string
+                | null
+                | undefined
+            },
             name: "inside-property-notes"
           },
           renderWhen(stepValues: {
-            "inside-property-radios"?: ComponentValue<
-              DatabaseSchema,
-              "isVisitInside"
-            >;
+            "inside-property"?: ComponentValue<DatabaseSchema, "isVisitInside">;
           }): boolean {
-            return stepValues["inside-property-radios"] === "no";
+            return stepValues["inside-property"] === "no";
           },
           defaultValue: "",
           emptyValue: "",

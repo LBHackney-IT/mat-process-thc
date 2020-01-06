@@ -1,5 +1,5 @@
 import React from "react";
-import { SummaryList } from "lbh-frontend-react/components/SummaryList";
+import { SummaryList } from "lbh-frontend-react/components";
 
 interface TenancySummaryProps {
   address?: string;
@@ -38,6 +38,7 @@ export const TenancySummary = (
           }
         ]}
       />
+
       <style jsx>{`
         :global(.mat-tenancy-summary dt, .mat-tenancy-summary dd) {
           padding-bottom: 0 !important;

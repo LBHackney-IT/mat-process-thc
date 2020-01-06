@@ -46,11 +46,11 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       // About visit page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/about-visit");
 
-      await browser!.findElement({ id: "unannounced-visit-radios-no" }).click();
+      await browser!.findElement({ id: "unannounced-visit-no" }).click();
       await browser!
         .wait(until.elementLocated({ name: "unannounced-visit-notes" }), 500)
         .sendKeys("Unannounced visit notes");
-      await browser!.findElement({ id: "inside-property-radios-no" }).click();
+      await browser!.findElement({ id: "inside-property-no" }).click();
       await browser!
         .wait(until.elementLocated({ name: "inside-property-notes" }), 500)
         .sendKeys("Inside property notes");
@@ -60,7 +60,24 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       // Sections page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
 
-      await browser!.submit({ css: '[href="/submit"]' });
+      await browser!.submit({ css: '[href="/id"]' });
+
+      // Id page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/id");
+
+      await browser!.findElement({ id: "id-type-valid-passport" }).click();
+      await browser!
+        .findElement({ name: "id-proof-images" })
+        .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
+      await browser!.findElement({ id: "id-notes-summary" }).click();
+      await browser!
+        .wait(
+          until.elementIsVisible(browser!.findElement({ name: "id-notes" })),
+          500
+        )
+        .sendKeys("ID notes");
+
+      await browser!.submit();
 
       // Submit page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/submit");
