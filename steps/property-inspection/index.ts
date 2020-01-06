@@ -4,6 +4,7 @@ import structuralChanges from "./structural-changes";
 import damage from "./damage";
 import roof from "./roof";
 import loft from "./loft";
+import garden from "./garden";
 
 export default [
   rooms,
@@ -11,5 +12,6 @@ export default [
   structuralChanges,
   damage,
   roof,
-  loft
+  loft,
+  garden
 ];

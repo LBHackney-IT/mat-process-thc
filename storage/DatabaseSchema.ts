@@ -52,6 +52,13 @@ type DatabaseSchema = NamedSchema<
           itemsStored: boolean;
           notes: string;
         };
+        garden: {
+          hasGarden: boolean;
+          type: string;
+          isMaintained: boolean;
+          images: string[];
+          notes: string;
+        };
       };
     };
 

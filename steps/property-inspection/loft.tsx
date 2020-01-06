@@ -22,9 +22,9 @@ const step: ProcessStepDefinition = {
   heading: "Does the tenant have access to loft space?",
   step: {
     slug: PageSlugs.Loft,
-    nextSlug: PageSlugs.Submit,
+    nextSlug: PageSlugs.Garden,
     Submit: makeSubmit({
-      href: hrefForSlug(PageSlugs.Submit),
+      href: hrefForSlug(PageSlugs.Garden),
       value: "Save and continue"
     }),
     componentWrappers: [

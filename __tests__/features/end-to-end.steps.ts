@@ -271,6 +271,21 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
+      // Garden page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/garden");
+
+      await browser!.findElement({ id: "has-garden-yes" }).click();
+      await browser!.findElement({ id: "garden-type-private" }).click();
+      await browser!.findElement({ id: "is-maintained-yes" }).click();
+      await browser!
+        .findElement({ name: "garden-images" })
+        .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
+      await browser!
+        .wait(until.elementLocated({ name: "garden-notes" }), 500)
+        .sendKeys("Garden notes");
+
+      await browser!.submit();
+
       // Submit page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/submit");
 

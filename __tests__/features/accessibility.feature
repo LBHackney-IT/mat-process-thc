@@ -89,6 +89,11 @@ Feature: Accessibility
     Then the page should be accessible
     And the page should have a descriptive title
 
+  Scenario: Garden page is accessible
+    When I visit /garden
+    Then the page should be accessible
+    And the page should have a descriptive title
+
   Scenario: Submit page is accessible
     When I visit /submit
     Then the page should be accessible
