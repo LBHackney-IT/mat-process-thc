@@ -28,9 +28,9 @@ const step: ProcessStepDefinition = {
     "Are there any other comments or points to investigate for the property?",
   step: {
     slug: PageSlugs.OtherComments,
-    nextSlug: PageSlugs.Submit,
+    nextSlug: PageSlugs.HomeCheck,
     Submit: makeSubmit({
-      href: hrefForSlug(PageSlugs.Submit),
+      href: hrefForSlug(PageSlugs.HomeCheck),
       value: "Save and continue"
     }),
     componentWrappers: [

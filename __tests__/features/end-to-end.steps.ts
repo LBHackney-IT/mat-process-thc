@@ -398,7 +398,11 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!
         .wait(until.elementLocated({ name: "other-comments-notes" }), 500)
         .sendKeys("Other comments notes");
+      await browser!.submit();
 
+      // Home check page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/home-check");
+      await browser!.findElement({ id: "home-check-yes" }).click();
       await browser!.submit();
 
       // Submit page
