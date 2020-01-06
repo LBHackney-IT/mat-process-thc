@@ -18,27 +18,25 @@ import PageSlugs, { hrefForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const step: ProcessStepDefinition = {
-  title: PageTitles.StoringMaterials,
-  heading:
-    "Is the tenant storing materials in their home that can catch fire, other than those needed for normal household use?",
+  title: PageTitles.FireExit,
+  heading: "Does the property have a secondary fire exit?",
   step: {
-    slug: PageSlugs.StoringMaterials,
-    nextSlug: PageSlugs.FireExit,
+    slug: PageSlugs.FireExit,
+    nextSlug: PageSlugs.Submit,
     Submit: makeSubmit({
-      href: hrefForSlug(PageSlugs.FireExit),
+      href: hrefForSlug(PageSlugs.Submit),
       value: "Save and continue"
     }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "is-storing-materials",
+          key: "has-fire-exit",
           Component: RadioButtons,
           props: {
-            name: "is-storing-materials",
+            name: "has-fire-exit",
             legend: (
               <FieldsetLegend>
-                Is the tenant storing materials in their home that can catch
-                fire, other than those needed for normal household use?
+                Does the property have a secondary fire exit?
               </FieldsetLegend>
             ) as React.ReactNode,
             radios: [
@@ -57,18 +55,18 @@ const step: ProcessStepDefinition = {
           databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
             storeName: "property",
             key: processRef,
-            property: ["storingMaterials", "isStoringMaterials"]
+            property: ["fireExit", "hasFireExit"]
           })
         })
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "further-action-required",
+          key: "is-accessible",
           Component: RadioButtons,
           props: {
-            name: "further-action-required",
+            name: "is-accessible",
             legend: (
-              <FieldsetLegend>Is further action required?</FieldsetLegend>
+              <FieldsetLegend>Is it accessible and easy to use?</FieldsetLegend>
             ) as React.ReactNode,
             radios: [
               {
@@ -82,43 +80,43 @@ const step: ProcessStepDefinition = {
             ]
           },
           renderWhen(stepValues: {
-            "is-storing-materials"?: ComponentValue<DatabaseSchema, "property">;
+            "has-fire-exit"?: ComponentValue<DatabaseSchema, "property">;
           }): boolean {
-            return stepValues["is-storing-materials"] === "yes";
+            return stepValues["has-fire-exit"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
             storeName: "property",
             key: processRef,
-            property: ["storingMaterials", "furtherActionRequired"]
+            property: ["fireExit", "isAccessible"]
           })
         })
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "stored-materials-notes",
+          key: "fire-exit-notes",
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about the stored materials if necessary." as
+              value: "Add note about the fire exit if necessary." as
                 | string
                 | null
                 | undefined
             },
-            name: "stored-materials-notes"
+            name: "fire-exit-notes"
           },
           renderWhen(stepValues: {
-            "is-storing-materials"?: ComponentValue<DatabaseSchema, "property">;
+            "has-fire-exit"?: ComponentValue<DatabaseSchema, "property">;
           }): boolean {
-            return stepValues["is-storing-materials"] === "yes";
+            return stepValues["has-fire-exit"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
             storeName: "property",
             key: processRef,
-            property: ["storingMaterials", "notes"]
+            property: ["fireExit", "notes"]
           })
         })
       )

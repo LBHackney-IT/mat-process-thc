@@ -6,6 +6,7 @@ import roof from "./roof";
 import loft from "./loft";
 import garden from "./garden";
 import storingMaterials from "./storing-materials";
+import fireExit from "./fire-exit";
 
 export default [
   rooms,
@@ -15,5 +16,6 @@ export default [
   roof,
   loft,
   garden,
-  storingMaterials
+  storingMaterials,
+  fireExit
 ];

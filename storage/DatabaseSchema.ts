@@ -64,6 +64,11 @@ type DatabaseSchema = NamedSchema<
           furtherActionRequired: boolean;
           notes: string;
         };
+        fireExit: {
+          hasFireExit: boolean;
+          isAccessible: boolean;
+          notes: string;
+        };
       };
     };
 
