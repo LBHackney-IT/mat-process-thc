@@ -202,6 +202,23 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
+      // Laminated flooring page
+
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/laminated-flooring"
+      );
+
+      await browser!.findElement({ id: "has-laminated-flooring-yes" }).click();
+      await browser!.findElement({ id: "has-permission-yes" }).click();
+      await browser!
+        .findElement({ name: "laminated-flooring-images" })
+        .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
+      await browser!
+        .wait(until.elementLocated({ name: "laminated-flooring-notes" }), 500)
+        .sendKeys("Laminated flooring notes");
+
+      await browser!.submit();
+
       // Submit page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/submit");
 

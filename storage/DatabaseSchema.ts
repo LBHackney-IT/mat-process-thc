@@ -25,6 +25,12 @@ type DatabaseSchema = NamedSchema<
           canEnterAll: boolean;
           notes: string;
         };
+        laminatedFlooring: {
+          hasLaminatedFlooring: boolean;
+          hasPermission: boolean;
+          images: string[];
+          notes: string;
+        };
       };
     };
 

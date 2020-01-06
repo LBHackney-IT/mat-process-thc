@@ -22,9 +22,9 @@ const step: ProcessStepDefinition = {
   heading: "Can you enter all rooms within the property?",
   step: {
     slug: PageSlugs.Rooms,
-    nextSlug: PageSlugs.Submit,
+    nextSlug: PageSlugs.LaminatedFlooring,
     Submit: makeSubmit({
-      href: hrefForSlug(PageSlugs.Submit),
+      href: hrefForSlug(PageSlugs.LaminatedFlooring),
       value: "Save and continue"
     }),
     componentWrappers: [
