@@ -310,6 +310,17 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
+      // Smoke alarm page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/smoke-alarm");
+
+      await browser!.findElement({ id: "has-smoke-alarm-yes" }).click();
+      await browser!.findElement({ id: "is-working-yes" }).click();
+      await browser!
+        .wait(until.elementLocated({ name: "smoke-alarm-notes" }), 500)
+        .sendKeys("Smoke alarm notes");
+
+      await browser!.submit();
+
       // Submit page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/submit");
 

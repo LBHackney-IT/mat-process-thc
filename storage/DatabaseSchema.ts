@@ -69,6 +69,11 @@ type DatabaseSchema = NamedSchema<
           isAccessible: boolean;
           notes: string;
         };
+        smokeAlarm: {
+          hasSmokeAlarm: boolean;
+          isWorking: boolean;
+          notes: string;
+        };
       };
     };
 

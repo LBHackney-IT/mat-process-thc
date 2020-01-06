@@ -18,25 +18,25 @@ import PageSlugs, { hrefForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const step: ProcessStepDefinition = {
-  title: PageTitles.FireExit,
-  heading: "Does the property have a secondary fire exit?",
+  title: PageTitles.SmokeAlarm,
+  heading: "Is there is a hard wired smoke alarm in the property?",
   step: {
-    slug: PageSlugs.FireExit,
-    nextSlug: PageSlugs.SmokeAlarm,
+    slug: PageSlugs.SmokeAlarm,
+    nextSlug: PageSlugs.Submit,
     Submit: makeSubmit({
-      href: hrefForSlug(PageSlugs.SmokeAlarm),
+      href: hrefForSlug(PageSlugs.Submit),
       value: "Save and continue"
     }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "has-fire-exit",
+          key: "has-smoke-alarm",
           Component: RadioButtons,
           props: {
-            name: "has-fire-exit",
+            name: "has-smoke-alarm",
             legend: (
               <FieldsetLegend>
-                Does the property have a secondary fire exit?
+                Is there is a hard wired smoke alarm in the property?
               </FieldsetLegend>
             ) as React.ReactNode,
             radios: [
@@ -55,18 +55,18 @@ const step: ProcessStepDefinition = {
           databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
             storeName: "property",
             key: processRef,
-            property: ["fireExit", "hasFireExit"]
+            property: ["smokeAlarm", "hasSmokeAlarm"]
           })
         })
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "is-accessible",
+          key: "is-working",
           Component: RadioButtons,
           props: {
-            name: "is-accessible",
+            name: "is-working",
             legend: (
-              <FieldsetLegend>Is it accessible and easy to use?</FieldsetLegend>
+              <FieldsetLegend>Does it work when tested?</FieldsetLegend>
             ) as React.ReactNode,
             radios: [
               {
@@ -80,43 +80,43 @@ const step: ProcessStepDefinition = {
             ]
           },
           renderWhen(stepValues: {
-            "has-fire-exit"?: ComponentValue<DatabaseSchema, "property">;
+            "has-smoke-alarm"?: ComponentValue<DatabaseSchema, "property">;
           }): boolean {
-            return stepValues["has-fire-exit"] === "yes";
+            return stepValues["has-smoke-alarm"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
             storeName: "property",
             key: processRef,
-            property: ["fireExit", "isAccessible"]
+            property: ["smokeAlarm", "isWorking"]
           })
         })
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "fire-exit-notes",
+          key: "smoke-alarm-notes",
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about the fire exit if necessary." as
+              value: "Add note about the smoke alarm if necessary." as
                 | string
                 | null
                 | undefined
             },
-            name: "fire-exit-notes"
+            name: "smoke-alarm-notes"
           },
           renderWhen(stepValues: {
-            "has-fire-exit"?: ComponentValue<DatabaseSchema, "property">;
+            "has-smoke-alarm"?: ComponentValue<DatabaseSchema, "property">;
           }): boolean {
-            return stepValues["has-fire-exit"] === "yes";
+            return stepValues["has-smoke-alarm"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
             storeName: "property",
             key: processRef,
-            property: ["fireExit", "notes"]
+            property: ["smokeAlarm", "notes"]
           })
         })
       )
