@@ -85,32 +85,27 @@ export const SectionsPage: NextPage = () => {
               {
                 name: "ID, residency, and tenant information",
                 href: hrefForSlug(PageSlugs.Id),
-                status: idAndResidencyComplete.result ? "Completed" : undefined,
-                "data-testid": "start-id"
+                status: idAndResidencyComplete.result ? "Completed" : undefined
               },
               {
                 name: "Household",
                 href: hrefForSlug(PageSlugs.Submit),
-                status: idAndResidencyComplete.result ? undefined : "",
-                "data-testid": "start-household"
+                status: idAndResidencyComplete.result ? undefined : ""
               },
               {
                 name: "Property inspection",
                 href: hrefForSlug(PageSlugs.Rooms),
-                status: idAndResidencyComplete.result ? undefined : "",
-                "data-testid": "start-property"
+                status: idAndResidencyComplete.result ? undefined : ""
               },
               {
                 name: "Wellbeing support",
                 href: hrefForSlug(PageSlugs.Submit),
-                status: idAndResidencyComplete.result ? undefined : "",
-                "data-testid": "start-wellbeing"
+                status: idAndResidencyComplete.result ? undefined : ""
               },
               {
                 name: "Review and submit",
                 href: hrefForSlug(PageSlugs.Submit),
-                status: idAndResidencyComplete.result ? undefined : "",
-                "data-testid": "start-review"
+                status: idAndResidencyComplete.result ? undefined : ""
               }
             ]}
           />
