@@ -18,27 +18,25 @@ import PageSlugs, { hrefForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const step: ProcessStepDefinition = {
-  title: PageTitles.DoorMats,
-  heading:
-    "Has the tenant placed door mats and/or potted plants in communal areas?",
+  title: PageTitles.CommunalAreas,
+  heading: "Has the tenant left combustible items in communal areas?",
   step: {
-    slug: PageSlugs.DoorMats,
-    nextSlug: PageSlugs.CommunalAreas,
+    slug: PageSlugs.CommunalAreas,
+    nextSlug: PageSlugs.Submit,
     Submit: makeSubmit({
-      href: hrefForSlug(PageSlugs.CommunalAreas),
+      href: hrefForSlug(PageSlugs.Submit),
       value: "Save and continue"
     }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "has-placed",
+          key: "has-left-combustible-items",
           Component: RadioButtons,
           props: {
-            name: "has-placed",
+            name: "has-left-combustible-items",
             legend: (
               <FieldsetLegend>
-                Has the tenant placed door mats and/or potted plants in communal
-                areas?
+                Has the tenant left combustible items in communal areas?
               </FieldsetLegend>
             ) as React.ReactNode,
             radios: [
@@ -57,7 +55,7 @@ const step: ProcessStepDefinition = {
           databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
             storeName: "property",
             key: processRef,
-            property: ["doorMats", "hasPlaced"]
+            property: ["communalAreas", "hasLeftCombustibleItems"]
           })
         })
       ),
@@ -82,22 +80,25 @@ const step: ProcessStepDefinition = {
             ]
           },
           renderWhen(stepValues: {
-            "has-placed"?: ComponentValue<DatabaseSchema, "property">;
+            "has-left-combustible-items"?: ComponentValue<
+              DatabaseSchema,
+              "property"
+            >;
           }): boolean {
-            return stepValues["has-placed"] === "yes";
+            return stepValues["has-left-combustible-items"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
             storeName: "property",
             key: processRef,
-            property: ["doorMats", "furtherActionRequired"]
+            property: ["communalAreas", "furtherActionRequired"]
           })
         })
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "door-mats-notes",
+          key: "communal-areas-notes",
           Component: TextArea,
           props: {
             label: {
@@ -106,19 +107,22 @@ const step: ProcessStepDefinition = {
                 | null
                 | undefined
             },
-            name: "door-mats-notes"
+            name: "communal-areas-notes"
           },
           renderWhen(stepValues: {
-            "has-placed"?: ComponentValue<DatabaseSchema, "property">;
+            "has-left-combustible-items"?: ComponentValue<
+              DatabaseSchema,
+              "property"
+            >;
           }): boolean {
-            return stepValues["has-placed"] === "yes";
+            return stepValues["has-left-combustible-items"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
             storeName: "property",
             key: processRef,
-            property: ["doorMats", "notes"]
+            property: ["communalAreas", "notes"]
           })
         })
       )

@@ -86,6 +86,11 @@ type DatabaseSchema = NamedSchema<
           furtherActionRequired: boolean;
           notes: string;
         };
+        communalAreas: {
+          hasLeftCombustibleItems: boolean;
+          furtherActionRequired: boolean;
+          notes: string;
+        };
       };
     };
 

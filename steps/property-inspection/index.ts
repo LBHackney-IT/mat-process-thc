@@ -10,6 +10,7 @@ import fireExit from "./fire-exit";
 import smokeAlarm from "./smoke-alarm";
 import metalGates from "./metal-gates";
 import doorMats from "./door-mats";
+import communalAreas from "./communal-areas";
 
 export default [
   rooms,
@@ -23,5 +24,6 @@ export default [
   fireExit,
   smokeAlarm,
   metalGates,
-  doorMats
+  doorMats,
+  communalAreas
 ];
