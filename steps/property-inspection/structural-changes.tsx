@@ -19,25 +19,27 @@ import PageSlugs, { hrefForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const step: ProcessStepDefinition = {
-  title: PageTitles.LaminatedFlooring,
-  heading: "Is there any laminated flooring in the property?",
+  title: PageTitles.StructuralChanges,
+  heading:
+    "Have any structural changes been made within the property since it was originally let?",
   step: {
-    slug: PageSlugs.LaminatedFlooring,
-    nextSlug: PageSlugs.StructuralChanges,
+    slug: PageSlugs.StructuralChanges,
+    nextSlug: PageSlugs.Submit,
     Submit: makeSubmit({
-      href: hrefForSlug(PageSlugs.StructuralChanges),
+      href: hrefForSlug(PageSlugs.Submit),
       value: "Save and continue"
     }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "has-laminated-flooring",
+          key: "has-structural-changes",
           Component: RadioButtons,
           props: {
-            name: "has-laminated-flooring",
+            name: "has-structural-changes",
             legend: (
               <FieldsetLegend>
-                Is there any laminated flooring in the property?
+                Have any structural changes been made within the property since
+                it was originally let?
               </FieldsetLegend>
             ) as React.ReactNode,
             radios: [
@@ -56,19 +58,19 @@ const step: ProcessStepDefinition = {
           databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
             storeName: "property",
             key: processRef,
-            property: ["laminatedFlooring", "hasLaminatedFlooring"]
+            property: ["structuralChanges", "hasStructuralChanges"]
           })
         })
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "has-permission",
+          key: "changes-authorised",
           Component: RadioButtons,
           props: {
-            name: "has-permission",
+            name: "changes-authorised",
             legend: (
               <FieldsetLegend>
-                Is there permission for laminated flooring?
+                Have the structural changes been authorised?
               </FieldsetLegend>
             ) as React.ReactNode,
             radios: [
@@ -83,29 +85,29 @@ const step: ProcessStepDefinition = {
             ]
           },
           renderWhen(stepValues: {
-            "has-laminated-flooring"?: ComponentValue<
+            "has-structural-changes"?: ComponentValue<
               DatabaseSchema,
               "property"
             >;
           }): boolean {
-            return stepValues["has-laminated-flooring"] === "yes";
+            return stepValues["has-structural-changes"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
             storeName: "property",
             key: processRef,
-            property: ["laminatedFlooring", "hasPermission"]
+            property: ["structuralChanges", "changesAuthorised"]
           })
         })
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "laminated-flooring-images",
+          key: "structural-changes-images",
           Component: ImageInput,
           props: {
-            label: "Take a photo of laminated flooring and any document(s)",
-            name: "laminated-flooring-images",
+            label: "Take photos of structural changes and any documents",
+            name: "structural-changes-images",
             hintText: "You can take up to 5 different photos" as
               | string
               | null
@@ -113,49 +115,49 @@ const step: ProcessStepDefinition = {
             maxCount: 5
           },
           renderWhen(stepValues: {
-            "has-laminated-flooring"?: ComponentValue<
+            "has-structural-changes"?: ComponentValue<
               DatabaseSchema,
               "property"
             >;
           }): boolean {
-            return stepValues["has-laminated-flooring"] === "yes";
+            return stepValues["has-structural-changes"] === "yes";
           },
           defaultValue: [],
           emptyValue: [] as string[],
           databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
             storeName: "property",
             key: processRef,
-            property: ["laminatedFlooring", "images"]
+            property: ["structuralChanges", "images"]
           })
         })
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "laminated-flooring-notes",
+          key: "structural-changes-notes",
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about laminated flooring if necessary." as
+              value: "Add note about structural changes including when it was done and location in property." as
                 | string
                 | null
                 | undefined
             },
-            name: "laminated-flooring-notes"
+            name: "structural-changes-notes"
           },
           renderWhen(stepValues: {
-            "has-laminated-flooring"?: ComponentValue<
+            "has-structural-changes"?: ComponentValue<
               DatabaseSchema,
               "property"
             >;
           }): boolean {
-            return stepValues["has-laminated-flooring"] === "yes";
+            return stepValues["has-structural-changes"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
             storeName: "property",
             key: processRef,
-            property: ["laminatedFlooring", "notes"]
+            property: ["structuralChanges", "notes"]
           })
         })
       )

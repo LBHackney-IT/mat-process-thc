@@ -219,6 +219,23 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
+      // Structural changes page
+
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/structural-changes"
+      );
+
+      await browser!.findElement({ id: "has-structural-changes-yes" }).click();
+      await browser!.findElement({ id: "changes-authorised-yes" }).click();
+      await browser!
+        .findElement({ name: "structural-changes-images" })
+        .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
+      await browser!
+        .wait(until.elementLocated({ name: "structural-changes-notes" }), 500)
+        .sendKeys("Structural channges notes");
+
+      await browser!.submit();
+
       // Submit page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/submit");
 

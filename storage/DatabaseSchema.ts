@@ -31,6 +31,12 @@ type DatabaseSchema = NamedSchema<
           images: string[];
           notes: string;
         };
+        structuralChanges: {
+          hasStructuralChanges: boolean;
+          changesAuthorised: boolean;
+          images: string[];
+          notes: string;
+        };
       };
     };
 
