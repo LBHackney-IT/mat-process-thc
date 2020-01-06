@@ -22,9 +22,9 @@ const step: ProcessStepDefinition = {
   heading: "Verify proof of residency",
   step: {
     slug: PageSlugs.Residency,
-    nextSlug: PageSlugs.Submit,
+    nextSlug: PageSlugs.TenantPhoto,
     Submit: makeSubmit({
-      href: hrefForSlug(PageSlugs.Submit),
+      href: hrefForSlug(PageSlugs.TenantPhoto),
       value: "Save and continue"
     }),
     componentWrappers: [
