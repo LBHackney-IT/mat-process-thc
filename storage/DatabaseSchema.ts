@@ -21,6 +21,10 @@ type DatabaseSchema = NamedSchema<
         outside: {
           images: string[];
         };
+        rooms: {
+          canEnterAll: boolean;
+          notes: string;
+        };
       };
     };
 

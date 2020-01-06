@@ -192,6 +192,16 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
+      // Rooms page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/rooms");
+
+      await browser!.findElement({ id: "can-enter-all-rooms-no" }).click();
+      await browser!
+        .wait(until.elementLocated({ name: "room-entry-notes" }), 500)
+        .sendKeys("Room entry notes");
+
+      await browser!.submit();
+
       // Submit page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/submit");
 

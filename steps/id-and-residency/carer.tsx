@@ -30,9 +30,9 @@ const step: ProcessStepDefinition = {
   heading: "Carer",
   step: {
     slug: PageSlugs.Carer,
-    nextSlug: PageSlugs.Submit,
+    nextSlug: PageSlugs.Rooms,
     Submit: makeSubmit({
-      href: hrefForSlug(PageSlugs.Submit),
+      href: hrefForSlug(PageSlugs.Rooms),
       value: "Save and continue"
     }),
     componentWrappers: [

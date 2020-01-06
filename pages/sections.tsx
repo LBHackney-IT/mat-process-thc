@@ -96,7 +96,7 @@ export const SectionsPage: NextPage = () => {
               },
               {
                 name: "Property inspection",
-                href: hrefForSlug(PageSlugs.Submit),
+                href: hrefForSlug(PageSlugs.Rooms),
                 status: idAndResidencyComplete.result ? undefined : "",
                 "data-testid": "start-property"
               },

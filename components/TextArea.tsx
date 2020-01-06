@@ -21,7 +21,7 @@ export const TextArea = (props: Props): React.ReactElement => {
   const inputId = `${name}-input`;
 
   return (
-    <>
+    <div className="text-area">
       {label.value && (
         <label id={labelId} htmlFor={inputId}>
           {label.value}
@@ -42,12 +42,15 @@ export const TextArea = (props: Props): React.ReactElement => {
       </textarea>
 
       <style jsx>{`
+        .text-area {
+          margin-top: 10px;
+        }
         textarea {
           display: block;
           margin: 10px 0;
         }
       `}</style>
-    </>
+    </div>
   );
 };
 
