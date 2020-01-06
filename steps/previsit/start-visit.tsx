@@ -37,7 +37,7 @@ const step: ProcessStepDefinition = {
           Component: Heading,
           props: {
             level: HeadingLevels.H2,
-            children: "About Tenancy and Household Check" as React.ReactNode
+            children: "About Tenancy and Household Check"
           }
         })
       ),
@@ -51,7 +51,7 @@ const step: ProcessStepDefinition = {
                 Please read the following text to the tenant(s) to explain why
                 we collect information from them and what we do with it.
               </strong>
-            ) as React.ReactNode
+            )
           }
         })
       ),
@@ -60,7 +60,8 @@ const step: ProcessStepDefinition = {
           key: "paragraph-2",
           Component: Paragraph,
           props: {
-            children: "Housing Services carry out unannounced visits at tenants' homes." as React.ReactNode
+            children:
+              "Housing Services carry out unannounced visits at tenants' homes."
           }
         })
       ),
@@ -69,7 +70,7 @@ const step: ProcessStepDefinition = {
           key: "paragraph-3",
           Component: Paragraph,
           props: {
-            children: "The information we collect from our visits helps us to:" as React.ReactNode
+            children: "The information we collect from our visits helps us to:"
           }
         })
       ),
@@ -92,7 +93,8 @@ const step: ProcessStepDefinition = {
           key: "paragraph-4",
           Component: Paragraph,
           props: {
-            children: "We can also give advice about any tenancy issues or other enquiries." as React.ReactNode
+            children:
+              "We can also give advice about any tenancy issues or other enquiries."
           }
         })
       ),
@@ -101,7 +103,8 @@ const step: ProcessStepDefinition = {
           key: "paragraph-5",
           Component: Paragraph,
           props: {
-            children: "All the information collected from you will be stored electronically and kept secure. Once stored, it can be accessed by the Council’s Housing team and may be shared internally and with partner organisations, for instance, if you have medical or support needs." as React.ReactNode
+            children:
+              "All the information collected from you will be stored electronically and kept secure. Once stored, it can be accessed by the Council’s Housing team and may be shared internally and with partner organisations, for instance, if you have medical or support needs."
           }
         })
       ),
@@ -110,7 +113,8 @@ const step: ProcessStepDefinition = {
           key: "paragraph-6",
           Component: Paragraph,
           props: {
-            children: "We will keep your information for as long as the Council’s data retention schedule permits." as React.ReactNode
+            children:
+              "We will keep your information for as long as the Council’s data retention schedule permits."
           }
         })
       ),
@@ -119,7 +123,8 @@ const step: ProcessStepDefinition = {
           key: "paragraph-7",
           Component: Paragraph,
           props: {
-            children: "More about how we hold information about you and your access to it can be found on the privacy notice page of the Hackney Council website." as React.ReactNode
+            children:
+              "More about how we hold information about you and your access to it can be found on the privacy notice page of the Hackney Council website."
           }
         })
       ),
@@ -128,7 +133,7 @@ const step: ProcessStepDefinition = {
           key: "paragraph-8",
           Component: Paragraph,
           props: {
-            children: "Are you OK to start this visit?" as React.ReactNode
+            children: "Are you OK to start this visit?"
           }
         })
       )

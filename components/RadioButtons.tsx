@@ -21,46 +21,46 @@ export const RadioButtons = (props: RadioButtons): JSX.Element => {
   return (
     <div className="radio-buttons">
       {radios.map(
-        (radio: RadioButton, index): JSX.Element => (
-          <div key={index}>
-            <input
-              id={`${name}-${index}`}
-              type="radio"
-              name={name}
-              checked={value === radio.value}
-              value={radio.value}
-              onClick={(): void => onValueChange(radio.value)}
-            />
-            <label htmlFor={`${name}-${index}`}>{radio.label}</label>
-          </div>
-        )
+        (radio): JSX.Element => {
+          const id = `${name}-${radio.value}`;
+
+          return (
+            <span key={id}>
+              <input
+                id={id}
+                type="radio"
+                name={name}
+                value={radio.value}
+                checked={value === radio.value}
+                onChange={(): void => onValueChange(radio.value)}
+              />
+              <label htmlFor={id}>{radio.label}</label>
+            </span>
+          );
+        }
       )}
-      <style jsx>
-        {`
-          .radio-buttons {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 20px;
-          }
+      <style jsx>{`
+        .radio-buttons {
+          display: flex;
+          flex-direction: column;
+          margin-bottom: 20px;
+        }
 
-          label {
-            font-family: "Montserrat";
-          }
+        label {
+          font-family: "Montserrat";
+        }
 
-          input {
-            margin-right: 10px;
-            margin-top: 10px;
-          }
-        `}
-      </style>
+        input {
+          margin-right: 10px;
+          margin-top: 10px;
+        }
+      `}</style>
     </div>
   );
 };
 
 RadioButtons.propTypes = {
-  ...DynamicComponent.controlledPropTypes(
-    PropTypes.arrayOf(PropTypes.string.isRequired)
-  ),
+  ...DynamicComponent.controlledPropTypes(PropTypes.string.isRequired),
   name: PropTypes.string.isRequired,
   radios: PropTypes.arrayOf(
     PropTypes.exact({

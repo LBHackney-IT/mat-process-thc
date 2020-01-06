@@ -4,12 +4,11 @@ import {
 } from "lbh-frontend-react/components/typography/Heading";
 import { Paragraph } from "lbh-frontend-react/components/typography/Paragraph";
 import {
+  ComponentDatabaseMap,
   ComponentWrapper,
-  DatabaseMap,
   DynamicComponent,
   StaticComponent
 } from "remultiform/component-wrapper";
-import React from "react";
 
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
@@ -42,7 +41,7 @@ const step: ProcessStepDefinition = {
           Component: Heading,
           props: {
             level: HeadingLevels.H2,
-            children: "Visit attempt" as React.ReactNode
+            children: "Visit attempt"
           }
         })
       ),
@@ -52,7 +51,7 @@ const step: ProcessStepDefinition = {
           Component: Heading,
           props: {
             level: HeadingLevels.H3,
-            children: "Outside property" as React.ReactNode
+            children: "Outside property"
           }
         })
       ),
@@ -61,7 +60,8 @@ const step: ProcessStepDefinition = {
           key: "outside-property-paragraph",
           Component: Paragraph,
           props: {
-            children: "The photo of outside of the property should include as much as the front of the property as possible. If it is a flat, then try to take a photo of what you see when you are standing outside of the property itself." as React.ReactNode
+            children:
+              "The photo of outside of the property should include as much as the front of the property as possible. If it is a flat, then try to take a photo of what you see when you are standing outside of the property itself."
           }
         })
       ),
@@ -74,13 +74,13 @@ const step: ProcessStepDefinition = {
             buttonText: "Take a photo of outside the property",
             name: "outside-property-images"
           },
-          databaseMap: new DatabaseMap<DatabaseSchema, "outsidePropertyImages">(
-            {
-              storeName: "outsidePropertyImages",
-              key: processRef
-            }
-          ),
-          emptyValue: []
+          defaultValue: [],
+          emptyValue: [] as string[],
+          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+            storeName: "property",
+            key: processRef,
+            property: ["outside", "images"]
+          })
         })
       ),
       ComponentWrapper.wrapStatic(
@@ -89,7 +89,7 @@ const step: ProcessStepDefinition = {
           Component: Heading,
           props: {
             level: HeadingLevels.H3,
-            children: "Metal gate across entrance?" as React.ReactNode
+            children: "Metal gate across entrance?"
           }
         })
       ),
@@ -98,8 +98,7 @@ const step: ProcessStepDefinition = {
           key: "metal-gate-paragraph",
           Component: Paragraph,
           props: {
-            level: Paragraph,
-            children: "This photo will also be displayed later in the process." as React.ReactNode
+            children: "This photo will also be displayed later in the process."
           }
         })
       ),
@@ -112,11 +111,13 @@ const step: ProcessStepDefinition = {
             buttonText: "Take a photo of the metal gate",
             name: "metal-gate-images"
           },
-          databaseMap: new DatabaseMap<DatabaseSchema, "metalGateImages">({
-            storeName: "metalGateImages",
-            key: processRef
-          }),
-          emptyValue: []
+          defaultValue: [],
+          emptyValue: [] as string[],
+          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "metalGates">({
+            storeName: "metalGates",
+            key: processRef,
+            property: ["images"]
+          })
         })
       ),
       ComponentWrapper.wrapStatic(
@@ -125,7 +126,7 @@ const step: ProcessStepDefinition = {
           Component: Heading,
           props: {
             level: HeadingLevels.H4,
-            children: "What do you want to do next?" as React.ReactNode
+            children: "What do you want to do next?"
           }
         })
       )

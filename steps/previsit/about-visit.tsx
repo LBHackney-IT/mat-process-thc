@@ -4,7 +4,8 @@ import {
 } from "lbh-frontend-react/components/Fieldset";
 import React from "react";
 import {
-  DatabaseMap,
+  ComponentDatabaseMap,
+  ComponentValue,
   ComponentWrapper,
   DynamicComponent
 } from "remultiform/component-wrapper";
@@ -31,16 +32,17 @@ const step: ProcessStepDefinition = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "unannounced-visit-radios",
-          // eslint-disable-next-line react/display-name
-          Component: (props): React.ReactElement => (
-            <Fieldset
-              legend={
-                <FieldsetLegend>Is this an unnanounced visit?</FieldsetLegend>
-              }
-            >
-              <RadioButtons {...props} />
-            </Fieldset>
-          ),
+          Component(props): React.ReactElement {
+            return (
+              <Fieldset
+                legend={
+                  <FieldsetLegend>Is this an unnanounced visit?</FieldsetLegend>
+                }
+              >
+                <RadioButtons {...props} />
+              </Fieldset>
+            );
+          },
           props: {
             name: "unannounced-visit-radios",
             radios: [
@@ -54,11 +56,16 @@ const step: ProcessStepDefinition = {
               }
             ]
           },
-          databaseMap: new DatabaseMap<DatabaseSchema, "unannouncedVisit">({
-            storeName: "unannouncedVisit",
-            key: processRef
-          }),
-          emptyValue: undefined
+          defaultValue: "",
+          emptyValue: "",
+          databaseMap: new ComponentDatabaseMap<
+            DatabaseSchema,
+            "isUnannouncedVisit"
+          >({
+            storeName: "isUnannouncedVisit",
+            key: processRef,
+            property: ["value"]
+          })
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -66,18 +73,27 @@ const step: ProcessStepDefinition = {
           key: "unannounced-visit-notes-textarea",
           Component: TextArea,
           props: {
-            label: "Explain why this visit is pre-arranged.",
+            label: "Explain why this visit was pre-arranged.",
             name: "unannounced-visit-notes"
           },
-          databaseMap: new DatabaseMap<DatabaseSchema, "unannouncedVisitNotes">(
-            {
-              storeName: "unannouncedVisitNotes",
-              key: processRef
-            }
-          ),
+          renderWhen(stepValues: {
+            "unannounced-visit-radios"?: ComponentValue<
+              DatabaseSchema,
+              "isVisitInside"
+            >;
+          }): boolean {
+            return stepValues["unannounced-visit-radios"] === "no";
+          },
+          defaultValue: "",
           emptyValue: "",
-          renderWhen: (values): boolean =>
-            values["unannounced-visit-radios"] === "yes"
+          databaseMap: new ComponentDatabaseMap<
+            DatabaseSchema,
+            "isUnannouncedVisit"
+          >({
+            storeName: "isUnannouncedVisit",
+            key: processRef,
+            property: ["notes"]
+          })
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -108,11 +124,16 @@ const step: ProcessStepDefinition = {
               }
             ]
           },
-          databaseMap: new DatabaseMap<DatabaseSchema, "insideProperty">({
-            storeName: "insideProperty",
-            key: processRef
-          }),
-          emptyValue: undefined
+          defaultValue: "",
+          emptyValue: "",
+          databaseMap: new ComponentDatabaseMap<
+            DatabaseSchema,
+            "isVisitInside"
+          >({
+            storeName: "isVisitInside",
+            key: processRef,
+            property: ["value"]
+          })
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -120,16 +141,28 @@ const step: ProcessStepDefinition = {
           key: "inside-property-notes-textarea",
           Component: TextArea,
           props: {
-            label: "Explain why this visit is outside of tenant's home.",
+            label:
+              "Explain why this visit is not happening inside a tenant's home.",
             name: "inside-property-notes"
           },
-          databaseMap: new DatabaseMap<DatabaseSchema, "insidePropertyNotes">({
-            storeName: "insidePropertyNotes",
-            key: processRef
-          }),
+          renderWhen(stepValues: {
+            "inside-property-radios"?: ComponentValue<
+              DatabaseSchema,
+              "isVisitInside"
+            >;
+          }): boolean {
+            return stepValues["inside-property-radios"] === "no";
+          },
+          defaultValue: "",
           emptyValue: "",
-          renderWhen: (values): boolean =>
-            values["inside-property-radios"] === "no"
+          databaseMap: new ComponentDatabaseMap<
+            DatabaseSchema,
+            "isVisitInside"
+          >({
+            storeName: "isVisitInside",
+            key: processRef,
+            property: ["notes"]
+          })
         })
       )
     ]

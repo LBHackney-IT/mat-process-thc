@@ -100,7 +100,9 @@ export const ImageInput = (props: ImageInputProps): React.ReactElement => {
           if (inputRef.current) {
             inputRef.current.value = "";
           } else {
-            console.error("Input's ref is not populated, yet");
+            console.error(
+              "Input's ref is not populated and we're trying to set its value"
+            );
           }
         }}
       />
@@ -111,43 +113,53 @@ export const ImageInput = (props: ImageInputProps): React.ReactElement => {
           if (inputRef.current) {
             inputRef.current.click();
           } else {
-            console.error("Input's ref is not populated, yet");
+            console.error(
+              "Input's ref is not populated yet and we're trying to click it"
+            );
           }
         }}
       >
         <PhotoIcon className="photo-icon" />
         {buttonText}
       </Button>
+
       <style jsx>{`
         input,
         label {
           display: none;
         }
+
         .image-container {
           display: flex;
           flex-wrap: wrap;
         }
+
         .thumbnail {
           display: flex;
           flex-direction: column;
           margin-right: 10px;
         }
+
         .thumbnail img {
           max-height: 200px;
           width: auto;
           margin: auto;
           margin-bottom: -1.5em;
         }
+
         .photo-icon {
           background: white;
         }
-        :global(.input-button) {
+
+        :global(.lbh-button.input-button) {
           display: flex;
           align-items: center;
         }
+
         :global(.photo-icon) {
           margin-right: 15px;
         }
+
         :global(.remove-button) {
           vertical-align: bottom;
           margin-bottom: 6px;
@@ -158,10 +170,10 @@ export const ImageInput = (props: ImageInputProps): React.ReactElement => {
 };
 
 ImageInput.propTypes = {
+  ...DynamicComponent.controlledPropTypes(
+    PropTypes.arrayOf(PropTypes.string.isRequired).isRequired
+  ),
   label: PropTypes.string.isRequired,
   buttonText: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  ...DynamicComponent.controlledPropTypes(
-    PropTypes.arrayOf(PropTypes.string.isRequired)
-  )
+  name: PropTypes.string.isRequired
 };

@@ -3,8 +3,7 @@ import {
   Builder,
   Locator,
   WebDriver,
-  WebElement,
-  WebElementPromise
+  until
 } from "selenium-webdriver";
 import chrome from "selenium-webdriver/chrome";
 import firefox from "selenium-webdriver/firefox";
@@ -119,19 +118,7 @@ class WebDriverWrapper implements WebDriver {
     const submitButton = await this.findElement(locator);
 
     await submitButton.click();
-    await this.waitUntilStale(submitButton);
-  }
-
-  async waitUntilStale(element: WebElement | WebElementPromise): Promise<void> {
-    await this.wait(async () => {
-      try {
-        await element.findElement({ id: "anything" });
-
-        return false;
-      } catch (error) {
-        return error.name === "StaleElementReferenceError";
-      }
-    });
+    await this.wait(until.stalenessOf(submitButton));
   }
 }
 

@@ -1,13 +1,13 @@
+import { Button } from "lbh-frontend-react/components/Button";
 import Link from "next/link";
 import PropTypes from "prop-types";
 import React from "react";
 import { SubmitProps, submitPropTypes } from "remultiform/step";
-import { Button } from "lbh-frontend-react/components/Button";
 
-export type MakeSubmitProps = {
+export interface MakeSubmitProps {
   href: string;
   value: string;
-};
+}
 
 export const makeSubmit = (
   props: MakeSubmitProps | MakeSubmitProps[]

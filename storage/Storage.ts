@@ -18,12 +18,10 @@ export default class Storage {
 
         if (version === 0) {
           upgrade.createStore("lastModified");
-          upgrade.createStore("outsidePropertyImages");
-          upgrade.createStore("metalGateImages");
-          upgrade.createStore("unannouncedVisit");
-          upgrade.createStore("unannouncedVisitNotes");
-          upgrade.createStore("insideProperty");
-          upgrade.createStore("insidePropertyNotes");
+          upgrade.createStore("property");
+          upgrade.createStore("isUnannouncedVisit");
+          upgrade.createStore("isVisitInside");
+          upgrade.createStore("metalGates");
 
           version = 1;
         }
@@ -69,7 +67,7 @@ export default class Storage {
           return;
         }
 
-        await stores.lastModified.put(lastModified, processRef);
+        await stores.lastModified.put(processRef, lastModified);
 
         // Update the rest of the data here.
       },
