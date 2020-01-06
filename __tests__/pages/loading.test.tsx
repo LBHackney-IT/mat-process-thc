@@ -1,25 +1,18 @@
-import isOnline from "is-online";
 import React from "react";
 import { ReactTestRenderer, act, create } from "react-test-renderer";
 
 import { promiseToWaitForNextTick } from "../helpers/promise";
+import { spyOnConsoleError } from "../helpers/spies";
 
-import SubmitPage from "../../pages/submit";
-
-jest.mock("is-online");
-
-const isOnlineMock = (isOnline as unknown) as jest.MockInstance<
-  Promise<boolean>,
-  [isOnline.Options?]
->;
+import LoadingPage from "../../pages/loading";
 
 it("renders correctly when online", async () => {
-  isOnlineMock.mockResolvedValue(true);
+  fetchMock.mockResponse(JSON.stringify({ online: true }));
 
   let component: ReactTestRenderer | undefined = undefined;
 
   await act(async () => {
-    component = create(<SubmitPage />);
+    component = create(<LoadingPage />);
 
     await promiseToWaitForNextTick();
   });
@@ -109,62 +102,113 @@ it("renders correctly when online", async () => {
         <div
           className="govuk-container lbh-container"
         >
-          <section
-            className="lbh-page-announcement"
+          <h1
+            className="lbh-heading-h1"
           >
-            <h3
-              className="lbh-page-announcement__title"
-            >
-              Process submission pending
-            </h3>
+            Tenancy and Household Check
+          </h1>
+          <dl
+            className="govuk-summary-list lbh-summary-list govuk-summary-list--no-border mat-tenancy-summary"
+          >
             <div
-              className="lbh-page-announcement__content"
+              className="govuk-summary-list__row lbh-summary-list__row"
             >
-              <p
-                className="lbh-body"
+              <dt
+                className="govuk-summary-list__key lbh-summary-list__key"
               >
-                You are online.
-              </p>
-              <p
-                className="lbh-body"
+                Address
+              </dt>
+              <dd
+                className="govuk-summary-list__value lbh-summary-list__value"
               >
-                The Tenancy and Household Check for the tenancy at 
                 1 Mare Street, London, E8 3AA
-                , occupied by 
-                Jane Doe, John Doe
-                 has been saved to your device ready to be sent to your manager for review.
-              </p>
-              <p
-                className="lbh-body"
-              >
-                <strong>
-                  You need to be online on this device to continue.
-                </strong>
-              </p>
-              <p
-                className="lbh-body"
-              >
-                If you can't go online now, when you are next online on this device, please come back to this Tenancy and Household Check from your work tray and click on the ‘Save and submit to manager’ button below that will become able to be clicked.
-              </p>
-              <p
-                className="lbh-body"
-              >
-                <strong>
-                  You are online
-                </strong>
-                , and can submit this Tenancy and Household Check to your manager now.
-              </p>
+              </dd>
             </div>
-          </section>
+            <div
+              className="govuk-summary-list__row lbh-summary-list__row"
+            >
+              <dt
+                className="govuk-summary-list__key lbh-summary-list__key"
+              >
+                Tenants
+              </dt>
+              <dd
+                className="govuk-summary-list__value lbh-summary-list__value"
+              >
+                Jane Doe, John Doe
+              </dd>
+            </div>
+            <div
+              className="govuk-summary-list__row lbh-summary-list__row"
+            >
+              <dt
+                className="govuk-summary-list__key lbh-summary-list__key"
+              >
+                Tenure type
+              </dt>
+              <dd
+                className="govuk-summary-list__value lbh-summary-list__value"
+              >
+                Introductory
+              </dd>
+            </div>
+            <div
+              className="govuk-summary-list__row lbh-summary-list__row"
+            >
+              <dt
+                className="govuk-summary-list__key lbh-summary-list__key"
+              >
+                Tenancy start date
+              </dt>
+              <dd
+                className="govuk-summary-list__value lbh-summary-list__value"
+              >
+                1 January 2019
+              </dd>
+            </div>
+          </dl>
+          <style
+            jsx={true}
+          >
+            
+            :global(.mat-tenancy-summary dt, .mat-tenancy-summary dd) {
+              padding-bottom: 0 !important;
+            }
+          
+          </style>
+          <h2
+            className="lbh-heading-h2"
+          >
+            Previsit setup
+          </h2>
+          <p
+            className="lbh-body"
+          >
+            The system is currently updating the information you need for this process so that you can work offline or online.
+          </p>
+          <p
+            className="lbh-body"
+          >
+            Please wait until the ‘Go’ button is available to be clicked before proceeding.
+          </p>
+          <ul
+            className="govuk-list lbh-list"
+          >
+            <li>
+              Answers saved to the Hub... Loaded
+            </li>
+            <li>
+              Offline storage... More recent than the Hub
+            </li>
+          </ul>
           <button
             aria-disabled={false}
             className="govuk-button lbh-button"
-            data-prevent-double-click={true}
             data-testid="submit"
             disabled={false}
             onClick={[Function]}
           >
-            Save and submit to manager
+            Go
           </button>
         </div>
       </main>,
@@ -173,15 +217,27 @@ it("renders correctly when online", async () => {
 });
 
 it("renders correctly when offline", async () => {
-  isOnlineMock.mockResolvedValue(false);
+  fetchMock.mockReject(new Error("Request timed out"));
+
+  const consoleErrorSpy = spyOnConsoleError();
 
   let component: ReactTestRenderer | undefined = undefined;
 
   await act(async () => {
-    component = create(<SubmitPage />);
+    component = create(<LoadingPage />);
 
     await promiseToWaitForNextTick();
   });
+
+  expect(consoleErrorSpy.mock.calls).toMatchInlineSnapshot(`
+    Array [
+      Array [
+        [Error: Request timed out],
+      ],
+    ]
+  `);
+
+  consoleErrorSpy.mockRestore();
 
   expect(component).toMatchInlineSnapshot(`
     Array [
@@ -268,54 +324,115 @@ it("renders correctly when offline", async () => {
         <div
           className="govuk-container lbh-container"
         >
-          <section
-            className="lbh-page-announcement"
+          <h1
+            className="lbh-heading-h1"
           >
-            <h3
-              className="lbh-page-announcement__title"
-            >
-              Process submission pending
-            </h3>
+            Tenancy and Household Check
+          </h1>
+          <dl
+            className="govuk-summary-list lbh-summary-list govuk-summary-list--no-border mat-tenancy-summary"
+          >
             <div
-              className="lbh-page-announcement__content"
+              className="govuk-summary-list__row lbh-summary-list__row"
             >
-              <p
-                className="lbh-body"
+              <dt
+                className="govuk-summary-list__key lbh-summary-list__key"
               >
-                You are currently working offline.
-              </p>
-              <p
-                className="lbh-body"
+                Address
+              </dt>
+              <dd
+                className="govuk-summary-list__value lbh-summary-list__value"
               >
-                The Tenancy and Household Check for the tenancy at 
-                1 Mare Street, London, E8 3AA
-                , occupied by 
-                Jane Doe, John Doe
-                 has been saved to your device ready to be sent to your manager for review.
-              </p>
-              <p
-                className="lbh-body"
-              >
-                <strong>
-                  You need to be online on this device to continue.
-                </strong>
-              </p>
-              <p
-                className="lbh-body"
-              >
-                If you can't go online now, when you are next online on this device, please come back to this Tenancy and Household Check from your work tray and click on the ‘Save and submit to manager’ button below that will become able to be clicked.
-              </p>
+                Loading...
+              </dd>
             </div>
-          </section>
+            <div
+              className="govuk-summary-list__row lbh-summary-list__row"
+            >
+              <dt
+                className="govuk-summary-list__key lbh-summary-list__key"
+              >
+                Tenants
+              </dt>
+              <dd
+                className="govuk-summary-list__value lbh-summary-list__value"
+              >
+                Loading...
+              </dd>
+            </div>
+            <div
+              className="govuk-summary-list__row lbh-summary-list__row"
+            >
+              <dt
+                className="govuk-summary-list__key lbh-summary-list__key"
+              >
+                Tenure type
+              </dt>
+              <dd
+                className="govuk-summary-list__value lbh-summary-list__value"
+              >
+                Loading...
+              </dd>
+            </div>
+            <div
+              className="govuk-summary-list__row lbh-summary-list__row"
+            >
+              <dt
+                className="govuk-summary-list__key lbh-summary-list__key"
+              >
+                Tenancy start date
+              </dt>
+              <dd
+                className="govuk-summary-list__value lbh-summary-list__value"
+              >
+                Loading...
+              </dd>
+            </div>
+          </dl>
+          <style
+            jsx={true}
+          >
+            
+            :global(.mat-tenancy-summary dt, .mat-tenancy-summary dd) {
+              padding-bottom: 0 !important;
+            }
+          
+          </style>
+          <h2
+            className="lbh-heading-h2"
+          >
+            Previsit setup
+          </h2>
+          <p
+            className="lbh-body"
+          >
+            The system is currently updating the information you need for this process so that you can work offline or online.
+          </p>
+          <p
+            className="lbh-body"
+          >
+            Please wait until the ‘Go’ button is available to be clicked before proceeding.
+          </p>
+          <ul
+            className="govuk-list lbh-list"
+          >
+            <li>
+              Answers saved to the Hub... Error
+            </li>
+          </ul>
+          <p
+            className="lbh-body"
+          >
+            Something went really wrong. Please contact support.
+          </p>
           <button
             aria-disabled={true}
             className="govuk-button lbh-button"
-            data-prevent-double-click={true}
             data-testid="submit"
             disabled={true}
             onClick={[Function]}
           >
-            Waiting for connectivity...
+            Loading...
           </button>
         </div>
       </main>,
