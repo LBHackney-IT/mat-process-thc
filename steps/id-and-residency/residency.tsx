@@ -18,56 +18,68 @@ import PageSlugs, { hrefForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const step: ProcessStepDefinition = {
-  title: PageTitles.Id,
-  heading: "Verify proof of ID",
+  title: PageTitles.Residency,
+  heading: "Verify proof of residency",
   step: {
-    slug: PageSlugs.Id,
-    nextSlug: PageSlugs.Residency,
+    slug: PageSlugs.Residency,
+    nextSlug: PageSlugs.Submit,
     Submit: makeSubmit({
-      href: hrefForSlug(PageSlugs.Residency),
+      href: hrefForSlug(PageSlugs.Submit),
       value: "Save and continue"
     }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "id-type",
+          key: "residency-proof-type",
           Component: RadioButtons,
           props: {
-            name: "id-type",
+            name: "residency-proof-type",
             legend: (
-              <FieldsetLegend>What type of ID?</FieldsetLegend>
+              <FieldsetLegend>What type of proof of residency?</FieldsetLegend>
             ) as React.ReactNode,
             radios: [
               {
-                label: "Valid passport",
-                value: "valid passport"
+                label: "Bank statement",
+                value: "bank statement"
               },
               {
-                label: "Driving license",
-                value: "driving passport"
+                label: "DWP document (e.g. benefits / pension)",
+                value: "dwp document"
               },
               {
-                label: "Freedom pass",
-                value: "freedom pass"
+                label: "P45",
+                value: "p45"
               },
               {
-                label: "Photographic work ID",
-                value: "photographic work id"
+                label: "P60",
+                value: "p60"
               },
               {
-                label: "Photographic student ID",
-                value: "photographic student id"
+                label: "Tax Credit / Working Tax Credit",
+                value: "tax credit"
               },
               {
-                label: "Unable to verify ID",
-                value: "no id"
+                label: "Utility bill",
+                value: "utility bill"
+              },
+              {
+                label: "Valid UK residence permit",
+                value: "residence permit"
+              },
+              {
+                label: "Payslip",
+                value: "payslip"
+              },
+              {
+                label: "Unable to provide proof of residency",
+                value: "no residency"
               }
             ]
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "id">({
-            storeName: "id",
+          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "residency">({
+            storeName: "residency",
             key: processRef,
             property: ["type"]
           })
@@ -75,22 +87,21 @@ const step: ProcessStepDefinition = {
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "id-proof-images",
+          key: "residency-proof-images",
           Component: ImageInput,
           props: {
-            label: "Take photo of ID",
-            name: "id-proof-images",
-            buttonText: "Take photo of ID",
-            hintText: "You can take up to 3 different photos for ID verification." as
+            label: "Take photo of proof of residency",
+            name: "residency-proof-images",
+            buttonText: "Take photo of proof of residency",
+            hintText: "You can take up to 3 different photos for proof of residency." as
               | string
-              | null
               | undefined,
             maxCount: 3
           },
           defaultValue: [],
           emptyValue: [] as string[],
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "id">({
-            storeName: "id",
+          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "residency">({
+            storeName: "residency",
             key: processRef,
             property: ["images"]
           })
@@ -98,16 +109,16 @@ const step: ProcessStepDefinition = {
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "id-notes",
+          key: "residency-notes",
           Component: TextAreaDetails,
           props: {
-            summary: "Add note about ID if necessary",
-            name: "id-notes"
+            summary: "Add note about residency if necessary",
+            name: "residency-notes"
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "id">({
-            storeName: "id",
+          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "residency">({
+            storeName: "residency",
             key: processRef,
             property: ["notes"]
           })

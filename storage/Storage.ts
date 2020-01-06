@@ -23,6 +23,7 @@ export default class Storage {
           upgrade.createStore("isVisitInside");
           upgrade.createStore("metalGates");
           upgrade.createStore("id");
+          upgrade.createStore("residency");
 
           version = 1;
         }
