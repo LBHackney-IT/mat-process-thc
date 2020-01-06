@@ -136,6 +136,49 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
+      // Carer page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/carer");
+
+      await browser!.findElement({ id: "carer-needed-yes" }).click();
+      await browser!
+        .wait(until.elementLocated({ id: "carer-type-registered" }), 500)
+        .click();
+      await browser!
+        .wait(until.elementLocated({ id: "carer-live-in-yes" }), 500)
+        .click();
+      await browser!
+        .wait(
+          until.elementLocated({ name: "carer-live-in-start-date-month" }),
+          500
+        )
+        .sendKeys("1");
+      await browser!
+        .wait(
+          until.elementLocated({ name: "carer-live-in-start-date-year" }),
+          500
+        )
+        .sendKeys("2019");
+      await browser!
+        .wait(until.elementLocated({ name: "carer-full-name" }), 500)
+        .sendKeys("Full name");
+      await browser!
+        .wait(until.elementLocated({ name: "carer-relationship" }), 500)
+        .sendKeys("Relationship");
+      await browser!
+        .wait(until.elementLocated({ name: "carer-phone-number" }), 500)
+        .sendKeys("Phone number");
+      await browser!
+        .wait(until.elementLocated({ id: "carer-notes-summary" }), 500)
+        .click();
+      await browser!
+        .wait(
+          until.elementIsVisible(browser!.findElement({ name: "carer-notes" })),
+          500
+        )
+        .sendKeys("Carer notes");
+
+      await browser!.submit();
+
       // Submit page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/submit");
 

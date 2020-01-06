@@ -19,9 +19,9 @@ const step: ProcessStepDefinition = {
   heading: "Next of kin details",
   step: {
     slug: PageSlugs.NextOfKin,
-    nextSlug: PageSlugs.Submit,
+    nextSlug: PageSlugs.Carer,
     Submit: makeSubmit({
-      href: hrefForSlug(PageSlugs.Submit),
+      href: hrefForSlug(PageSlugs.Carer),
       value: "Save and continue"
     }),
     componentWrappers: [
