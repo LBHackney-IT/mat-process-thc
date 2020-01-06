@@ -5,6 +5,7 @@ import damage from "./damage";
 import roof from "./roof";
 import loft from "./loft";
 import garden from "./garden";
+import storingMaterials from "./storing-materials";
 
 export default [
   rooms,
@@ -13,5 +14,6 @@ export default [
   damage,
   roof,
   loft,
-  garden
+  garden,
+  storingMaterials
 ];

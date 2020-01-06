@@ -23,9 +23,9 @@ const step: ProcessStepDefinition = {
   heading: "Does the property have a garden?",
   step: {
     slug: PageSlugs.Garden,
-    nextSlug: PageSlugs.Submit,
+    nextSlug: PageSlugs.StoringMaterials,
     Submit: makeSubmit({
-      href: hrefForSlug(PageSlugs.Submit),
+      href: hrefForSlug(PageSlugs.StoringMaterials),
       value: "Save and continue"
     }),
     componentWrappers: [

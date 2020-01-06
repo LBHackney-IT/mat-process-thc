@@ -286,6 +286,19 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
+      // Storing materials page
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/storing-materials"
+      );
+
+      await browser!.findElement({ id: "is-storing-materials-yes" }).click();
+      await browser!.findElement({ id: "further-action-required-yes" }).click();
+      await browser!
+        .wait(until.elementLocated({ name: "stored-materials-notes" }), 500)
+        .sendKeys("Garden notes");
+
+      await browser!.submit();
+
       // Submit page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/submit");
 

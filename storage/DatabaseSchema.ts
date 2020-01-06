@@ -59,6 +59,11 @@ type DatabaseSchema = NamedSchema<
           images: string[];
           notes: string;
         };
+        storingMaterials: {
+          isStoringMaterials: boolean;
+          furtherActionRequired: boolean;
+          notes: string;
+        };
       };
     };
 
