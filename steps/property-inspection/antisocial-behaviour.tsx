@@ -14,9 +14,9 @@ import {
 } from "remultiform/component-wrapper";
 
 import { makeSubmit } from "../../components/makeSubmit";
-import ProcessStepDefinition from "../../components/ProcessStepDefinition";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import DatabaseSchema from "../../storage/DatabaseSchema";
 import processRef from "../../storage/processRef";
 

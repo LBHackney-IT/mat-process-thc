@@ -8,9 +8,9 @@ import {
 
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
-import ProcessStepDefinition from "../../components/ProcessStepDefinition";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextAreaDetails } from "../../components/TextAreaDetails";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import DatabaseSchema from "../../storage/DatabaseSchema";
 import processRef from "../../storage/processRef";
 

@@ -7,9 +7,9 @@ import {
 import { makeSubmit } from "../../components/makeSubmit";
 import { TextArea } from "../../components/TextArea";
 import { TextInput } from "../../components/TextInput";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import DatabaseSchema from "../../storage/DatabaseSchema";
 import processRef from "../../storage/processRef";
-import ProcessStepDefinition from "../../components/ProcessStepDefinition";
 
 import PageSlugs, { hrefForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
