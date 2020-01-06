@@ -74,6 +74,11 @@ Feature: Accessibility
     Then the page should be accessible
     And the page should have a descriptive title
 
+  Scenario: Damage page is accessible
+    When I visit /damage
+    Then the page should be accessible
+    And the page should have a descriptive title
+
   Scenario: Submit page is accessible
     When I visit /submit
     Then the page should be accessible

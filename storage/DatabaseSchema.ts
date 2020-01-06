@@ -37,6 +37,11 @@ type DatabaseSchema = NamedSchema<
           images: string[];
           notes: string;
         };
+        damage: {
+          hasDamage: boolean;
+          images: string[];
+          notes: string;
+        };
       };
     };
 
