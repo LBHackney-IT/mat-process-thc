@@ -335,6 +335,17 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
+      // Door mats page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/door-mats");
+
+      await browser!.findElement({ id: "has-placed-yes" }).click();
+      await browser!.findElement({ id: "further-action-required-yes" }).click();
+      await browser!
+        .wait(until.elementLocated({ name: "door-mats-notes" }), 500)
+        .sendKeys("Door mats notes");
+
+      await browser!.submit();
+
       // Submit page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/submit");
 

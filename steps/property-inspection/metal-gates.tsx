@@ -24,9 +24,9 @@ const step: ProcessStepDefinition = {
     "Has the tenant had metal gates erected across front entrance doors?",
   step: {
     slug: PageSlugs.MetalGates,
-    nextSlug: PageSlugs.Submit,
+    nextSlug: PageSlugs.DoorMats,
     Submit: makeSubmit({
-      href: hrefForSlug(PageSlugs.Submit),
+      href: hrefForSlug(PageSlugs.DoorMats),
       value: "Save and continue"
     }),
     componentWrappers: [

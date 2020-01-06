@@ -9,6 +9,7 @@ import storingMaterials from "./storing-materials";
 import fireExit from "./fire-exit";
 import smokeAlarm from "./smoke-alarm";
 import metalGates from "./metal-gates";
+import doorMats from "./door-mats";
 
 export default [
   rooms,
@@ -21,5 +22,6 @@ export default [
   storingMaterials,
   fireExit,
   smokeAlarm,
-  metalGates
+  metalGates,
+  doorMats
 ];

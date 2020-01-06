@@ -81,6 +81,11 @@ type DatabaseSchema = NamedSchema<
           images: string[];
           notes: string;
         };
+        doorMats: {
+          hasPlaced: boolean;
+          furtherActionRequired: boolean;
+          notes: string;
+        };
       };
     };
 
