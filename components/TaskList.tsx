@@ -37,6 +37,7 @@ export interface TaskListprops {
 
 export const TaskList = (props: TaskListprops): JSX.Element => {
   const { items } = props;
+
   return (
     <>
       <List
@@ -46,13 +47,10 @@ export const TaskList = (props: TaskListprops): JSX.Element => {
             <span>{name}</span>
             {status !== "" && (
               <span>
-                {nullAsUndefined(status) === undefined ? (
-                  <Link href={href} data-testid={testId}>
-                    Start
-                  </Link>
-                ) : (
-                  <Tag>Completed</Tag>
-                )}
+                {nullAsUndefined(status) !== undefined && <Tag>{status}</Tag>}
+                <Link href={href} data-testid={testId}>
+                  {nullAsUndefined(status) === undefined ? "Start" : "Edit"}
+                </Link>
               </span>
             )}
           </>
@@ -65,6 +63,10 @@ export const TaskList = (props: TaskListprops): JSX.Element => {
           justify-content: space-between;
           align-items: center;
           margin-bottom: 1em;
+        }
+
+        :global(.task-list li .lbh-tag) {
+          margin-right: 2em;
         }
       `}</style>
     </>
