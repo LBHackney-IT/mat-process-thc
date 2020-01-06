@@ -49,6 +49,11 @@ Feature: Accessibility
     Then the page should be accessible
     And the page should have a descriptive title
 
+  Scenario: Next of kin page is accessible
+    When I visit /next-of-kin
+    Then the page should be accessible
+    And the page should have a descriptive title
+
   Scenario: Submit page is accessible
     When I visit /submit
     Then the page should be accessible

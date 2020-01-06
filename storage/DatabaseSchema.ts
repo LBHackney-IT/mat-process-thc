@@ -73,6 +73,15 @@ type DatabaseSchema = NamedSchema<
           notes: string;
           images: string[];
         };
+
+        nextOfKin: {
+          fullName: string;
+          relationship: string;
+          mobileNumber: string;
+          otherNumber: string;
+          email: string;
+          address: string;
+        };
       };
     };
   }

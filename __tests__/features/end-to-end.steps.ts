@@ -112,6 +112,30 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
+      // Next of kin page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/next-of-kin");
+
+      await browser!
+        .findElement({ name: "next-of-kin-full-name" })
+        .sendKeys("Full name");
+      await browser!
+        .findElement({ name: "next-of-kin-relationship" })
+        .sendKeys("Relationship");
+      await browser!
+        .findElement({ name: "next-of-kin-mobile-number" })
+        .sendKeys("Mobile number");
+      await browser!
+        .findElement({ name: "next-of-kin-other-number" })
+        .sendKeys("Other number");
+      await browser!
+        .findElement({ name: "next-of-kin-email" })
+        .sendKeys("Email address");
+      await browser!
+        .findElement({ name: "next-of-kin-address" })
+        .sendKeys("Address");
+
+      await browser!.submit();
+
       // Submit page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/submit");
 

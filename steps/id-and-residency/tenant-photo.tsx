@@ -28,9 +28,9 @@ const step: ProcessStepDefinition = {
   heading: "Update tenant's photo",
   step: {
     slug: PageSlugs.TenantPhoto,
-    nextSlug: PageSlugs.Submit,
+    nextSlug: PageSlugs.NextOfKin,
     Submit: makeSubmit({
-      href: hrefForSlug(PageSlugs.Submit),
+      href: hrefForSlug(PageSlugs.NextOfKin),
       value: "Save and continue"
     }),
     componentWrappers: [
