@@ -1,9 +1,9 @@
-import "cross-fetch/polyfill";
-
-import { Button } from "lbh-frontend-react/components/Button/Button";
-import { ErrorMessage } from "lbh-frontend-react/components/ErrorMessage";
-import { PageAnnouncement } from "lbh-frontend-react/components/PageAnnouncement";
-import { Paragraph } from "lbh-frontend-react/components/typography/Paragraph";
+import {
+  Button,
+  ErrorMessage,
+  PageAnnouncement,
+  Paragraph
+} from "lbh-frontend-react";
 import { NextPage } from "next";
 import Router from "next/router";
 import React from "react";

@@ -1,5 +1,3 @@
-import "cross-fetch/polyfill";
-
 import {
   Button,
   List,
