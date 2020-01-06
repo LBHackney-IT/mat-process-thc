@@ -22,9 +22,9 @@ const step: ProcessStepDefinition = {
   heading: "Is there is a hard wired smoke alarm in the property?",
   step: {
     slug: PageSlugs.SmokeAlarm,
-    nextSlug: PageSlugs.Submit,
+    nextSlug: PageSlugs.MetalGates,
     Submit: makeSubmit({
-      href: hrefForSlug(PageSlugs.Submit),
+      href: hrefForSlug(PageSlugs.MetalGates),
       value: "Save and continue"
     }),
     componentWrappers: [

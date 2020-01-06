@@ -321,6 +321,20 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
+      // Metal gates page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/metal-gates");
+
+      await browser!.findElement({ id: "has-metal-gates-yes" }).click();
+      await browser!
+        .findElement({ id: "combustible-items-behind-gates-yes" })
+        .click();
+      await browser!.findElement({ id: "further-action-required-yes" }).click();
+      await browser!
+        .wait(until.elementLocated({ name: "metal-gates-notes" }), 500)
+        .sendKeys("Metal gates notes");
+
+      await browser!.submit();
+
       // Submit page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/submit");
 

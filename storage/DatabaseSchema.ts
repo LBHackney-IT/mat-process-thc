@@ -74,6 +74,13 @@ type DatabaseSchema = NamedSchema<
           isWorking: boolean;
           notes: string;
         };
+        metalGates: {
+          hasMetalGates: boolean;
+          combustibleItemsBehind: boolean;
+          furtherActionRequired: boolean;
+          images: string[];
+          notes: string;
+        };
       };
     };
 
@@ -90,13 +97,6 @@ type DatabaseSchema = NamedSchema<
       value: {
         value: string;
         notes: string;
-      };
-    };
-
-    metalGates: {
-      key: ProcessRef;
-      value: {
-        images: string[];
       };
     };
 
@@ -157,7 +157,6 @@ export const processStoreNames: StoreNames<DatabaseSchema["schema"]>[] = [
   "property",
   "isUnannouncedVisit",
   "isVisitInside",
-  "metalGates",
   "residency",
   "tenant"
 ];

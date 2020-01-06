@@ -21,7 +21,6 @@ export default class Storage {
           upgrade.createStore("property");
           upgrade.createStore("isUnannouncedVisit");
           upgrade.createStore("isVisitInside");
-          upgrade.createStore("metalGates");
           upgrade.createStore("id");
           upgrade.createStore("residency");
           upgrade.createStore("tenant");

@@ -8,6 +8,7 @@ import garden from "./garden";
 import storingMaterials from "./storing-materials";
 import fireExit from "./fire-exit";
 import smokeAlarm from "./smoke-alarm";
+import metalGates from "./metal-gates";
 
 export default [
   rooms,
@@ -19,5 +20,6 @@ export default [
   garden,
   storingMaterials,
   fireExit,
-  smokeAlarm
+  smokeAlarm,
+  metalGates
 ];

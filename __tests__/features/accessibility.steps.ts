@@ -45,6 +45,7 @@ defineFeature(loadFeature("./accessibility.feature"), test => {
   testAccessibility(test, "Storing materials");
   testAccessibility(test, "Fire exit");
   testAccessibility(test, "Smoke alarm");
+  testAccessibility(test, "Metal gates");
   testAccessibility(test, "Submit");
   testAccessibility(test, "Confirmed");
 });
