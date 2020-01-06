@@ -79,6 +79,11 @@ Feature: Accessibility
     Then the page should be accessible
     And the page should have a descriptive title
 
+  Scenario: Roof page is accessible
+    When I visit /roof
+    Then the page should be accessible
+    And the page should have a descriptive title
+
   Scenario: Submit page is accessible
     When I visit /submit
     Then the page should be accessible

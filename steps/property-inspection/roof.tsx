@@ -7,7 +7,6 @@ import {
   DynamicComponent
 } from "remultiform/component-wrapper";
 
-import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import ProcessStepDefinition from "../../components/ProcessStepDefinition";
 import { RadioButtons } from "../../components/RadioButtons";
@@ -19,25 +18,25 @@ import PageSlugs, { hrefForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const step: ProcessStepDefinition = {
-  title: PageTitles.Damage,
-  heading: "Are there any signs of damage caused to the property?",
+  title: PageTitles.Roof,
+  heading: "Does the tenant have access to the roof?",
   step: {
-    slug: PageSlugs.Damage,
-    nextSlug: PageSlugs.Roof,
+    slug: PageSlugs.Roof,
+    nextSlug: PageSlugs.Submit,
     Submit: makeSubmit({
-      href: hrefForSlug(PageSlugs.Roof),
+      href: hrefForSlug(PageSlugs.Submit),
       value: "Save and continue"
     }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "has-damage",
+          key: "has-access",
           Component: RadioButtons,
           props: {
-            name: "has-damage",
+            name: "has-access",
             legend: (
               <FieldsetLegend>
-                Are there any signs of damage caused to the property?
+                Does the tenant have access to the roof?
               </FieldsetLegend>
             ) as React.ReactNode,
             radios: [
@@ -56,61 +55,70 @@ const step: ProcessStepDefinition = {
           databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
             storeName: "property",
             key: processRef,
-            property: ["damage", "hasDamage"]
+            property: ["roof", "hasAccess"]
           })
         })
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "damage-images",
-          Component: ImageInput,
+          key: "items-stored-on-roof",
+          Component: RadioButtons,
           props: {
-            label: "Take photos of damage",
-            name: "damage-images",
-            hintText: "You can take up to 5 different photos" as
-              | string
-              | null
-              | undefined,
-            maxCount: 5
+            name: "items-stored-on-roof",
+            legend: (
+              <FieldsetLegend>
+                Are items being stored on the roof?
+              </FieldsetLegend>
+            ) as React.ReactNode,
+            radios: [
+              {
+                label: "Yes",
+                value: "yes"
+              },
+              {
+                label: "No",
+                value: "no"
+              }
+            ]
           },
           renderWhen(stepValues: {
-            "has-damage"?: ComponentValue<DatabaseSchema, "property">;
+            "has-access"?: ComponentValue<DatabaseSchema, "property">;
           }): boolean {
-            return stepValues["has-damage"] === "yes";
-          },
-          defaultValue: [],
-          emptyValue: [] as string[],
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
-            storeName: "property",
-            key: processRef,
-            property: ["damage", "images"]
-          })
-        })
-      ),
-      ComponentWrapper.wrapDynamic(
-        new DynamicComponent({
-          key: "damage-notes",
-          Component: TextArea,
-          props: {
-            label: {
-              value: "Add note about damage including how it was caused and location in property." as
-                | string
-                | null
-                | undefined
-            },
-            name: "damage-notes"
-          },
-          renderWhen(stepValues: {
-            "has-damage"?: ComponentValue<DatabaseSchema, "property">;
-          }): boolean {
-            return stepValues["has-damage"] === "yes";
+            return stepValues["has-access"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
             storeName: "property",
             key: processRef,
-            property: ["damage", "notes"]
+            property: ["roof", "itemsStoredOnRoof"]
+          })
+        })
+      ),
+      ComponentWrapper.wrapDynamic(
+        new DynamicComponent({
+          key: "roof-notes",
+          Component: TextArea,
+          props: {
+            label: {
+              value: "Add note about roof if necessary." as
+                | string
+                | null
+                | undefined
+            },
+            name: "roof-notes"
+          },
+          renderWhen(stepValues: {
+            "has-access"?: ComponentValue<DatabaseSchema, "property">;
+          }): boolean {
+            return stepValues["has-access"] === "yes";
+          },
+          defaultValue: "",
+          emptyValue: "",
+          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+            storeName: "property",
+            key: processRef,
+            property: ["roof", "notes"]
           })
         })
       )

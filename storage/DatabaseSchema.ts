@@ -42,6 +42,11 @@ type DatabaseSchema = NamedSchema<
           images: string[];
           notes: string;
         };
+        roof: {
+          hasAccess: boolean;
+          itemsStoredOnRoof: boolean;
+          notes: string;
+        };
       };
     };
 

@@ -249,6 +249,17 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
+      // Roof page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/roof");
+
+      await browser!.findElement({ id: "has-access-yes" }).click();
+      await browser!.findElement({ id: "items-stored-on-roof-yes" }).click();
+      await browser!
+        .wait(until.elementLocated({ name: "roof-notes" }), 500)
+        .sendKeys("Roof notes");
+
+      await browser!.submit();
+
       // Submit page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/submit");
 
