@@ -11,7 +11,7 @@ import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
-import DatabaseSchema from "../../storage/DatabaseSchema";
+import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
 import PageSlugs, { hrefForSlug } from "../PageSlugs";
@@ -52,7 +52,10 @@ const step: ProcessStepDefinition = {
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["smokeAlarm", "hasSmokeAlarm"]
@@ -80,13 +83,19 @@ const step: ProcessStepDefinition = {
             ]
           },
           renderWhen(stepValues: {
-            "has-smoke-alarm"?: ComponentValue<DatabaseSchema, "property">;
+            "has-smoke-alarm"?: ComponentValue<
+              ProcessDatabaseSchema,
+              "property"
+            >;
           }): boolean {
             return stepValues["has-smoke-alarm"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["smokeAlarm", "isWorking"]
@@ -107,13 +116,19 @@ const step: ProcessStepDefinition = {
             name: "smoke-alarm-notes"
           },
           renderWhen(stepValues: {
-            "has-smoke-alarm"?: ComponentValue<DatabaseSchema, "property">;
+            "has-smoke-alarm"?: ComponentValue<
+              ProcessDatabaseSchema,
+              "property"
+            >;
           }): boolean {
             return stepValues["has-smoke-alarm"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["smokeAlarm", "notes"]

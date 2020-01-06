@@ -12,7 +12,7 @@ import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
-import DatabaseSchema from "../../storage/DatabaseSchema";
+import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
 import PageSlugs, { hrefForSlug } from "../PageSlugs";
@@ -55,7 +55,10 @@ const step: ProcessStepDefinition = {
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["metalGates", "hasMetalGates"]
@@ -85,13 +88,19 @@ const step: ProcessStepDefinition = {
             ]
           },
           renderWhen(stepValues: {
-            "has-metal-gates"?: ComponentValue<DatabaseSchema, "property">;
+            "has-metal-gates"?: ComponentValue<
+              ProcessDatabaseSchema,
+              "property"
+            >;
           }): boolean {
             return stepValues["has-metal-gates"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["metalGates", "combustibleItemsBehind"]
@@ -120,7 +129,7 @@ const step: ProcessStepDefinition = {
           },
           renderWhen(stepValues: {
             "combustible-items-behind-gates"?: ComponentValue<
-              DatabaseSchema,
+              ProcessDatabaseSchema,
               "property"
             >;
           }): boolean {
@@ -128,7 +137,10 @@ const step: ProcessStepDefinition = {
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["metalGates", "furtherActionRequired"]
@@ -149,13 +161,19 @@ const step: ProcessStepDefinition = {
             maxCount: 3
           },
           renderWhen(stepValues: {
-            "has-metal-gates"?: ComponentValue<DatabaseSchema, "property">;
+            "has-metal-gates"?: ComponentValue<
+              ProcessDatabaseSchema,
+              "property"
+            >;
           }): boolean {
             return stepValues["has-metal-gates"] === "yes";
           },
           defaultValue: [],
           emptyValue: [] as string[],
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["metalGates", "images"]
@@ -176,13 +194,19 @@ const step: ProcessStepDefinition = {
             name: "metal-gates-notes"
           },
           renderWhen(stepValues: {
-            "has-metal-gates"?: ComponentValue<DatabaseSchema, "property">;
+            "has-metal-gates"?: ComponentValue<
+              ProcessDatabaseSchema,
+              "property"
+            >;
           }): boolean {
             return stepValues["has-metal-gates"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["metalGates", "notes"]

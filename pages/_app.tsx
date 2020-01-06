@@ -43,9 +43,11 @@ export default class App extends NextApp {
   render(): React.ReactElement {
     const base = super.render();
 
-    if (Storage.Context) {
+    if (Storage.ProcessContext) {
       return (
-        <DatabaseProvider context={Storage.Context}>{base}</DatabaseProvider>
+        <DatabaseProvider context={Storage.ProcessContext}>
+          {base}
+        </DatabaseProvider>
       );
     } else {
       return base;

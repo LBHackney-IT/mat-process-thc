@@ -31,14 +31,14 @@ const ProcessPage: NextPage<Props> = ({ slug }: Props) => {
         startDate="1 January 2019"
       />
       <Orchestrator
-        context={Storage.Context}
+        context={Storage.ProcessContext}
         initialSlug={slug}
         steps={steps.map(step => step.step)}
         manageStepTransitions={false}
         provideDatabase={false}
         onNextStep={async (): Promise<void> => {
           try {
-            await Storage.updateLastModified(processRef);
+            await Storage.updateProcessLastModified(processRef);
           } catch (error) {
             // This is invisible to the user, so we should do something to
             // display it to them.

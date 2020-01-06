@@ -11,7 +11,7 @@ import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextAreaDetails } from "../../components/TextAreaDetails";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
-import DatabaseSchema from "../../storage/DatabaseSchema";
+import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
 import PageSlugs, { hrefForSlug } from "../PageSlugs";
@@ -78,7 +78,10 @@ const step: ProcessStepDefinition = {
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "residency">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "residency"
+          >({
             storeName: "residency",
             key: processRef,
             property: ["type"]
@@ -100,7 +103,10 @@ const step: ProcessStepDefinition = {
           },
           defaultValue: [],
           emptyValue: [] as string[],
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "residency">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "residency"
+          >({
             storeName: "residency",
             key: processRef,
             property: ["images"]
@@ -117,7 +123,10 @@ const step: ProcessStepDefinition = {
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "residency">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "residency"
+          >({
             storeName: "residency",
             key: processRef,
             property: ["notes"]

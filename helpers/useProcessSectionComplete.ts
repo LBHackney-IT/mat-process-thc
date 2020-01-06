@@ -8,25 +8,29 @@ import {
 } from "remultiform/database";
 import { DatabaseContext, useDatabase } from "remultiform/database-context";
 
-import DatabaseSchema, { ProcessRef } from "../storage/DatabaseSchema";
+import ProcessDatabaseSchema, {
+  ProcessRef
+} from "../storage/ProcessDatabaseSchema";
 import Storage from "../storage/Storage";
 
 const useProcessSectionComplete = <
-  S extends StoreNames<DatabaseSchema["schema"]>
+  S extends StoreNames<ProcessDatabaseSchema["schema"]>
 >(
   processRef: ProcessRef,
   storeNames: S[]
 ): UseAsyncReturn<
   boolean,
-  [Database<DatabaseSchema> | undefined, string, string]
+  [Database<ProcessDatabaseSchema> | undefined, string, string]
 > => {
   const database = useDatabase(
-    Storage.Context ||
-      // This is a bit of a hack to get around `Storage.Context` being
+    Storage.ProcessContext ||
+      // This is a bit of a hack to get around contexts being
       // undefined on the server, while still obeying the rules of hooks.
       ({
-        context: createContext<Database<DatabaseSchema> | undefined>(undefined)
-      } as DatabaseContext<DatabaseSchema>)
+        context: createContext<Database<ProcessDatabaseSchema> | undefined>(
+          undefined
+        )
+      } as DatabaseContext<ProcessDatabaseSchema>)
   );
 
   return useAsync(async () => {
@@ -38,12 +42,12 @@ const useProcessSectionComplete = <
 
     await database.transaction(
       storeNames,
-      async (stores: StoreMap<DatabaseSchema["schema"], S[]>) => {
+      async (stores: StoreMap<ProcessDatabaseSchema["schema"], S[]>) => {
         const values = await Promise.all(
           storeNames.map(
             storeName =>
               stores[storeName].get(processRef) as Promise<
-                StoreValue<DatabaseSchema["schema"], S>
+                StoreValue<ProcessDatabaseSchema["schema"], S>
               >
           )
         );

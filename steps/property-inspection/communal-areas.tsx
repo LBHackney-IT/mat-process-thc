@@ -11,7 +11,7 @@ import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
-import DatabaseSchema from "../../storage/DatabaseSchema";
+import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
 import PageSlugs, { hrefForSlug } from "../PageSlugs";
@@ -52,7 +52,10 @@ const step: ProcessStepDefinition = {
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["communalAreas", "hasLeftCombustibleItems"]
@@ -81,7 +84,7 @@ const step: ProcessStepDefinition = {
           },
           renderWhen(stepValues: {
             "has-left-combustible-items"?: ComponentValue<
-              DatabaseSchema,
+              ProcessDatabaseSchema,
               "property"
             >;
           }): boolean {
@@ -89,7 +92,10 @@ const step: ProcessStepDefinition = {
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["communalAreas", "furtherActionRequired"]
@@ -111,7 +117,7 @@ const step: ProcessStepDefinition = {
           },
           renderWhen(stepValues: {
             "has-left-combustible-items"?: ComponentValue<
-              DatabaseSchema,
+              ProcessDatabaseSchema,
               "property"
             >;
           }): boolean {
@@ -119,7 +125,10 @@ const step: ProcessStepDefinition = {
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["communalAreas", "notes"]

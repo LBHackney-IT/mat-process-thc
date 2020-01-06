@@ -11,7 +11,7 @@ import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
-import DatabaseSchema from "../../storage/DatabaseSchema";
+import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
 import PageSlugs, { hrefForSlug } from "../PageSlugs";
@@ -51,7 +51,7 @@ const step: ProcessStepDefinition = {
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
-            DatabaseSchema,
+            ProcessDatabaseSchema,
             "isUnannouncedVisit"
           >({
             storeName: "isUnannouncedVisit",
@@ -75,7 +75,7 @@ const step: ProcessStepDefinition = {
           },
           renderWhen(stepValues: {
             "unannounced-visit"?: ComponentValue<
-              DatabaseSchema,
+              ProcessDatabaseSchema,
               "isVisitInside"
             >;
           }): boolean {
@@ -84,7 +84,7 @@ const step: ProcessStepDefinition = {
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
-            DatabaseSchema,
+            ProcessDatabaseSchema,
             "isUnannouncedVisit"
           >({
             storeName: "isUnannouncedVisit",
@@ -118,7 +118,7 @@ const step: ProcessStepDefinition = {
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
-            DatabaseSchema,
+            ProcessDatabaseSchema,
             "isVisitInside"
           >({
             storeName: "isVisitInside",
@@ -141,14 +141,17 @@ const step: ProcessStepDefinition = {
             name: "inside-property-notes"
           },
           renderWhen(stepValues: {
-            "inside-property"?: ComponentValue<DatabaseSchema, "isVisitInside">;
+            "inside-property"?: ComponentValue<
+              ProcessDatabaseSchema,
+              "isVisitInside"
+            >;
           }): boolean {
             return stepValues["inside-property"] === "no";
           },
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
-            DatabaseSchema,
+            ProcessDatabaseSchema,
             "isVisitInside"
           >({
             storeName: "isVisitInside",

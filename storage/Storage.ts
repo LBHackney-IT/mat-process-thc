@@ -6,51 +6,62 @@ import {
 } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
 
-import DatabaseSchema, { databaseName } from "./DatabaseSchema";
+import ProcessDatabaseSchema, {
+  processDatabaseName
+} from "./ProcessDatabaseSchema";
 
 export default class Storage {
-  static Context: DatabaseContext<DatabaseSchema> | undefined = undefined;
+  static ProcessContext:
+    | DatabaseContext<ProcessDatabaseSchema>
+    | undefined = undefined;
 
   static init(): void {
-    const databasePromise = Database.open<DatabaseSchema>(databaseName, 1, {
-      upgrade(upgrade) {
-        let version = upgrade.oldVersion;
+    const processDatabasePromise = Database.open<ProcessDatabaseSchema>(
+      processDatabaseName,
+      1,
+      {
+        upgrade(upgrade) {
+          let version = upgrade.oldVersion;
 
-        if (version === 0) {
-          upgrade.createStore("lastModified");
-          upgrade.createStore("property");
-          upgrade.createStore("isUnannouncedVisit");
-          upgrade.createStore("isVisitInside");
-          upgrade.createStore("id");
-          upgrade.createStore("residency");
-          upgrade.createStore("tenant");
+          if (version === 0) {
+            upgrade.createStore("lastModified");
+            upgrade.createStore("property");
+            upgrade.createStore("isUnannouncedVisit");
+            upgrade.createStore("isVisitInside");
+            upgrade.createStore("id");
+            upgrade.createStore("residency");
+            upgrade.createStore("tenant");
 
-          version = 1;
-        }
+            version = 1;
+          }
 
-        if (version !== upgrade.newVersion) {
-          throw new Error(
-            `Unable to upgrade to ${upgrade.newVersion} due to missing ` +
-              `migrations from ${version} onwards`
-          );
+          if (version !== upgrade.newVersion) {
+            throw new Error(
+              `Unable to upgrade to ${upgrade.newVersion} due to missing ` +
+                `migrations from ${version} onwards`
+            );
+          }
         }
       }
-    });
+    );
 
-    this.Context = new DatabaseContext(databasePromise);
+    this.ProcessContext = new DatabaseContext(processDatabasePromise);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static async updateData(processRef: string, data: any): Promise<boolean> {
-    if (!this.Context) {
+  static async updateProcessData(
+    processRef: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    data: any
+  ): Promise<boolean> {
+    if (!this.ProcessContext) {
       return false;
     }
 
-    if (!this.Context.database) {
+    if (!this.ProcessContext.database) {
       return false;
     }
 
-    const database = await this.Context.database;
+    const database = await this.ProcessContext.database;
 
     let isNewer = false;
 
@@ -59,7 +70,7 @@ export default class Storage {
       async stores => {
         const lastModified = new Date(data.dateLastModified);
 
-        isNewer = await this.isNewerThanStorage(
+        isNewer = await this.isProcessNewerThanStorage(
           stores.lastModified,
           processRef,
           lastModified
@@ -79,24 +90,24 @@ export default class Storage {
     return isNewer;
   }
 
-  static async updateLastModified(processRef: string): Promise<void> {
-    if (!this.Context) {
+  static async updateProcessLastModified(processRef: string): Promise<void> {
+    if (!this.ProcessContext) {
       return;
     }
 
-    if (!this.Context.database) {
+    if (!this.ProcessContext.database) {
       return;
     }
 
-    const database = await this.Context.database;
+    const database = await this.ProcessContext.database;
 
     await database.put("lastModified", processRef, new Date());
   }
 
-  static async isNewerThanStorage(
+  static async isProcessNewerThanStorage(
     store: Store<
-      DatabaseSchema["schema"],
-      StoreNames<DatabaseSchema["schema"]>[],
+      ProcessDatabaseSchema["schema"],
+      StoreNames<ProcessDatabaseSchema["schema"]>[],
       "lastModified"
     >,
     processRef: string,

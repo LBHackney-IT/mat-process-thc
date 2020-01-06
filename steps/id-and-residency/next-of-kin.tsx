@@ -8,7 +8,7 @@ import { makeSubmit } from "../../components/makeSubmit";
 import { TextArea } from "../../components/TextArea";
 import { TextInput } from "../../components/TextInput";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
-import DatabaseSchema from "../../storage/DatabaseSchema";
+import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
 import PageSlugs, { hrefForSlug } from "../PageSlugs";
@@ -35,7 +35,10 @@ const step: ProcessStepDefinition = {
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "tenant">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "tenant"
+          >({
             storeName: "tenant",
             key: processRef,
             property: ["nextOfKin", "fullName"]
@@ -52,7 +55,10 @@ const step: ProcessStepDefinition = {
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "tenant">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "tenant"
+          >({
             storeName: "tenant",
             key: processRef,
             property: ["nextOfKin", "relationship"]
@@ -69,7 +75,10 @@ const step: ProcessStepDefinition = {
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "tenant">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "tenant"
+          >({
             storeName: "tenant",
             key: processRef,
             property: ["nextOfKin", "mobileNumber"]
@@ -86,7 +95,10 @@ const step: ProcessStepDefinition = {
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "tenant">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "tenant"
+          >({
             storeName: "tenant",
             key: processRef,
             property: ["nextOfKin", "otherNumber"]
@@ -103,7 +115,10 @@ const step: ProcessStepDefinition = {
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "tenant">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "tenant"
+          >({
             storeName: "tenant",
             key: processRef,
             property: ["nextOfKin", "email"]
@@ -121,7 +136,10 @@ const step: ProcessStepDefinition = {
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "tenant">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "tenant"
+          >({
             storeName: "tenant",
             key: processRef,
             property: ["nextOfKin", "address"]

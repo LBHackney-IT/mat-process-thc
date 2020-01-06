@@ -10,7 +10,7 @@ import Link from "next/link";
 import React from "react";
 import { useAsync } from "react-async-hook";
 
-import useApi from "../api/useApi";
+import useProcessApi from "../api/useProcessApi";
 import { TenancySummary } from "../components/TenancySummary";
 import MainLayout from "../layouts/MainLayout";
 import PageSlugs, { hrefForSlug } from "../steps/PageSlugs";
@@ -19,8 +19,8 @@ import processRef from "../storage/processRef";
 import Storage from "../storage/Storage";
 
 export const LoadingPage: NextPage = () => {
-  const processData = useApi({
-    url: `${process.env.PROCESS_API_URL}/v1/processData/${processRef}`
+  const processData = useProcessApi({
+    endpoint: `/v1/processData/${processRef}`
   });
 
   const offlineDataStatus = useAsync(
@@ -33,7 +33,7 @@ export const LoadingPage: NextPage = () => {
         return false;
       }
 
-      return Storage.updateData(processRef, data.processData);
+      return Storage.updateProcessData(processRef, data.processData);
     },
     [processData.result]
   );

@@ -13,13 +13,13 @@ import useOnlineWithRetry from "../helpers/useOnlineWithRetry";
 import MainLayout from "../layouts/MainLayout";
 import PageSlugs, { hrefForSlug } from "../steps/PageSlugs";
 import PageTitles from "../steps/PageTitles";
-import { processStoreNames } from "../storage/DatabaseSchema";
+import { processStoreNames } from "../storage/ProcessDatabaseSchema";
 import Storage from "../storage/Storage";
 import processRef from "../storage/processRef";
 
 const submit = async (): Promise<void> => {
-  if (Storage.Context && Storage.Context.database) {
-    const database = await Storage.Context.database;
+  if (Storage.ProcessContext && Storage.ProcessContext.database) {
+    const database = await Storage.ProcessContext.database;
 
     // We should push to the API before doing this, or data will be
     // lost.
