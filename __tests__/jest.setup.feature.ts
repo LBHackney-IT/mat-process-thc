@@ -1,5 +1,5 @@
 import { setJestCucumberConfiguration } from "jest-cucumber";
-import { Browser } from "selenium-webdriver";
+import { Browser, logging } from "selenium-webdriver";
 import yn from "yn";
 
 import WebDriverWrapper from "./helpers/webdriver/WebDriverWrapper";
@@ -21,11 +21,29 @@ beforeEach(async () => {
 });
 
 afterEach(async () => {
+  const log =
+    (await global.browser
+      ?.manage()
+      .logs()
+      .get(logging.Type.BROWSER)) || [];
+
+  log.forEach(line => {
+    switch (line.level) {
+      case logging.Level.SEVERE:
+        console.error(line.level.name, line.message);
+        break;
+      case logging.Level.WARNING:
+        console.warn(line.level.name, line.message);
+        break;
+      default:
+        console.log(line.level.name, line.message);
+        break;
+    }
+  });
+
   const oldBrowser = global.browser;
 
   delete global.browser;
 
-  if (oldBrowser) {
-    await oldBrowser.quit();
-  }
+  await oldBrowser?.quit();
 });
