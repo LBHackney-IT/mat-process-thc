@@ -102,7 +102,7 @@ const step: ProcessStepDefinition = {
           props: {
             label: {
               value: "Add note about loft space if necessary." as
-                | string
+                | React.ReactNode
                 | null
                 | undefined
             },

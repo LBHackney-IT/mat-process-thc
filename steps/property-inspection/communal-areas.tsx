@@ -103,7 +103,7 @@ const step: ProcessStepDefinition = {
           props: {
             label: {
               value: "Add note about door mats / potted plants if necessary." as
-                | string
+                | React.ReactNode
                 | null
                 | undefined
             },

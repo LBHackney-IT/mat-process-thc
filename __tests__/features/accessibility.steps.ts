@@ -49,6 +49,7 @@ defineFeature(loadFeature("./accessibility.feature"), test => {
   testAccessibility(test, "Door mats");
   testAccessibility(test, "Communal areas");
   testAccessibility(test, "Pets");
+  testAccessibility(test, "Antisocial behaviour");
   testAccessibility(test, "Submit");
   testAccessibility(test, "Confirmed");
 });

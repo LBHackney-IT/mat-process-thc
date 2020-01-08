@@ -375,6 +375,18 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
+      // Antisocial behaviour page
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/antisocial-behaviour"
+      );
+
+      await browser!.findElement({ id: "tenant-understands-yes" }).click();
+      await browser!
+        .wait(until.elementLocated({ name: "antisocial-behaviour-notes" }), 500)
+        .sendKeys("Antisocial behaviour notes");
+
+      await browser!.submit();
+
       // Submit page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/submit");
 

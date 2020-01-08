@@ -23,9 +23,9 @@ const step: ProcessStepDefinition = {
   heading: "Are there any pets in the property?",
   step: {
     slug: PageSlugs.Pets,
-    nextSlug: PageSlugs.Submit,
+    nextSlug: PageSlugs.AntisocialBehaviour,
     Submit: makeSubmit({
-      href: hrefForSlug(PageSlugs.Submit),
+      href: hrefForSlug(PageSlugs.AntisocialBehaviour),
       value: "Save and continue"
     }),
     componentWrappers: [
@@ -126,7 +126,7 @@ const step: ProcessStepDefinition = {
           props: {
             label: {
               value: "Add note about pets if necessary." as
-                | string
+                | React.ReactNode
                 | null
                 | undefined
             },

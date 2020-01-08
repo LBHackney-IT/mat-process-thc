@@ -71,7 +71,7 @@ const step: ProcessStepDefinition = {
           Component: TextArea,
           props: {
             label: {
-              value: "Explain why." as string | null | undefined
+              value: "Explain why." as React.ReactNode | null | undefined
             },
             name: "tenant-photo-willing-notes"
           },

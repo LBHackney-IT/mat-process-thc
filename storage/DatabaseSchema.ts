@@ -98,6 +98,10 @@ type DatabaseSchema = NamedSchema<
           images: string[];
           notes: string;
         };
+        antisocialBehaviour: {
+          tenantUnderstands: boolean;
+          notes: string;
+        };
       };
     };
 

@@ -257,7 +257,7 @@ const step: ProcessStepDefinition = {
           Component: TextArea,
           props: {
             name: "carer-address",
-            label: { value: "Address" as string | null | undefined },
+            label: { value: "Address" as React.ReactNode | null | undefined },
             rows: 4 as number | null | undefined
           },
           renderWhen(stepValues: {

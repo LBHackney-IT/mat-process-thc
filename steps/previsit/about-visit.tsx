@@ -67,7 +67,7 @@ const step: ProcessStepDefinition = {
           props: {
             label: {
               value: "Explain why this visit was pre-arranged." as
-                | string
+                | React.ReactNode
                 | null
                 | undefined
             },
@@ -134,7 +134,7 @@ const step: ProcessStepDefinition = {
           props: {
             label: {
               value: "Explain why this visit is not happening inside a tenant's home." as
-                | string
+                | React.ReactNode
                 | null
                 | undefined
             },

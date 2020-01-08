@@ -94,7 +94,7 @@ const step: ProcessStepDefinition = {
           props: {
             label: {
               value: "Add note about damage including how it was caused and location in property." as
-                | string
+                | React.ReactNode
                 | null
                 | undefined
             },

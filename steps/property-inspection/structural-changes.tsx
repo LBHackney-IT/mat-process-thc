@@ -138,7 +138,7 @@ const step: ProcessStepDefinition = {
           props: {
             label: {
               value: "Add note about structural changes including when it was done and location in property." as
-                | string
+                | React.ReactNode
                 | null
                 | undefined
             },

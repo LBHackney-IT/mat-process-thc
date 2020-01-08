@@ -100,7 +100,7 @@ const step: ProcessStepDefinition = {
           props: {
             label: {
               value: "Add note about the fire exit if necessary." as
-                | string
+                | React.ReactNode
                 | null
                 | undefined
             },

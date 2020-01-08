@@ -166,7 +166,7 @@ const step: ProcessStepDefinition = {
           props: {
             label: {
               value: "Add note about upkeep of garden if necessary." as
-                | string
+                | React.ReactNode
                 | null
                 | undefined
             },

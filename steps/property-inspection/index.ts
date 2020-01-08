@@ -12,6 +12,7 @@ import metalGates from "./metal-gates";
 import doorMats from "./door-mats";
 import communalAreas from "./communal-areas";
 import pets from "./pets";
+import antisocialBehaviour from "./antisocial-behaviour";
 
 export default [
   rooms,
@@ -27,5 +28,6 @@ export default [
   metalGates,
   doorMats,
   communalAreas,
-  pets
+  pets,
+  antisocialBehaviour
 ];
