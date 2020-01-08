@@ -7,6 +7,7 @@ import {
   DynamicComponent
 } from "remultiform/component-wrapper";
 
+import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import ProcessStepDefinition from "../../components/ProcessStepDefinition";
 import { RadioButtons } from "../../components/RadioButtons";
@@ -18,25 +19,25 @@ import PageSlugs, { hrefForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const step: ProcessStepDefinition = {
-  title: PageTitles.CommunalAreas,
-  heading: "Has the tenant left combustible items in communal areas?",
+  title: PageTitles.Pets,
+  heading: "Are there any pets in the property?",
   step: {
-    slug: PageSlugs.CommunalAreas,
-    nextSlug: PageSlugs.Pets,
+    slug: PageSlugs.Pets,
+    nextSlug: PageSlugs.Submit,
     Submit: makeSubmit({
-      href: hrefForSlug(PageSlugs.Pets),
+      href: hrefForSlug(PageSlugs.Submit),
       value: "Save and continue"
     }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "has-left-combustible-items",
+          key: "has-pets",
           Component: RadioButtons,
           props: {
-            name: "has-left-combustible-items",
+            name: "has-pets",
             legend: (
               <FieldsetLegend>
-                Has the tenant left combustible items in communal areas?
+                Are there any pets in the property?
               </FieldsetLegend>
             ) as React.ReactNode,
             radios: [
@@ -55,18 +56,20 @@ const step: ProcessStepDefinition = {
           databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
             storeName: "property",
             key: processRef,
-            property: ["communalAreas", "hasLeftCombustibleItems"]
+            property: ["pets", "hasPets"]
           })
         })
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "further-action-required",
+          key: "has-permission",
           Component: RadioButtons,
           props: {
-            name: "further-action-required",
+            name: "has-permission",
             legend: (
-              <FieldsetLegend>Is further action required?</FieldsetLegend>
+              <FieldsetLegend>
+                Has permission been given to keep pets?
+              </FieldsetLegend>
             ) as React.ReactNode,
             radios: [
               {
@@ -80,49 +83,66 @@ const step: ProcessStepDefinition = {
             ]
           },
           renderWhen(stepValues: {
-            "has-left-combustible-items"?: ComponentValue<
-              DatabaseSchema,
-              "property"
-            >;
+            "has-pets"?: ComponentValue<DatabaseSchema, "property">;
           }): boolean {
-            return stepValues["has-left-combustible-items"] === "yes";
+            return stepValues["has-pets"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
             storeName: "property",
             key: processRef,
-            property: ["communalAreas", "furtherActionRequired"]
+            property: ["pets", "hasPermission"]
           })
         })
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "communal-areas-notes",
+          key: "pets-permission-images",
+          Component: ImageInput,
+          props: {
+            label: "Take photo of permission document",
+            name: "pets-permission-images",
+            maxCount: 1
+          },
+          renderWhen(stepValues: {
+            "has-permission"?: ComponentValue<DatabaseSchema, "property">;
+          }): boolean {
+            return stepValues["has-permission"] === "yes";
+          },
+          defaultValue: [],
+          emptyValue: [] as string[],
+          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+            storeName: "property",
+            key: processRef,
+            property: ["pets", "images"]
+          })
+        })
+      ),
+      ComponentWrapper.wrapDynamic(
+        new DynamicComponent({
+          key: "pets-notes",
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about door mats / potted plants if necessary." as
+              value: "Add note about pets if necessary." as
                 | string
                 | null
                 | undefined
             },
-            name: "communal-areas-notes"
+            name: "pets-notes"
           },
           renderWhen(stepValues: {
-            "has-left-combustible-items"?: ComponentValue<
-              DatabaseSchema,
-              "property"
-            >;
+            "has-pets"?: ComponentValue<DatabaseSchema, "property">;
           }): boolean {
-            return stepValues["has-left-combustible-items"] === "yes";
+            return stepValues["has-pets"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
             storeName: "property",
             key: processRef,
-            property: ["communalAreas", "notes"]
+            property: ["pets", "notes"]
           })
         })
       )

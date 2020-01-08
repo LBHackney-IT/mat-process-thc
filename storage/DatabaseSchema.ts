@@ -91,6 +91,13 @@ type DatabaseSchema = NamedSchema<
           furtherActionRequired: boolean;
           notes: string;
         };
+        pets: {
+          hasPets: boolean;
+          petTypes: string[];
+          hasPermission: boolean;
+          images: string[];
+          notes: string;
+        };
       };
     };
 

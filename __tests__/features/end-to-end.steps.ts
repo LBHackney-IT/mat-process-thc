@@ -361,6 +361,20 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
+      // Pets page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/pets");
+
+      await browser!.findElement({ id: "has-pets-yes" }).click();
+      await browser!.findElement({ id: "has-permission-yes" }).click();
+      await browser!
+        .findElement({ name: "pets-permission-images" })
+        .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
+      await browser!
+        .wait(until.elementLocated({ name: "pets-notes" }), 500)
+        .sendKeys("Pets notes");
+
+      await browser!.submit();
+
       // Submit page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/submit");
 

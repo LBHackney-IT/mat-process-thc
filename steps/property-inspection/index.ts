@@ -11,6 +11,7 @@ import smokeAlarm from "./smoke-alarm";
 import metalGates from "./metal-gates";
 import doorMats from "./door-mats";
 import communalAreas from "./communal-areas";
+import pets from "./pets";
 
 export default [
   rooms,
@@ -25,5 +26,6 @@ export default [
   smokeAlarm,
   metalGates,
   doorMats,
-  communalAreas
+  communalAreas,
+  pets
 ];
