@@ -28,9 +28,9 @@ const step: ProcessStepDefinition = {
   heading: "Does the tenant understand about anti social behaviour?",
   step: {
     slug: PageSlugs.AntisocialBehaviour,
-    nextSlug: PageSlugs.Submit,
+    nextSlug: PageSlugs.OtherComments,
     Submit: makeSubmit({
-      href: hrefForSlug(PageSlugs.Submit),
+      href: hrefForSlug(PageSlugs.OtherComments),
       value: "Save and continue"
     }),
     componentWrappers: [

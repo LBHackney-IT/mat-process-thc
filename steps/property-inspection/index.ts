@@ -13,6 +13,7 @@ import doorMats from "./door-mats";
 import communalAreas from "./communal-areas";
 import pets from "./pets";
 import antisocialBehaviour from "./antisocial-behaviour";
+import otherComments from "./other-comments";
 
 export default [
   rooms,
@@ -29,5 +30,6 @@ export default [
   doorMats,
   communalAreas,
   pets,
-  antisocialBehaviour
+  antisocialBehaviour,
+  otherComments
 ];

@@ -387,6 +387,20 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
+      // Other comments page
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/other-comments"
+      );
+
+      await browser!
+        .findElement({ name: "other-comments-images" })
+        .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
+      await browser!
+        .wait(until.elementLocated({ name: "other-comments-notes" }), 500)
+        .sendKeys("Other comments notes");
+
+      await browser!.submit();
+
       // Submit page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/submit");
 

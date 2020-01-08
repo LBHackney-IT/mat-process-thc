@@ -102,6 +102,10 @@ type DatabaseSchema = NamedSchema<
           tenantUnderstands: boolean;
           notes: string;
         };
+        otherComments: {
+          images: string[];
+          notes: string;
+        };
       };
     };
 
