@@ -1,11 +1,15 @@
 import { NextPage, NextPageContext } from "next";
-import React from "react";
+import React, { createContext } from "react";
+import { useAsync } from "react-async-hook";
+import { Database } from "remultiform/database";
+import { DatabaseContext, useDatabase } from "remultiform/database-context";
 import { Orchestrator } from "remultiform/orchestrator";
 
 import { TenancySummary } from "../components/TenancySummary";
 import MainLayout from "../layouts/MainLayout";
 import steps from "../steps";
 import PageSlugs from "../steps/PageSlugs";
+import ExternalDatabaseSchema from "../storage/ExternalDatabaseSchema";
 import processRef from "../storage/processRef";
 import Storage from "../storage/Storage";
 
@@ -14,6 +18,27 @@ interface Props {
 }
 
 const ProcessPage: NextPage<Props> = ({ slug }: Props) => {
+  const database = useDatabase(
+    Storage.ExternalContext ||
+      // This is a bit of a hack to get around contexts being
+      // undefined on the server, while still obeying the rules of hooks.
+      ({
+        context: createContext<Database<ExternalDatabaseSchema> | undefined>(
+          undefined
+        )
+      } as DatabaseContext<ExternalDatabaseSchema>)
+  );
+  const tenancyData = useAsync(
+    async (db: Database<ExternalDatabaseSchema> | undefined) =>
+      db?.get("tenancy", processRef),
+    [database]
+  );
+  const contactsData = useAsync(
+    async (db: Database<ExternalDatabaseSchema> | undefined) =>
+      db?.get("contacts", processRef),
+    [database]
+  );
+
   const currentStep = steps.find(step => step.step.slug === slug);
 
   if (!currentStep) {
@@ -25,11 +50,30 @@ const ProcessPage: NextPage<Props> = ({ slug }: Props) => {
   const content = (
     <>
       <TenancySummary
-        address="1 Mare Street, London, E8 3AA"
-        tenants={["Jane Doe", "John Doe"]}
-        tenureType="Introductory"
-        startDate="1 January 2019"
+        details={{
+          address: contactsData.result
+            ? contactsData.result.address
+            : contactsData.error
+            ? ["Error"]
+            : undefined,
+          tenants: contactsData.result
+            ? contactsData.result.tenants.map(tenant => tenant.fullName)
+            : contactsData.error
+            ? ["Error"]
+            : undefined,
+          tenureType: tenancyData.result
+            ? tenancyData.result.tenureType
+            : tenancyData.error
+            ? "Error"
+            : undefined,
+          startDate: tenancyData.result
+            ? tenancyData.result.startDate
+            : tenancyData.error
+            ? "Error"
+            : undefined
+        }}
       />
+
       <Orchestrator
         context={Storage.ProcessContext}
         initialSlug={slug}
@@ -48,6 +92,7 @@ const ProcessPage: NextPage<Props> = ({ slug }: Props) => {
       />
     </>
   );
+
   let page: React.ReactElement;
 
   if (currentStep.heading) {

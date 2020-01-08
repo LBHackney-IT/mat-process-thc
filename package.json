@@ -26,6 +26,7 @@
   "dependencies": {
     "@zeit/next-css": "^1.0.1",
     "cross-fetch": "^3.0.4",
+    "date-fns": "^2.8.1",
     "is-online": "^8.2.1",
     "lbh-frontend-react": "0.0.5",
     "next": "^9.1.6",

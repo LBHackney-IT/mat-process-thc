@@ -8,6 +8,12 @@ class Expect {
     await expect(element.getText()).resolves.toContain(content);
   }
 
+  static async pageNotToContain(content: string): Promise<void> {
+    const element = await browser!.findElement({ tagName: "body" });
+
+    await expect(element.getText()).resolves.not.toContain(content);
+  }
+
   static async toBeEnabled(locator: Locator): Promise<void> {
     const element = await browser!.findElement(locator);
 

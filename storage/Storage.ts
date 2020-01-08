@@ -6,16 +6,46 @@ import {
 } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
 
+import ExternalDatabaseSchema, {
+  externalDatabaseName
+} from "./ExternalDatabaseSchema";
 import ProcessDatabaseSchema, {
   processDatabaseName
 } from "./ProcessDatabaseSchema";
 
 export default class Storage {
+  static ExternalContext:
+    | DatabaseContext<ExternalDatabaseSchema>
+    | undefined = undefined;
   static ProcessContext:
     | DatabaseContext<ProcessDatabaseSchema>
     | undefined = undefined;
 
   static init(): void {
+    const externalDatabasePromise = Database.open<ExternalDatabaseSchema>(
+      externalDatabaseName,
+      1,
+      {
+        upgrade(upgrade) {
+          let version = upgrade.oldVersion;
+
+          if (version === 0) {
+            upgrade.createStore("tenancy");
+            upgrade.createStore("contacts");
+
+            version = 1;
+          }
+
+          if (version !== upgrade.newVersion) {
+            throw new Error(
+              `Unable to upgrade to ${upgrade.newVersion} due to missing ` +
+                `migrations from ${version} onwards`
+            );
+          }
+        }
+      }
+    );
+
     const processDatabasePromise = Database.open<ProcessDatabaseSchema>(
       processDatabaseName,
       1,
@@ -45,6 +75,7 @@ export default class Storage {
       }
     );
 
+    this.ExternalContext = new DatabaseContext(externalDatabasePromise);
     this.ProcessContext = new DatabaseContext(processDatabasePromise);
   }
 

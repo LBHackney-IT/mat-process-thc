@@ -41,16 +41,24 @@ if (process.browser) {
 
 export default class App extends NextApp {
   render(): React.ReactElement {
-    const base = super.render();
+    let page = super.render();
 
-    if (Storage.ProcessContext) {
-      return (
-        <DatabaseProvider context={Storage.ProcessContext}>
-          {base}
+    if (Storage.ExternalContext) {
+      page = (
+        <DatabaseProvider context={Storage.ExternalContext}>
+          {page}
         </DatabaseProvider>
       );
-    } else {
-      return base;
     }
+
+    if (Storage.ProcessContext) {
+      page = (
+        <DatabaseProvider context={Storage.ProcessContext}>
+          {page}
+        </DatabaseProvider>
+      );
+    }
+
+    return page;
   }
 }
