@@ -46,7 +46,6 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
           name: "outside-property-images"
         })
         .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
-
       await browser!
         .waitForEnabledElement({ name: "metal-gate-images" })
         .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
@@ -64,17 +63,14 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!
         .waitForEnabledElement({ id: "unannounced-visit-no" })
         .click();
-
       await browser!
         .waitForEnabledElement({
           name: "unannounced-visit-notes"
         })
         .sendKeys("Unannounced visit notes");
-
       await browser!
         .waitForEnabledElement({ id: "inside-property-no" })
         .click();
-
       await browser!
         .waitForEnabledElement({ name: "inside-property-notes" })
         .sendKeys("Inside property notes");
@@ -94,11 +90,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!
         .waitForEnabledElement({ id: "id-type-valid-passport" })
         .click();
-
       await browser!
         .waitForEnabledElement({ name: "id-proof-images" })
         .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
-
       await browser!.waitForEnabledElement({ id: "id-notes-summary" }).click();
       await browser!
         .waitForEnabledElement({ name: "id-notes" })
@@ -114,15 +108,12 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
           id: "residency-proof-type-bank-statement"
         })
         .click();
-
       await browser!
         .waitForEnabledElement({ name: "residency-proof-images" })
         .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
-
       await browser!
         .waitForEnabledElement({ id: "residency-notes-summary" })
         .click();
-
       await browser!
         .waitForEnabledElement({ name: "residency-notes" })
         .sendKeys("Residency notes");
@@ -149,29 +140,24 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!
         .waitForEnabledElement({ name: "next-of-kin-full-name" })
         .sendKeys("Full name");
-
       await browser!
         .waitForEnabledElement({
           name: "next-of-kin-relationship"
         })
         .sendKeys("Relationship");
-
       await browser!
         .waitForEnabledElement({
           name: "next-of-kin-mobile-number"
         })
         .sendKeys("Mobile number");
-
       await browser!
         .waitForEnabledElement({
           name: "next-of-kin-other-number"
         })
         .sendKeys("Other number");
-
       await browser!
         .waitForEnabledElement({ name: "next-of-kin-email" })
         .sendKeys("Email address");
-
       await browser!
         .waitForEnabledElement({ name: "next-of-kin-address" })
         .sendKeys("Address");
@@ -186,33 +172,26 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!
         .waitForEnabledElement({ id: "carer-type-registered" })
         .click();
-
       await browser!.waitForEnabledElement({ id: "carer-live-in-yes" }).click();
-
       await browser!
         .waitForEnabledElement({
           name: "carer-live-in-start-date-month"
         })
         .sendKeys("1");
-
       await browser!
         .waitForEnabledElement({
           name: "carer-live-in-start-date-year"
         })
         .sendKeys("2019");
-
       await browser!
         .waitForEnabledElement({ name: "carer-full-name" })
         .sendKeys("Full name");
-
       await browser!
         .waitForEnabledElement({ name: "carer-relationship" })
         .sendKeys("Relationship");
-
       await browser!
         .waitForEnabledElement({ name: "carer-phone-number" })
         .sendKeys("Phone number");
-
       await browser!
         .waitForEnabledElement({ id: "carer-notes-summary" })
         .click();
@@ -222,13 +201,19 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
+      // Sections page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
+
+      await browser!.waitForEnabledElement({ css: '[href="/rooms"]' }, 10000);
+
+      await browser!.submit({ css: '[href="/rooms"]' });
+
       // Rooms page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/rooms");
 
       await browser!
         .waitForEnabledElement({ id: "can-enter-all-rooms-no" })
         .click();
-
       await browser!
         .waitForEnabledElement({ name: "room-entry-notes" })
         .sendKeys("Room entry notes");
@@ -245,17 +230,14 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
           id: "has-laminated-flooring-yes"
         })
         .click();
-
       await browser!
         .waitForEnabledElement({ id: "has-permission-yes" })
         .click();
-
       await browser!
         .waitForEnabledElement({
           name: "laminated-flooring-images"
         })
         .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
-
       await browser!
         .waitForEnabledElement({
           name: "laminated-flooring-notes"
@@ -274,17 +256,14 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
           id: "has-structural-changes-yes"
         })
         .click();
-
       await browser!
         .waitForEnabledElement({ id: "changes-authorised-yes" })
         .click();
-
       await browser!
         .waitForEnabledElement({
           name: "structural-changes-images"
         })
         .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
-
       await browser!
         .waitForEnabledElement({
           name: "structural-changes-notes"
@@ -297,7 +276,6 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await expect(browser!.getCurrentUrl()).resolves.toContain("/damage");
 
       await browser!.waitForEnabledElement({ id: "has-damage-yes" }).click();
-
       await browser!
         .waitForEnabledElement({ name: "damage-images" })
         .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
@@ -311,7 +289,6 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await expect(browser!.getCurrentUrl()).resolves.toContain("/roof");
 
       await browser!.waitForEnabledElement({ id: "has-access-yes" }).click();
-
       await browser!
         .waitForEnabledElement({ id: "items-stored-on-roof-yes" })
         .click();
@@ -327,7 +304,6 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!
         .waitForEnabledElement({ id: "has-access-to-loft-yes" })
         .click();
-
       await browser!
         .waitForEnabledElement({ id: "items-stored-in-loft-yes" })
         .click();
@@ -341,13 +317,10 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await expect(browser!.getCurrentUrl()).resolves.toContain("/garden");
 
       await browser!.waitForEnabledElement({ id: "has-garden-yes" }).click();
-
       await browser!
         .waitForEnabledElement({ id: "garden-type-private" })
         .click();
-
       await browser!.waitForEnabledElement({ id: "is-maintained-yes" }).click();
-
       await browser!
         .waitForEnabledElement({ name: "garden-images" })
         .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
@@ -365,13 +338,11 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!
         .waitForEnabledElement({ id: "is-storing-materials-yes" })
         .click();
-
       await browser!
         .waitForEnabledElement({
           id: "further-action-required-yes"
         })
         .click();
-
       await browser!
         .waitForEnabledElement({ name: "stored-materials-notes" })
         .sendKeys("Stored materials notes");
@@ -382,9 +353,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await expect(browser!.getCurrentUrl()).resolves.toContain("/fire-exit");
 
       await browser!.waitForEnabledElement({ id: "has-fire-exit-yes" }).click();
-
       await browser!.waitForEnabledElement({ id: "is-accessible-yes" }).click();
-
       await browser!
         .waitForEnabledElement({ name: "fire-exit-notes" })
         .sendKeys("Fire exit notes");
@@ -411,19 +380,16 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!
         .waitForEnabledElement({ id: "has-metal-gates-yes" })
         .click();
-
       await browser!
         .waitForEnabledElement({
           id: "combustible-items-behind-gates-yes"
         })
         .click();
-
       await browser!
         .waitForEnabledElement({
           id: "further-action-required-yes"
         })
         .click();
-
       await browser!
         .waitForEnabledElement({ name: "metal-gates-notes" })
         .sendKeys("Metal gates notes");
@@ -434,13 +400,11 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await expect(browser!.getCurrentUrl()).resolves.toContain("/door-mats");
 
       await browser!.waitForEnabledElement({ id: "has-placed-yes" }).click();
-
       await browser!
         .waitForEnabledElement({
           id: "further-action-required-yes"
         })
         .click();
-
       await browser!
         .waitForEnabledElement({ name: "door-mats-notes" })
         .sendKeys("Door mats notes");
@@ -457,13 +421,11 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
           id: "has-left-combustible-items-yes"
         })
         .click();
-
       await browser!
         .waitForEnabledElement({
           id: "further-action-required-yes"
         })
         .click();
-
       await browser!
         .waitForEnabledElement({ name: "communal-areas-notes" })
         .sendKeys("Communal areas notes");
@@ -482,7 +444,6 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!
         .waitForEnabledElement({ id: "has-permission-yes" })
         .click();
-
       await browser!
         .waitForEnabledElement({ name: "pets-permission-images" })
         .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
@@ -500,7 +461,6 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!
         .waitForEnabledElement({ id: "tenant-understands-yes" })
         .click();
-
       await browser!
         .waitForEnabledElement({
           name: "antisocial-behaviour-notes"
@@ -517,16 +477,32 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!
         .waitForEnabledElement({ name: "other-comments-images" })
         .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
-
       await browser!
         .waitForEnabledElement({ name: "other-comments-notes" })
         .sendKeys("Other comments notes");
       await browser!.submit();
 
+      // Sections page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
+
+      await browser!.waitForEnabledElement(
+        { css: '[href="/home-check"]' },
+        10000
+      );
+
+      await browser!.submit({ css: '[href="/home-check"]' });
+
       // Home check page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/home-check");
       await browser!.findElement({ id: "home-check-yes" }).click();
       await browser!.submit();
+
+      // Sections page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
+
+      await browser!.waitForEnabledElement({ css: '[href="/submit"]' }, 10000);
+
+      await browser!.submit({ css: '[href="/submit"]' });
 
       // Submit page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/submit");

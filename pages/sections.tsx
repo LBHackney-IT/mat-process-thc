@@ -87,7 +87,7 @@ export const SectionsPage: NextPage = () => {
               },
               {
                 name: "Household",
-                href: hrefForSlug(PageSlugs.Submit),
+                href: hrefForSlug(PageSlugs.Household),
                 status: idAndResidencyComplete.result ? undefined : ""
               },
               {
@@ -97,7 +97,7 @@ export const SectionsPage: NextPage = () => {
               },
               {
                 name: "Wellbeing support",
-                href: hrefForSlug(PageSlugs.Submit),
+                href: hrefForSlug(PageSlugs.HomeCheck),
                 status: idAndResidencyComplete.result ? undefined : ""
               },
               {
