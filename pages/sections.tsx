@@ -77,7 +77,7 @@ export const SectionsPage: NextPage = () => {
         }}
       />
 
-      {idAndResidencyComplete.loading || wellbeingComplete.loading ? (
+      {idAndResidencyComplete.loading ? (
         <Paragraph>Checking process status...</Paragraph>
       ) : (
         <>
