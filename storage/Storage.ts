@@ -61,6 +61,7 @@ export default class Storage {
             upgrade.createStore("id");
             upgrade.createStore("residency");
             upgrade.createStore("tenant");
+            upgrade.createStore("homeCheck");
 
             version = 1;
           }

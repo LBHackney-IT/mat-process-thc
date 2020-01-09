@@ -174,6 +174,14 @@ type ProcessDatabaseSchema = NamedSchema<
         };
       };
     };
+
+    homeCheck: {
+      key: ProcessRef;
+      value: {
+        value: string;
+        notes: string;
+      };
+    };
   }
 >;
 
@@ -185,7 +193,8 @@ export const processStoreNames: StoreNames<
   "isUnannouncedVisit",
   "isVisitInside",
   "residency",
-  "tenant"
+  "tenant",
+  "homeCheck"
 ];
 
 export default ProcessDatabaseSchema;

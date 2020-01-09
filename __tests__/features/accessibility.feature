@@ -138,6 +138,11 @@ Feature: Accessibility
     When I visit /other-comments
     Then the page should be accessible
     And the page should have a descriptive title
+    
+  Scenario: Home check page is accessible
+    When I visit /home-check
+    Then the page should be accessible
+    And the page should have a descriptive title
 
   Scenario: Submit page is accessible
     When I visit /submit
