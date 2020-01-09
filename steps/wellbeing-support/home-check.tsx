@@ -23,9 +23,9 @@ const step: ProcessStepDefinition = {
     "Are you doing a Home Check as part of the Tenancy and Household Check?",
   step: {
     slug: PageSlugs.HomeCheck,
-    nextSlug: PageSlugs.Submit,
+    nextSlug: PageSlugs.Sections,
     Submit: makeSubmit({
-      href: hrefForSlug(PageSlugs.Submit),
+      href: hrefForSlug(PageSlugs.Sections),
       value: "Save and continue"
     }),
     componentWrappers: [

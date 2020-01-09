@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import React from "react";
 import { SubmitProps, submitPropTypes } from "remultiform/step";
 
+import isStep from "../helpers/isStep";
+
 export interface MakeSubmitProps {
   href: string;
   value: string;
@@ -18,7 +20,7 @@ export const makeSubmit = (
     return (
       <>
         {buttonProps.map(({ href, value }, i) => (
-          <Link key={i} href={href}>
+          <Link key={i} href={isStep(href) ? "/[slug]" : href} as={href}>
             <Button
               className={
                 i > 0

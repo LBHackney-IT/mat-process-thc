@@ -3,6 +3,7 @@ import { useAsync } from "react-async-hook";
 
 import PageSlugs, { hrefForSlug } from "../steps/PageSlugs";
 
+import isStep from "./isStep";
 import useOnlineWithRetry from "./useOnlineWithRetry";
 
 export interface UseRedirectWhenOnlineReturn {
@@ -27,7 +28,9 @@ const useRedirectWhenOnline = (
   const redirect = useAsync(
     async (result: boolean | undefined) => {
       if (result) {
-        return await router[method](hrefForSlug(slug));
+        const href = hrefForSlug(slug);
+
+        return await router[method](isStep(href) ? "/[slug]" : href, href);
       }
 
       return false;

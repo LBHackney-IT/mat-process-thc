@@ -245,7 +245,7 @@ export const LoadingPage: NextPage = () => {
         </Paragraph>
       )}
 
-      <Link href={hrefForSlug(PageSlugs.VisitAttempt)}>
+      <Link href="/[slug]" as={hrefForSlug(PageSlugs.VisitAttempt)}>
         <Button disabled={!ready} data-testid="submit">
           {ready ? "Go" : "Loading..."}
         </Button>

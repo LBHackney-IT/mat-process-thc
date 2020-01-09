@@ -1,11 +1,11 @@
 import { NextPage, NextPageContext } from "next";
-import React, { createContext } from "react";
+import React from "react";
 import { useAsync } from "react-async-hook";
 import { Database } from "remultiform/database";
-import { DatabaseContext, useDatabase } from "remultiform/database-context";
 import { Orchestrator } from "remultiform/orchestrator";
 
 import { TenancySummary } from "../components/TenancySummary";
+import useDatabase from "../helpers/useDatabase";
 import MainLayout from "../layouts/MainLayout";
 import steps from "../steps";
 import PageSlugs from "../steps/PageSlugs";
@@ -18,16 +18,7 @@ interface Props {
 }
 
 const ProcessPage: NextPage<Props> = ({ slug }: Props) => {
-  const database = useDatabase(
-    Storage.ExternalContext ||
-      // This is a bit of a hack to get around contexts being
-      // undefined on the server, while still obeying the rules of hooks.
-      ({
-        context: createContext<Database<ExternalDatabaseSchema> | undefined>(
-          undefined
-        )
-      } as DatabaseContext<ExternalDatabaseSchema>)
-  );
+  const database = useDatabase(Storage.ExternalContext);
   const tenancyData = useAsync(
     async (db: Database<ExternalDatabaseSchema> | undefined) =>
       db?.get("tenancy", processRef),

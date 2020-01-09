@@ -12,10 +12,11 @@ import { DatabaseProvider } from "remultiform/database-context";
 
 import "normalize.css";
 
+import isStep from "../helpers/isStep";
 import Storage from "../storage/Storage";
 
 const Link: React.FunctionComponent<LinkComponentTypeProps> = props => (
-  <NextLink href={props.href}>
+  <NextLink href={isStep(props.href) ? "/[slug]" : props.href} as={props.href}>
     <a {...props} />
   </NextLink>
 );

@@ -35,7 +35,7 @@ it("redirects to /loading when online", async () => {
   });
 
   expect(routerPushMock).toHaveBeenCalledTimes(1);
-  expect(routerPushMock).toHaveBeenCalledWith("/loading");
+  expect(routerPushMock).toHaveBeenCalledWith("/loading", "/loading");
 });
 
 it("renders correctly when offline", async () => {

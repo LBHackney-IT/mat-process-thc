@@ -9,6 +9,7 @@ import Router from "next/router";
 import React from "react";
 import { TransactionMode } from "remultiform/database";
 
+import isStep from "../helpers/isStep";
 import useOnlineWithRetry from "../helpers/useOnlineWithRetry";
 import MainLayout from "../layouts/MainLayout";
 import PageSlugs, { hrefForSlug } from "../steps/PageSlugs";
@@ -34,7 +35,9 @@ const submit = async (): Promise<void> => {
     );
   }
 
-  await Router.push(hrefForSlug(PageSlugs.Confirmed));
+  const href = hrefForSlug(PageSlugs.Confirmed);
+
+  await Router.push(isStep(href) ? "/[slug]" : href, href);
 };
 
 const SubmitPage: NextPage = () => {
