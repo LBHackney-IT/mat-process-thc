@@ -14,7 +14,7 @@ import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
-import PageSlugs, { hrefForSlug } from "../PageSlugs";
+import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const step: ProcessStepDefinition = {
@@ -24,7 +24,7 @@ const step: ProcessStepDefinition = {
     slug: PageSlugs.Loft,
     nextSlug: PageSlugs.Garden,
     Submit: makeSubmit({
-      href: hrefForSlug(PageSlugs.Garden),
+      url: urlObjectForSlug(PageSlugs.Garden),
       value: "Save and continue"
     }),
     componentWrappers: [

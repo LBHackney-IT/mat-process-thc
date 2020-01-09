@@ -16,7 +16,7 @@ import useProcessApi from "../api/useProcessApi";
 import { TenancySummary } from "../components/TenancySummary";
 import titleCase from "../helpers/titleCase";
 import MainLayout from "../layouts/MainLayout";
-import PageSlugs, { hrefForSlug } from "../steps/PageSlugs";
+import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 import PageTitles from "../steps/PageTitles";
 import ExternalDatabaseSchema from "../storage/ExternalDatabaseSchema";
 import processRef from "../storage/processRef";
@@ -245,7 +245,10 @@ export const LoadingPage: NextPage = () => {
         </Paragraph>
       )}
 
-      <Link href="/[slug]" as={hrefForSlug(PageSlugs.VisitAttempt)}>
+      <Link
+        href="/[slug]?process_type=thc"
+        as={urlObjectForSlug(PageSlugs.VisitAttempt)}
+      >
         <Button disabled={!ready} data-testid="submit">
           {ready ? "Go" : "Loading..."}
         </Button>
