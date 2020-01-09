@@ -3,6 +3,7 @@ import {
   Builder,
   Locator,
   WebDriver,
+  WebElementPromise,
   until
 } from "selenium-webdriver";
 import chrome from "selenium-webdriver/chrome";
@@ -110,6 +111,24 @@ class WebDriverWrapper implements WebDriver {
     const url = new URL(relativeUrl, this.baseUrl).href;
 
     return this.get(url);
+  }
+
+  waitForEnabledElement(
+    locator: Locator,
+    locateTimeout = 1000,
+    enabledTimeout = 1000
+  ): WebElementPromise {
+    const element = this.wait(
+      until.elementLocated(locator),
+      locateTimeout,
+      `Unable to find ${JSON.stringify(locator)}`
+    );
+
+    return this.wait(
+      until.elementIsEnabled(element),
+      enabledTimeout,
+      `${JSON.stringify(locator)} never became enabled`
+    );
   }
 
   async submit(
