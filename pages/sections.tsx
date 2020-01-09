@@ -4,13 +4,13 @@ import {
   Paragraph
 } from "lbh-frontend-react/components";
 import { NextPage } from "next";
-import React, { createContext } from "react";
+import React from "react";
 import { useAsync } from "react-async-hook";
 import { Database } from "remultiform/database";
-import { DatabaseContext, useDatabase } from "remultiform/database-context";
 
 import { TaskList } from "../components/TaskList";
 import { TenancySummary } from "../components/TenancySummary";
+import useDatabase from "../helpers/useDatabase";
 import useProcessSectionComplete from "../helpers/useProcessSectionComplete";
 import MainLayout from "../layouts/MainLayout";
 import PageSlugs, { hrefForSlug } from "../steps/PageSlugs";
@@ -20,16 +20,7 @@ import processRef from "../storage/processRef";
 import Storage from "../storage/Storage";
 
 export const SectionsPage: NextPage = () => {
-  const database = useDatabase(
-    Storage.ExternalContext ||
-      // This is a bit of a hack to get around contexts being
-      // undefined on the server, while still obeying the rules of hooks.
-      ({
-        context: createContext<Database<ExternalDatabaseSchema> | undefined>(
-          undefined
-        )
-      } as DatabaseContext<ExternalDatabaseSchema>)
-  );
+  const database = useDatabase(Storage.ExternalContext);
   const tenancyData = useAsync(
     async (db: Database<ExternalDatabaseSchema> | undefined) =>
       db?.get("tenancy", processRef),
