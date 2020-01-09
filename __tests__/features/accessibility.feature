@@ -59,6 +59,86 @@ Feature: Accessibility
     Then the page should be accessible
     And the page should have a descriptive title
 
+  Scenario: Rooms page is accessible
+    When I visit /rooms
+    Then the page should be accessible
+    And the page should have a descriptive title
+
+  Scenario: Laminated flooring page is accessible
+    When I visit /laminated-flooring
+    Then the page should be accessible
+    And the page should have a descriptive title
+
+  Scenario: Structural changes page is accessible
+    When I visit /structural-changes
+    Then the page should be accessible
+    And the page should have a descriptive title
+
+  Scenario: Damage page is accessible
+    When I visit /damage
+    Then the page should be accessible
+    And the page should have a descriptive title
+
+  Scenario: Roof page is accessible
+    When I visit /roof
+    Then the page should be accessible
+    And the page should have a descriptive title
+
+  Scenario: Loft page is accessible
+    When I visit /loft
+    Then the page should be accessible
+    And the page should have a descriptive title
+
+  Scenario: Garden page is accessible
+    When I visit /garden
+    Then the page should be accessible
+    And the page should have a descriptive title
+
+  Scenario: Storing materials page is accessible
+    When I visit /storing-materials
+    Then the page should be accessible
+    And the page should have a descriptive title
+
+  Scenario: Fire exit page is accessible
+    When I visit /fire-exit
+    Then the page should be accessible
+    And the page should have a descriptive title
+
+  Scenario: Smoke alarm page is accessible
+    When I visit /smoke-alarm
+    Then the page should be accessible
+    And the page should have a descriptive title
+
+  Scenario: Metal gates page is accessible
+    When I visit /metal-gates
+    Then the page should be accessible
+    And the page should have a descriptive title
+
+  Scenario: Door mats page is accessible
+    When I visit /door-mats
+    Then the page should be accessible
+    And the page should have a descriptive title
+
+  Scenario: Communal areas page is accessible
+    When I visit /communal-areas
+    Then the page should be accessible
+    And the page should have a descriptive title
+
+  Scenario: Pets page is accessible
+    When I visit /pets
+    Then the page should be accessible
+    And the page should have a descriptive title
+
+  Scenario: Antisocial behaviour page is accessible
+    When I visit /antisocial-behaviour
+    Then the page should be accessible
+    And the page should have a descriptive title
+
+  Scenario: Other comments page is accessible
+    When I visit /other-comments
+    Then the page should be accessible
+    And the page should have a descriptive title
+
   Scenario: Submit page is accessible
     When I visit /submit
     Then the page should be accessible

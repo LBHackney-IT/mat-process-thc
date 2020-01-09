@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 type Props = DynamicComponentControlledProps<string> & {
   label: {
     id?: string | null;
-    value?: string | null;
+    value?: React.ReactNode | null;
   };
   name: string;
   rows?: number | null;
@@ -21,7 +21,7 @@ export const TextArea = (props: Props): React.ReactElement => {
   const inputId = `${name}-input`;
 
   return (
-    <>
+    <div className="text-area">
       {label.value && (
         <label id={labelId} htmlFor={inputId}>
           {label.value}
@@ -42,12 +42,18 @@ export const TextArea = (props: Props): React.ReactElement => {
       </textarea>
 
       <style jsx>{`
+        .text-area {
+          margin-top: 10px;
+        }
+        label {
+          font-family: "Montserrat";
+        }
         textarea {
           display: block;
           margin: 10px 0;
         }
       `}</style>
-    </>
+    </div>
   );
 };
 
@@ -55,7 +61,7 @@ TextArea.propTypes = {
   ...DynamicComponent.controlledPropTypes(PropTypes.string.isRequired),
   label: PropTypes.exact({
     id: PropTypes.string,
-    value: PropTypes.string
+    value: PropTypes.node
   }).isRequired,
   name: PropTypes.string.isRequired,
   rows: PropTypes.number

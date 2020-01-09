@@ -7,6 +7,7 @@ import {
   DynamicComponent
 } from "remultiform/component-wrapper";
 
+import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import ProcessStepDefinition from "../../components/ProcessStepDefinition";
 import { RadioButtons } from "../../components/RadioButtons";
@@ -18,90 +19,25 @@ import PageSlugs, { hrefForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const step: ProcessStepDefinition = {
-  title: PageTitles.AboutVisit,
-  heading: "About the visit",
+  title: PageTitles.Pets,
+  heading: "Are there any pets in the property?",
   step: {
-    slug: PageSlugs.AboutVisit,
-    nextSlug: PageSlugs.Sections,
+    slug: PageSlugs.Pets,
+    nextSlug: PageSlugs.AntisocialBehaviour,
     Submit: makeSubmit({
-      href: hrefForSlug(PageSlugs.Sections),
+      href: hrefForSlug(PageSlugs.AntisocialBehaviour),
       value: "Save and continue"
     }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "unannounced-visit",
+          key: "has-pets",
           Component: RadioButtons,
           props: {
-            name: "unannounced-visit",
-            legend: (
-              <FieldsetLegend>Is this an unnanounced visit?</FieldsetLegend>
-            ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
-          },
-          defaultValue: "",
-          emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<
-            DatabaseSchema,
-            "isUnannouncedVisit"
-          >({
-            storeName: "isUnannouncedVisit",
-            key: processRef,
-            property: ["value"]
-          })
-        })
-      ),
-      ComponentWrapper.wrapDynamic(
-        new DynamicComponent({
-          key: "unannounced-visit-notes",
-          Component: TextArea,
-          props: {
-            label: {
-              value: "Explain why this visit was pre-arranged." as
-                | React.ReactNode
-                | null
-                | undefined
-            },
-            name: "unannounced-visit-notes"
-          },
-          renderWhen(stepValues: {
-            "unannounced-visit"?: ComponentValue<
-              DatabaseSchema,
-              "isVisitInside"
-            >;
-          }): boolean {
-            return stepValues["unannounced-visit"] === "no";
-          },
-          defaultValue: "",
-          emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<
-            DatabaseSchema,
-            "isUnannouncedVisit"
-          >({
-            storeName: "isUnannouncedVisit",
-            key: processRef,
-            property: ["notes"]
-          })
-        })
-      ),
-      ComponentWrapper.wrapDynamic(
-        new DynamicComponent({
-          key: "inside-property",
-          Component: RadioButtons,
-          props: {
-            name: "inside-property",
+            name: "has-pets",
             legend: (
               <FieldsetLegend>
-                Is it taking place inside a tenant&apos;s home?
+                Are there any pets in the property?
               </FieldsetLegend>
             ) as React.ReactNode,
             radios: [
@@ -117,43 +53,96 @@ const step: ProcessStepDefinition = {
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<
-            DatabaseSchema,
-            "isVisitInside"
-          >({
-            storeName: "isVisitInside",
+          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+            storeName: "property",
             key: processRef,
-            property: ["value"]
+            property: ["pets", "hasPets"]
           })
         })
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "inside-property-notes",
+          key: "has-permission",
+          Component: RadioButtons,
+          props: {
+            name: "has-permission",
+            legend: (
+              <FieldsetLegend>
+                Has permission been given to keep pets?
+              </FieldsetLegend>
+            ) as React.ReactNode,
+            radios: [
+              {
+                label: "Yes",
+                value: "yes"
+              },
+              {
+                label: "No",
+                value: "no"
+              }
+            ]
+          },
+          renderWhen(stepValues: {
+            "has-pets"?: ComponentValue<DatabaseSchema, "property">;
+          }): boolean {
+            return stepValues["has-pets"] === "yes";
+          },
+          defaultValue: "",
+          emptyValue: "",
+          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+            storeName: "property",
+            key: processRef,
+            property: ["pets", "hasPermission"]
+          })
+        })
+      ),
+      ComponentWrapper.wrapDynamic(
+        new DynamicComponent({
+          key: "pets-permission-images",
+          Component: ImageInput,
+          props: {
+            label: "Take photo of permission document",
+            name: "pets-permission-images",
+            maxCount: 1
+          },
+          renderWhen(stepValues: {
+            "has-permission"?: ComponentValue<DatabaseSchema, "property">;
+          }): boolean {
+            return stepValues["has-permission"] === "yes";
+          },
+          defaultValue: [],
+          emptyValue: [] as string[],
+          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+            storeName: "property",
+            key: processRef,
+            property: ["pets", "images"]
+          })
+        })
+      ),
+      ComponentWrapper.wrapDynamic(
+        new DynamicComponent({
+          key: "pets-notes",
           Component: TextArea,
           props: {
             label: {
-              value: "Explain why this visit is not happening inside a tenant's home." as
+              value: "Add note about pets if necessary." as
                 | React.ReactNode
                 | null
                 | undefined
             },
-            name: "inside-property-notes"
+            name: "pets-notes"
           },
           renderWhen(stepValues: {
-            "inside-property"?: ComponentValue<DatabaseSchema, "isVisitInside">;
+            "has-pets"?: ComponentValue<DatabaseSchema, "property">;
           }): boolean {
-            return stepValues["inside-property"] === "no";
+            return stepValues["has-pets"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<
-            DatabaseSchema,
-            "isVisitInside"
-          >({
-            storeName: "isVisitInside",
+          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+            storeName: "property",
             key: processRef,
-            property: ["notes"]
+            property: ["pets", "notes"]
           })
         })
       )

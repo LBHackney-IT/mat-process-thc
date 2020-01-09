@@ -192,6 +192,215 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
+      // Rooms page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/rooms");
+
+      await browser!.findElement({ id: "can-enter-all-rooms-no" }).click();
+      await browser!
+        .wait(until.elementLocated({ name: "room-entry-notes" }), 500)
+        .sendKeys("Room entry notes");
+
+      await browser!.submit();
+
+      // Laminated flooring page
+
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/laminated-flooring"
+      );
+
+      await browser!.findElement({ id: "has-laminated-flooring-yes" }).click();
+      await browser!.findElement({ id: "has-permission-yes" }).click();
+      await browser!
+        .findElement({ name: "laminated-flooring-images" })
+        .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
+      await browser!
+        .wait(until.elementLocated({ name: "laminated-flooring-notes" }), 500)
+        .sendKeys("Laminated flooring notes");
+
+      await browser!.submit();
+
+      // Structural changes page
+
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/structural-changes"
+      );
+
+      await browser!.findElement({ id: "has-structural-changes-yes" }).click();
+      await browser!.findElement({ id: "changes-authorised-yes" }).click();
+      await browser!
+        .findElement({ name: "structural-changes-images" })
+        .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
+      await browser!
+        .wait(until.elementLocated({ name: "structural-changes-notes" }), 500)
+        .sendKeys("Structural channges notes");
+
+      await browser!.submit();
+
+      // Damage page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/damage");
+
+      await browser!.findElement({ id: "has-damage-yes" }).click();
+      await browser!
+        .findElement({ name: "damage-images" })
+        .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
+      await browser!
+        .wait(until.elementLocated({ name: "damage-notes" }), 500)
+        .sendKeys("Damage notes");
+
+      await browser!.submit();
+
+      // Roof page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/roof");
+
+      await browser!.findElement({ id: "has-access-yes" }).click();
+      await browser!.findElement({ id: "items-stored-on-roof-yes" }).click();
+      await browser!
+        .wait(until.elementLocated({ name: "roof-notes" }), 500)
+        .sendKeys("Roof notes");
+
+      await browser!.submit();
+
+      // Loft page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/loft");
+
+      await browser!.findElement({ id: "has-access-to-loft-yes" }).click();
+      await browser!.findElement({ id: "items-stored-in-loft-yes" }).click();
+      await browser!
+        .wait(until.elementLocated({ name: "loft-notes" }), 500)
+        .sendKeys("Loft notes");
+
+      await browser!.submit();
+
+      // Garden page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/garden");
+
+      await browser!.findElement({ id: "has-garden-yes" }).click();
+      await browser!.findElement({ id: "garden-type-private" }).click();
+      await browser!.findElement({ id: "is-maintained-yes" }).click();
+      await browser!
+        .findElement({ name: "garden-images" })
+        .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
+      await browser!
+        .wait(until.elementLocated({ name: "garden-notes" }), 500)
+        .sendKeys("Garden notes");
+
+      await browser!.submit();
+
+      // Storing materials page
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/storing-materials"
+      );
+
+      await browser!.findElement({ id: "is-storing-materials-yes" }).click();
+      await browser!.findElement({ id: "further-action-required-yes" }).click();
+      await browser!
+        .wait(until.elementLocated({ name: "stored-materials-notes" }), 500)
+        .sendKeys("Garden notes");
+
+      await browser!.submit();
+
+      // Fire exit page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/fire-exit");
+
+      await browser!.findElement({ id: "has-fire-exit-yes" }).click();
+      await browser!.findElement({ id: "is-accessible-yes" }).click();
+      await browser!
+        .wait(until.elementLocated({ name: "fire-exit-notes" }), 500)
+        .sendKeys("Fire exit notes");
+
+      await browser!.submit();
+
+      // Smoke alarm page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/smoke-alarm");
+
+      await browser!.findElement({ id: "has-smoke-alarm-yes" }).click();
+      await browser!.findElement({ id: "is-working-yes" }).click();
+      await browser!
+        .wait(until.elementLocated({ name: "smoke-alarm-notes" }), 500)
+        .sendKeys("Smoke alarm notes");
+
+      await browser!.submit();
+
+      // Metal gates page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/metal-gates");
+
+      await browser!.findElement({ id: "has-metal-gates-yes" }).click();
+      await browser!
+        .findElement({ id: "combustible-items-behind-gates-yes" })
+        .click();
+      await browser!.findElement({ id: "further-action-required-yes" }).click();
+      await browser!
+        .wait(until.elementLocated({ name: "metal-gates-notes" }), 500)
+        .sendKeys("Metal gates notes");
+
+      await browser!.submit();
+
+      // Door mats page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/door-mats");
+
+      await browser!.findElement({ id: "has-placed-yes" }).click();
+      await browser!.findElement({ id: "further-action-required-yes" }).click();
+      await browser!
+        .wait(until.elementLocated({ name: "door-mats-notes" }), 500)
+        .sendKeys("Door mats notes");
+
+      await browser!.submit();
+
+      // Communal areas page
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/communal-areas"
+      );
+
+      await browser!
+        .findElement({ id: "has-left-combustible-items-yes" })
+        .click();
+      await browser!.findElement({ id: "further-action-required-yes" }).click();
+      await browser!
+        .wait(until.elementLocated({ name: "communal-areas-notes" }), 500)
+        .sendKeys("Communal areas notes");
+
+      await browser!.submit();
+
+      // Pets page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/pets");
+
+      await browser!.findElement({ id: "has-pets-yes" }).click();
+      await browser!.findElement({ id: "has-permission-yes" }).click();
+      await browser!
+        .findElement({ name: "pets-permission-images" })
+        .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
+      await browser!
+        .wait(until.elementLocated({ name: "pets-notes" }), 500)
+        .sendKeys("Pets notes");
+
+      await browser!.submit();
+
+      // Antisocial behaviour page
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/antisocial-behaviour"
+      );
+
+      await browser!.findElement({ id: "tenant-understands-yes" }).click();
+      await browser!
+        .wait(until.elementLocated({ name: "antisocial-behaviour-notes" }), 500)
+        .sendKeys("Antisocial behaviour notes");
+
+      await browser!.submit();
+
+      // Other comments page
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/other-comments"
+      );
+
+      await browser!
+        .findElement({ name: "other-comments-images" })
+        .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
+      await browser!
+        .wait(until.elementLocated({ name: "other-comments-notes" }), 500)
+        .sendKeys("Other comments notes");
+
+      await browser!.submit();
+
       // Submit page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/submit");
 

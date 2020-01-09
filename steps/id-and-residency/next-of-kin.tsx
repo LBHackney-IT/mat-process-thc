@@ -116,7 +116,7 @@ const step: ProcessStepDefinition = {
           Component: TextArea,
           props: {
             name: "next-of-kin-address",
-            label: { value: "Address" as string | null | undefined },
+            label: { value: "Address" as React.ReactNode | null | undefined },
             rows: 4 as number | null | undefined
           },
           defaultValue: "",

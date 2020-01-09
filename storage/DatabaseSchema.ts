@@ -21,6 +21,91 @@ type DatabaseSchema = NamedSchema<
         outside: {
           images: string[];
         };
+        rooms: {
+          canEnterAll: boolean;
+          notes: string;
+        };
+        laminatedFlooring: {
+          hasLaminatedFlooring: boolean;
+          hasPermission: boolean;
+          images: string[];
+          notes: string;
+        };
+        structuralChanges: {
+          hasStructuralChanges: boolean;
+          changesAuthorised: boolean;
+          images: string[];
+          notes: string;
+        };
+        damage: {
+          hasDamage: boolean;
+          images: string[];
+          notes: string;
+        };
+        roof: {
+          hasAccess: boolean;
+          itemsStoredOnRoof: boolean;
+          notes: string;
+        };
+        loft: {
+          hasAccess: boolean;
+          itemsStored: boolean;
+          notes: string;
+        };
+        garden: {
+          hasGarden: boolean;
+          type: string;
+          isMaintained: boolean;
+          images: string[];
+          notes: string;
+        };
+        storingMaterials: {
+          isStoringMaterials: boolean;
+          furtherActionRequired: boolean;
+          notes: string;
+        };
+        fireExit: {
+          hasFireExit: boolean;
+          isAccessible: boolean;
+          notes: string;
+        };
+        smokeAlarm: {
+          hasSmokeAlarm: boolean;
+          isWorking: boolean;
+          notes: string;
+        };
+        metalGates: {
+          hasMetalGates: boolean;
+          combustibleItemsBehind: boolean;
+          furtherActionRequired: boolean;
+          images: string[];
+          notes: string;
+        };
+        doorMats: {
+          hasPlaced: boolean;
+          furtherActionRequired: boolean;
+          notes: string;
+        };
+        communalAreas: {
+          hasLeftCombustibleItems: boolean;
+          furtherActionRequired: boolean;
+          notes: string;
+        };
+        pets: {
+          hasPets: boolean;
+          petTypes: string[];
+          hasPermission: boolean;
+          images: string[];
+          notes: string;
+        };
+        antisocialBehaviour: {
+          tenantUnderstands: boolean;
+          notes: string;
+        };
+        otherComments: {
+          images: string[];
+          notes: string;
+        };
       };
     };
 
@@ -37,13 +122,6 @@ type DatabaseSchema = NamedSchema<
       value: {
         value: string;
         notes: string;
-      };
-    };
-
-    metalGates: {
-      key: ProcessRef;
-      value: {
-        images: string[];
       };
     };
 
@@ -104,7 +182,6 @@ export const processStoreNames: StoreNames<DatabaseSchema["schema"]>[] = [
   "property",
   "isUnannouncedVisit",
   "isVisitInside",
-  "metalGates",
   "residency",
   "tenant"
 ];
