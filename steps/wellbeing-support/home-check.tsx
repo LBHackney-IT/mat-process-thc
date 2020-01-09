@@ -9,9 +9,9 @@ import {
 import { Paragraph } from "lbh-frontend-react/components/typography/Paragraph";
 
 import { makeSubmit } from "../../components/makeSubmit";
-import ProcessStepDefinition from "../../components/ProcessStepDefinition";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import { RadioButtons } from "../../components/RadioButtons";
-import DatabaseSchema from "../../storage/DatabaseSchema";
+import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
 import PageSlugs, { hrefForSlug } from "../PageSlugs";
@@ -63,7 +63,10 @@ const step: ProcessStepDefinition = {
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "homeCheck">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "homeCheck"
+          >({
             storeName: "homeCheck",
             key: processRef,
             property: ["value"]
