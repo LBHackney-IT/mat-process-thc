@@ -75,7 +75,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit({ css: '[href="/id"]' });
 
-      // Id page
+      // ID page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/id");
 
       await browser!.findElement({ id: "id-type-valid-passport" }).click();
@@ -203,15 +203,16 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Laminated flooring page
-
       await expect(browser!.getCurrentUrl()).resolves.toContain(
         "/laminated-flooring"
       );
 
       await browser!.findElement({ id: "has-laminated-flooring-yes" }).click();
-      await browser!.findElement({ id: "has-permission-yes" }).click();
       await browser!
-        .findElement({ name: "laminated-flooring-images" })
+        .wait(until.elementLocated({ id: "has-permission-yes" }), 500)
+        .click();
+      await browser!
+        .wait(until.elementLocated({ name: "laminated-flooring-images" }), 500)
         .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
       await browser!
         .wait(until.elementLocated({ name: "laminated-flooring-notes" }), 500)
@@ -226,9 +227,11 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       );
 
       await browser!.findElement({ id: "has-structural-changes-yes" }).click();
-      await browser!.findElement({ id: "changes-authorised-yes" }).click();
       await browser!
-        .findElement({ name: "structural-changes-images" })
+        .wait(until.elementLocated({ id: "changes-authorised-yes" }), 500)
+        .click();
+      await browser!
+        .wait(until.elementLocated({ name: "structural-changes-images" }), 500)
         .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
       await browser!
         .wait(until.elementLocated({ name: "structural-changes-notes" }), 500)
@@ -241,7 +244,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.findElement({ id: "has-damage-yes" }).click();
       await browser!
-        .findElement({ name: "damage-images" })
+        .wait(until.elementLocated({ name: "damage-images" }), 500)
         .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
       await browser!
         .wait(until.elementLocated({ name: "damage-notes" }), 500)
@@ -253,7 +256,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await expect(browser!.getCurrentUrl()).resolves.toContain("/roof");
 
       await browser!.findElement({ id: "has-access-yes" }).click();
-      await browser!.findElement({ id: "items-stored-on-roof-yes" }).click();
+      await browser!
+        .wait(until.elementLocated({ id: "items-stored-on-roof-yes" }), 500)
+        .click();
       await browser!
         .wait(until.elementLocated({ name: "roof-notes" }), 500)
         .sendKeys("Roof notes");
@@ -264,7 +269,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await expect(browser!.getCurrentUrl()).resolves.toContain("/loft");
 
       await browser!.findElement({ id: "has-access-to-loft-yes" }).click();
-      await browser!.findElement({ id: "items-stored-in-loft-yes" }).click();
+      await browser!
+        .wait(until.elementLocated({ id: "items-stored-in-loft-yes" }), 500)
+        .click();
       await browser!
         .wait(until.elementLocated({ name: "loft-notes" }), 500)
         .sendKeys("Loft notes");
@@ -275,10 +282,14 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await expect(browser!.getCurrentUrl()).resolves.toContain("/garden");
 
       await browser!.findElement({ id: "has-garden-yes" }).click();
-      await browser!.findElement({ id: "garden-type-private" }).click();
-      await browser!.findElement({ id: "is-maintained-yes" }).click();
       await browser!
-        .findElement({ name: "garden-images" })
+        .wait(until.elementLocated({ id: "garden-type-private" }), 500)
+        .click();
+      await browser!
+        .wait(until.elementLocated({ id: "is-maintained-yes" }), 500)
+        .click();
+      await browser!
+        .wait(until.elementLocated({ name: "garden-images" }), 500)
         .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
       await browser!
         .wait(until.elementLocated({ name: "garden-notes" }), 500)
@@ -292,10 +303,12 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       );
 
       await browser!.findElement({ id: "is-storing-materials-yes" }).click();
-      await browser!.findElement({ id: "further-action-required-yes" }).click();
+      await browser!
+        .wait(until.elementLocated({ id: "further-action-required-yes" }), 500)
+        .click();
       await browser!
         .wait(until.elementLocated({ name: "stored-materials-notes" }), 500)
-        .sendKeys("Garden notes");
+        .sendKeys("Stored materials notes");
 
       await browser!.submit();
 
@@ -303,7 +316,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await expect(browser!.getCurrentUrl()).resolves.toContain("/fire-exit");
 
       await browser!.findElement({ id: "has-fire-exit-yes" }).click();
-      await browser!.findElement({ id: "is-accessible-yes" }).click();
+      await browser!
+        .wait(until.elementLocated({ id: "is-accessible-yes" }), 500)
+        .click();
       await browser!
         .wait(until.elementLocated({ name: "fire-exit-notes" }), 500)
         .sendKeys("Fire exit notes");
@@ -314,7 +329,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await expect(browser!.getCurrentUrl()).resolves.toContain("/smoke-alarm");
 
       await browser!.findElement({ id: "has-smoke-alarm-yes" }).click();
-      await browser!.findElement({ id: "is-working-yes" }).click();
+      await browser!
+        .wait(until.elementLocated({ id: "is-working-yes" }), 500)
+        .click();
       await browser!
         .wait(until.elementLocated({ name: "smoke-alarm-notes" }), 500)
         .sendKeys("Smoke alarm notes");
@@ -326,9 +343,14 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.findElement({ id: "has-metal-gates-yes" }).click();
       await browser!
-        .findElement({ id: "combustible-items-behind-gates-yes" })
+        .wait(
+          until.elementLocated({ id: "combustible-items-behind-gates-yes" }),
+          500
+        )
         .click();
-      await browser!.findElement({ id: "further-action-required-yes" }).click();
+      await browser!
+        .wait(until.elementLocated({ id: "further-action-required-yes" }), 500)
+        .click();
       await browser!
         .wait(until.elementLocated({ name: "metal-gates-notes" }), 500)
         .sendKeys("Metal gates notes");
@@ -339,7 +361,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await expect(browser!.getCurrentUrl()).resolves.toContain("/door-mats");
 
       await browser!.findElement({ id: "has-placed-yes" }).click();
-      await browser!.findElement({ id: "further-action-required-yes" }).click();
+      await browser!
+        .wait(until.elementLocated({ id: "further-action-required-yes" }), 500)
+        .click();
       await browser!
         .wait(until.elementLocated({ name: "door-mats-notes" }), 500)
         .sendKeys("Door mats notes");
@@ -354,7 +378,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!
         .findElement({ id: "has-left-combustible-items-yes" })
         .click();
-      await browser!.findElement({ id: "further-action-required-yes" }).click();
+      await browser!
+        .wait(until.elementLocated({ id: "further-action-required-yes" }), 500)
+        .click();
       await browser!
         .wait(until.elementLocated({ name: "communal-areas-notes" }), 500)
         .sendKeys("Communal areas notes");
@@ -365,9 +391,11 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await expect(browser!.getCurrentUrl()).resolves.toContain("/pets");
 
       await browser!.findElement({ id: "has-pets-yes" }).click();
-      await browser!.findElement({ id: "has-permission-yes" }).click();
       await browser!
-        .findElement({ name: "pets-permission-images" })
+        .wait(until.elementLocated({ id: "has-permission-yes" }), 500)
+        .click();
+      await browser!
+        .wait(until.elementLocated({ name: "pets-permission-images" }), 500)
         .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
       await browser!
         .wait(until.elementLocated({ name: "pets-notes" }), 500)
@@ -396,7 +424,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         .findElement({ name: "other-comments-images" })
         .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
       await browser!
-        .wait(until.elementLocated({ name: "other-comments-notes" }), 500)
+        .findElement({ name: "other-comments-notes" })
         .sendKeys("Other comments notes");
 
       await browser!.submit();
