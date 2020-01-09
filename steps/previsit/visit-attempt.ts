@@ -16,7 +16,7 @@ import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
-import PageSlugs, { hrefForSlug } from "../PageSlugs";
+import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const step: ProcessStepDefinition = {
@@ -27,11 +27,11 @@ const step: ProcessStepDefinition = {
     nextSlug: PageSlugs.StartCheck,
     Submit: makeSubmit([
       {
-        href: hrefForSlug(PageSlugs.StartCheck),
+        url: urlObjectForSlug(PageSlugs.StartCheck),
         value: "Enter the property"
       },
       {
-        href: "",
+        url: urlObjectForSlug(PageSlugs.Index),
         value: "Unable to enter property"
       }
     ]),

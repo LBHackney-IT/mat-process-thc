@@ -23,7 +23,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       );
 
       // Loading page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/loading");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/loading?process_type=thc"
+      );
 
       // Wait for data fetching.
       await browser!.waitForEnabledElement(
@@ -53,12 +55,16 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Start check page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/start-check");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/start-check?process_type=thc"
+      );
 
       await browser!.submit();
 
       // About visit page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/about-visit");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/about-visit?process_type=thc"
+      );
 
       await browser!
         .waitForEnabledElement({ id: "unannounced-visit-no" })
@@ -78,14 +84,18 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Sections page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/sections?process_type=thc"
+      );
 
-      await browser!.waitForEnabledElement({ css: '[href="/id"]' }, 10000);
+      await browser!.waitForEnabledElement({ css: '[href^="/id"]' }, 10000);
 
-      await browser!.submit({ css: '[href="/id"]' });
+      await browser!.submit({ css: '[href^="/id"]' });
 
       // ID page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/id");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/id?process_type=thc"
+      );
 
       await browser!
         .waitForEnabledElement({ id: "id-type-valid-passport" })
@@ -101,7 +111,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Residency page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/residency");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/residency?process_type=thc"
+      );
 
       await browser!
         .waitForEnabledElement({
@@ -135,7 +147,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Next of kin page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/next-of-kin");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/next-of-kin?process_type=thc"
+      );
 
       await browser!
         .waitForEnabledElement({ name: "next-of-kin-full-name" })
@@ -165,10 +179,11 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Carer page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/carer");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/carer?process_type=thc"
+      );
 
       await browser!.waitForEnabledElement({ id: "carer-needed-yes" }).click();
-
       await browser!
         .waitForEnabledElement({ id: "carer-type-registered" })
         .click();
@@ -202,14 +217,18 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Sections page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/sections?process_type=thc"
+      );
 
-      await browser!.waitForEnabledElement({ css: '[href="/rooms"]' }, 10000);
+      await browser!.waitForEnabledElement({ css: '[href^="/rooms"]' }, 10000);
 
-      await browser!.submit({ css: '[href="/rooms"]' });
+      await browser!.submit({ css: '[href^="/rooms"]' });
 
       // Rooms page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/rooms");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/rooms?process_type=thc"
+      );
 
       await browser!
         .waitForEnabledElement({ id: "can-enter-all-rooms-no" })
@@ -273,7 +292,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Damage page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/damage");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/damage?process_type=thc"
+      );
 
       await browser!.waitForEnabledElement({ id: "has-damage-yes" }).click();
       await browser!
@@ -286,7 +307,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Roof page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/roof");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/roof?process_type=thc"
+      );
 
       await browser!.waitForEnabledElement({ id: "has-access-yes" }).click();
       await browser!
@@ -299,7 +322,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Loft page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/loft");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/loft?process_type=thc"
+      );
 
       await browser!
         .waitForEnabledElement({ id: "has-access-to-loft-yes" })
@@ -314,7 +339,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Garden page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/garden");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/garden?process_type=thc"
+      );
 
       await browser!.waitForEnabledElement({ id: "has-garden-yes" }).click();
       await browser!
@@ -350,7 +377,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Fire exit page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/fire-exit");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/fire-exit?process_type=thc"
+      );
 
       await browser!.waitForEnabledElement({ id: "has-fire-exit-yes" }).click();
       await browser!.waitForEnabledElement({ id: "is-accessible-yes" }).click();
@@ -361,13 +390,14 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Smoke alarm page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/smoke-alarm");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/smoke-alarm?process_type=thc"
+      );
 
       await browser!
         .waitForEnabledElement({ id: "has-smoke-alarm-yes" })
         .click();
       await browser!.waitForEnabledElement({ id: "is-working-yes" }).click();
-
       await browser!
         .waitForEnabledElement({ name: "smoke-alarm-notes" })
         .sendKeys("Smoke alarm notes");
@@ -375,7 +405,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Metal gates page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/metal-gates");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/metal-gates?process_type=thc"
+      );
 
       await browser!
         .waitForEnabledElement({ id: "has-metal-gates-yes" })
@@ -397,7 +429,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Door mats page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/door-mats");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/door-mats?process_type=thc"
+      );
 
       await browser!.waitForEnabledElement({ id: "has-placed-yes" }).click();
       await browser!
@@ -433,7 +467,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Pets page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/pets");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/pets?process_type=thc"
+      );
 
       await browser!.waitForEnabledElement({ id: "has-pets-yes" }).click();
       await browser!
@@ -480,21 +516,28 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!
         .waitForEnabledElement({ name: "other-comments-notes" })
         .sendKeys("Other comments notes");
+
       await browser!.submit();
 
       // Sections page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/sections?process_type=thc"
+      );
 
       await browser!.waitForEnabledElement(
-        { css: '[href="/home-check"]' },
+        { css: '[href^="/home-check"]' },
         10000
       );
 
-      await browser!.submit({ css: '[href="/home-check"]' });
+      await browser!.submit({ css: '[href^="/home-check"]' });
 
       // Home check page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/home-check");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/home-check?process_type=thc"
+      );
+
       await browser!.findElement({ id: "home-check-yes" }).click();
+
       await browser!.submit();
 
       // Health concerns page
@@ -515,19 +558,25 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Sections page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/sections?process_type=thc"
+      );
 
-      await browser!.waitForEnabledElement({ css: '[href="/submit"]' }, 10000);
+      await browser!.waitForEnabledElement({ css: '[href^="/submit"]' }, 10000);
 
-      await browser!.submit({ css: '[href="/submit"]' });
+      await browser!.submit({ css: '[href^="/submit"]' });
 
       // Submit page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/submit");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/submit?process_type=thc"
+      );
 
       await browser!.submit();
 
       // Confirmed page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/confirmed");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/confirmed?process_type=thc"
+      );
     });
 
     then("I should see that the process has been submitted", async () => {

@@ -13,7 +13,7 @@ import { TenancySummary } from "../components/TenancySummary";
 import useDatabase from "../helpers/useDatabase";
 import useProcessSectionComplete from "../helpers/useProcessSectionComplete";
 import MainLayout from "../layouts/MainLayout";
-import PageSlugs, { hrefForSlug } from "../steps/PageSlugs";
+import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 import PageTitles from "../steps/PageTitles";
 import ExternalDatabaseSchema from "../storage/ExternalDatabaseSchema";
 import processRef from "../storage/processRef";
@@ -82,27 +82,27 @@ export const SectionsPage: NextPage = () => {
             items={[
               {
                 name: "ID, residency, and tenant information",
-                href: hrefForSlug(PageSlugs.Id),
+                url: urlObjectForSlug(PageSlugs.Id),
                 status: idAndResidencyComplete.result ? "Completed" : undefined
               },
               {
                 name: "Household",
-                href: hrefForSlug(PageSlugs.Household),
+                url: urlObjectForSlug(PageSlugs.Household),
                 status: idAndResidencyComplete.result ? undefined : ""
               },
               {
                 name: "Property inspection",
-                href: hrefForSlug(PageSlugs.Rooms),
+                url: urlObjectForSlug(PageSlugs.Rooms),
                 status: idAndResidencyComplete.result ? undefined : ""
               },
               {
                 name: "Wellbeing support",
-                href: hrefForSlug(PageSlugs.HomeCheck),
+                url: urlObjectForSlug(PageSlugs.HomeCheck),
                 status: idAndResidencyComplete.result ? undefined : ""
               },
               {
                 name: "Review and submit",
-                href: hrefForSlug(PageSlugs.Submit),
+                url: urlObjectForSlug(PageSlugs.Submit),
                 status: idAndResidencyComplete.result ? undefined : ""
               }
             ]}

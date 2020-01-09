@@ -12,7 +12,7 @@ import { TransactionMode } from "remultiform/database";
 import isStep from "../helpers/isStep";
 import useOnlineWithRetry from "../helpers/useOnlineWithRetry";
 import MainLayout from "../layouts/MainLayout";
-import PageSlugs, { hrefForSlug } from "../steps/PageSlugs";
+import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 import PageTitles from "../steps/PageTitles";
 import { processStoreNames } from "../storage/ProcessDatabaseSchema";
 import Storage from "../storage/Storage";
@@ -35,9 +35,20 @@ const submit = async (): Promise<void> => {
     );
   }
 
-  const href = hrefForSlug(PageSlugs.Confirmed);
+  const href = urlObjectForSlug(PageSlugs.Confirmed);
+  const as = { ...href };
 
-  await Router.push(isStep(href) ? "/[slug]" : href, href);
+  if (isStep(href)) {
+    href.pathname = "/[slug]";
+  }
+
+  // eslint-disable-next-line @typescript-eslint/camelcase
+  href.query = { ...href.query, process_type: "thc" };
+
+  // eslint-disable-next-line @typescript-eslint/camelcase
+  as.query = { ...as.query, process_type: "thc" };
+
+  await Router.push(href, as);
 };
 
 const SubmitPage: NextPage = () => {

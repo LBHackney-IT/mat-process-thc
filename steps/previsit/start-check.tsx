@@ -13,7 +13,7 @@ import React from "react";
 import { makeSubmit } from "../../components/makeSubmit";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 
-import PageSlugs, { hrefForSlug } from "../PageSlugs";
+import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const step: ProcessStepDefinition = {
@@ -24,11 +24,11 @@ const step: ProcessStepDefinition = {
     nextSlug: PageSlugs.AboutVisit,
     Submit: makeSubmit([
       {
-        href: hrefForSlug(PageSlugs.AboutVisit),
+        url: urlObjectForSlug(PageSlugs.AboutVisit),
         value: "Start visit with tenant"
       },
       {
-        href: "",
+        url: urlObjectForSlug(PageSlugs.Index),
         value: "Unable to enter property"
       }
     ]),
