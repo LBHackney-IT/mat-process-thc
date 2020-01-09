@@ -3,6 +3,7 @@ enum PageTitles {
   Index = "Loading",
   Loading = "Loading",
   Sections = "Sections",
+  UnableToEnterProperty = "Unable to enter property",
 
   // Previsit
   VisitAttempt = "Visit attempt",

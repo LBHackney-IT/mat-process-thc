@@ -31,7 +31,7 @@ const step: ProcessStepDefinition = {
         value: "Enter the property"
       },
       {
-        href: "",
+        href: hrefForSlug(PageSlugs.UnableToEnterProperty),
         value: "Unable to enter property"
       }
     ]),

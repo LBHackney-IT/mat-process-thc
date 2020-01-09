@@ -3,6 +3,7 @@ enum PageSlugs {
   Index = "",
   Loading = "loading",
   Sections = "sections",
+  UnableToEnterProperty = "unable-to-enter-property",
 
   // Previsit
   VisitAttempt = "visit-attempt",
