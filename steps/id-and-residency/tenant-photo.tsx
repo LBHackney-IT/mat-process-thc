@@ -16,9 +16,9 @@ import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
-import DatabaseSchema from "../../storage/DatabaseSchema";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
-import ProcessStepDefinition from "../../components/ProcessStepDefinition";
 
 import PageSlugs, { hrefForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
@@ -58,7 +58,10 @@ const step: ProcessStepDefinition = {
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "tenant">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "tenant"
+          >({
             storeName: "tenant",
             key: processRef,
             property: ["photo", "isWilling"]
@@ -76,13 +79,19 @@ const step: ProcessStepDefinition = {
             name: "tenant-photo-willing-notes"
           },
           renderWhen(stepValues: {
-            "tenant-photo-willing"?: ComponentValue<DatabaseSchema, "tenant">;
+            "tenant-photo-willing"?: ComponentValue<
+              ProcessDatabaseSchema,
+              "tenant"
+            >;
           }): boolean {
             return stepValues["tenant-photo-willing"] === "no";
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "tenant">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "tenant"
+          >({
             storeName: "tenant",
             key: processRef,
             property: ["photo", "notes"]
@@ -98,7 +107,10 @@ const step: ProcessStepDefinition = {
             children: "Tenant photo"
           },
           renderWhen(stepValues: {
-            "tenant-photo-willing"?: ComponentValue<DatabaseSchema, "tenant">;
+            "tenant-photo-willing"?: ComponentValue<
+              ProcessDatabaseSchema,
+              "tenant"
+            >;
           }): boolean {
             return stepValues["tenant-photo-willing"] === "yes";
           }
@@ -118,13 +130,19 @@ const step: ProcessStepDefinition = {
             maxCount: 1
           },
           renderWhen(stepValues: {
-            "tenant-photo-willing"?: ComponentValue<DatabaseSchema, "tenant">;
+            "tenant-photo-willing"?: ComponentValue<
+              ProcessDatabaseSchema,
+              "tenant"
+            >;
           }): boolean {
             return stepValues["tenant-photo-willing"] === "yes";
           },
           defaultValue: [],
           emptyValue: [] as string[],
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "tenant">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "tenant"
+          >({
             storeName: "tenant",
             key: processRef,
             property: ["photo", "images"]

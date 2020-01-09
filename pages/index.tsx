@@ -1,5 +1,3 @@
-import "cross-fetch/polyfill";
-
 import { Paragraph } from "lbh-frontend-react/components";
 import { NextPage } from "next";
 import React from "react";

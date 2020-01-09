@@ -9,10 +9,10 @@ import {
 
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
-import ProcessStepDefinition from "../../components/ProcessStepDefinition";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
-import DatabaseSchema from "../../storage/DatabaseSchema";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
 import PageSlugs, { hrefForSlug } from "../PageSlugs";
@@ -53,7 +53,10 @@ const step: ProcessStepDefinition = {
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["pets", "hasPets"]
@@ -83,13 +86,16 @@ const step: ProcessStepDefinition = {
             ]
           },
           renderWhen(stepValues: {
-            "has-pets"?: ComponentValue<DatabaseSchema, "property">;
+            "has-pets"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
             return stepValues["has-pets"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["pets", "hasPermission"]
@@ -106,13 +112,19 @@ const step: ProcessStepDefinition = {
             maxCount: 1
           },
           renderWhen(stepValues: {
-            "has-permission"?: ComponentValue<DatabaseSchema, "property">;
+            "has-permission"?: ComponentValue<
+              ProcessDatabaseSchema,
+              "property"
+            >;
           }): boolean {
             return stepValues["has-permission"] === "yes";
           },
           defaultValue: [],
           emptyValue: [] as string[],
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["pets", "images"]
@@ -133,13 +145,16 @@ const step: ProcessStepDefinition = {
             name: "pets-notes"
           },
           renderWhen(stepValues: {
-            "has-pets"?: ComponentValue<DatabaseSchema, "property">;
+            "has-pets"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
             return stepValues["has-pets"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["pets", "notes"]

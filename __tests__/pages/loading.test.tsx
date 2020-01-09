@@ -7,7 +7,55 @@ import { spyOnConsoleError } from "../helpers/spies";
 import LoadingPage from "../../pages/loading";
 
 it("renders correctly when online", async () => {
-  fetchMock.mockResponse(JSON.stringify({ online: true }));
+  fetchMock.mockResponse(
+    ({ method, url }): Promise<string> => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let body: any = {};
+
+      if (
+        url.includes("/v1/Accounts/AccountDetailsByContactId") &&
+        method === "GET"
+      ) {
+        body = {
+          results: { tenuretype: "Secure", tenancyStartDate: "2019-01-01" }
+        };
+      } else if (
+        url.includes("/v1/Contacts/GetContactsByUprn") &&
+        method === "GET"
+      ) {
+        body = {
+          results: [
+            {
+              fullAddressDisplay:
+                "FLAT 1\r\n1 TEST STREET\r\nTEST TOWN TT1 1TT",
+              responsible: true,
+              fullName: "TestTenant1"
+            },
+            {
+              fullAddressDisplay:
+                "FLAT 1\r\n1 TEST STREET\r\nTEST TOWN TT1 1TT",
+              responsible: true,
+              fullName: "TestTenant2"
+            },
+            {
+              fullAddressDisplay:
+                "FLAT 1\r\n1 TEST STREET\r\nTEST TOWN TT1 1TT",
+              responsible: false,
+              fullName: "TestHouseholdMember1"
+            },
+            {
+              fullAddressDisplay:
+                "FLAT 1\r\n1 TEST STREET\r\nTEST TOWN TT1 1TT",
+              responsible: false,
+              fullName: "TestHouseholdMember2"
+            }
+          ]
+        };
+      }
+
+      return Promise.resolve(JSON.stringify(body));
+    }
+  );
 
   let component: ReactTestRenderer | undefined = undefined;
 
@@ -121,7 +169,7 @@ it("renders correctly when online", async () => {
               <dd
                 className="govuk-summary-list__value lbh-summary-list__value"
               >
-                1 Mare Street, London, E8 3AA
+                Flat 1, 1 Test Street, Test Town, TT1 1TT
               </dd>
             </div>
             <div
@@ -135,7 +183,7 @@ it("renders correctly when online", async () => {
               <dd
                 className="govuk-summary-list__value lbh-summary-list__value"
               >
-                Jane Doe, John Doe
+                TestTenant1, TestTenant2
               </dd>
             </div>
             <div
@@ -149,7 +197,7 @@ it("renders correctly when online", async () => {
               <dd
                 className="govuk-summary-list__value lbh-summary-list__value"
               >
-                Introductory
+                Secure
               </dd>
             </div>
             <div
@@ -195,10 +243,13 @@ it("renders correctly when online", async () => {
             className="govuk-list lbh-list"
           >
             <li>
-              Answers saved to the Hub... Loaded
+              Fetching any answers previously saved to the Hub... Loaded
             </li>
             <li>
-              Offline storage... More recent than the Hub
+              Fetching and saving tenancy information... Saved
+            </li>
+            <li>
+              Updating offline storage of process data... Process on device is more recent than in Hub
             </li>
           </ul>
           <button
@@ -231,6 +282,12 @@ it("renders correctly when offline", async () => {
 
   expect(consoleErrorSpy.mock.calls).toMatchInlineSnapshot(`
     Array [
+      Array [
+        [Error: Request timed out],
+      ],
+      Array [
+        [Error: Request timed out],
+      ],
       Array [
         [Error: Request timed out],
       ],
@@ -343,7 +400,7 @@ it("renders correctly when offline", async () => {
               <dd
                 className="govuk-summary-list__value lbh-summary-list__value"
               >
-                Loading...
+                Error
               </dd>
             </div>
             <div
@@ -357,7 +414,7 @@ it("renders correctly when offline", async () => {
               <dd
                 className="govuk-summary-list__value lbh-summary-list__value"
               >
-                Loading...
+                Error
               </dd>
             </div>
             <div
@@ -371,7 +428,7 @@ it("renders correctly when offline", async () => {
               <dd
                 className="govuk-summary-list__value lbh-summary-list__value"
               >
-                Loading...
+                Error
               </dd>
             </div>
             <div
@@ -385,7 +442,7 @@ it("renders correctly when offline", async () => {
               <dd
                 className="govuk-summary-list__value lbh-summary-list__value"
               >
-                Loading...
+                Error
               </dd>
             </div>
           </dl>
@@ -417,7 +474,10 @@ it("renders correctly when offline", async () => {
             className="govuk-list lbh-list"
           >
             <li>
-              Answers saved to the Hub... Error
+              Fetching any answers previously saved to the Hub... Error
+            </li>
+            <li>
+              Fetching and saving tenancy information... Error
             </li>
           </ul>
           <p

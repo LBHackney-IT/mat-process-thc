@@ -9,10 +9,10 @@ import {
 
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
-import ProcessStepDefinition from "../../components/ProcessStepDefinition";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
-import DatabaseSchema from "../../storage/DatabaseSchema";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
 import PageSlugs, { hrefForSlug } from "../PageSlugs";
@@ -51,7 +51,10 @@ const step: ProcessStepDefinition = {
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["garden", "hasGarden"]
@@ -85,13 +88,16 @@ const step: ProcessStepDefinition = {
             ]
           },
           renderWhen(stepValues: {
-            "has-garden"?: ComponentValue<DatabaseSchema, "property">;
+            "has-garden"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
             return stepValues["has-garden"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["garden", "type"]
@@ -119,13 +125,16 @@ const step: ProcessStepDefinition = {
             ]
           },
           renderWhen(stepValues: {
-            "garden-type"?: ComponentValue<DatabaseSchema, "property">;
+            "garden-type"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
             return stepValues["garden-type"] === ("private" || "not sure");
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["garden", "isMaintained"]
@@ -146,13 +155,16 @@ const step: ProcessStepDefinition = {
             maxCount: 3
           },
           renderWhen(stepValues: {
-            "has-garden"?: ComponentValue<DatabaseSchema, "property">;
+            "has-garden"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
             return stepValues["has-garden"] === "yes";
           },
           defaultValue: [],
           emptyValue: [] as string[],
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["garden", "images"]
@@ -173,13 +185,16 @@ const step: ProcessStepDefinition = {
             name: "garden-notes"
           },
           renderWhen(stepValues: {
-            "is-maintained"?: ComponentValue<DatabaseSchema, "property">;
+            "is-maintained"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
             return stepValues["is-maintained"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["garden", "notes"]

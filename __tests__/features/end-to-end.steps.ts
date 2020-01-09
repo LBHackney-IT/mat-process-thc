@@ -6,7 +6,7 @@ import { until } from "selenium-webdriver";
 import Given from "../helpers/steps/Given";
 import Expect from "../helpers/Expect";
 
-jest.setTimeout(60 * 1000);
+jest.setTimeout(120 * 1000);
 
 defineFeature(loadFeature("./end-to-end.feature"), test => {
   test("Performing a check while online", ({ defineStep, when, then }) => {
@@ -19,7 +19,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       // Wait for redirect.
       await browser!.wait(
         until.elementLocated({ css: '[data-testid="submit"]' }),
-        5000
+        10000
       );
 
       // Loading page
@@ -30,7 +30,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         until.elementIsEnabled(
           await browser!.findElement({ css: '[data-testid="submit"]' })
         ),
-        5000
+        10000
       );
 
       await browser!.submit();
@@ -71,7 +71,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       // Sections page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
 
-      await browser!.wait(until.elementLocated({ css: '[href="/id"]' }), 5000);
+      await browser!.wait(until.elementLocated({ css: '[href="/id"]' }), 10000);
 
       await browser!.submit({ css: '[href="/id"]' });
 

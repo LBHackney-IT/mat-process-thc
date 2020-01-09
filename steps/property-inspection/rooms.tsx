@@ -8,10 +8,10 @@ import {
 } from "remultiform/component-wrapper";
 
 import { makeSubmit } from "../../components/makeSubmit";
-import ProcessStepDefinition from "../../components/ProcessStepDefinition";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
-import DatabaseSchema from "../../storage/DatabaseSchema";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
 import PageSlugs, { hrefForSlug } from "../PageSlugs";
@@ -52,7 +52,10 @@ const step: ProcessStepDefinition = {
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["rooms", "canEnterAll"]
@@ -73,13 +76,19 @@ const step: ProcessStepDefinition = {
             name: "room-entry-notes"
           },
           renderWhen(stepValues: {
-            "can-enter-all-rooms"?: ComponentValue<DatabaseSchema, "property">;
+            "can-enter-all-rooms"?: ComponentValue<
+              ProcessDatabaseSchema,
+              "property"
+            >;
           }): boolean {
             return stepValues["can-enter-all-rooms"] === "no";
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["rooms", "notes"]

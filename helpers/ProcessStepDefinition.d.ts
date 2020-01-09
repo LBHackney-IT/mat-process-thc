@@ -2,16 +2,18 @@ import { StepDefinition } from "remultiform/step";
 
 import PageTitles from "../steps/PageTitles";
 
-export interface TitledStepDefinition {
-  title: PageTitles;
-  heading?: string;
+interface BaseStepDefinition {
   step: StepDefinition;
 }
 
-export interface HeadedStepDefinition {
+interface TitledStepDefinition extends BaseStepDefinition {
+  title: PageTitles;
+  heading?: string;
+}
+
+interface HeadedStepDefinition extends BaseStepDefinition {
   title?: PageTitles;
   heading: string;
-  step: StepDefinition;
 }
 
 type ProcessStepDefinition = TitledStepDefinition | HeadedStepDefinition;

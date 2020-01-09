@@ -18,9 +18,9 @@ import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
 import { TextAreaDetails } from "../../components/TextAreaDetails";
 import { TextInput } from "../../components/TextInput";
-import DatabaseSchema from "../../storage/DatabaseSchema";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
-import ProcessStepDefinition from "../../components/ProcessStepDefinition";
 
 import PageSlugs, { hrefForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
@@ -58,7 +58,10 @@ const step: ProcessStepDefinition = {
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "tenant">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "tenant"
+          >({
             storeName: "tenant",
             key: processRef,
             property: ["carer", "hasCarer"]
@@ -86,13 +89,16 @@ const step: ProcessStepDefinition = {
             ]
           },
           renderWhen(stepValues: {
-            "carer-needed"?: ComponentValue<DatabaseSchema, "tenant">;
+            "carer-needed"?: ComponentValue<ProcessDatabaseSchema, "tenant">;
           }): boolean {
             return stepValues["carer-needed"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "tenant">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "tenant"
+          >({
             storeName: "tenant",
             key: processRef,
             property: ["carer", "type"]
@@ -122,13 +128,16 @@ const step: ProcessStepDefinition = {
             ]
           },
           renderWhen(stepValues: {
-            "carer-needed"?: ComponentValue<DatabaseSchema, "tenant">;
+            "carer-needed"?: ComponentValue<ProcessDatabaseSchema, "tenant">;
           }): boolean {
             return stepValues["carer-needed"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "tenant">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "tenant"
+          >({
             storeName: "tenant",
             key: processRef,
             property: ["carer", "isLiveIn"]
@@ -143,7 +152,7 @@ const step: ProcessStepDefinition = {
             children: "When did the carer start living in the property?"
           },
           renderWhen(stepValues: {
-            "carer-live-in"?: ComponentValue<DatabaseSchema, "tenant">;
+            "carer-live-in"?: ComponentValue<ProcessDatabaseSchema, "tenant">;
           }): boolean {
             return stepValues["carer-live-in"] === "yes";
           }
@@ -157,13 +166,16 @@ const step: ProcessStepDefinition = {
             name: "carer-live-in-start-date"
           },
           renderWhen(stepValues: {
-            "carer-live-in"?: ComponentValue<DatabaseSchema, "tenant">;
+            "carer-live-in"?: ComponentValue<ProcessDatabaseSchema, "tenant">;
           }): boolean {
             return stepValues["carer-live-in"] === "yes";
           },
           defaultValue: {},
           emptyValue: {} as { month?: number; year?: number },
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "tenant">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "tenant"
+          >({
             storeName: "tenant",
             key: processRef,
             property: ["carer", "liveInStartDate"]
@@ -179,7 +191,7 @@ const step: ProcessStepDefinition = {
             children: "Carer details"
           },
           renderWhen(stepValues: {
-            "carer-needed"?: ComponentValue<DatabaseSchema, "tenant">;
+            "carer-needed"?: ComponentValue<ProcessDatabaseSchema, "tenant">;
           }): boolean {
             return stepValues["carer-needed"] === "yes";
           }
@@ -194,13 +206,16 @@ const step: ProcessStepDefinition = {
             label: "Full name"
           },
           renderWhen(stepValues: {
-            "carer-needed"?: ComponentValue<DatabaseSchema, "tenant">;
+            "carer-needed"?: ComponentValue<ProcessDatabaseSchema, "tenant">;
           }): boolean {
             return stepValues["carer-needed"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "tenant">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "tenant"
+          >({
             storeName: "tenant",
             key: processRef,
             property: ["carer", "fullName"]
@@ -216,13 +231,16 @@ const step: ProcessStepDefinition = {
             label: "Relationship to tenant or 'Not related'"
           },
           renderWhen(stepValues: {
-            "carer-needed"?: ComponentValue<DatabaseSchema, "tenant">;
+            "carer-needed"?: ComponentValue<ProcessDatabaseSchema, "tenant">;
           }): boolean {
             return stepValues["carer-needed"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "tenant">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "tenant"
+          >({
             storeName: "tenant",
             key: processRef,
             property: ["carer", "relationship"]
@@ -238,13 +256,16 @@ const step: ProcessStepDefinition = {
             label: "Phone number"
           },
           renderWhen(stepValues: {
-            "carer-needed"?: ComponentValue<DatabaseSchema, "tenant">;
+            "carer-needed"?: ComponentValue<ProcessDatabaseSchema, "tenant">;
           }): boolean {
             return stepValues["carer-needed"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "tenant">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "tenant"
+          >({
             storeName: "tenant",
             key: processRef,
             property: ["carer", "phoneNumber"]
@@ -261,13 +282,16 @@ const step: ProcessStepDefinition = {
             rows: 4 as number | null | undefined
           },
           renderWhen(stepValues: {
-            "carer-live-in"?: ComponentValue<DatabaseSchema, "tenant">;
+            "carer-live-in"?: ComponentValue<ProcessDatabaseSchema, "tenant">;
           }): boolean {
             return stepValues["carer-live-in"] === "no";
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "tenant">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "tenant"
+          >({
             storeName: "tenant",
             key: processRef,
             property: ["carer", "address"]
@@ -283,13 +307,16 @@ const step: ProcessStepDefinition = {
             name: "carer-notes"
           },
           renderWhen(stepValues: {
-            "carer-needed"?: ComponentValue<DatabaseSchema, "tenant">;
+            "carer-needed"?: ComponentValue<ProcessDatabaseSchema, "tenant">;
           }): boolean {
             return stepValues["carer-needed"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "tenant">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "tenant"
+          >({
             storeName: "tenant",
             key: processRef,
             property: ["carer", "notes"]

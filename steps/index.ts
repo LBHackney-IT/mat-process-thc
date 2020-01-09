@@ -1,4 +1,4 @@
-import ProcessStepDefinition from "../components/ProcessStepDefinition";
+import ProcessStepDefinition from "../helpers/ProcessStepDefinition";
 
 import previsit from "./previsit";
 import idAndResidency from "./id-and-residency";

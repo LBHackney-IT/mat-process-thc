@@ -11,7 +11,7 @@ import {
 import React from "react";
 
 import { makeSubmit } from "../../components/makeSubmit";
-import ProcessStepDefinition from "../../components/ProcessStepDefinition";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 
 import PageSlugs, { hrefForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";

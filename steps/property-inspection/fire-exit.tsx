@@ -8,10 +8,10 @@ import {
 } from "remultiform/component-wrapper";
 
 import { makeSubmit } from "../../components/makeSubmit";
-import ProcessStepDefinition from "../../components/ProcessStepDefinition";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
-import DatabaseSchema from "../../storage/DatabaseSchema";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
 import PageSlugs, { hrefForSlug } from "../PageSlugs";
@@ -52,7 +52,10 @@ const step: ProcessStepDefinition = {
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["fireExit", "hasFireExit"]
@@ -80,13 +83,16 @@ const step: ProcessStepDefinition = {
             ]
           },
           renderWhen(stepValues: {
-            "has-fire-exit"?: ComponentValue<DatabaseSchema, "property">;
+            "has-fire-exit"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
             return stepValues["has-fire-exit"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["fireExit", "isAccessible"]
@@ -107,13 +113,16 @@ const step: ProcessStepDefinition = {
             name: "fire-exit-notes"
           },
           renderWhen(stepValues: {
-            "has-fire-exit"?: ComponentValue<DatabaseSchema, "property">;
+            "has-fire-exit"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
             return stepValues["has-fire-exit"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["fireExit", "notes"]

@@ -1,9 +1,9 @@
-import "cross-fetch/polyfill";
-
-import { Button } from "lbh-frontend-react/components/Button/Button";
-import { ErrorMessage } from "lbh-frontend-react/components/ErrorMessage";
-import { PageAnnouncement } from "lbh-frontend-react/components/PageAnnouncement";
-import { Paragraph } from "lbh-frontend-react/components/typography/Paragraph";
+import {
+  Button,
+  ErrorMessage,
+  PageAnnouncement,
+  Paragraph
+} from "lbh-frontend-react";
 import { NextPage } from "next";
 import Router from "next/router";
 import React from "react";
@@ -13,13 +13,13 @@ import useOnlineWithRetry from "../helpers/useOnlineWithRetry";
 import MainLayout from "../layouts/MainLayout";
 import PageSlugs, { hrefForSlug } from "../steps/PageSlugs";
 import PageTitles from "../steps/PageTitles";
-import { processStoreNames } from "../storage/DatabaseSchema";
+import { processStoreNames } from "../storage/ProcessDatabaseSchema";
 import Storage from "../storage/Storage";
 import processRef from "../storage/processRef";
 
 const submit = async (): Promise<void> => {
-  if (Storage.Context && Storage.Context.database) {
-    const database = await Storage.Context.database;
+  if (Storage.ProcessContext && Storage.ProcessContext.database) {
+    const database = await Storage.ProcessContext.database;
 
     // We should push to the API before doing this, or data will be
     // lost.

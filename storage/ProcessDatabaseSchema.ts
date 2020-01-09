@@ -1,13 +1,13 @@
 import { NamedSchema, StoreNames } from "remultiform/database";
 
-type ProcessRef = string;
+export type ProcessRef = string;
 
 // We will replace this with a real name before release. It should be specific
 // to the environment it's running on to avoid clashes.
-export const databaseName = "mat-process-thc-local";
+export const processDatabaseName = "mat-process-thc-process-local";
 
-type DatabaseSchema = NamedSchema<
-  typeof databaseName,
+type ProcessDatabaseSchema = NamedSchema<
+  typeof processDatabaseName,
   1,
   {
     lastModified: {
@@ -177,7 +177,9 @@ type DatabaseSchema = NamedSchema<
   }
 >;
 
-export const processStoreNames: StoreNames<DatabaseSchema["schema"]>[] = [
+export const processStoreNames: StoreNames<
+  ProcessDatabaseSchema["schema"]
+>[] = [
   "lastModified",
   "property",
   "isUnannouncedVisit",
@@ -186,4 +188,4 @@ export const processStoreNames: StoreNames<DatabaseSchema["schema"]>[] = [
   "tenant"
 ];
 
-export default DatabaseSchema;
+export default ProcessDatabaseSchema;

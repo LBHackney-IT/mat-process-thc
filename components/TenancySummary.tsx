@@ -1,17 +1,21 @@
+import format from "date-fns/format";
 import React from "react";
 import { SummaryList } from "lbh-frontend-react/components";
 
 interface TenancySummaryProps {
-  address?: string;
-  tenants?: string[];
-  tenureType?: string;
-  startDate?: string;
+  details?: {
+    address?: string[];
+    tenants?: string[];
+    tenureType?: string;
+    startDate?: string | Date;
+  };
 }
 
 export const TenancySummary = (
   props: TenancySummaryProps
 ): React.ReactElement => {
-  const { address, tenants, tenureType, startDate } = props;
+  const { details } = props;
+  const { address, tenants, tenureType, startDate } = details || {};
 
   const loading = "Loading...";
 
@@ -22,7 +26,7 @@ export const TenancySummary = (
         rows={[
           {
             key: "Address",
-            value: address ? address : loading
+            value: address ? address.join(", ") : loading
           },
           {
             key: "Tenants",
@@ -34,7 +38,11 @@ export const TenancySummary = (
           },
           {
             key: "Tenancy start date",
-            value: startDate ? startDate : loading
+            value: startDate
+              ? typeof startDate === "string"
+                ? startDate
+                : format(startDate, "d MMMM yyyy")
+              : loading
           }
         ]}
       />

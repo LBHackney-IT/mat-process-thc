@@ -50,9 +50,6 @@ jobs:
       - run:
           name: Run tests in Chrome
           command: TEST_BROWSER=chrome npm test
-      - run:
-          name: Run tests in Firefox
-          command: TEST_BROWSER=firefox npm test
 
   build:
     docker:

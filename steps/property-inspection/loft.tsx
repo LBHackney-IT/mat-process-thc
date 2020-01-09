@@ -8,10 +8,10 @@ import {
 } from "remultiform/component-wrapper";
 
 import { makeSubmit } from "../../components/makeSubmit";
-import ProcessStepDefinition from "../../components/ProcessStepDefinition";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
-import DatabaseSchema from "../../storage/DatabaseSchema";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
 import PageSlugs, { hrefForSlug } from "../PageSlugs";
@@ -52,7 +52,10 @@ const step: ProcessStepDefinition = {
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["loft", "hasAccess"]
@@ -82,13 +85,19 @@ const step: ProcessStepDefinition = {
             ]
           },
           renderWhen(stepValues: {
-            "has-access-to-loft"?: ComponentValue<DatabaseSchema, "property">;
+            "has-access-to-loft"?: ComponentValue<
+              ProcessDatabaseSchema,
+              "property"
+            >;
           }): boolean {
             return stepValues["has-access-to-loft"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["loft", "itemsStored"]
@@ -109,13 +118,19 @@ const step: ProcessStepDefinition = {
             name: "loft-notes"
           },
           renderWhen(stepValues: {
-            "has-access-to-loft"?: ComponentValue<DatabaseSchema, "property">;
+            "has-access-to-loft"?: ComponentValue<
+              ProcessDatabaseSchema,
+              "property"
+            >;
           }): boolean {
             return stepValues["has-access-to-loft"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<DatabaseSchema, "property">({
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
             storeName: "property",
             key: processRef,
             property: ["loft", "notes"]

@@ -24,10 +24,9 @@ const thenIShouldSeeTheTenancyDetails = (
   defineStep: DefineStepFunction
 ): void => {
   defineStep("I should see the tenancy details", async () => {
-    await Expect.pageToContain("1 Mare Street");
-    await Expect.pageToContain("Jane Doe");
-    await Expect.pageToContain("Introductory");
-    await Expect.pageToContain("1 January 2019");
+    await Expect.pageToContain("Address");
+    await Expect.pageNotToContain("Loading...");
+    await Expect.pageNotToContain("Error");
   });
 };
 
