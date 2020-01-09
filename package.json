@@ -28,7 +28,7 @@
     "cross-fetch": "^3.0.4",
     "date-fns": "^2.8.1",
     "is-online": "^8.2.1",
-    "lbh-frontend-react": "0.0.5",
+    "lbh-frontend-react": "0.0.6",
     "next": "^9.1.6",
     "null-as-undefined": "^0.2.1",
     "prop-types": "^15.7.2",
