@@ -1,4 +1,3 @@
-import { createContext } from "react";
 import { UseAsyncReturn, useAsync } from "react-async-hook";
 import {
   Database,
@@ -6,8 +5,8 @@ import {
   StoreNames,
   StoreValue
 } from "remultiform/database";
-import { DatabaseContext, useDatabase } from "remultiform/database-context";
 
+import useDatabase from "../helpers/useDatabase";
 import ProcessDatabaseSchema, {
   ProcessRef
 } from "../storage/ProcessDatabaseSchema";
@@ -22,18 +21,12 @@ const useProcessSectionComplete = <
   boolean,
   [Database<ProcessDatabaseSchema> | undefined, string, string]
 > => {
-  const database = useDatabase(
-    Storage.ProcessContext ||
-      // This is a bit of a hack to get around contexts being
-      // undefined on the server, while still obeying the rules of hooks.
-      ({
-        context: createContext<Database<ProcessDatabaseSchema> | undefined>(
-          undefined
-        )
-      } as DatabaseContext<ProcessDatabaseSchema>)
-  );
+  const database = useDatabase(Storage.ProcessContext);
 
-  return useAsync(async () => {
+  const result = useAsync<
+    boolean,
+    [Database<ProcessDatabaseSchema> | undefined, string, string]
+  >(async () => {
     if (!database) {
       throw new Error("No database to check for process state");
     }
@@ -58,6 +51,8 @@ const useProcessSectionComplete = <
 
     return result;
   }, [database, processRef, storeNames.join(",")]);
+
+  return result;
 };
 
 export default useProcessSectionComplete;
