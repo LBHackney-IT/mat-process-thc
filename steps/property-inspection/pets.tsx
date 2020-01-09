@@ -7,6 +7,7 @@ import {
   DynamicComponent
 } from "remultiform/component-wrapper";
 
+import { Checkboxes } from "../../components/Checkboxes";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
@@ -60,6 +61,79 @@ const step: ProcessStepDefinition = {
             storeName: "property",
             key: processRef,
             property: ["pets", "hasPets"]
+          })
+        })
+      ),
+      ComponentWrapper.wrapDynamic(
+        new DynamicComponent({
+          key: "pet-type",
+          Component: Checkboxes,
+          props: {
+            name: "pet-type",
+            legend: (
+              <FieldsetLegend>What type of pets?</FieldsetLegend>
+            ) as React.ReactNode,
+            checkboxes: [
+              {
+                label: "Amphibian (e.g. frog, newt, salamander, toad)",
+                value: "amphibian"
+              },
+              {
+                label: "Bird",
+                value: "bird"
+              },
+              {
+                label: "Cat",
+                value: "cat"
+              },
+              {
+                label: "Chicken",
+                value: "chicken"
+              },
+              {
+                label: "Dog",
+                value: "dog"
+              },
+              {
+                label: "Domestic rodent (e.g. gerbil, hamster, mouse, rat)",
+                value: "domestic rodent"
+              },
+              {
+                label: "Fish",
+                value: "fish"
+              },
+              {
+                label: "Invertebrate (e.g. crab, insect, spider, worm)",
+                value: "invertebrate"
+              },
+              {
+                label: "Rabbit",
+                value: "rabbit"
+              },
+              {
+                label: "Reptile (e.g. lizard, snake, tortoise, turtle)",
+                value: "reptile"
+              },
+              {
+                label: "Other",
+                value: "other"
+              }
+            ]
+          },
+          renderWhen(stepValues: {
+            "has-pets"?: ComponentValue<ProcessDatabaseSchema, "property">;
+          }): boolean {
+            return stepValues["has-pets"] === "yes";
+          },
+          defaultValue: [],
+          emptyValue: [] as string[],
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
+            storeName: "property",
+            key: processRef,
+            property: ["pets", "petTypes"]
           })
         })
       ),

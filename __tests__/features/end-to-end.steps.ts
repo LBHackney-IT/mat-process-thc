@@ -366,6 +366,8 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.findElement({ id: "has-pets-yes" }).click();
       await browser!.findElement({ id: "has-permission-yes" }).click();
+      await browser!.findElement({ id: "pet-type-bird" }).click();
+      await browser!.findElement({ id: "pet-type-rabbit" }).click();
       await browser!
         .findElement({ name: "pets-permission-images" })
         .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
