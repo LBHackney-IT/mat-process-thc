@@ -28,9 +28,9 @@ const step: ProcessStepDefinition = {
   heading: "Review household members",
   step: {
     slug: PageSlugs.Household,
-    nextSlug: PageSlugs.Sections,
+    nextSlug: PageSlugs.Rent,
     Submit: makeSubmit({
-      url: urlObjectForSlug(PageSlugs.Sections),
+      url: urlObjectForSlug(PageSlugs.Rent),
       value: "Save and continue"
     }),
     componentWrappers: [

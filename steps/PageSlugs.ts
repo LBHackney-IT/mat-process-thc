@@ -21,8 +21,8 @@ enum PageSlugs {
 
   // Household
   Household = "household",
-  OtherProperty = "other-property",
   Rent = "rent",
+  OtherProperty = "other-property",
 
   // Property inspection
   AboutProperty = "about-property",

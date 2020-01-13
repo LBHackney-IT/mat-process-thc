@@ -187,6 +187,18 @@ type ProcessDatabaseSchema = NamedSchema<
         memberChanges: {
           notes: string;
         };
+        rentArrears: {
+          type: string;
+          notes: string;
+        };
+        housingBenefits: {
+          hasApplied: string;
+          notes: string;
+        };
+        incomeOfficer: {
+          wantsToContact: string;
+          notes: string;
+        };
       };
     };
 
