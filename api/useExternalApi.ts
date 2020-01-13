@@ -1,3 +1,4 @@
+import querystring from "querystring";
 import { useAsync, UseAsyncReturn } from "react-async-hook";
 import {
   NamedSchema,
@@ -43,9 +44,7 @@ const useExternalApi = <
           let url = `${baseUrl}${endpoint}`;
 
           if (query) {
-            url += `?${Object.entries(query)
-              .map(([key, value]) => `${key}=${value}`)
-              .join("&")}`;
+            url += `?${querystring.stringify(query)}`;
           }
 
           const response = await fetch(url, { headers });

@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useAsync } from "react-async-hook";
 
-import PageSlugs, { hrefForSlug } from "../steps/PageSlugs";
+import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 
 import isStep from "./isStep";
 import useOnlineWithRetry from "./useOnlineWithRetry";
@@ -28,9 +28,20 @@ const useRedirectWhenOnline = (
   const redirect = useAsync(
     async (result: boolean | undefined) => {
       if (result) {
-        const href = hrefForSlug(slug);
+        const href = urlObjectForSlug(slug);
+        const as = { ...href };
 
-        return await router[method](isStep(href) ? "/[slug]" : href, href);
+        if (isStep(href)) {
+          href.pathname = "/[slug]";
+        }
+
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        href.query = { ...href.query, process_type: "thc" };
+
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        as.query = { ...as.query, process_type: "thc" };
+
+        return await router[method](href, as);
       }
 
       return false;

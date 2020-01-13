@@ -35,7 +35,12 @@ it("redirects to /loading when online", async () => {
   });
 
   expect(routerPushMock).toHaveBeenCalledTimes(1);
-  expect(routerPushMock).toHaveBeenCalledWith("/loading", "/loading");
+  expect(routerPushMock).toHaveBeenCalledWith(
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    { pathname: "/loading", query: { process_type: "thc" } },
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    { pathname: "/loading", query: { process_type: "thc" } }
+  );
 });
 
 it("renders correctly when offline", async () => {

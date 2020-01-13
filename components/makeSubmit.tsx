@@ -7,7 +7,7 @@ import { SubmitProps, submitPropTypes } from "remultiform/step";
 import isStep from "../helpers/isStep";
 
 export interface MakeSubmitProps {
-  href: string;
+  url: { pathname: string; query?: { [s: string]: string } };
   value: string;
 }
 
@@ -19,29 +19,44 @@ export const makeSubmit = (
   const Submit = ({ onSubmit }: SubmitProps): React.ReactElement => {
     return (
       <>
-        {buttonProps.map(({ href, value }, i) => (
-          <Link key={i} href={isStep(href) ? "/[slug]" : href} as={href}>
-            <Button
-              className={
-                i > 0
-                  ? "submit-button lbh-button--secondary govuk-button--secondary"
-                  : "submit-button"
-              }
-              onClick={async (): Promise<void> => {
-                try {
-                  await onSubmit();
-                } catch (error) {
-                  // This is invisible to the user, so we should do something to
-                  // display it to them.
-                  console.error(error);
+        {buttonProps.map(({ url, value }, i) => {
+          const href = { ...url };
+          const as = { ...url };
+
+          if (isStep(href)) {
+            href.pathname = "/[slug]";
+          }
+
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          href.query = { ...href.query, process_type: "thc" };
+
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          as.query = { ...as.query, process_type: "thc" };
+
+          return (
+            <Link key={i} href={href} as={as}>
+              <Button
+                className={
+                  i > 0
+                    ? "submit-button lbh-button--secondary govuk-button--secondary"
+                    : "submit-button"
                 }
-              }}
-              data-testid={i > 0 ? undefined : "submit"}
-            >
-              {value}
-            </Button>
-          </Link>
-        ))}
+                onClick={async (): Promise<void> => {
+                  try {
+                    await onSubmit();
+                  } catch (error) {
+                    // This is invisible to the user, so we should do something to
+                    // display it to them.
+                    console.error(error);
+                  }
+                }}
+                data-testid={i > 0 ? undefined : "submit"}
+              >
+                {value}
+              </Button>
+            </Link>
+          );
+        })}
         <style jsx>{`
           :global(.submit-button:not(:last-child)) {
             margin-right: 1em;

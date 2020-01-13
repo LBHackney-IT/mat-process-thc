@@ -14,7 +14,7 @@ import { RadioButtons } from "../../components/RadioButtons";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
-import PageSlugs, { hrefForSlug } from "../PageSlugs";
+import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const step: ProcessStepDefinition = {
@@ -25,7 +25,7 @@ const step: ProcessStepDefinition = {
     slug: PageSlugs.HomeCheck,
     nextSlug: PageSlugs.Health,
     Submit: makeSubmit({
-      href: hrefForSlug(PageSlugs.Health),
+      url: urlObjectForSlug(PageSlugs.Health),
       value: "Save and continue"
     }),
     componentWrappers: [
