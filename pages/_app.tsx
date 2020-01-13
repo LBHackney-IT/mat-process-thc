@@ -22,6 +22,10 @@ const Link: React.FunctionComponent<LinkComponentTypeProps> = props => {
   const { href: originalHref } = props;
   const { href, as } = urlsForRouter(originalHref);
 
+  if (!originalHref.startsWith("/") || originalHref.startsWith("//")) {
+    return <a {...props} />;
+  }
+
   const url =
     as.query && Object.keys(as.query).length > 0
       ? `${as.pathname}?${querystring.stringify(as.query)}`

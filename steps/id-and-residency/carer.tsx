@@ -303,7 +303,7 @@ const step: ProcessStepDefinition = {
           key: "carer-notes",
           Component: TextAreaDetails,
           props: {
-            summary: "Add note about carer if necessary",
+            summary: "Add note about carer if necessary" as React.ReactNode,
             name: "carer-notes"
           },
           renderWhen(stepValues: {

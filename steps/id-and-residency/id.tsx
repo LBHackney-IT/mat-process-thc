@@ -101,7 +101,7 @@ const step: ProcessStepDefinition = {
           key: "id-notes",
           Component: TextAreaDetails,
           props: {
-            summary: "Add note about ID if necessary",
+            summary: "Add note about ID if necessary" as React.ReactNode,
             name: "id-notes"
           },
           defaultValue: "",

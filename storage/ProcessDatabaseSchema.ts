@@ -205,6 +205,19 @@ type ProcessDatabaseSchema = NamedSchema<
         notes: string;
       };
     };
+
+    supportNeeds: {
+      key: ProcessRef;
+      value: {
+        residentSustainmentNotes: string;
+        befriendingNotes: string;
+        adultSafeguardingNotes: string;
+        childrenYoungPeopleSafeguardingNotes: string;
+        domesticSexualViolenceNotes: string;
+        mentalHealth18To65Notes: string;
+        mentalHealthOver65Notes: string;
+      };
+    };
   }
 >;
 
@@ -219,7 +232,8 @@ export const processStoreNames: StoreNames<
   "tenant",
   "homeCheck",
   "healthConcerns",
-  "disability"
+  "disability",
+  "supportNeeds"
 ];
 
 export default ProcessDatabaseSchema;
