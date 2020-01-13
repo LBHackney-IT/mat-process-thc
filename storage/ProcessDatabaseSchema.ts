@@ -199,6 +199,10 @@ type ProcessDatabaseSchema = NamedSchema<
           wantsToContact: string;
           notes: string;
         };
+        otherProperty: {
+          hasOtherProperty: string;
+          notes: string;
+        };
       };
     };
 

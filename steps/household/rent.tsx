@@ -28,9 +28,9 @@ const step: ProcessStepDefinition = {
   heading: "Rent arrears",
   step: {
     slug: PageSlugs.Rent,
-    nextSlug: PageSlugs.Sections,
+    nextSlug: PageSlugs.OtherProperty,
     Submit: makeSubmit({
-      url: urlObjectForSlug(PageSlugs.Sections),
+      url: urlObjectForSlug(PageSlugs.OtherProperty),
       value: "Save and continue"
     }),
     componentWrappers: [

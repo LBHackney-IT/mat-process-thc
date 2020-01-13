@@ -173,6 +173,10 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         incomeOfficer: {
           wantsToContact: "yes",
           notes: "Income officer notes"
+        },
+        otherProperty: {
+          hasOtherProperty: "yes",
+          notes: "Other property notes"
         }
       },
       homeCheck: {
@@ -503,6 +507,22 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!
         .waitForEnabledElement({ name: "income-officer-notes" })
         .sendKeys(processData.household.incomeOfficer.notes);
+
+      await browser!.submit();
+
+      // Other property page
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/thc/other-property"
+      );
+
+      await browser!
+        .waitForEnabledElement({
+          id: `has-other-property-${processData.household.otherProperty.hasOtherProperty}`
+        })
+        .click();
+      await browser!
+        .waitForEnabledElement({ name: "other-property-notes" })
+        .sendKeys(processData.household.otherProperty.notes);
 
       await browser!.submit();
 
