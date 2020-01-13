@@ -1,24 +1,32 @@
-import { NextPage, NextPageContext } from "next";
-import React from "react";
+import { NextPage } from "next";
+import ErrorPage from "next/error";
+import { useRouter } from "next/router";
+import React, { createContext } from "react";
 import { useAsync } from "react-async-hook";
 import { Database } from "remultiform/database";
+import { DatabaseContext } from "remultiform/database-context";
 import { Orchestrator } from "remultiform/orchestrator";
 
 import { TenancySummary } from "../components/TenancySummary";
 import useDatabase from "../helpers/useDatabase";
 import MainLayout from "../layouts/MainLayout";
 import steps from "../steps";
-import PageSlugs from "../steps/PageSlugs";
 import ExternalDatabaseSchema from "../storage/ExternalDatabaseSchema";
 import processRef from "../storage/processRef";
 import Storage from "../storage/Storage";
 
-interface Props {
-  slug: string;
-}
-
-const ProcessPage: NextPage<Props> = ({ slug }: Props) => {
-  const database = useDatabase(Storage.ExternalContext);
+const ProcessPage: NextPage = () => {
+  const router = useRouter();
+  const database = useDatabase(
+    Storage.ExternalContext ||
+      // This is a bit of a hack to get around contexts being
+      // undefined on the server, while still obeying the rules of hooks.
+      ({
+        context: createContext<Database<ExternalDatabaseSchema> | undefined>(
+          undefined
+        )
+      } as DatabaseContext<ExternalDatabaseSchema>)
+  );
   const tenancyData = useAsync(
     async (db: Database<ExternalDatabaseSchema> | undefined) =>
       db?.get("tenancy", processRef),
@@ -30,12 +38,17 @@ const ProcessPage: NextPage<Props> = ({ slug }: Props) => {
     [database]
   );
 
+  const slug = router.query.slug as string | undefined;
+
+  // `router.query` might be empty when first loading a page for some reason.
+  if (slug === undefined) {
+    return null;
+  }
+
   const currentStep = steps.find(step => step.step.slug === slug);
 
   if (!currentStep) {
-    console.error(`No step matches slug ${slug}`);
-
-    return <div>Something went wrong!</div>;
+    return <ErrorPage statusCode={404} />;
   }
 
   const content = (
@@ -101,13 +114,6 @@ const ProcessPage: NextPage<Props> = ({ slug }: Props) => {
   }
 
   return page;
-};
-
-// eslint-disable-next-line @typescript-eslint/unbound-method
-ProcessPage.getInitialProps = ({ query }: NextPageContext): Props => {
-  const { slug } = query;
-
-  return { slug: slug as PageSlugs };
 };
 
 export default ProcessPage;
