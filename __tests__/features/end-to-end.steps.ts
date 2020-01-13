@@ -540,6 +540,23 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
+      // Health concerns page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/health");
+      await browser!.findElement({ id: "health-concerns-yes" }).click();
+      await browser!
+        .findElement({ id: "health-concerns-who-tenant-1" })
+        .click();
+      await browser!
+        .findElement({ id: "health-concerns-more-info-dementia" })
+        .click();
+      await browser!
+        .findElement({ id: "health-concerns-more-info-smoking" })
+        .click();
+      await browser!
+        .wait(until.elementLocated({ name: "health-notes" }), 500)
+        .sendKeys("Health notes");
+      await browser!.submit();
+
       // Sections page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
         "/sections?process_type=thc"

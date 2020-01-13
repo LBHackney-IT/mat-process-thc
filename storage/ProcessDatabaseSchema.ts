@@ -182,6 +182,17 @@ type ProcessDatabaseSchema = NamedSchema<
         notes: string;
       };
     };
+
+    healthConcerns: {
+      key: ProcessRef;
+      value: {
+        value: string;
+        who: string[];
+        moreInfo: string[];
+        notes: string;
+        action: boolean;
+      };
+    };
   }
 >;
 
@@ -194,7 +205,8 @@ export const processStoreNames: StoreNames<
   "isVisitInside",
   "residency",
   "tenant",
-  "homeCheck"
+  "homeCheck",
+  "healthConcerns"
 ];
 
 export default ProcessDatabaseSchema;

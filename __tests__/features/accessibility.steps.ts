@@ -52,6 +52,7 @@ defineFeature(loadFeature("./accessibility.feature"), test => {
   testAccessibility(test, "Antisocial behaviour");
   testAccessibility(test, "Other comments");
   testAccessibility(test, "Home check");
+  testAccessibility(test, "Health");
   testAccessibility(test, "Submit");
   testAccessibility(test, "Confirmed");
 });
