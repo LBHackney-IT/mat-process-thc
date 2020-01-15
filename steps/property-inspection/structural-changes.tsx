@@ -11,17 +11,18 @@ import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
-import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step: ProcessStepDefinition = {
+const step = {
   title: PageTitles.StructuralChanges,
   heading:
     "Have any structural changes been made within the property since it was originally let?",
+  questionsForReview: {},
   step: {
     slug: PageSlugs.StructuralChanges,
     nextSlug: PageSlugs.Damage,

@@ -18,16 +18,27 @@ import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
 import { TextAreaDetails } from "../../components/TextAreaDetails";
 import { TextInput } from "../../components/TextInput";
-import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step: ProcessStepDefinition = {
+const step = {
   title: PageTitles.Carer,
   heading: "Carer",
+  questionsForReview: {
+    "carer-needed": "Does the tenant have a carer?",
+    "carer-type": "Who is the care provided by?",
+    "carer-live-in": "Does the carer live in?",
+    "carer-live-in-start-date-heading":
+      "When did the carer start living in the property?",
+    "carer-full-name": "Full name",
+    "carer-relationship": "Relationship to tenant",
+    "carer-phone-number": "Phone number",
+    "carer-address": "Address",
+    "carer-notes": "Notes about carer"
+  },
   step: {
     slug: PageSlugs.Carer,
     nextSlug: PageSlugs.Sections,

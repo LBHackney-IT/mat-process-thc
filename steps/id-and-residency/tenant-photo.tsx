@@ -16,16 +16,20 @@ import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
-import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step: ProcessStepDefinition = {
+const step = {
   title: PageTitles.TenantPhoto,
   heading: "Update tenant's photo",
+  questionsForReview: {
+    "tenant-photo-willing": "Is the tenant willing to be photographed?",
+    "tenant-photo-willing-notes": "Explain why they aren't",
+    "tenant-photo": "Tenant's photo"
+  },
   step: {
     slug: PageSlugs.TenantPhoto,
     nextSlug: PageSlugs.NextOfKin,

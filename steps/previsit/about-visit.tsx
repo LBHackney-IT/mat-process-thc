@@ -10,16 +10,23 @@ import {
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
-import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step: ProcessStepDefinition = {
+const step = {
   title: PageTitles.AboutVisit,
   heading: "About the visit",
+  questionsForReview: {
+    "unannounced-visit": "Is this an unnanounced visit?",
+    "unannounced-visit-notes": "Explain why this visit was pre-arranged.",
+    "inside-property": "Is it taking place inside a tenant's home?",
+    "inside-property-notes":
+      "Explain why this visit is not happening inside a tenant's home."
+  },
   step: {
     slug: PageSlugs.AboutVisit,
     nextSlug: PageSlugs.Sections,

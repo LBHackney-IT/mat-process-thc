@@ -7,16 +7,23 @@ import {
 import { makeSubmit } from "../../components/makeSubmit";
 import { TextArea } from "../../components/TextArea";
 import { TextInput } from "../../components/TextInput";
-import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step: ProcessStepDefinition = {
+const step = {
   title: PageTitles.NextOfKin,
   heading: "Next of kin details",
+  questionsForReview: {
+    "next-of-kin-full-name": "Full name",
+    "next-of-kin-relationship": "Relationship to tenant",
+    "next-of-kin-mobile-number": "Mobile number",
+    "next-of-kin-other-number": "Other phone number",
+    "next-of-kin-email": "Email",
+    "next-of-kin-address": "Address"
+  },
   step: {
     slug: PageSlugs.NextOfKin,
     nextSlug: PageSlugs.Carer,

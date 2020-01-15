@@ -10,16 +10,17 @@ import {
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
-import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step: ProcessStepDefinition = {
+const step = {
   title: PageTitles.Loft,
   heading: "Does the tenant have access to loft space?",
+  questionsForReview: {},
   step: {
     slug: PageSlugs.Loft,
     nextSlug: PageSlugs.Garden,

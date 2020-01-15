@@ -10,17 +10,18 @@ import {
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
-import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step: ProcessStepDefinition = {
+const step = {
   title: PageTitles.StoringMaterials,
   heading:
     "Is the tenant storing materials in their home that can catch fire, other than those needed for normal household use?",
+  questionsForReview: {},
   step: {
     slug: PageSlugs.StoringMaterials,
     nextSlug: PageSlugs.FireExit,

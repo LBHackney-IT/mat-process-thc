@@ -1,21 +1,31 @@
+import { NamedSchema, Schema, StoreNames } from "remultiform/database";
 import { StepDefinition } from "remultiform/step";
 
 import PageTitles from "../steps/PageTitles";
 
-interface BaseStepDefinition {
-  step: StepDefinition;
+interface BaseStepDefinition<
+  DBSchema extends NamedSchema<string, number, Schema>
+> {
+  step: StepDefinition<DBSchema, StoreNames<DBSchema["schema"]>>;
+  questionsForReview: { [s: string]: string };
 }
 
-interface TitledStepDefinition extends BaseStepDefinition {
+interface TitledStepDefinition<
+  DBSchema extends NamedSchema<string, number, Schema>
+> extends BaseStepDefinition<DBSchema> {
   title: PageTitles;
   heading?: string;
 }
 
-interface HeadedStepDefinition extends BaseStepDefinition {
+interface HeadedStepDefinition<
+  DBSchema extends NamedSchema<string, number, Schema>
+> extends BaseStepDefinition<DBSchema> {
   title?: PageTitles;
   heading: string;
 }
 
-type ProcessStepDefinition = TitledStepDefinition | HeadedStepDefinition;
+type ProcessStepDefinition<
+  DBSchema extends NamedSchema<string, number, Schema>
+> = TitledStepDefinition<DBSchema> | HeadedStepDefinition<DBSchema>;
 
 export default ProcessStepDefinition;

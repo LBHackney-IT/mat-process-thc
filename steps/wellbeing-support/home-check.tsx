@@ -9,7 +9,7 @@ import {
 import { Paragraph } from "lbh-frontend-react/components/typography/Paragraph";
 
 import { makeSubmit } from "../../components/makeSubmit";
-import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+
 import { RadioButtons } from "../../components/RadioButtons";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
@@ -17,10 +17,11 @@ import processRef from "../../storage/processRef";
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step: ProcessStepDefinition = {
+const step = {
   title: PageTitles.HomeCheck,
   heading:
     "Are you doing a Home Check as part of the Tenancy and Household Check?",
+  questionsForReview: {},
   step: {
     slug: PageSlugs.HomeCheck,
     nextSlug: PageSlugs.Health,

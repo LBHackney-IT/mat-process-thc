@@ -10,16 +10,27 @@ import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextAreaDetails } from "../../components/TextAreaDetails";
-import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step: ProcessStepDefinition = {
+const step = {
   title: PageTitles.Residency,
   heading: "Verify proof of residency",
+  rowsForReview: {
+    "residency-proof-type": {
+      label: "Proof of residency",
+      renderValue: value => <img src={value} />,
+      changeSlug: {
+        ...urlObjectForSlug(PageSlugs.Residency),
+        hash: "residency-proof-type-label"
+      }
+    },
+    "residency-proof-images": "Images of proof of residency",
+    "residency-notes": "Notes about residency"
+  },
   step: {
     slug: PageSlugs.Residency,
     nextSlug: PageSlugs.TenantPhoto,

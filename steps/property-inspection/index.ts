@@ -14,6 +14,8 @@ import communalAreas from "./communal-areas";
 import pets from "./pets";
 import antisocialBehaviour from "./antisocial-behaviour";
 import otherComments from "./other-comments";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 
 export default [
   rooms,
@@ -32,4 +34,4 @@ export default [
   pets,
   antisocialBehaviour,
   otherComments
-];
+] as ProcessStepDefinition<ProcessDatabaseSchema>[];

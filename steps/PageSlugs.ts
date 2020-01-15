@@ -57,7 +57,7 @@ enum PageSlugs {
 }
 
 export const urlObjectForSlug = (
-  slug: PageSlugs
+  slug: string
 ): { pathname: string; query: { [s: string]: string } } => ({
   pathname: `/${slug}`,
   query: {
