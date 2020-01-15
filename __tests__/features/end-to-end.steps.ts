@@ -14,7 +14,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
     when("I complete a process", async () => {
       // Index page
-      await browser!.getRelative("/");
+      await browser!.getRelative("/thc");
 
       // Wait for redirect.
       await browser!.wait(
@@ -23,9 +23,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       );
 
       // Loading page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/loading?process_type=thc"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/loading");
 
       // Wait for data fetching.
       await browser!.waitForEnabledElement(
@@ -40,7 +38,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Visit attempt page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/visit-attempt"
+        "/thc/visit-attempt"
       );
 
       await browser!
@@ -56,14 +54,14 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Start check page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/start-check?process_type=thc"
+        "/thc/start-check"
       );
 
       await browser!.submit();
 
       // About visit page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/about-visit?process_type=thc"
+        "/thc/about-visit"
       );
 
       await browser!
@@ -85,17 +83,15 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Sections page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/sections?process_type=thc"
+        "/thc/sections"
       );
 
-      await browser!.waitForEnabledElement({ css: '[href^="/id"]' }, 10000);
+      await browser!.waitForEnabledElement({ css: '[href^="/thc/id"]' }, 10000);
 
-      await browser!.submit({ css: '[href^="/id"]' });
+      await browser!.submit({ css: '[href^="/thc/id"]' });
 
       // ID page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/id?process_type=thc"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/id");
 
       await browser!
         .waitForEnabledElement({ id: "id-type-valid-passport" })
@@ -112,7 +108,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Residency page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/residency?process_type=thc"
+        "/thc/residency"
       );
 
       await browser!
@@ -134,7 +130,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Tenant photo page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/tenant-photo"
+        "/thc/tenant-photo"
       );
 
       await browser!
@@ -148,7 +144,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Next of kin page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/next-of-kin?process_type=thc"
+        "/thc/next-of-kin"
       );
 
       await browser!
@@ -179,9 +175,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Carer page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/carer?process_type=thc"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/carer");
 
       await browser!.waitForEnabledElement({ id: "carer-needed-yes" }).click();
       await browser!
@@ -218,17 +212,18 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Sections page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/sections?process_type=thc"
+        "/thc/sections"
       );
 
-      await browser!.waitForEnabledElement({ css: '[href^="/rooms"]' }, 10000);
+      await browser!.waitForEnabledElement(
+        { css: '[href^="/thc/rooms"]' },
+        10000
+      );
 
-      await browser!.submit({ css: '[href^="/rooms"]' });
+      await browser!.submit({ css: '[href^="/thc/rooms"]' });
 
       // Rooms page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/rooms?process_type=thc"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/rooms");
 
       await browser!
         .waitForEnabledElement({ id: "can-enter-all-rooms-no" })
@@ -241,7 +236,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Laminated flooring page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/laminated-flooring"
+        "/thc/laminated-flooring"
       );
 
       await browser!
@@ -267,7 +262,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Structural changes page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/structural-changes"
+        "/thc/structural-changes"
       );
 
       await browser!
@@ -292,9 +287,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Damage page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/damage?process_type=thc"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/damage");
 
       await browser!.waitForEnabledElement({ id: "has-damage-yes" }).click();
       await browser!
@@ -307,9 +300,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Roof page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/roof?process_type=thc"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/roof");
 
       await browser!.waitForEnabledElement({ id: "has-access-yes" }).click();
       await browser!
@@ -322,9 +313,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Loft page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/loft?process_type=thc"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/loft");
 
       await browser!
         .waitForEnabledElement({ id: "has-access-to-loft-yes" })
@@ -339,9 +328,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Garden page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/garden?process_type=thc"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/garden");
 
       await browser!.waitForEnabledElement({ id: "has-garden-yes" }).click();
       await browser!
@@ -359,7 +346,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Storing materials page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/storing-materials"
+        "/thc/storing-materials"
       );
 
       await browser!
@@ -378,7 +365,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Fire exit page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/fire-exit?process_type=thc"
+        "/thc/fire-exit"
       );
 
       await browser!.waitForEnabledElement({ id: "has-fire-exit-yes" }).click();
@@ -391,7 +378,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Smoke alarm page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/smoke-alarm?process_type=thc"
+        "/thc/smoke-alarm"
       );
 
       await browser!
@@ -406,7 +393,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Metal gates page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/metal-gates?process_type=thc"
+        "/thc/metal-gates"
       );
 
       await browser!
@@ -430,7 +417,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Door mats page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/door-mats?process_type=thc"
+        "/thc/door-mats"
       );
 
       await browser!.waitForEnabledElement({ id: "has-placed-yes" }).click();
@@ -447,7 +434,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Communal areas page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/communal-areas"
+        "/thc/communal-areas"
       );
 
       await browser!
@@ -467,9 +454,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Pets page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/pets?process_type=thc"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/pets");
 
       await browser!.waitForEnabledElement({ id: "has-pets-yes" }).click();
       await browser!
@@ -491,7 +476,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Antisocial behaviour page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/antisocial-behaviour"
+        "/thc/antisocial-behaviour"
       );
 
       await browser!
@@ -507,7 +492,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Other comments page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/other-comments"
+        "/thc/other-comments"
       );
 
       await browser!
@@ -521,19 +506,19 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Sections page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/sections?process_type=thc"
+        "/thc/sections"
       );
 
       await browser!.waitForEnabledElement(
-        { css: '[href^="/home-check"]' },
+        { css: '[href^="/thc/home-check"]' },
         10000
       );
 
-      await browser!.submit({ css: '[href^="/home-check"]' });
+      await browser!.submit({ css: '[href^="/thc/home-check"]' });
 
       // Home check page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/home-check?process_type=thc"
+        "/thc/home-check"
       );
 
       await browser!.waitForEnabledElement({ id: "home-check-yes" }).click();
@@ -541,9 +526,8 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Health concerns page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/health?process_type=thc"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/health");
+
       await browser!
         .waitForEnabledElement({ id: "health-concerns-yes" })
         .click();
@@ -559,12 +543,14 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!
         .waitForEnabledElement({ name: "health-notes" })
         .sendKeys("Health notes");
+
       await browser!.submit();
 
       // Disability page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/disability?process_type=thc"
+        "/thc/disability"
       );
+
       await browser!.waitForEnabledElement({ id: "disability-yes" }).click();
       await browser!
         .waitForEnabledElement({ id: "who-disability-tenant-1" })
@@ -574,27 +560,29 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!
         .waitForEnabledElement({ name: "disability-notes" })
         .sendKeys("Disability notes");
+
       await browser!.submit();
 
       // Sections page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/sections?process_type=thc"
+        "/thc/sections"
       );
 
-      await browser!.waitForEnabledElement({ css: '[href^="/submit"]' }, 10000);
+      await browser!.waitForEnabledElement(
+        { css: '[href^="/thc/submit"]' },
+        10000
+      );
 
-      await browser!.submit({ css: '[href^="/submit"]' });
+      await browser!.submit({ css: '[href^="/thc/submit"]' });
 
       // Submit page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/submit?process_type=thc"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/submit");
 
       await browser!.submit();
 
       // Confirmed page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/confirmed?process_type=thc"
+        "/thc/confirmed"
       );
     });
 

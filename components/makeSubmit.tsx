@@ -1,10 +1,10 @@
 import { Button } from "lbh-frontend-react/components";
-import Link from "next/link";
+import NextLink from "next/link";
 import PropTypes from "prop-types";
 import React from "react";
 import { SubmitProps, submitPropTypes } from "remultiform/step";
 
-import isStep from "../helpers/isStep";
+import urlsForRouter from "../helpers/urlsForRouter";
 
 export interface MakeSubmitProps {
   url: { pathname: string; query?: { [s: string]: string } };
@@ -20,21 +20,10 @@ export const makeSubmit = (
     return (
       <>
         {buttonProps.map(({ url, value }, i) => {
-          const href = { ...url };
-          const as = { ...url };
-
-          if (isStep(href)) {
-            href.pathname = "/[slug]";
-          }
-
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          href.query = { ...href.query, process_type: "thc" };
-
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          as.query = { ...as.query, process_type: "thc" };
+          const { href, as } = urlsForRouter(url);
 
           return (
-            <Link key={i} href={href} as={as}>
+            <NextLink key={i} href={href} as={as}>
               <Button
                 className={
                   i > 0
@@ -54,7 +43,7 @@ export const makeSubmit = (
               >
                 {value}
               </Button>
-            </Link>
+            </NextLink>
           );
         })}
         <style jsx>{`

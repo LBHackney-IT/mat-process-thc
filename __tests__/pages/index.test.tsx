@@ -25,7 +25,7 @@ beforeEach(() => {
   }));
 });
 
-it("redirects to /loading when online", async () => {
+it("redirects to the loading page when online", async () => {
   isOnlineMock.mockResolvedValue(true);
 
   await act(async () => {
@@ -36,10 +36,8 @@ it("redirects to /loading when online", async () => {
 
   expect(routerPushMock).toHaveBeenCalledTimes(1);
   expect(routerPushMock).toHaveBeenCalledWith(
-    // eslint-disable-next-line @typescript-eslint/camelcase
-    { pathname: "/loading", query: { process_type: "thc" } },
-    // eslint-disable-next-line @typescript-eslint/camelcase
-    { pathname: "/loading", query: { process_type: "thc" } }
+    { pathname: "/loading" },
+    { pathname: "/base/path/loading" }
   );
 });
 
