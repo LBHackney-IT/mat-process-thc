@@ -7,7 +7,7 @@ import Expect from "../helpers/Expect";
 
 const givenIAmAtTheEndOfTheProcess = (defineStep: DefineStepFunction): void => {
   defineStep("I am at the end of the process", async () => {
-    await browser!.getRelative("/submit");
+    await browser!.getRelative("/thc/submit");
   });
 };
 

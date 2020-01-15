@@ -13,33 +13,21 @@ import { DatabaseProvider } from "remultiform/database-context";
 
 import "normalize.css";
 
-import isStep from "../helpers/isStep";
+import urlsForRouter from "../helpers/urlsForRouter";
 import Storage from "../storage/Storage";
 
 const Link: React.FunctionComponent<LinkComponentTypeProps> = props => {
   const { href: originalHref } = props;
+  const { href, as } = urlsForRouter(originalHref);
 
-  const urlComponents = originalHref.split("?", 1);
-  const pathname = urlComponents[0];
-  const query = querystring.parse(urlComponents[1]) as {
-    [key: string]: string;
-  };
-  const href = { pathname, query };
-  const as = { ...href };
-
-  if (isStep(href)) {
-    href.pathname = "/[slug]";
-  }
-
-  // eslint-disable-next-line @typescript-eslint/camelcase
-  href.query = { ...href.query, process_type: "thc" };
-
-  // eslint-disable-next-line @typescript-eslint/camelcase
-  as.query = { ...as.query, process_type: "thc" };
+  const url =
+    as.query && Object.keys(as.query).length > 0
+      ? `${as.pathname}?${querystring.stringify(as.query)}`
+      : as.pathname;
 
   return (
     <NextLink href={href} as={as}>
-      <a {...props} />
+      <a {...props} href={url} />
     </NextLink>
   );
 };

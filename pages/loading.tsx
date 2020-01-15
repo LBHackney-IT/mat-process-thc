@@ -6,7 +6,7 @@ import {
   Paragraph
 } from "lbh-frontend-react/components";
 import { NextPage } from "next";
-import Link from "next/link";
+import NextLink from "next/link";
 import React from "react";
 import { useAsync } from "react-async-hook";
 import { StoreValue } from "remultiform/database";
@@ -15,6 +15,7 @@ import useExternalApi from "../api/useExternalApi";
 import useProcessApi from "../api/useProcessApi";
 import { TenancySummary } from "../components/TenancySummary";
 import titleCase from "../helpers/titleCase";
+import urlsForRouter from "../helpers/urlsForRouter";
 import MainLayout from "../layouts/MainLayout";
 import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 import PageTitles from "../steps/PageTitles";
@@ -196,6 +197,8 @@ export const LoadingPage: NextPage = () => {
     );
   }
 
+  const { href, as } = urlsForRouter(urlObjectForSlug(PageSlugs.VisitAttempt));
+
   return (
     <MainLayout
       title={PageTitles.Loading}
@@ -238,21 +241,17 @@ export const LoadingPage: NextPage = () => {
       </Paragraph>
 
       <List items={progressItems} />
-
       {errored && (
         <Paragraph>
           Something went really wrong. Please contact support.
         </Paragraph>
       )}
 
-      <Link
-        href="/[slug]?process_type=thc"
-        as={urlObjectForSlug(PageSlugs.VisitAttempt)}
-      >
+      <NextLink href={href} as={as}>
         <Button disabled={!ready} data-testid="submit">
           {ready ? "Go" : "Loading..."}
         </Button>
-      </Link>
+      </NextLink>
     </MainLayout>
   );
 };

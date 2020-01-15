@@ -47,7 +47,8 @@ module "development" {
   lb_iam_role_arn    = "${data.aws_iam_role.ec2_container_service_role.arn}"
 
   task_definition_environment_variables = {
-    NODE_ENV = "production"
+    NODE_ENV  = "production"
+    BASE_PATH = "/thc"
   }
 
   task_definition_environment_variable_count = 1

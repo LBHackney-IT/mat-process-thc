@@ -9,7 +9,7 @@ import Router from "next/router";
 import React from "react";
 import { TransactionMode } from "remultiform/database";
 
-import isStep from "../helpers/isStep";
+import urlsForRouter from "../helpers/urlsForRouter";
 import useOnlineWithRetry from "../helpers/useOnlineWithRetry";
 import MainLayout from "../layouts/MainLayout";
 import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
@@ -35,18 +35,7 @@ const submit = async (): Promise<void> => {
     );
   }
 
-  const href = urlObjectForSlug(PageSlugs.Confirmed);
-  const as = { ...href };
-
-  if (isStep(href)) {
-    href.pathname = "/[slug]";
-  }
-
-  // eslint-disable-next-line @typescript-eslint/camelcase
-  href.query = { ...href.query, process_type: "thc" };
-
-  // eslint-disable-next-line @typescript-eslint/camelcase
-  as.query = { ...as.query, process_type: "thc" };
+  const { href, as } = urlsForRouter(urlObjectForSlug(PageSlugs.Confirmed));
 
   await Router.push(href, as);
 };

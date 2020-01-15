@@ -1,6 +1,6 @@
 import format from "date-fns/format";
-import React from "react";
 import { SummaryList } from "lbh-frontend-react/components";
+import React from "react";
 
 interface TenancySummaryProps {
   details?: {

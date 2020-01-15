@@ -38,11 +38,19 @@ const ProcessPage: NextPage = () => {
     [database]
   );
 
-  const slug = router.query.slug as string | undefined;
+  const slugParam = router.query.slug as string | string[] | undefined;
 
   // `router.query` might be empty when first loading a page for some reason.
-  if (slug === undefined) {
+  if (slugParam === undefined) {
     return null;
+  }
+
+  let slug: string;
+
+  if (typeof slugParam === "string") {
+    slug = slugParam;
+  } else {
+    slug = slugParam.filter(part => part !== "thc").join("/");
   }
 
   const currentStep = steps.find(step => step.step.slug === slug);

@@ -3,7 +3,7 @@ import { useAsync } from "react-async-hook";
 
 import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 
-import isStep from "./isStep";
+import urlsForRouter from "./urlsForRouter";
 import useOnlineWithRetry from "./useOnlineWithRetry";
 
 export interface UseRedirectWhenOnlineReturn {
@@ -28,18 +28,7 @@ const useRedirectWhenOnline = (
   const redirect = useAsync(
     async (result: boolean | undefined) => {
       if (result) {
-        const href = urlObjectForSlug(slug);
-        const as = { ...href };
-
-        if (isStep(href)) {
-          href.pathname = "/[slug]";
-        }
-
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        href.query = { ...href.query, process_type: "thc" };
-
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        as.query = { ...as.query, process_type: "thc" };
+        const { href, as } = urlsForRouter(urlObjectForSlug(slug));
 
         return await router[method](href, as);
       }

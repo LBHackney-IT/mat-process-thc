@@ -56,14 +56,8 @@ enum PageSlugs {
   Confirmed = "confirmed"
 }
 
-export const urlObjectForSlug = (
-  slug: PageSlugs
-): { pathname: string; query: { [s: string]: string } } => ({
-  pathname: `/${slug}`,
-  query: {
-    // eslint-disable-next-line @typescript-eslint/camelcase
-    process_type: "thc"
-  }
+export const urlObjectForSlug = (slug: PageSlugs): { pathname: string } => ({
+  pathname: `/${slug}`
 });
 
 export default PageSlugs;

@@ -40,26 +40,26 @@ export const TaskList = (props: TaskListprops): JSX.Element => {
     <>
       <List
         className="task-list"
-        items={items.map(({ name, url, status, "data-testid": testId }) => (
-          <>
-            <span>{name}</span>
-            {status !== "" && (
-              <span>
-                {nullAsUndefined(status) !== undefined && <Tag>{status}</Tag>}
-                <Link
-                  href={`${url.pathname}?${querystring.stringify({
-                    ...url.query,
-                    // eslint-disable-next-line @typescript-eslint/camelcase
-                    process_type: "thc"
-                  })}`}
-                  data-testid={testId}
-                >
-                  {nullAsUndefined(status) === undefined ? "Start" : "Edit"}
-                </Link>
-              </span>
-            )}
-          </>
-        ))}
+        items={items.map(({ name, url, status, "data-testid": testId }) => {
+          const href =
+            url.query && Object.keys(url.query).length > 0
+              ? `${url.pathname}?${querystring.stringify(url.query)}`
+              : url.pathname;
+
+          return (
+            <>
+              <span>{name}</span>
+              {status !== "" && (
+                <span>
+                  {nullAsUndefined(status) !== undefined && <Tag>{status}</Tag>}
+                  <Link href={href} data-testid={testId}>
+                    {nullAsUndefined(status) === undefined ? "Start" : "Edit"}
+                  </Link>
+                </span>
+              )}
+            </>
+          );
+        })}
       />
 
       <style jsx>{`
