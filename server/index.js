@@ -2,7 +2,7 @@
 const express = require("express");
 const nextjs = require("next");
 
-const nextConfig = require("./next.config");
+const nextConfig = require("../next.config");
 
 const dev = process.env.NODE_ENV !== "production";
 const port = parseInt(process.env.PORT || "3000");
