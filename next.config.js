@@ -16,8 +16,5 @@ module.exports = withCSS({
     MAT_API_URL:
       process.env.MAT_API_URL ||
       "https://g6bw0g0ojk.execute-api.eu-west-2.amazonaws.com/development/manage-a-tenancy-api"
-  },
-  experimental: {
-    catchAllRouting: true
   }
 });

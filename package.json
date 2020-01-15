@@ -30,7 +30,7 @@
     "express": "^4.17.1",
     "is-online": "^8.2.1",
     "lbh-frontend-react": "0.0.6",
-    "next": "^9.1.6",
+    "next": "^9.1.8-canary.16",
     "null-as-undefined": "^0.2.1",
     "prop-types": "^15.7.2",
     "querystring": "^0.2.0",
