@@ -20,7 +20,7 @@ ENV NODE_ENV production
 
 FROM base AS dependencies
 
-RUN apk add --no-cache git openssh
+RUN apk add --no-cache g++ git make openssh python3
 
 COPY package.json /app/package.json
 COPY package-lock.json /app/package-lock.json
@@ -32,6 +32,8 @@ RUN npm ci
 # ------------------------------------------------------------------------------
 
 FROM base AS build
+
+RUN apk add --no-cache g++ make python3
 
 COPY . /app
 
