@@ -19,5 +19,5 @@
       "remultiform/*": ["./node_modules/remultiform/dist/esm/*"]
     }
   },
-  "exclude": ["**/node_modules/**/*", "__tests__/**/*"]
+  "exclude": ["**/node_modules/**/*", "__tests__/**/*", "server/**/*"]
 }
