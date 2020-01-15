@@ -193,6 +193,18 @@ type ProcessDatabaseSchema = NamedSchema<
         action: boolean;
       };
     };
+
+    disability: {
+      key: ProcessRef;
+      value: {
+        value: string;
+        whoDisability: string[];
+        pipOrDLA: string;
+        whoPIP: string[];
+        whoDLA: string[];
+        notes: string;
+      };
+    };
   }
 >;
 
@@ -206,7 +218,8 @@ export const processStoreNames: StoreNames<
   "residency",
   "tenant",
   "homeCheck",
-  "healthConcerns"
+  "healthConcerns",
+  "disability"
 ];
 
 export default ProcessDatabaseSchema;

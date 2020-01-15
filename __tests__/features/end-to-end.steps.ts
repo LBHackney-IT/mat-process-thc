@@ -536,25 +536,44 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         "/home-check?process_type=thc"
       );
 
-      await browser!.findElement({ id: "home-check-yes" }).click();
+      await browser!.waitForEnabledElement({ id: "home-check-yes" }).click();
 
       await browser!.submit();
 
       // Health concerns page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/health");
-      await browser!.findElement({ id: "health-concerns-yes" }).click();
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/health?process_type=thc"
+      );
       await browser!
-        .findElement({ id: "health-concerns-who-tenant-1" })
+        .waitForEnabledElement({ id: "health-concerns-yes" })
         .click();
       await browser!
-        .findElement({ id: "health-concerns-more-info-dementia" })
+        .waitForEnabledElement({ id: "health-concerns-who-tenant-1" })
         .click();
       await browser!
-        .findElement({ id: "health-concerns-more-info-smoking" })
+        .waitForEnabledElement({ id: "health-concerns-more-info-dementia" })
         .click();
       await browser!
-        .wait(until.elementLocated({ name: "health-notes" }), 500)
+        .waitForEnabledElement({ id: "health-concerns-more-info-smoking" })
+        .click();
+      await browser!
+        .waitForEnabledElement({ name: "health-notes" })
         .sendKeys("Health notes");
+      await browser!.submit();
+
+      // Disability page
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/disability?process_type=thc"
+      );
+      await browser!.waitForEnabledElement({ id: "disability-yes" }).click();
+      await browser!
+        .waitForEnabledElement({ id: "who-disability-tenant-1" })
+        .click();
+      await browser!.waitForEnabledElement({ id: "pip-or-dla-yes" }).click();
+      await browser!.waitForEnabledElement({ id: "who-pip-tenant-1" }).click();
+      await browser!
+        .waitForEnabledElement({ name: "disability-notes" })
+        .sendKeys("Disability notes");
       await browser!.submit();
 
       // Sections page

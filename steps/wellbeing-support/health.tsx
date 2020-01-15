@@ -23,9 +23,9 @@ const step: ProcessStepDefinition = {
   heading: "Health concerns",
   step: {
     slug: PageSlugs.Health,
-    nextSlug: PageSlugs.Sections,
+    nextSlug: PageSlugs.Disability,
     Submit: makeSubmit({
-      url: urlObjectForSlug(PageSlugs.Sections),
+      url: urlObjectForSlug(PageSlugs.Disability),
       value: "Save and continue"
     }),
     componentWrappers: [

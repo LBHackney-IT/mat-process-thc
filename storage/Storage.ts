@@ -63,6 +63,7 @@ export default class Storage {
             upgrade.createStore("tenant");
             upgrade.createStore("homeCheck");
             upgrade.createStore("healthConcerns");
+            upgrade.createStore("disability");
 
             version = 1;
           }
