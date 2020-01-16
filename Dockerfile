@@ -60,6 +60,8 @@ COPY package-lock.json /app/package-lock.json
 COPY --from=dependencies /app/node_modules /app/node_modules
 COPY --from=build /app/.next /app/.next
 COPY --from=build /app/next.config.js /app/next.config.js
+COPY --from=build /app/build /app/build
+COPY --from=build /app/pages /app/pages
 COPY --from=build /app/public /app/public
 COPY --from=build /app/server /app/server
 

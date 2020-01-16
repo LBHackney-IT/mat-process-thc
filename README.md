@@ -63,6 +63,15 @@ We use:
 Hot reloading isn't set up for the local server, so you will need to restart it
 to see any changes.
 
+### Using service workers
+
+The project is configured to only generate a service worker in production mode.
+If you want to try offline functionality locally, you will need to use:
+
+```bash
+npm run build && npm start
+```
+
 ## Running the tests
 
 We use [Jest](https://jestjs.io/) for testing. Feature tests are driven by

@@ -6,15 +6,19 @@ import {
 } from "lbh-frontend-react/helpers";
 import querystring from "querystring";
 import React from "react";
+import isEqual from "react-fast-compare";
 import NextApp from "next/app";
 import NextLink from "next/link";
 import { Router } from "next/router";
+import ErrorPage from "next/error";
+
 import PropTypes from "prop-types";
 import { DatabaseProvider } from "remultiform/database-context";
 
 import "normalize.css";
 
 import urlsForRouter from "../helpers/urlsForRouter";
+import { precacheAll } from "../helpers/usePrecacheAll";
 import Storage from "../storage/Storage";
 import { nullAsUndefined } from "null-as-undefined";
 
@@ -59,15 +63,17 @@ if (process.browser) {
 
 interface State {
   cachedQueryParameters: boolean;
+  precached: boolean;
+  error?: Error;
 }
 
 export default class App extends NextApp<{}, {}, State> {
-  state: State = { cachedQueryParameters: false };
+  state: State = { cachedQueryParameters: false, precached: false };
 
   static getDerivedStateFromProps(props: { router: Router }): State {
     App.cacheQueryParameters(props.router);
 
-    return { cachedQueryParameters: true };
+    return { cachedQueryParameters: true, precached: false };
   }
 
   private static cacheQueryParameters(router: Router): void {
@@ -108,8 +114,58 @@ export default class App extends NextApp<{}, {}, State> {
     }
   }
 
+  private isUnmounted = true;
+
+  private async precacheAll(): Promise<boolean> {
+    const { router } = this.props;
+
+    return precacheAll(router);
+  }
+
+  async componentDidMount(): Promise<void> {
+    this.isUnmounted = false;
+
+    const stateUpdate: Partial<State> = {};
+
+    try {
+      const precached = await this.precacheAll();
+
+      stateUpdate.precached = precached;
+    } catch (err) {
+      stateUpdate.error = err;
+    }
+
+    if (this.isUnmounted) {
+      return;
+    }
+
+    this.setState(state => ({ ...state, ...stateUpdate }));
+  }
+
+  componentWillUnmount(): void {
+    this.isUnmounted = true;
+  }
+
+  shouldComponentUpdate(nextProps: {}, nextState: State): boolean {
+    return (
+      !isEqual(this.props, nextProps) ||
+      !isEqual(
+        { ...this.state, precached: undefined },
+        { ...nextState, precached: undefined }
+      )
+    );
+  }
+
   render(): React.ReactElement {
     let page = super.render();
+
+    const { error } = this.state;
+
+    if (error) {
+      console.error(error);
+
+      page = <ErrorPage statusCode={500} />;
+    }
 
     if (Storage.ExternalContext) {
       page = (

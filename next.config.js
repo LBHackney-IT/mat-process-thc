@@ -2,6 +2,10 @@
 require("dotenv/config");
 
 const withCSS = require("@zeit/next-css");
+const withOffline = require("next-offline");
+const { join } = require("path");
+
+const findAllRoutes = require("./build/utils/findAllRoutes");
 
 const dev = process.env.NODE_ENV !== "production";
 
@@ -19,8 +23,18 @@ if (dev) {
   });
 }
 
-module.exports = withCSS({
-  assetPrefix: process.env.BASE_PATH || "",
-  distDir: process.env.NEXT_DIST_DIR || ".next",
-  env
-});
+module.exports = withOffline(
+  withCSS({
+    assetPrefix: process.env.BASE_PATH || "",
+    distDir: process.env.NEXT_DIST_DIR || ".next",
+    publicRuntimeConfig: {
+      allRoutes: findAllRoutes(
+        join(__dirname, "pages"),
+        new RegExp(`\\.(?:${["js", "jsx", "ts", "tsx"].join("|")})$`)
+      )
+    },
+    env,
+    registerSwPrefix: env.BASE_PATH,
+    scope: `${env.BASE_PATH}/`
+  })
+);

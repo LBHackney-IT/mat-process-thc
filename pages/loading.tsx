@@ -8,6 +8,7 @@ import {
 import { NextPage } from "next";
 import NextLink from "next/link";
 import { nullAsUndefined } from "null-as-undefined";
+
 import React from "react";
 import { useAsync } from "react-async-hook";
 
@@ -17,6 +18,7 @@ import useApiWithStorage, {
   UseApiWithStorageReturn
 } from "../helpers/api/useApiWithStorage";
 import getProcessRef from "../helpers/getProcessRef";
+import usePrecacheAll from "../helpers/usePrecacheAll";
 import titleCase from "../helpers/titleCase";
 import urlsForRouter from "../helpers/urlsForRouter";
 import MainLayout from "../layouts/MainLayout";
@@ -149,18 +151,22 @@ export const LoadingPage: NextPage = () => {
     );
   }, [processRef, processData.loading, JSON.stringify(processData.result)]);
 
+  const precacheProcessPages = usePrecacheAll();
+
   const loading =
     processData.loading ||
     residentData.loading ||
     tenancyData.loading ||
-    offlineProcessDataStatus.loading;
+    offlineProcessDataStatus.loading ||
+    precacheProcessPages.loading;
   const errored =
     !loading &&
     Boolean(
       processData.error ||
         residentData.error ||
         tenancyData.error ||
-        offlineProcessDataStatus.error
+        offlineProcessDataStatus.error ||
+        precacheProcessPages.error
     );
   const ready =
     !loading &&
@@ -168,7 +174,8 @@ export const LoadingPage: NextPage = () => {
     processData.result &&
     residentData.result &&
     tenancyData.result &&
-    offlineProcessDataStatus.result !== undefined;
+    offlineProcessDataStatus.result !== undefined &&
+    precacheProcessPages.result;
 
   if (processData.error) {
     // We should give the user some way to recover from this. Perhaps we should
@@ -192,6 +199,12 @@ export const LoadingPage: NextPage = () => {
     // We should give the user some way to recover from this. Perhaps we should
     // retry in this case and dedupe the error?
     console.error(offlineProcessDataStatus.error);
+  }
+
+  if (precacheProcessPages.error) {
+    // We should give the user some way to recover from this. Perhaps we should
+    // retry in this case and dedupe the error?
+    console.error(precacheProcessPages.error);
   }
 
   const progressItems = [
@@ -220,6 +233,15 @@ export const LoadingPage: NextPage = () => {
         ? "Error"
         : tenancyData.result
         ? "Saved"
+        : "N/A"
+    }`,
+    `Precaching process pages... ${
+      precacheProcessPages.loading
+        ? "Loading"
+        : precacheProcessPages.error
+        ? "Error"
+        : precacheProcessPages.result
+        ? "Cached"
         : "N/A"
     }`
   ] as React.ReactNode[];
