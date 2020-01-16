@@ -18,7 +18,7 @@ type ExternalDatabaseSchema = NamedSchema<
       };
     };
 
-    contacts: {
+    residents: {
       key: ProcessRef;
       value: {
         address: string[];
@@ -31,6 +31,6 @@ type ExternalDatabaseSchema = NamedSchema<
 
 export const externalStoreNames: StoreNames<
   ExternalDatabaseSchema["schema"]
->[] = ["tenancy", "contacts"];
+>[] = ["tenancy", "residents"];
 
 export default ExternalDatabaseSchema;

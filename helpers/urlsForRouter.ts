@@ -1,11 +1,6 @@
 import querystring from "querystring";
-import getConfig from "next/config";
 
 import isStep from "./isStep";
-
-const {
-  publicRuntimeConfig: { basePath }
-} = getConfig();
 
 const urlsForRouter = (
   url:
@@ -48,11 +43,12 @@ const urlsForRouter = (
   }
 
   if (
+    process.env.BASE_PATH &&
     as.pathname.startsWith("/") &&
     !as.pathname.startsWith("//") &&
-    !as.pathname.startsWith(basePath)
+    !as.pathname.startsWith(process.env.BASE_PATH)
   ) {
-    as.pathname = basePath + as.pathname;
+    as.pathname = process.env.BASE_PATH + as.pathname;
   }
 
   return { href, as };

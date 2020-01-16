@@ -1,20 +1,25 @@
 /* eslint-env node */
+require("dotenv/config");
+
 const withCSS = require("@zeit/next-css");
 
-const basePath = process.env.BASE_PATH || "/thc";
+const dev = process.env.NODE_ENV !== "production";
+
+const env = {
+  BASE_PATH: process.env.BASE_PATH
+};
+
+if (dev) {
+  Object.assign(env, {
+    TEST_PROCESS_REF: process.env.TEST_PROCESS_REF,
+    TEST_PROCESS_API_JWT: process.env.TEST_PROCESS_API_JWT,
+    TEST_MAT_API_JWT: process.env.TEST_MAT_API_JWT,
+    TEST_MAT_API_DATA: process.env.TEST_MAT_API_DATA
+  });
+}
 
 module.exports = withCSS({
-  assetPrefix: basePath,
+  assetPrefix: process.env.BASE_PATH || "",
   distDir: process.env.NEXT_DIST_DIR || ".next",
-  publicRuntimeConfig: {
-    basePath
-  },
-  env: {
-    PROCESS_API_URL:
-      process.env.PROCESS_API_URL ||
-      "https://4cgb2c6pqe.execute-api.eu-west-2.amazonaws.com/development/mat-process/api",
-    MAT_API_URL:
-      process.env.MAT_API_URL ||
-      "https://g6bw0g0ojk.execute-api.eu-west-2.amazonaws.com/development/manage-a-tenancy-api"
-  }
+  env
 });
