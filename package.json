@@ -31,7 +31,7 @@
     "express": "^4.17.1",
     "is-online": "^8.2.1",
     "jsonwebtoken": "^8.5.1",
-    "lbh-frontend-react": "0.0.6",
+    "lbh-frontend-react": "0.0.7",
     "next": "^9.1.8-canary.16",
     "null-as-undefined": "^0.2.1",
     "prop-types": "^15.7.2",
