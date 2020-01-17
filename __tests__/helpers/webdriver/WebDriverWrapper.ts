@@ -103,9 +103,20 @@ class WebDriverWrapper implements WebDriver {
     this.switchTo = this.driver.switchTo.bind(this.driver);
   }
 
-  async getRelative(relativeUrl: string): Promise<void> {
+  async getRelative(
+    relativeUrl: string,
+    excludeParameters = false
+  ): Promise<void> {
     if (!this.baseUrl) {
       throw new Error(`No base URL is set to make ${relativeUrl} relative to.`);
+    }
+
+    if (!excludeParameters) {
+      relativeUrl +=
+        `?processRef=${process.env.TEST_PROCESS_REF}` +
+        `&processApiJwt=${process.env.TEST_PROCESS_API_JWT}` +
+        `&matApiJwt=${process.env.TEST_MAT_API_JWT}` +
+        `&data=${process.env.TEST_MAT_API_DATA}`;
     }
 
     const url = new URL(relativeUrl, this.baseUrl).href;

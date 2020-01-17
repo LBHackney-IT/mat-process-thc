@@ -36,6 +36,8 @@ We use:
 
 ## Getting started
 
+1. Copy `.env.example` to `.env` and fill in the blanks.
+
 1. Install the required packages:
 
    ```bash
@@ -49,6 +51,13 @@ We use:
    ```
 
 1. Navigate to [`http://localhost:3000`](http://localhost:3000).
+
+1. Make a change, and see the page hot reload.
+
+### Changing the server
+
+Hot reloading isn't set up for the local server, so you will need to restart it
+to see any changes.
 
 ## Running the tests
 

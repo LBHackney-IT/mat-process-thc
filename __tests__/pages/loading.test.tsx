@@ -5,6 +5,39 @@ import { promiseToWaitForNextTick } from "../helpers/promise";
 import { spyOnConsoleError } from "../helpers/spies";
 
 import LoadingPage from "../../pages/loading";
+import Storage from "../../storage/Storage";
+
+const originalBrowser = Object.prototype.hasOwnProperty.call(process, "browser")
+  ? process.browser
+  : undefined;
+const originalExternalContext = Storage.ExternalContext;
+
+beforeEach(() => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (process as any).browser = true;
+
+  sessionStorage.setItem("currentProcessRef", "test-process-ref");
+  sessionStorage.setItem(
+    "test-process-ref:processApiJwt",
+    "test-process-api-jwt"
+  );
+  sessionStorage.setItem("test-process-ref:matApiJwt", "test-mat-api-jwt");
+  sessionStorage.setItem("test-process-ref:matApiData", "test-mat-api-data");
+
+  Storage.ExternalContext = {
+    ...jest.fn()(),
+    database: { ...jest.fn()(), put: jest.fn() }
+  };
+});
+
+afterEach(() => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (process as any).browser = originalBrowser;
+
+  sessionStorage.clear();
+
+  Storage.ExternalContext = originalExternalContext;
+});
 
 it("renders correctly when online", async () => {
   fetchMock.mockResponse(
@@ -12,17 +45,14 @@ it("renders correctly when online", async () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let body: any = {};
 
-      if (
-        url.includes("/v1/Accounts/AccountDetailsByContactId") &&
-        method === "GET"
-      ) {
+      if (url.includes("/api/v1/tenancies") && method === "GET") {
         body = {
-          results: { tenuretype: "Secure", tenancyStartDate: "2019-01-01" }
+          results: {
+            tenuretype: "Secure",
+            tenancyStartDate: "2019-01-01"
+          }
         };
-      } else if (
-        url.includes("/v1/Contacts/GetContactsByUprn") &&
-        method === "GET"
-      ) {
+      } else if (url.includes("/api/v1/residents") && method === "GET") {
         body = {
           results: [
             {
@@ -246,6 +276,9 @@ it("renders correctly when online", async () => {
               Fetching any answers previously saved to the Hub... Loaded
             </li>
             <li>
+              Fetching and saving resident information... Saved
+            </li>
+            <li>
               Fetching and saving tenancy information... Saved
             </li>
             <li>
@@ -282,6 +315,21 @@ it("renders correctly when offline", async () => {
 
   expect(consoleErrorSpy.mock.calls).toMatchInlineSnapshot(`
     Array [
+      Array [
+        [Error: Request timed out],
+      ],
+      Array [
+        [Error: Request timed out],
+      ],
+      Array [
+        [Error: Request timed out],
+      ],
+      Array [
+        [Error: Request timed out],
+      ],
+      Array [
+        [Error: Request timed out],
+      ],
       Array [
         [Error: Request timed out],
       ],
@@ -475,6 +523,9 @@ it("renders correctly when offline", async () => {
           >
             <li>
               Fetching any answers previously saved to the Hub... Error
+            </li>
+            <li>
+              Fetching and saving resident information... Error
             </li>
             <li>
               Fetching and saving tenancy information... Error

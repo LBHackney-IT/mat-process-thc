@@ -31,7 +31,7 @@ export default class Storage {
 
           if (version === 0) {
             upgrade.createStore("tenancy");
-            upgrade.createStore("contacts");
+            upgrade.createStore("residents");
 
             version = 1;
           }

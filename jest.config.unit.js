@@ -5,7 +5,9 @@ module.exports = {
   preset: "ts-jest/presets/js-with-ts",
   testRunner: "jest-circus/runner",
   setupFilesAfterEnv: [
+    "dotenv/config",
     "jest-axe/extend-expect",
+    "jest-localstorage-mock",
     "<rootDir>/__tests__/jest.setup.ts"
   ],
   moduleNameMapper: {

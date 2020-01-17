@@ -26,9 +26,9 @@ export const SectionsPage: NextPage = () => {
       db?.get("tenancy", processRef),
     [database]
   );
-  const contactsData = useAsync(
+  const residentData = useAsync(
     async (db: Database<ExternalDatabaseSchema> | undefined) =>
-      db?.get("contacts", processRef),
+      db?.get("residents", processRef),
     [database]
   );
   const idAndResidencyComplete = useProcessSectionComplete(processRef, [
@@ -45,14 +45,14 @@ export const SectionsPage: NextPage = () => {
 
       <TenancySummary
         details={{
-          address: contactsData.result
-            ? contactsData.result.address
-            : contactsData.error
+          address: residentData.result
+            ? residentData.result.address
+            : residentData.error
             ? ["Error"]
             : undefined,
-          tenants: contactsData.result
-            ? contactsData.result.tenants.map(tenant => tenant.fullName)
-            : contactsData.error
+          tenants: residentData.result
+            ? residentData.result.tenants.map(tenant => tenant.fullName)
+            : residentData.error
             ? ["Error"]
             : undefined,
           tenureType: tenancyData.result

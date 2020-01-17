@@ -1,8 +1,12 @@
 /* eslint-env node */
+require("dotenv/config");
+
 const express = require("express");
 const nextjs = require("next");
 
 const nextConfig = require("../next.config");
+
+const api = require("./api");
 
 const dev = process.env.NODE_ENV !== "production";
 const port = parseInt(process.env.PORT || "3000");
@@ -35,8 +39,13 @@ app
       .use((req, _res, next) => {
         req.url = req.originalUrl.replace(nextConfig.assetPrefix, "") || "/";
 
+        if (!req.url.startsWith("/")) {
+          req.url = "/" + req.url;
+        }
+
         next();
       })
+      .use("/api", api)
       .get("*", (req, res) => {
         handle(req, res);
       })

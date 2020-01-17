@@ -47,8 +47,15 @@ module "development" {
   lb_iam_role_arn    = "${data.aws_iam_role.ec2_container_service_role.arn}"
 
   task_definition_environment_variables = {
-    NODE_ENV  = "production"
+    NODE_ENV = "production"
+
     BASE_PATH = "/thc"
+
+    PROCESS_API_HOST     = "4cgb2c6pqe.execute-api.eu-west-2.amazonaws.com"
+    PROCESS_API_BASE_URL = "/development/mat-process/api"
+
+    MAT_API_HOST     = "g6bw0g0ojk.execute-api.eu-west-2.amazonaws.com"
+    MAT_API_BASE_URL = "/development/manage-a-tenancy-api"
   }
 
   task_definition_environment_variable_count = 1
