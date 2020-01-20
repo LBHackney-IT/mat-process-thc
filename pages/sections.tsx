@@ -5,33 +5,20 @@ import {
 } from "lbh-frontend-react/components";
 import { NextPage } from "next";
 import React from "react";
-import { useAsync } from "react-async-hook";
-import { Database } from "remultiform/database";
 
 import { TaskList } from "../components/TaskList";
 import { TenancySummary } from "../components/TenancySummary";
-import useDatabase from "../helpers/useDatabase";
+import useData from "../helpers/useData";
 import useProcessSectionComplete from "../helpers/useProcessSectionComplete";
 import MainLayout from "../layouts/MainLayout";
 import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 import PageTitles from "../steps/PageTitles";
-import ExternalDatabaseSchema from "../storage/ExternalDatabaseSchema";
-import processRef from "../storage/processRef";
 import Storage from "../storage/Storage";
 
 export const SectionsPage: NextPage = () => {
-  const database = useDatabase(Storage.ExternalContext);
-  const tenancyData = useAsync(
-    async (db: Database<ExternalDatabaseSchema> | undefined) =>
-      db?.get("tenancy", processRef),
-    [database]
-  );
-  const residentData = useAsync(
-    async (db: Database<ExternalDatabaseSchema> | undefined) =>
-      db?.get("residents", processRef),
-    [database]
-  );
-  const idAndResidencyComplete = useProcessSectionComplete(processRef, [
+  const tenancyData = useData(Storage.ExternalContext, "tenancy");
+  const residentData = useData(Storage.ExternalContext, "residents");
+  const idAndResidencyComplete = useProcessSectionComplete([
     "id",
     "residency",
     "tenant"
