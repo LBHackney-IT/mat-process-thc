@@ -563,6 +563,54 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
+      // Support needs page
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/thc/support-needs"
+      );
+      await browser!
+        .waitForEnabledElement({ id: "resident-sustainment-notes-summary" })
+        .click();
+      await browser!
+        .waitForEnabledElement({ name: "resident-sustainment-notes" })
+        .sendKeys("Resident sustainment notes");
+      await browser!
+        .waitForEnabledElement({ id: "befriending-notes-summary" })
+        .click();
+      await browser!
+        .waitForEnabledElement({ name: "befriending-notes" })
+        .sendKeys("Befriending notes");
+      await browser!
+        .waitForEnabledElement({ id: "adult-safeguarding-notes-summary" })
+        .click();
+      await browser!
+        .waitForEnabledElement({ name: "adult-safeguarding-notes" })
+        .sendKeys("Adult safeguarding notes");
+      await browser!
+        .waitForEnabledElement({ id: "childrens-safeguarding-notes-summary" })
+        .click();
+      await browser!
+        .waitForEnabledElement({ name: "childrens-safeguarding-notes" })
+        .sendKeys("Children's safeguarding notes");
+      await browser!
+        .waitForEnabledElement({ id: "domestic-violence-notes-summary" })
+        .click();
+      await browser!
+        .waitForEnabledElement({ name: "domestic-violence-notes" })
+        .sendKeys("Domestic violence notes");
+      await browser!
+        .waitForEnabledElement({ id: "mental-health-18-65-notes-summary" })
+        .click();
+      await browser!
+        .waitForEnabledElement({ name: "mental-health-18-65-notes" })
+        .sendKeys("Mental health 18&ndash;65 notes");
+      await browser!
+        .waitForEnabledElement({ id: "mental-health-over-65-notes-summary" })
+        .click();
+      await browser!
+        .waitForEnabledElement({ name: "mental-health-over-65-notes" })
+        .sendKeys("Mental health over 65 notes");
+      await browser!.submit();
+
       // Sections page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
         "/thc/sections"

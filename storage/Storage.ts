@@ -64,6 +64,7 @@ export default class Storage {
             upgrade.createStore("homeCheck");
             upgrade.createStore("healthConcerns");
             upgrade.createStore("disability");
+            upgrade.createStore("supportNeeds");
 
             version = 1;
           }

@@ -1,13 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+interface Summary {
+  id: string;
+  value: React.ReactNode;
+}
+
 interface Props {
-  summary:
-    | string
-    | {
-        id: string;
-        value: string;
-      };
+  summary: React.ReactNode | Summary;
   children: React.ReactNode;
 }
 
@@ -15,13 +15,14 @@ export const Details = (props: Props): JSX.Element => {
   const { summary, children } = props;
 
   let summaryId: string | undefined = undefined;
-  let summaryValue: string;
+  let summaryValue: React.ReactNode;
+  const s = summary as Summary;
 
-  if (typeof summary === "string") {
+  if (s.id && s.value) {
+    summaryId = s.id;
+    summaryValue = s.value;
+  } else if (summary) {
     summaryValue = summary;
-  } else {
-    summaryId = summary.id;
-    summaryValue = summary.value;
   }
 
   return (
@@ -44,6 +45,28 @@ export const Details = (props: Props): JSX.Element => {
         summary:hover {
           cursor: pointer;
         }
+
+        summary :global(h2) {
+          display: inline-block;
+          margin: 0;
+          color: #025ea6;
+          font-size: 19px;
+          font-family: "Montserrat";
+          font-weight: 400;
+        }
+
+        summary :global(span) {
+          margin-left: 18px;
+          color: #0b0c0c;
+          font-size: 19px;
+          font-family: "Montserrat";
+          font-weight: 300;
+          display: inline-block;
+        }
+
+        details > :global(*:not(summary)) {
+          margin-left: 18px;
+        }
       `}</style>
     </>
   );
@@ -51,10 +74,10 @@ export const Details = (props: Props): JSX.Element => {
 
 Details.propTypes = {
   summary: PropTypes.oneOfType([
-    PropTypes.string.isRequired,
+    PropTypes.node.isRequired,
     PropTypes.exact({
       id: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired
+      value: PropTypes.node.isRequired
     }).isRequired
   ]).isRequired,
   children: PropTypes.node.isRequired

@@ -118,7 +118,7 @@ const step: ProcessStepDefinition = {
           key: "residency-notes",
           Component: TextAreaDetails,
           props: {
-            summary: "Add note about residency if necessary",
+            summary: "Add note about residency if necessary" as React.ReactNode,
             name: "residency-notes"
           },
           defaultValue: "",
