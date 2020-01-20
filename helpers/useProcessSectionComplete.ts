@@ -29,7 +29,7 @@ const useProcessSectionComplete = <
       db: Database<ProcessDatabaseSchema> | undefined,
       loading: boolean
     ) => {
-      const processRef: string | undefined = getProcessRef();
+      const processRef = getProcessRef();
 
       if (loading || !processRef) {
         return;

@@ -119,7 +119,7 @@ const useFetchTenancyData = (
 };
 
 export const LoadingPage: NextPage = () => {
-  const processRef: string | undefined = getProcessRef();
+  const processRef = getProcessRef();
 
   const processData = useApi({
     endpoint: `${process.env.BASE_PATH}/api/v1/process/${processRef}/processData`,

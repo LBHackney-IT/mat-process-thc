@@ -27,7 +27,7 @@ const submit = async (): Promise<void> => {
     database.transaction(
       processStoreNames,
       async stores => {
-        const processRef: string | undefined = getProcessRef();
+        const processRef = getProcessRef();
 
         if (processRef) {
           await Promise.all(
