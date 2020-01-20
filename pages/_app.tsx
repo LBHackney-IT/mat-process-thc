@@ -5,7 +5,6 @@ import {
   LinkComponentTypeProps
 } from "lbh-frontend-react/helpers";
 import querystring from "querystring";
-import { nullAsUndefined } from "null-as-undefined";
 import React from "react";
 import NextApp from "next/app";
 import NextLink from "next/link";
@@ -17,6 +16,7 @@ import "normalize.css";
 
 import urlsForRouter from "../helpers/urlsForRouter";
 import Storage from "../storage/Storage";
+import { nullAsUndefined } from "null-as-undefined";
 
 const Link: React.FunctionComponent<LinkComponentTypeProps> = props => {
   const { href: originalHref } = props;

@@ -1,21 +1,22 @@
-import { createContext } from "react";
+import { useAsync, UseAsyncReturn } from "react-async-hook";
 import { Database, NamedSchema, Schema } from "remultiform/database";
-import {
-  DatabaseContext,
-  useDatabase as useRemultiformDatabase
-} from "remultiform/database-context";
+import { DatabaseContext } from "remultiform/database-context";
 
 const useDatabase = <S extends NamedSchema<string, number, Schema>>(
   context: DatabaseContext<S> | undefined
-): Database<S> | undefined => {
-  return useRemultiformDatabase(
-    context ||
-      // This is a bit of a hack to get around contexts being
-      // undefined on the server, while still obeying the rules of hooks.
-      ({
-        context: createContext<Database<S> | undefined>(undefined)
-      } as DatabaseContext<S>)
-  );
+): UseAsyncReturn<
+  Database<S> | undefined,
+  (DatabaseContext<S> | undefined)[]
+> => {
+  return useAsync(async () => {
+    if (!context) {
+      return;
+    }
+
+    const db = await context.database;
+
+    return db;
+  }, [context]);
 };
 
 export default useDatabase;

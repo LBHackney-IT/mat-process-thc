@@ -23,6 +23,7 @@ import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 import PageTitles from "../steps/PageTitles";
 import ExternalDatabaseSchema from "../storage/ExternalDatabaseSchema";
 import Storage from "../storage/Storage";
+import getProcessRef from "../helpers/getProcessRef";
 
 const useFetchResidentData = (
   processRef: string | undefined
@@ -118,11 +119,7 @@ const useFetchTenancyData = (
 };
 
 export const LoadingPage: NextPage = () => {
-  let processRef: string | undefined;
-
-  if (process.browser) {
-    processRef = nullAsUndefined(sessionStorage.getItem("currentProcessRef"));
-  }
+  const processRef: string | undefined = getProcessRef();
 
   const processData = useApi({
     endpoint: `${process.env.BASE_PATH}/api/v1/process/${processRef}/processData`,

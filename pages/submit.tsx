@@ -16,7 +16,7 @@ import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 import PageTitles from "../steps/PageTitles";
 import { processStoreNames } from "../storage/ProcessDatabaseSchema";
 import Storage from "../storage/Storage";
-import processRef from "../storage/processRef";
+import getProcessRef from "../helpers/getProcessRef";
 
 const submit = async (): Promise<void> => {
   if (Storage.ProcessContext && Storage.ProcessContext.database) {
@@ -27,9 +27,13 @@ const submit = async (): Promise<void> => {
     database.transaction(
       processStoreNames,
       async stores => {
-        await Promise.all(
-          Object.values(stores).map(store => store.delete(processRef))
-        );
+        const processRef: string | undefined = getProcessRef();
+
+        if (processRef) {
+          await Promise.all(
+            Object.values(stores).map(store => store.delete(processRef))
+          );
+        }
       },
       TransactionMode.ReadWrite
     );

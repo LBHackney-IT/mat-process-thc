@@ -1,42 +1,20 @@
 import { NextPage } from "next";
 import ErrorPage from "next/error";
 import { useRouter } from "next/router";
-import React, { createContext } from "react";
-import { useAsync } from "react-async-hook";
-import { Database } from "remultiform/database";
-import { DatabaseContext } from "remultiform/database-context";
+import React from "react";
 import { Orchestrator } from "remultiform/orchestrator";
 
 import { TenancySummary } from "../components/TenancySummary";
-import useDatabase from "../helpers/useDatabase";
+import useData from "../helpers/useData";
 import MainLayout from "../layouts/MainLayout";
 import steps from "../steps";
-import ExternalDatabaseSchema from "../storage/ExternalDatabaseSchema";
 import processRef from "../storage/processRef";
 import Storage from "../storage/Storage";
 
 const ProcessPage: NextPage = () => {
   const router = useRouter();
-  const database = useDatabase(
-    Storage.ExternalContext ||
-      // This is a bit of a hack to get around contexts being
-      // undefined on the server, while still obeying the rules of hooks.
-      ({
-        context: createContext<Database<ExternalDatabaseSchema> | undefined>(
-          undefined
-        )
-      } as DatabaseContext<ExternalDatabaseSchema>)
-  );
-  const tenancyData = useAsync(
-    async (db: Database<ExternalDatabaseSchema> | undefined) =>
-      db?.get("tenancy", processRef),
-    [database]
-  );
-  const residentData = useAsync(
-    async (db: Database<ExternalDatabaseSchema> | undefined) =>
-      db?.get("residents", processRef),
-    [database]
-  );
+  const tenancyData = useData(Storage.ExternalContext, "tenancy");
+  const residentData = useData(Storage.ExternalContext, "residents");
 
   const slugParam = router.query.slug as string | string[] | undefined;
 
