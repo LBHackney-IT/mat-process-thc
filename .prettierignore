@@ -14,6 +14,7 @@ Dockerfile
 LICENCE
 *.feature
 *.jpg
+*.png
 *.snap
 *.tf
 .*
