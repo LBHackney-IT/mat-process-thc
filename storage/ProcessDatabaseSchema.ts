@@ -12,7 +12,7 @@ type ProcessDatabaseSchema = NamedSchema<
   {
     lastModified: {
       key: ProcessRef;
-      value: Date;
+      value: string;
     };
 
     property: {

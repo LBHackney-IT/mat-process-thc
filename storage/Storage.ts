@@ -115,7 +115,7 @@ export default class Storage {
           return;
         }
 
-        await stores.lastModified.put(processRef, lastModified);
+        await stores.lastModified.put(processRef, lastModified.toISOString());
 
         // Update the rest of the data here.
       },
@@ -136,7 +136,7 @@ export default class Storage {
 
     const database = await this.ProcessContext.database;
 
-    await database.put("lastModified", processRef, new Date());
+    await database.put("lastModified", processRef, new Date().toISOString());
   }
 
   static async isProcessNewerThanStorage(
@@ -150,6 +150,6 @@ export default class Storage {
   ): Promise<boolean> {
     const storedLastModified = await store.get(processRef);
 
-    return !storedLastModified || lastModified > storedLastModified;
+    return !storedLastModified || lastModified > new Date(storedLastModified);
   }
 }
