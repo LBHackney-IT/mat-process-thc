@@ -15,6 +15,7 @@ LICENCE
 *.feature
 *.jpg
 *.png
+*.ico
 *.snap
 *.tf
 .*
