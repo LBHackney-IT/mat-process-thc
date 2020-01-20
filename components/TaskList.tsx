@@ -1,8 +1,14 @@
 import { Link, List, Tag } from "lbh-frontend-react/components";
 import querystring from "querystring";
-import { nullAsUndefined } from "null-as-undefined";
 import PropTypes from "prop-types";
 import React from "react";
+
+export enum TaskListStatus {
+  Unavailable = "unavailable",
+  NotStarted = "Not started",
+  Started = "Started",
+  Completed = "Completed"
+}
 
 /**
  * An item in {@link TaskList}.
@@ -17,11 +23,8 @@ export interface TaskListItem {
 
   /**
    * The status to display against the task.
-   *
-   * If undefined, the status is replaced by a link to the task. To not show
-   * anything, pass an empty string.
    */
-  status?: string | null;
+  status: TaskListStatus;
 
   /**
    * @ignore
@@ -49,11 +52,15 @@ export const TaskList = (props: TaskListprops): JSX.Element => {
           return (
             <>
               <span>{name}</span>
-              {status !== "" && (
+              {status !== TaskListStatus.Unavailable && (
                 <span>
-                  {nullAsUndefined(status) !== undefined && <Tag>{status}</Tag>}
+                  {status !== TaskListStatus.NotStarted && <Tag>{status}</Tag>}
                   <Link href={href} data-testid={testId}>
-                    {nullAsUndefined(status) === undefined ? "Start" : "Edit"}
+                    {status === TaskListStatus.NotStarted
+                      ? "Start"
+                      : status === TaskListStatus.Completed
+                      ? "Edit"
+                      : "Continue"}
                   </Link>
                 </span>
               )}
@@ -88,7 +95,7 @@ TaskList.propTypes = {
         pathname: PropTypes.string.isRequired,
         query: PropTypes.object
       }).isRequired,
-      status: PropTypes.string,
+      status: PropTypes.string.isRequired,
       "data-testid": PropTypes.string
     }).isRequired
   ).isRequired

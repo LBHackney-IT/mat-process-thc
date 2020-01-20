@@ -14,7 +14,10 @@ import getProcessRef from "./getProcessRef";
 const useProcessSectionComplete = <
   S extends StoreNames<ProcessDatabaseSchema["schema"]>
 >(
-  storeNames: S[]
+  storeNames: S[],
+  validator?: (
+    values: (StoreValue<ProcessDatabaseSchema["schema"], S> | undefined)[]
+  ) => boolean
 ): UseAsyncReturn<
   boolean | undefined,
   [Database<ProcessDatabaseSchema> | undefined, boolean, string]
@@ -55,7 +58,9 @@ const useProcessSectionComplete = <
             })
           );
 
-          result = values.every(v => v !== undefined);
+          result = validator
+            ? validator(values)
+            : values.every(v => v !== undefined);
         }
       );
 
