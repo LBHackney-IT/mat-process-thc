@@ -288,6 +288,9 @@ it("renders correctly when online", async () => {
               Fetching and saving tenancy information... Saved
             </li>
             <li>
+              Precaching process pages... Cached
+            </li>
+            <li>
               Updating offline storage of process data... Process on device is more recent than in Hub
             </li>
           </ul>
@@ -321,6 +324,15 @@ it("renders correctly when offline", async () => {
 
   expect(consoleErrorSpy.mock.calls).toMatchInlineSnapshot(`
     Array [
+      Array [
+        [Error: Request timed out],
+      ],
+      Array [
+        [Error: Request timed out],
+      ],
+      Array [
+        [Error: Request timed out],
+      ],
       Array [
         [Error: Request timed out],
       ],
@@ -538,6 +550,9 @@ it("renders correctly when offline", async () => {
             </li>
             <li>
               Fetching and saving tenancy information... Error
+            </li>
+            <li>
+              Precaching process pages... Cached
             </li>
           </ul>
           <p

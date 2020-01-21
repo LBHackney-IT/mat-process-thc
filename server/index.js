@@ -2,7 +2,9 @@
 require("dotenv/config");
 
 const express = require("express");
+const { join } = require("path");
 const nextjs = require("next");
+const { parse } = require("url");
 
 const nextConfig = require("../next.config");
 
@@ -46,6 +48,17 @@ app
         next();
       })
       .use("/api", api)
+      .get("/service-worker.js", (req, res) => {
+        const parsedUrl = parse(req.url, true);
+        const { pathname } = parsedUrl;
+        const filePath = join(
+          __dirname,
+          "..",
+          process.env.NEXT_DIST_DIR || ".next",
+          pathname
+        );
+        app.serveStatic(req, res, filePath);
+      })
       .get("*", (req, res) => {
         handle(req, res);
       })
