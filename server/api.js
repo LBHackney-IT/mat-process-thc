@@ -109,7 +109,10 @@ router.get("/v1/process/:ref/processData", (req, res) => {
     port: 443,
     path: `${processApiBaseUrl}/v1/processData/${ref}`,
     method: req.method,
-    headers: { "X-API-KEY": processApiKey }
+    headers: {
+      "Content-Type": "application/json",
+      "X-API-KEY": processApiKey
+    }
   };
 
   proxy(options, req, res);
@@ -167,7 +170,10 @@ router.get("/v1/tenancies", (req, res) => {
     port: 443,
     path: `${matApiBaseUrl}/v1/Accounts/AccountDetailsByContactId?contactid=${contactId}`,
     method: req.method,
-    headers: { Authorization: matApiToken }
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: matApiToken
+    }
   };
 
   proxy(options, req, res);
@@ -198,7 +204,10 @@ router.get("/v1/residents", (req, res) => {
     // This is intentionally `urpn` due to it being misnamed in the API.
     path: `${matApiBaseUrl}/v1/Contacts/GetContactsByUprn?urpn=${uprn}`,
     method: req.method,
-    headers: { Authorization: matApiToken }
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: matApiToken
+    }
   };
 
   proxy(options, req, res);
