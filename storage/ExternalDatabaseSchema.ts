@@ -2,9 +2,8 @@ import { NamedSchema, StoreNames } from "remultiform/database";
 
 import { ProcessRef } from "./ProcessDatabaseSchema";
 
-// We will replace this with a real name before release. It should be specific
-// to the environment it's running on to avoid clashes.
-export const externalDatabaseName = "mat-process-thc-external-local";
+export const externalDatabaseName = `mat-process-thc-external-${process.env
+  .ENVIRONMENT_NAME || "unknown"}`;
 
 type ExternalDatabaseSchema = NamedSchema<
   typeof externalDatabaseName,

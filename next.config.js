@@ -6,7 +6,8 @@ const withCSS = require("@zeit/next-css");
 const dev = process.env.NODE_ENV !== "production";
 
 const env = {
-  BASE_PATH: process.env.BASE_PATH
+  BASE_PATH: process.env.BASE_PATH,
+  ENVIRONMENT_NAME: process.env.ENVIRONMENT_NAME
 };
 
 if (dev) {
