@@ -24,13 +24,23 @@ const idResidencyStartedValidator = (
   )[]
 ): boolean => values.some(v => v !== undefined);
 
+const propertyInspectionStartedValidator = (
+  values: (
+    | StoreValue<ProcessDatabaseSchema["schema"], "property">
+    | undefined
+  )[]
+): boolean => {
+  const v = values[0];
+  return v !== undefined && v.rooms !== undefined;
+};
+
 const propertyInspectionCompleteValidator = (
   values: (
     | StoreValue<ProcessDatabaseSchema["schema"], "property">
     | undefined
   )[]
 ): boolean => {
-  const v = values[0] as { outside: object; rooms: object };
+  const v = values[0];
   return v !== undefined && v.outside !== undefined && v.rooms !== undefined;
 };
 
@@ -75,7 +85,10 @@ export const SectionsPage: NextPage = () => {
   );
   const householdStarted = { result: false };
   const householdComplete = { result: false };
-  const propertyInspectionStarted = useProcessSectionComplete(["property"]);
+  const propertyInspectionStarted = useProcessSectionComplete(
+    ["property"],
+    propertyInspectionStartedValidator
+  );
   const propertyInspectionComplete = useProcessSectionComplete(
     ["property"],
     propertyInspectionCompleteValidator
