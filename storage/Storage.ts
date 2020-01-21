@@ -103,7 +103,9 @@ export default class Storage {
     await database.transaction(
       ["lastModified"],
       async stores => {
-        const lastModified = new Date(data.dateLastModified);
+        const lastModified = new Date(
+          data.dateLastModified || data.dateCreated
+        );
 
         isNewer = await this.isProcessNewerThanStorage(
           stores.lastModified,
