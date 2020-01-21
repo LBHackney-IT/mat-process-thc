@@ -1,4 +1,5 @@
 import { NamedSchema, StoreNames } from "remultiform/database";
+import { DeepPartial } from "utility-types";
 
 export type ProcessRef = string;
 
@@ -21,84 +22,84 @@ type ProcessDatabaseSchema = NamedSchema<
           images: string[];
         };
         rooms: {
-          canEnterAll: boolean;
+          canEnterAll: string;
           notes: string;
         };
         laminatedFlooring: {
-          hasLaminatedFlooring: boolean;
-          hasPermission: boolean;
+          hasLaminatedFlooring: string;
+          hasPermission: string;
           images: string[];
           notes: string;
         };
         structuralChanges: {
-          hasStructuralChanges: boolean;
-          changesAuthorised: boolean;
+          hasStructuralChanges: string;
+          changesAuthorised: string;
           images: string[];
           notes: string;
         };
         damage: {
-          hasDamage: boolean;
+          hasDamage: string;
           images: string[];
           notes: string;
         };
         roof: {
-          hasAccess: boolean;
-          itemsStoredOnRoof: boolean;
+          hasAccess: string;
+          itemsStoredOnRoof: string;
           notes: string;
         };
         loft: {
-          hasAccess: boolean;
-          itemsStored: boolean;
+          hasAccess: string;
+          itemsStored: string;
           notes: string;
         };
         garden: {
-          hasGarden: boolean;
+          hasGarden: string;
           type: string;
-          isMaintained: boolean;
+          isMaintained: string;
           images: string[];
           notes: string;
         };
         storingMaterials: {
-          isStoringMaterials: boolean;
-          furtherActionRequired: boolean;
+          isStoringMaterials: string;
+          furtherActionRequired: string;
           notes: string;
         };
         fireExit: {
-          hasFireExit: boolean;
-          isAccessible: boolean;
+          hasFireExit: string;
+          isAccessible: string;
           notes: string;
         };
         smokeAlarm: {
-          hasSmokeAlarm: boolean;
-          isWorking: boolean;
+          hasSmokeAlarm: string;
+          isWorking: string;
           notes: string;
         };
         metalGates: {
-          hasMetalGates: boolean;
-          combustibleItemsBehind: boolean;
-          furtherActionRequired: boolean;
+          hasMetalGates: string;
+          combustibleItemsBehind: string;
+          furtherActionRequired: string;
           images: string[];
           notes: string;
         };
         doorMats: {
-          hasPlaced: boolean;
-          furtherActionRequired: boolean;
+          hasPlaced: string;
+          furtherActionRequired: string;
           notes: string;
         };
         communalAreas: {
-          hasLeftCombustibleItems: boolean;
-          furtherActionRequired: boolean;
+          hasLeftCombustibleItems: string;
+          furtherActionRequired: string;
           notes: string;
         };
         pets: {
-          hasPets: boolean;
+          hasPets: string;
           petTypes: string[];
-          hasPermission: boolean;
+          hasPermission: string;
           images: string[];
           notes: string;
         };
         antisocialBehaviour: {
-          tenantUnderstands: boolean;
+          tenantUnderstands: string;
           notes: string;
         };
         otherComments: {
@@ -147,8 +148,8 @@ type ProcessDatabaseSchema = NamedSchema<
       value: {
         photo: {
           isWilling: string;
-          notes: string;
           images: string[];
+          notes: string;
         };
 
         nextOfKin: {
@@ -189,7 +190,6 @@ type ProcessDatabaseSchema = NamedSchema<
         who: string[];
         moreInfo: string[];
         notes: string;
-        action: boolean;
       };
     };
 
@@ -224,7 +224,7 @@ export interface ProcessJson {
   dateCreated: string;
   dateLastModified?: string;
   dataSchemaVersion: number;
-  processData?: Partial<
+  processData?: DeepPartial<
     {
       [StoreName in keyof ProcessDatabaseSchema["schema"]]: ProcessDatabaseSchema["schema"][StoreName]["value"];
     }
