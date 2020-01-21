@@ -35,7 +35,7 @@ const step: ProcessStepDefinition = {
           props: {
             name: "unannounced-visit",
             legend: (
-              <FieldsetLegend>Is this an unnanounced visit?</FieldsetLegend>
+              <FieldsetLegend>Is this an unannounced visit?</FieldsetLegend>
             ) as React.ReactNode,
             radios: [
               {

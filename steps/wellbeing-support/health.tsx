@@ -77,19 +77,19 @@ const step: ProcessStepDefinition = {
             checkboxes: [
               {
                 label: "Tenant 1",
-                value: "tenant-1"
+                value: "tenant 1"
               },
               {
                 label: "Tenant 2",
-                value: "tenant-2"
+                value: "tenant 2"
               },
               {
                 label: "Household member 3",
-                value: "household-member-3"
+                value: "household member 3"
               },
               {
                 label: "Household member 4",
-                value: "household-member-4"
+                value: "household member 4"
               }
             ]
           },
@@ -128,7 +128,7 @@ const step: ProcessStepDefinition = {
             checkboxes: [
               {
                 label: "Childhood obesity",
-                value: "childhood-obesity"
+                value: "childhood obesity"
               },
               {
                 label: "Dementia",
@@ -136,7 +136,7 @@ const step: ProcessStepDefinition = {
               },
               {
                 label: "Mental health",
-                value: "mental-health"
+                value: "mental health"
               },
               {
                 label: "Smoking",

@@ -1,15 +1,186 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { readFileSync } from "fs";
+import { request } from "http";
 import { defineFeature, loadFeature } from "jest-cucumber";
 import { join } from "path";
 import { until } from "selenium-webdriver";
 
+import { ProcessJson } from "../../storage/ProcessDatabaseSchema";
+
 import Given from "../helpers/steps/Given";
 import Expect from "../helpers/Expect";
 
-jest.setTimeout(120 * 1000);
+jest.setTimeout(60 * 1000);
 
 defineFeature(loadFeature("./end-to-end.feature"), test => {
   test("Performing a check while online", ({ defineStep, when, then }) => {
+    const imagePath = join(__dirname, "..", "__fixtures__", "image.jpg");
+    const base64Image = readFileSync(
+      imagePath.replace(/jpg$/, "base64")
+    ).toString();
+
+    const processData = {
+      property: {
+        outside: {
+          images: [imagePath]
+        },
+        rooms: {
+          canEnterAll: "no",
+          notes: "Room notes"
+        },
+        laminatedFlooring: {
+          hasLaminatedFlooring: "yes",
+          hasPermission: "yes",
+          images: [imagePath],
+          notes: "Laminated flooring notes"
+        },
+        structuralChanges: {
+          hasStructuralChanges: "yes",
+          changesAuthorised: "yes",
+          images: [imagePath],
+          notes: "Structural changes notes"
+        },
+        damage: {
+          hasDamage: "yes",
+          images: [imagePath],
+          notes: "Damage notes"
+        },
+        roof: {
+          hasAccess: "yes",
+          itemsStoredOnRoof: "yes",
+          notes: "Roof notes"
+        },
+        loft: {
+          hasAccess: "yes",
+          itemsStored: "yes",
+          notes: "Loft notes"
+        },
+        garden: {
+          hasGarden: "yes",
+          type: "private",
+          isMaintained: "yes",
+          images: [imagePath],
+          notes: "Garden notes"
+        },
+        storingMaterials: {
+          isStoringMaterials: "yes",
+          furtherActionRequired: "yes",
+          notes: "Storing materials notes"
+        },
+        fireExit: {
+          hasFireExit: "yes",
+          isAccessible: "yes",
+          notes: "Fire exit notes"
+        },
+        smokeAlarm: {
+          hasSmokeAlarm: "yes",
+          isWorking: "yes",
+          notes: "Smoke alarm notes"
+        },
+        metalGates: {
+          hasMetalGates: "yes",
+          combustibleItemsBehind: "yes",
+          furtherActionRequired: "yes",
+          images: [imagePath],
+          notes: "Metal gates notes"
+        },
+        doorMats: {
+          hasPlaced: "yes",
+          furtherActionRequired: "yes",
+          notes: "Door mats notes"
+        },
+        communalAreas: {
+          hasLeftCombustibleItems: "yes",
+          furtherActionRequired: "yes",
+          notes: "Communal areas notes"
+        },
+        pets: {
+          hasPets: "yes",
+          petTypes: ["dog", "cat"],
+          hasPermission: "yes",
+          images: [imagePath],
+          notes: "Pets notes"
+        },
+        antisocialBehaviour: {
+          tenantUnderstands: "yes",
+          notes: "Antisocial behaviour notes"
+        },
+        otherComments: {
+          images: [imagePath],
+          notes: "Other comments notes"
+        }
+      },
+      isUnannouncedVisit: {
+        value: "no",
+        notes: "Unannounced visit notes"
+      },
+      isVisitInside: {
+        value: "no",
+        notes: "Visit inside notes"
+      },
+      id: {
+        type: "valid passport",
+        images: [imagePath],
+        notes: "ID notes"
+      },
+      residency: {
+        type: "bank statement",
+        images: [imagePath],
+        notes: "Residency notes"
+      },
+      tenant: {
+        photo: {
+          isWilling: "yes",
+          images: [imagePath]
+        },
+        nextOfKin: {
+          fullName: "Next of kin name",
+          relationship: "Next of kin relationship",
+          mobileNumber: "0123455789",
+          otherNumber: "9876543210",
+          email: "next@of.kin",
+          address: "1 Next of Kin Road\nKinsville\nNK0 0NK"
+        },
+        carer: {
+          hasCarer: "yes",
+          type: "registered",
+          isLiveIn: "yes",
+          liveInStartDate: { month: 1, year: 2019 },
+          fullName: "Carer name",
+          phoneNumber: "0123455789",
+          relationship: "Carer relationship",
+          notes: "Carer notes"
+        }
+      },
+      homeCheck: {
+        value: "yes"
+      },
+      healthConcerns: {
+        value: "yes",
+        who: ["tenant 1"],
+        moreInfo: ["dementia", "smoking"],
+        notes: "Health concerns notes"
+      },
+      disability: {
+        value: "yes",
+        whoDisability: ["tenant 1"],
+        pipOrDLA: "yes",
+        whoPIP: ["tenant 1"],
+        whoDLA: ["tenant 1"],
+        notes: "Disability notes"
+      },
+      supportNeeds: {
+        residentSustainmentNotes: "Resident sustainment notes",
+        befriendingNotes: "Befriending notes",
+        adultSafeguardingNotes: "Adult safeguarding notes",
+        childrenYoungPeopleSafeguardingNotes:
+          "Children young people safeguarding notes",
+        domesticSexualViolenceNotes: "Domestic sexual violence notes",
+        mentalHealth18To65Notes: "Mental health 18 to 65 notes",
+        mentalHealthOver65Notes: "Mental health over 65 notes"
+      }
+    };
+
     Given.iAmOnline(defineStep);
 
     when("I complete a process", async () => {
@@ -45,10 +216,10 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         .waitForEnabledElement({
           name: "outside-property-images"
         })
-        .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
+        .sendKeys(processData.property.outside.images[0]);
       await browser!
         .waitForEnabledElement({ name: "metal-gate-images" })
-        .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
+        .sendKeys(processData.property.metalGates.images[0]);
 
       await browser!.submit();
 
@@ -65,19 +236,23 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       );
 
       await browser!
-        .waitForEnabledElement({ id: "unannounced-visit-no" })
+        .waitForEnabledElement({
+          id: `unannounced-visit-${processData.isUnannouncedVisit.value}`
+        })
         .click();
       await browser!
         .waitForEnabledElement({
           name: "unannounced-visit-notes"
         })
-        .sendKeys("Unannounced visit notes");
+        .sendKeys(processData.isUnannouncedVisit.notes);
       await browser!
-        .waitForEnabledElement({ id: "inside-property-no" })
+        .waitForEnabledElement({
+          id: `inside-property-${processData.isVisitInside.value}`
+        })
         .click();
       await browser!
         .waitForEnabledElement({ name: "inside-property-notes" })
-        .sendKeys("Inside property notes");
+        .sendKeys(processData.isVisitInside.notes);
 
       await browser!.submit();
 
@@ -94,15 +269,17 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/id");
 
       await browser!
-        .waitForEnabledElement({ id: "id-type-valid-passport" })
+        .waitForEnabledElement({
+          id: `id-type-${processData.id.type.replace(/\s/g, "-")}`
+        })
         .click();
       await browser!
         .waitForEnabledElement({ name: "id-proof-images" })
-        .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
+        .sendKeys(processData.id.images[0]);
       await browser!.waitForEnabledElement({ id: "id-notes-summary" }).click();
       await browser!
         .waitForEnabledElement({ name: "id-notes" })
-        .sendKeys("ID notes");
+        .sendKeys(processData.id.notes);
 
       await browser!.submit();
 
@@ -113,18 +290,21 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!
         .waitForEnabledElement({
-          id: "residency-proof-type-bank-statement"
+          id: `residency-proof-type-${processData.residency.type.replace(
+            /\s/g,
+            "-"
+          )}`
         })
         .click();
       await browser!
         .waitForEnabledElement({ name: "residency-proof-images" })
-        .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
+        .sendKeys(processData.residency.images[0]);
       await browser!
         .waitForEnabledElement({ id: "residency-notes-summary" })
         .click();
       await browser!
         .waitForEnabledElement({ name: "residency-notes" })
-        .sendKeys("Residency notes");
+        .sendKeys(processData.residency.notes);
 
       await browser!.submit();
 
@@ -134,11 +314,13 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       );
 
       await browser!
-        .waitForEnabledElement({ id: "tenant-photo-willing-yes" })
+        .waitForEnabledElement({
+          id: `tenant-photo-willing-${processData.tenant.photo.isWilling}`
+        })
         .click();
       await browser!
         .waitForEnabledElement({ name: "tenant-photo" })
-        .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
+        .sendKeys(processData.tenant.photo.images[0]);
 
       await browser!.submit();
 
@@ -149,64 +331,70 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!
         .waitForEnabledElement({ name: "next-of-kin-full-name" })
-        .sendKeys("Full name");
+        .sendKeys(processData.tenant.nextOfKin.fullName);
       await browser!
         .waitForEnabledElement({
           name: "next-of-kin-relationship"
         })
-        .sendKeys("Relationship");
+        .sendKeys(processData.tenant.nextOfKin.relationship);
       await browser!
         .waitForEnabledElement({
           name: "next-of-kin-mobile-number"
         })
-        .sendKeys("Mobile number");
+        .sendKeys(processData.tenant.nextOfKin.mobileNumber);
       await browser!
         .waitForEnabledElement({
           name: "next-of-kin-other-number"
         })
-        .sendKeys("Other number");
+        .sendKeys(processData.tenant.nextOfKin.otherNumber);
       await browser!
         .waitForEnabledElement({ name: "next-of-kin-email" })
-        .sendKeys("Email address");
+        .sendKeys(processData.tenant.nextOfKin.email);
       await browser!
         .waitForEnabledElement({ name: "next-of-kin-address" })
-        .sendKeys("Address");
+        .sendKeys(processData.tenant.nextOfKin.address);
 
       await browser!.submit();
 
       // Carer page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/carer");
 
-      await browser!.waitForEnabledElement({ id: "carer-needed-yes" }).click();
       await browser!
-        .waitForEnabledElement({ id: "carer-type-registered" })
+        .waitForEnabledElement({
+          id: `carer-needed-${processData.tenant.carer.hasCarer}`
+        })
+        .click();
+      await browser!
+        .waitForEnabledElement({
+          id: `carer-type-${processData.tenant.carer.type}`
+        })
         .click();
       await browser!.waitForEnabledElement({ id: "carer-live-in-yes" }).click();
       await browser!
         .waitForEnabledElement({
           name: "carer-live-in-start-date-month"
         })
-        .sendKeys("1");
+        .sendKeys(processData.tenant.carer.liveInStartDate.month.toString());
       await browser!
         .waitForEnabledElement({
           name: "carer-live-in-start-date-year"
         })
-        .sendKeys("2019");
+        .sendKeys(processData.tenant.carer.liveInStartDate.year.toString());
       await browser!
         .waitForEnabledElement({ name: "carer-full-name" })
-        .sendKeys("Full name");
+        .sendKeys(processData.tenant.carer.fullName);
       await browser!
         .waitForEnabledElement({ name: "carer-relationship" })
-        .sendKeys("Relationship");
+        .sendKeys(processData.tenant.carer.relationship);
       await browser!
         .waitForEnabledElement({ name: "carer-phone-number" })
-        .sendKeys("Phone number");
+        .sendKeys(processData.tenant.carer.phoneNumber);
       await browser!
         .waitForEnabledElement({ id: "carer-notes-summary" })
         .click();
       await browser!
         .waitForEnabledElement({ name: "carer-notes" })
-        .sendKeys("Carer notes");
+        .sendKeys(processData.tenant.carer.notes);
 
       await browser!.submit();
 
@@ -226,11 +414,13 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/rooms");
 
       await browser!
-        .waitForEnabledElement({ id: "can-enter-all-rooms-no" })
+        .waitForEnabledElement({
+          id: `can-enter-all-rooms-${processData.property.rooms.canEnterAll}`
+        })
         .click();
       await browser!
         .waitForEnabledElement({ name: "room-entry-notes" })
-        .sendKeys("Room entry notes");
+        .sendKeys(processData.property.rooms.notes);
 
       await browser!.submit();
 
@@ -241,22 +431,24 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!
         .waitForEnabledElement({
-          id: "has-laminated-flooring-yes"
+          id: `has-laminated-flooring-${processData.property.laminatedFlooring.hasLaminatedFlooring}`
         })
         .click();
       await browser!
-        .waitForEnabledElement({ id: "has-permission-yes" })
+        .waitForEnabledElement({
+          id: `has-permission-${processData.property.laminatedFlooring.hasPermission}`
+        })
         .click();
       await browser!
         .waitForEnabledElement({
           name: "laminated-flooring-images"
         })
-        .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
+        .sendKeys(processData.property.laminatedFlooring.images[0]);
       await browser!
         .waitForEnabledElement({
           name: "laminated-flooring-notes"
         })
-        .sendKeys("Laminated flooring notes");
+        .sendKeys(processData.property.laminatedFlooring.notes);
 
       await browser!.submit();
 
@@ -267,48 +459,60 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!
         .waitForEnabledElement({
-          id: "has-structural-changes-yes"
+          id: `has-structural-changes-${processData.property.structuralChanges.hasStructuralChanges}`
         })
         .click();
       await browser!
-        .waitForEnabledElement({ id: "changes-authorised-yes" })
+        .waitForEnabledElement({
+          id: `changes-authorised-${processData.property.structuralChanges.changesAuthorised}`
+        })
         .click();
       await browser!
         .waitForEnabledElement({
           name: "structural-changes-images"
         })
-        .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
+        .sendKeys(processData.property.structuralChanges.images[0]);
       await browser!
         .waitForEnabledElement({
           name: "structural-changes-notes"
         })
-        .sendKeys("Structural changes notes");
+        .sendKeys(processData.property.structuralChanges.notes);
 
       await browser!.submit();
 
       // Damage page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/damage");
 
-      await browser!.waitForEnabledElement({ id: "has-damage-yes" }).click();
+      await browser!
+        .waitForEnabledElement({
+          id: `has-damage-${processData.property.damage.hasDamage}`
+        })
+        .click();
       await browser!
         .waitForEnabledElement({ name: "damage-images" })
-        .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
+        .sendKeys(processData.property.damage.images[0]);
       await browser!
         .waitForEnabledElement({ name: "damage-notes" })
-        .sendKeys("Damage notes");
+        .sendKeys(processData.property.damage.notes);
 
       await browser!.submit();
 
       // Roof page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/roof");
 
-      await browser!.waitForEnabledElement({ id: "has-access-yes" }).click();
       await browser!
-        .waitForEnabledElement({ id: "items-stored-on-roof-yes" })
+        .waitForEnabledElement({
+          id: `has-access-${processData.property.roof.hasAccess}`
+        })
+        .click();
+      await browser!
+        .waitForEnabledElement({
+          id: `items-stored-on-roof-${processData.property.roof.itemsStoredOnRoof}`
+        })
         .click();
       await browser!
         .waitForEnabledElement({ name: "roof-notes" })
-        .sendKeys("Roof notes");
+        .sendKeys(processData.property.roof.notes);
 
       await browser!.submit();
 
@@ -316,31 +520,45 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/loft");
 
       await browser!
-        .waitForEnabledElement({ id: "has-access-to-loft-yes" })
+        .waitForEnabledElement({
+          id: `has-access-to-loft-${processData.property.loft.hasAccess}`
+        })
         .click();
       await browser!
-        .waitForEnabledElement({ id: "items-stored-in-loft-yes" })
+        .waitForEnabledElement({
+          id: `items-stored-in-loft-${processData.property.loft.itemsStored}`
+        })
         .click();
       await browser!
         .waitForEnabledElement({ name: "loft-notes" })
-        .sendKeys("Loft notes");
+        .sendKeys(processData.property.loft.notes);
 
       await browser!.submit();
 
       // Garden page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/garden");
 
-      await browser!.waitForEnabledElement({ id: "has-garden-yes" }).click();
       await browser!
-        .waitForEnabledElement({ id: "garden-type-private" })
+        .waitForEnabledElement({
+          id: `has-garden-${processData.property.garden.hasGarden}`
+        })
         .click();
-      await browser!.waitForEnabledElement({ id: "is-maintained-yes" }).click();
+      await browser!
+        .waitForEnabledElement({
+          id: `garden-type-${processData.property.garden.type}`
+        })
+        .click();
+      await browser!
+        .waitForEnabledElement({
+          id: `is-maintained-${processData.property.garden.isMaintained}`
+        })
+        .click();
       await browser!
         .waitForEnabledElement({ name: "garden-images" })
-        .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
+        .sendKeys(processData.property.garden.images[0]);
       await browser!
         .waitForEnabledElement({ name: "garden-notes" })
-        .sendKeys("Garden notes");
+        .sendKeys(processData.property.garden.notes);
 
       await browser!.submit();
 
@@ -350,16 +568,18 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       );
 
       await browser!
-        .waitForEnabledElement({ id: "is-storing-materials-yes" })
+        .waitForEnabledElement({
+          id: `is-storing-materials-${processData.property.storingMaterials.isStoringMaterials}`
+        })
         .click();
       await browser!
         .waitForEnabledElement({
-          id: "further-action-required-yes"
+          id: `further-action-required-${processData.property.storingMaterials.furtherActionRequired}`
         })
         .click();
       await browser!
         .waitForEnabledElement({ name: "stored-materials-notes" })
-        .sendKeys("Stored materials notes");
+        .sendKeys(processData.property.storingMaterials.notes);
 
       await browser!.submit();
 
@@ -368,11 +588,19 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         "/thc/fire-exit"
       );
 
-      await browser!.waitForEnabledElement({ id: "has-fire-exit-yes" }).click();
-      await browser!.waitForEnabledElement({ id: "is-accessible-yes" }).click();
+      await browser!
+        .waitForEnabledElement({
+          id: `has-fire-exit-${processData.property.fireExit.hasFireExit}`
+        })
+        .click();
+      await browser!
+        .waitForEnabledElement({
+          id: `is-accessible-${processData.property.fireExit.isAccessible}`
+        })
+        .click();
       await browser!
         .waitForEnabledElement({ name: "fire-exit-notes" })
-        .sendKeys("Fire exit notes");
+        .sendKeys(processData.property.fireExit.notes);
 
       await browser!.submit();
 
@@ -382,12 +610,18 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       );
 
       await browser!
-        .waitForEnabledElement({ id: "has-smoke-alarm-yes" })
+        .waitForEnabledElement({
+          id: `has-smoke-alarm-${processData.property.smokeAlarm.hasSmokeAlarm}`
+        })
         .click();
-      await browser!.waitForEnabledElement({ id: "is-working-yes" }).click();
+      await browser!
+        .waitForEnabledElement({
+          id: `is-working-${processData.property.smokeAlarm.isWorking}`
+        })
+        .click();
       await browser!
         .waitForEnabledElement({ name: "smoke-alarm-notes" })
-        .sendKeys("Smoke alarm notes");
+        .sendKeys(processData.property.smokeAlarm.notes);
 
       await browser!.submit();
 
@@ -397,21 +631,23 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       );
 
       await browser!
-        .waitForEnabledElement({ id: "has-metal-gates-yes" })
-        .click();
-      await browser!
         .waitForEnabledElement({
-          id: "combustible-items-behind-gates-yes"
+          id: `has-metal-gates-${processData.property.metalGates.hasMetalGates}`
         })
         .click();
       await browser!
         .waitForEnabledElement({
-          id: "further-action-required-yes"
+          id: `combustible-items-behind-gates-${processData.property.metalGates.combustibleItemsBehind}`
+        })
+        .click();
+      await browser!
+        .waitForEnabledElement({
+          id: `further-action-required-${processData.property.metalGates.furtherActionRequired}`
         })
         .click();
       await browser!
         .waitForEnabledElement({ name: "metal-gates-notes" })
-        .sendKeys("Metal gates notes");
+        .sendKeys(processData.property.metalGates.notes);
 
       await browser!.submit();
 
@@ -420,15 +656,19 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         "/thc/door-mats"
       );
 
-      await browser!.waitForEnabledElement({ id: "has-placed-yes" }).click();
       await browser!
         .waitForEnabledElement({
-          id: "further-action-required-yes"
+          id: `has-placed-${processData.property.doorMats.hasPlaced}`
+        })
+        .click();
+      await browser!
+        .waitForEnabledElement({
+          id: `further-action-required-${processData.property.doorMats.furtherActionRequired}`
         })
         .click();
       await browser!
         .waitForEnabledElement({ name: "door-mats-notes" })
-        .sendKeys("Door mats notes");
+        .sendKeys(processData.property.doorMats.notes);
 
       await browser!.submit();
 
@@ -439,38 +679,49 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!
         .waitForEnabledElement({
-          id: "has-left-combustible-items-yes"
+          id: `has-left-combustible-items-${processData.property.communalAreas.hasLeftCombustibleItems}`
         })
         .click();
       await browser!
         .waitForEnabledElement({
-          id: "further-action-required-yes"
+          id: `further-action-required-${processData.property.communalAreas.furtherActionRequired}`
         })
         .click();
       await browser!
         .waitForEnabledElement({ name: "communal-areas-notes" })
-        .sendKeys("Communal areas notes");
+        .sendKeys(processData.property.communalAreas.notes);
 
       await browser!.submit();
 
       // Pets page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/pets");
 
-      await browser!.waitForEnabledElement({ id: "has-pets-yes" }).click();
       await browser!
-        .waitForEnabledElement({ id: "has-permission-yes" })
+        .waitForEnabledElement({
+          id: `has-pets-${processData.property.pets.hasPets}`
+        })
         .click();
-      await browser!.waitForEnabledElement({ id: "pet-type-bird" }).click();
-      await browser!.waitForEnabledElement({ id: "pet-type-rabbit" }).click();
       await browser!
-        .waitForEnabledElement({ id: "has-permission-yes" })
+        .waitForEnabledElement({
+          id: `pet-type-${processData.property.pets.petTypes[0]}`
+        })
+        .click();
+      await browser!
+        .waitForEnabledElement({
+          id: `pet-type-${processData.property.pets.petTypes[1]}`
+        })
+        .click();
+      await browser!
+        .waitForEnabledElement({
+          id: `has-permission-${processData.property.pets.hasPermission}`
+        })
         .click();
       await browser!
         .waitForEnabledElement({ name: "pets-permission-images" })
-        .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
+        .sendKeys(processData.property.pets.images[0]);
       await browser!
         .waitForEnabledElement({ name: "pets-notes" })
-        .sendKeys("Pets notes");
+        .sendKeys(processData.property.pets.notes);
 
       await browser!.submit();
 
@@ -480,13 +731,15 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       );
 
       await browser!
-        .waitForEnabledElement({ id: "tenant-understands-yes" })
+        .waitForEnabledElement({
+          id: `tenant-understands-${processData.property.antisocialBehaviour.tenantUnderstands}`
+        })
         .click();
       await browser!
         .waitForEnabledElement({
           name: "antisocial-behaviour-notes"
         })
-        .sendKeys("Antisocial behaviour notes");
+        .sendKeys(processData.property.antisocialBehaviour.notes);
 
       await browser!.submit();
 
@@ -497,10 +750,10 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!
         .waitForEnabledElement({ name: "other-comments-images" })
-        .sendKeys(join(__dirname, "..", "__fixtures__", "image.jpg"));
+        .sendKeys(processData.property.otherComments.images[0]);
       await browser!
         .waitForEnabledElement({ name: "other-comments-notes" })
-        .sendKeys("Other comments notes");
+        .sendKeys(processData.property.otherComments.notes);
 
       await browser!.submit();
 
@@ -521,7 +774,11 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         "/thc/home-check"
       );
 
-      await browser!.waitForEnabledElement({ id: "home-check-yes" }).click();
+      await browser!
+        .waitForEnabledElement({
+          id: `home-check-${processData.homeCheck.value}`
+        })
+        .click();
 
       await browser!.submit();
 
@@ -529,20 +786,31 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/health");
 
       await browser!
-        .waitForEnabledElement({ id: "health-concerns-yes" })
+        .waitForEnabledElement({
+          id: `health-concerns-${processData.healthConcerns.value}`
+        })
         .click();
       await browser!
-        .waitForEnabledElement({ id: "health-concerns-who-tenant-1" })
+        .waitForEnabledElement({
+          id: `health-concerns-who-${processData.healthConcerns.who[0].replace(
+            /\s/g,
+            "-"
+          )}`
+        })
         .click();
       await browser!
-        .waitForEnabledElement({ id: "health-concerns-more-info-dementia" })
+        .waitForEnabledElement({
+          id: `health-concerns-more-info-${processData.healthConcerns.moreInfo[0]}`
+        })
         .click();
       await browser!
-        .waitForEnabledElement({ id: "health-concerns-more-info-smoking" })
+        .waitForEnabledElement({
+          id: `health-concerns-more-info-${processData.healthConcerns.moreInfo[1]}`
+        })
         .click();
       await browser!
         .waitForEnabledElement({ name: "health-notes" })
-        .sendKeys("Health notes");
+        .sendKeys(processData.healthConcerns.notes);
 
       await browser!.submit();
 
@@ -551,15 +819,37 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         "/thc/disability"
       );
 
-      await browser!.waitForEnabledElement({ id: "disability-yes" }).click();
       await browser!
-        .waitForEnabledElement({ id: "who-disability-tenant-1" })
+        .waitForEnabledElement({
+          id: `disability-${processData.disability.value}`
+        })
         .click();
-      await browser!.waitForEnabledElement({ id: "pip-or-dla-yes" }).click();
-      await browser!.waitForEnabledElement({ id: "who-pip-tenant-1" }).click();
+      await browser!
+        .waitForEnabledElement({
+          id: `who-disability-${processData.disability.whoDisability[0].replace(
+            /\s/g,
+            "-"
+          )}`
+        })
+        .click();
+      await browser!
+        .waitForEnabledElement({
+          id: `pip-or-dla-${processData.disability.pipOrDLA}`
+        })
+        .click();
+      await browser!
+        .waitForEnabledElement({
+          id: `who-pip-${processData.disability.whoPIP[0].replace(/\s/g, "-")}`
+        })
+        .click();
+      await browser!
+        .waitForEnabledElement({
+          id: `who-dla-${processData.disability.whoDLA[0].replace(/\s/g, "-")}`
+        })
+        .click();
       await browser!
         .waitForEnabledElement({ name: "disability-notes" })
-        .sendKeys("Disability notes");
+        .sendKeys(processData.disability.notes);
 
       await browser!.submit();
 
@@ -572,43 +862,45 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         .click();
       await browser!
         .waitForEnabledElement({ name: "resident-sustainment-notes" })
-        .sendKeys("Resident sustainment notes");
+        .sendKeys(processData.supportNeeds.residentSustainmentNotes);
       await browser!
         .waitForEnabledElement({ id: "befriending-notes-summary" })
         .click();
       await browser!
         .waitForEnabledElement({ name: "befriending-notes" })
-        .sendKeys("Befriending notes");
+        .sendKeys(processData.supportNeeds.befriendingNotes);
       await browser!
         .waitForEnabledElement({ id: "adult-safeguarding-notes-summary" })
         .click();
       await browser!
         .waitForEnabledElement({ name: "adult-safeguarding-notes" })
-        .sendKeys("Adult safeguarding notes");
+        .sendKeys(processData.supportNeeds.adultSafeguardingNotes);
       await browser!
         .waitForEnabledElement({ id: "childrens-safeguarding-notes-summary" })
         .click();
       await browser!
         .waitForEnabledElement({ name: "childrens-safeguarding-notes" })
-        .sendKeys("Children's safeguarding notes");
+        .sendKeys(
+          processData.supportNeeds.childrenYoungPeopleSafeguardingNotes
+        );
       await browser!
         .waitForEnabledElement({ id: "domestic-violence-notes-summary" })
         .click();
       await browser!
         .waitForEnabledElement({ name: "domestic-violence-notes" })
-        .sendKeys("Domestic violence notes");
+        .sendKeys(processData.supportNeeds.domesticSexualViolenceNotes);
       await browser!
         .waitForEnabledElement({ id: "mental-health-18-65-notes-summary" })
         .click();
       await browser!
         .waitForEnabledElement({ name: "mental-health-18-65-notes" })
-        .sendKeys("Mental health 18&ndash;65 notes");
+        .sendKeys(processData.supportNeeds.mentalHealth18To65Notes);
       await browser!
         .waitForEnabledElement({ id: "mental-health-over-65-notes-summary" })
         .click();
       await browser!
         .waitForEnabledElement({ name: "mental-health-over-65-notes" })
-        .sendKeys("Mental health over 65 notes");
+        .sendKeys(processData.supportNeeds.mentalHealthOver65Notes);
       await browser!.submit();
 
       // Sections page
@@ -636,6 +928,68 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
     then("I should see that the process has been submitted", async () => {
       await Expect.pageToContain("has been submitted for manager review");
+    });
+
+    then("the data in the backend should match", async () => {
+      const responseData = await new Promise<{ processData: ProcessJson }>(
+        (resolve, reject) => {
+          const req = request(
+            {
+              host: "localhost",
+              port: process.env.PORT || 3000,
+              path: `${process.env.BASE_PATH}api/v1/process/${process.env.TEST_PROCESS_REF}/processData?jwt=${process.env.TEST_PROCESS_API_JWT}`,
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                "X-API-KEY": process.env.PROCESS_API_KEY || ""
+              }
+            },
+            res => {
+              res.setEncoding("utf8");
+
+              let rawData = "";
+
+              res.on("data", chunk => {
+                rawData += chunk;
+              });
+
+              res.on("end", () => {
+                try {
+                  const parsedData = JSON.parse(rawData);
+
+                  resolve(parsedData);
+                } catch (err) {
+                  reject(err);
+                }
+              });
+
+              res.on("error", err => {
+                reject(err);
+              });
+            }
+          );
+
+          req.on("error", err => {
+            reject(err);
+          });
+
+          req.end();
+        }
+      );
+
+      const persistedProcessData = JSON.parse(
+        JSON.stringify(responseData.processData.processData).replace(
+          new RegExp(
+            base64Image
+              .replace(/\n/g, "")
+              .replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&"),
+            "g"
+          ),
+          imagePath
+        )
+      );
+
+      expect(persistedProcessData).toEqual(processData);
     });
   });
 });
