@@ -9,7 +9,7 @@ import {
 import useDatabase from "../helpers/useDatabase";
 import ProcessDatabaseSchema from "../storage/ProcessDatabaseSchema";
 import Storage from "../storage/Storage";
-import getProcessRef from "./getProcessRef";
+import tmpProcessRef from "../storage/processRef";
 
 const useProcessSectionComplete = <
   S extends StoreNames<ProcessDatabaseSchema["schema"]>
@@ -32,9 +32,11 @@ const useProcessSectionComplete = <
       db: Database<ProcessDatabaseSchema> | undefined,
       loading: boolean
     ) => {
-      const processRef = getProcessRef();
+      if (loading) {
+        return;
+      }
 
-      if (loading || !processRef) {
+      if (!tmpProcessRef) {
         return;
       }
 
@@ -48,14 +50,7 @@ const useProcessSectionComplete = <
         storeNames,
         async (stores: StoreMap<ProcessDatabaseSchema["schema"], S[]>) => {
           const values = await Promise.all(
-            storeNames.map(storeName => {
-              if (!processRef) {
-                return;
-              }
-              return stores[storeName].get(processRef) as Promise<
-                StoreValue<ProcessDatabaseSchema["schema"], S>
-              >;
-            })
+            storeNames.map(storeName => stores[storeName].get(tmpProcessRef))
           );
 
           result = validator

@@ -75,6 +75,7 @@
     "styled-jsx": "^3.2.4",
     "ts-jest": "^24.3.0",
     "typescript": "^3.7.5",
+    "utility-types": "^3.10.0",
     "wait-for-localhost-cli": "^1.1.0",
     "yn": "^4.0.0"
   },

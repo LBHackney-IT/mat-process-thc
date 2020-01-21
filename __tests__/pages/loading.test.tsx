@@ -45,7 +45,13 @@ it("renders correctly when online", async () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let body: any = {};
 
-      if (url.includes("/api/v1/tenancies") && method === "GET") {
+      if (url.includes("/api/v1/process") && method === "GET") {
+        body = {
+          dateCreated: new Date(2019, 1),
+          dateLastModified: new Date(2019, 3),
+          processData: {}
+        };
+      } else if (url.includes("/api/v1/tenancies") && method === "GET") {
         body = {
           results: {
             tenuretype: "Secure",
@@ -315,6 +321,9 @@ it("renders correctly when offline", async () => {
 
   expect(consoleErrorSpy.mock.calls).toMatchInlineSnapshot(`
     Array [
+      Array [
+        [Error: Request timed out],
+      ],
       Array [
         [Error: Request timed out],
       ],

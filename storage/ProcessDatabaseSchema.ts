@@ -2,9 +2,8 @@ import { NamedSchema, StoreNames } from "remultiform/database";
 
 export type ProcessRef = string;
 
-// We will replace this with a real name before release. It should be specific
-// to the environment it's running on to avoid clashes.
-export const processDatabaseName = "mat-process-thc-process-local";
+export const processDatabaseName = `mat-process-thc-process-${process.env
+  .ENVIRONMENT_NAME || "unknown"}`;
 
 type ProcessDatabaseSchema = NamedSchema<
   typeof processDatabaseName,
@@ -12,7 +11,7 @@ type ProcessDatabaseSchema = NamedSchema<
   {
     lastModified: {
       key: ProcessRef;
-      value: Date;
+      value: string;
     };
 
     property: {
@@ -220,6 +219,17 @@ type ProcessDatabaseSchema = NamedSchema<
     };
   }
 >;
+
+export interface ProcessJson {
+  dateCreated: string;
+  dateLastModified?: string;
+  dataSchemaVersion: number;
+  processData?: Partial<
+    {
+      [StoreName in keyof ProcessDatabaseSchema["schema"]]: ProcessDatabaseSchema["schema"][StoreName]["value"];
+    }
+  >;
+}
 
 export const processStoreNames: StoreNames<
   ProcessDatabaseSchema["schema"]

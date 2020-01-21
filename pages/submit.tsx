@@ -9,6 +9,8 @@ import Router from "next/router";
 import React from "react";
 import { TransactionMode } from "remultiform/database";
 
+import getProcessApiJwt from "../helpers/getProcessApiJwt";
+import getProcessRef from "../helpers/getProcessRef";
 import urlsForRouter from "../helpers/urlsForRouter";
 import useOnlineWithRetry from "../helpers/useOnlineWithRetry";
 import MainLayout from "../layouts/MainLayout";
@@ -16,27 +18,59 @@ import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 import PageTitles from "../steps/PageTitles";
 import { processStoreNames } from "../storage/ProcessDatabaseSchema";
 import Storage from "../storage/Storage";
-import getProcessRef from "../helpers/getProcessRef";
+import tmpProcessRef from "../storage/processRef";
 
 const submit = async (): Promise<void> => {
   if (Storage.ProcessContext && Storage.ProcessContext.database) {
-    const database = await Storage.ProcessContext.database;
+    const processRef = getProcessRef();
+    const processApiJwt = getProcessApiJwt(processRef);
 
-    // We should push to the API before doing this, or data will be
-    // lost.
-    database.transaction(
-      processStoreNames,
-      async stores => {
-        const processRef = getProcessRef();
+    if (!processRef || !processApiJwt) {
+      console.error(
+        "Unable to persist process data due to missing session data"
+      );
 
-        if (processRef) {
+      return;
+    }
+
+    // The steps still use the hardcoded `processRef`, so we need to also use
+    // it, even though we're using the correct value to persist to the backend.
+    const processJson = await Storage.getProcessJson(tmpProcessRef);
+
+    if (processJson) {
+      const response = await fetch(
+        `${process.env.BASE_PATH}api/v1/process/${processRef}/processData?jwt=${processApiJwt}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(processJson)
+        }
+      );
+
+      if (!response.ok) {
+        console.error(`${response.status}: ${response.statusText}`);
+
+        return;
+      }
+
+      const db = await Storage.ProcessContext.database;
+
+      // To reduce risk of data loss, we only clear up the data if we sent
+      // something to the backend.
+      db.transaction(
+        processStoreNames,
+        async stores => {
           await Promise.all(
             Object.values(stores).map(store => store.delete(processRef))
           );
-        }
-      },
-      TransactionMode.ReadWrite
-    );
+        },
+        TransactionMode.ReadWrite
+      );
+    }
+  } else {
+    console.warn("No process data to persist");
   }
 
   const { href, as } = urlsForRouter(urlObjectForSlug(PageSlugs.Confirmed));
