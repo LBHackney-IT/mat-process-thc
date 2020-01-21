@@ -1,14 +1,13 @@
 {
-  "name": "MaT - Tenancy and Household Check",
-  "short_name": "THC",
-  "description": null,
-  "dir": "auto",
-  "lang": "en-US",
-  "display": "standalone",
-  "orientation": "any",
-  "start_url": "/",
-  "background_color": "#fff",
-  "theme_color": "#fff",
+  "name": "Manage a Tenancy - Tenancy and Household Check",
+  "short_name": "MaT - THC",
+  "dir": "ltr",
+  "lang": "en-GB",
+  "display": "browser",
+  "scope": "/",
+  "serviceworker": {
+    "src": "/service-worker.js"
+  },
   "icons": [
     {
       "src": "/favicons/favicon-16x16.png",
