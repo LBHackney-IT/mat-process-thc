@@ -38,6 +38,10 @@ We use:
 
 1. Copy `.env.example` to `.env` and fill in the blanks.
 
+1. Create yourself a working process for local development in the OutSystems
+   development environment, setting `TEST_PROCESS_REF` in your `.env` to its
+   reference.
+
 1. Install the required packages:
 
    ```bash
