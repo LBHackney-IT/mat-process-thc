@@ -16,6 +16,7 @@ import useApi from "../helpers/api/useApi";
 import useApiWithStorage, {
   UseApiWithStorageReturn
 } from "../helpers/api/useApiWithStorage";
+import getProcessRef from "../helpers/getProcessRef";
 import titleCase from "../helpers/titleCase";
 import urlsForRouter from "../helpers/urlsForRouter";
 import MainLayout from "../layouts/MainLayout";
@@ -23,7 +24,7 @@ import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 import PageTitles from "../steps/PageTitles";
 import ExternalDatabaseSchema from "../storage/ExternalDatabaseSchema";
 import Storage from "../storage/Storage";
-import getProcessRef from "../helpers/getProcessRef";
+import tmpProcessRef from "../storage/processRef";
 
 const useFetchResidentData = (
   processRef: string | undefined
@@ -130,20 +131,23 @@ export const LoadingPage: NextPage = () => {
   const residentData = useFetchResidentData(processRef);
   const tenancyData = useFetchTenancyData(processRef);
 
-  const offlineProcessDataStatus = useAsync(
-    async (process: typeof processData.result) => {
-      if (!process || !processRef) {
-        return;
-      }
+  const offlineProcessDataStatus = useAsync(async () => {
+    if (processData.loading) {
+      return;
+    }
 
-      if (!process.processData) {
-        return false;
-      }
+    if (!processRef || !processData.result || !processData.result.processData) {
+      return;
+    }
 
-      return Storage.updateProcessData(processRef, process.processData);
-    },
-    [processData.result]
-  );
+    // The steps still use the hardcoded `processRef`, so we need to also use
+    // it, even though we're using the correct value to fetch from the
+    // backend.
+    return Storage.updateProcessData(
+      tmpProcessRef,
+      processData.result.processData
+    );
+  }, [processRef, processData.loading, JSON.stringify(processData.result)]);
 
   const loading =
     processData.loading ||

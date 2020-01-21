@@ -220,6 +220,17 @@ type ProcessDatabaseSchema = NamedSchema<
   }
 >;
 
+export interface ProcessJson {
+  dateCreated: string;
+  dateLastModified?: string;
+  dataSchemaVersion: number;
+  processData?: Partial<
+    {
+      [StoreName in keyof ProcessDatabaseSchema["schema"]]: ProcessDatabaseSchema["schema"][StoreName]["value"];
+    }
+  >;
+}
+
 export const processStoreNames: StoreNames<
   ProcessDatabaseSchema["schema"]
 >[] = [

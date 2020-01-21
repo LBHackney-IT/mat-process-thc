@@ -5,12 +5,16 @@ import {
   TransactionMode
 } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
+import { DeepPartial } from "utility-types";
 
 import ExternalDatabaseSchema, {
   externalDatabaseName
 } from "./ExternalDatabaseSchema";
 import ProcessDatabaseSchema, {
-  processDatabaseName
+  ProcessJson,
+  ProcessRef,
+  processDatabaseName,
+  processStoreNames
 } from "./ProcessDatabaseSchema";
 
 export default class Storage {
@@ -84,28 +88,43 @@ export default class Storage {
   }
 
   static async updateProcessData(
-    processRef: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    data: any
+    processRef: ProcessRef,
+    data: ProcessJson & { processData: DeepPartial<ProcessJson["processData"]> }
   ): Promise<boolean> {
-    if (!this.ProcessContext) {
+    const {
+      dateCreated,
+      dateLastModified,
+      dataSchemaVersion,
+      processData
+    } = data;
+
+    if (!processData) {
       return false;
     }
 
-    if (!this.ProcessContext.database) {
-      return false;
+    if (!dateLastModified && !dateCreated) {
+      throw new Error("No last modified or created dates");
     }
 
-    const database = await this.ProcessContext.database;
+    if (!this.ProcessContext || !this.ProcessContext.database) {
+      throw new Error("No database to update");
+    }
+
+    const db = await this.ProcessContext.database;
+
+    // Ideally we'd be exposing the version on the database directly, but
+    // this hack works for now.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (dataSchemaVersion !== (db as any).db.version) {
+      throw new Error("Database schema versions don't match");
+    }
 
     let isNewer = false;
 
-    await database.transaction(
-      ["lastModified"],
+    await db.transaction(
+      processStoreNames,
       async stores => {
-        const lastModified = new Date(
-          data.dateLastModified || data.dateCreated
-        );
+        const lastModified = new Date(dateLastModified || dateCreated);
 
         isNewer = await this.isProcessNewerThanStorage(
           stores.lastModified,
@@ -119,7 +138,21 @@ export default class Storage {
 
         await stores.lastModified.put(processRef, lastModified.toISOString());
 
-        // Update the rest of the data here.
+        await Promise.all(
+          Object.entries(processData).map(async ([storeName, value]) => {
+            if (storeName === "lastModified") {
+              return;
+            }
+
+            await stores[
+              storeName as StoreNames<ProcessDatabaseSchema["schema"]>
+            ].put(
+              processRef,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              value as any
+            );
+          })
+        );
       },
       TransactionMode.ReadWrite
     );
