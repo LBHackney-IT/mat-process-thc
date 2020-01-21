@@ -1,6 +1,6 @@
 /* eslint-env node */
 const { createDecipheriv, pbkdf2Sync } = require("crypto");
-const { Router } = require("express");
+const { Router, json } = require("express");
 const { request } = require("https");
 const jwt = require("jsonwebtoken");
 
@@ -86,8 +86,14 @@ const proxy = (options, req, res) => {
     res.end();
   });
 
+  if (req.body) {
+    clientReq.write(JSON.stringify(req.body));
+  }
+
   clientReq.end();
 };
+
+router.use(json({ limit: "1gb" }));
 
 router.get("/v1/process/:ref/processData", (req, res) => {
   const { ref } = req.params;
@@ -104,6 +110,34 @@ router.get("/v1/process/:ref/processData", (req, res) => {
     path: `${processApiBaseUrl}/v1/processData/${ref}`,
     method: req.method,
     headers: { "X-API-KEY": processApiKey }
+  };
+
+  proxy(options, req, res);
+});
+
+router.patch("/v1/process/:ref/processData", (req, res) => {
+  const { ref } = req.params;
+
+  if (!verifyJwt(req.query.jwt, processApiJwtSecret)) {
+    res.status(401).send("Invalid JWT");
+
+    return;
+  }
+
+  const options = {
+    host: processApiHost,
+    port: 443,
+    path: `${processApiBaseUrl}/v1/processData/${ref}`,
+    method: req.method,
+    headers: {
+      "Content-Type": "application/json",
+      "X-API-KEY": processApiKey
+    }
+  };
+
+  req.body = {
+    processRef: ref,
+    processDataToUpdate: req.body
   };
 
   proxy(options, req, res);

@@ -2,7 +2,8 @@ import {
   Database,
   Store,
   StoreNames,
-  TransactionMode
+  TransactionMode,
+  StoreValue
 } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
 import { DeepPartial } from "utility-types";
@@ -85,6 +86,52 @@ export default class Storage {
 
     this.ExternalContext = new DatabaseContext(externalDatabasePromise);
     this.ProcessContext = new DatabaseContext(processDatabasePromise);
+  }
+
+  static async getProcessJson(
+    processRef: ProcessRef
+  ): Promise<DeepPartial<ProcessJson> | undefined> {
+    if (!processRef || !this.ProcessContext) {
+      return;
+    }
+
+    const db = await this.ProcessContext.database;
+
+    let lastModified: string | undefined;
+
+    const processData = (
+      await Promise.all(
+        processStoreNames.map(async storeName => {
+          const value = await db.get(storeName, processRef);
+
+          if (storeName === "lastModified") {
+            lastModified = value as StoreValue<
+              ProcessDatabaseSchema["schema"],
+              typeof storeName
+            >;
+
+            return {};
+          }
+
+          return { [storeName]: value };
+        })
+      )
+    ).reduce(
+      (valuesObj, valueObj) => ({
+        ...valuesObj,
+        ...valueObj
+      }),
+      {}
+    ) as ProcessJson["processData"];
+
+    return {
+      dateLastModified: lastModified,
+      // Ideally we'd be exposing the version on the database directly, but
+      // this hack works for now.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      dataSchemaVersion: (db as any).db.version,
+      processData
+    };
   }
 
   static async updateProcessData(
