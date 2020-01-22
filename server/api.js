@@ -57,6 +57,8 @@ const decryptJson = (
 
 const proxy = (options, req, res) => {
   const clientReq = request(options, proxyRes => {
+    proxyRes.setEncoding("utf8");
+
     res.status(proxyRes.statusCode);
 
     proxyRes.on("data", chunk => {

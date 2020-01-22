@@ -39,9 +39,8 @@ const step: ProcessStepDefinition = {
           key: "paragraph-1",
           Component: Paragraph,
           props: {
-            children: `Include notes to record other subjects discussed with 
-            tenant or issues not included in the form:
-            `
+            children:
+              "Include notes to record other subjects discussed with tenant or issues not included in the form:"
           }
         })
       ),
@@ -52,10 +51,8 @@ const step: ProcessStepDefinition = {
           props: {
             items: [
               "hoarding",
-              `signs of sub-letting (only record what you observe eg locks on 
-              bedroom doors)`,
-              `any further questions from the tenant about their home, estate 
-              or facilities`,
+              "signs of sub-letting (only record what you observe eg locks on bedroom doors)",
+              "any further questions from the tenant about their home, estate or facilities",
               "Tenant and Resident Association"
             ],
             type: ListTypes.Bullet
@@ -67,9 +64,13 @@ const step: ProcessStepDefinition = {
           key: "other-comments-images",
           Component: ImageInput,
           props: {
-            label: "Take photo of any other issues",
+            label: "Take photos of any other issues",
             name: "other-comments-images",
-            maxCount: 3
+            hintText: "You can take up to 5 different photos." as
+              | string
+              | null
+              | undefined,
+            maxCount: 5
           },
           defaultValue: [],
           emptyValue: [] as string[],
@@ -89,8 +90,10 @@ const step: ProcessStepDefinition = {
           Component: TextArea,
           props: {
             label: {
-              value: `Add notes about any other comments or points to 
-              investigate for the property` as React.ReactNode | null
+              value: "Add notes about any other comments or points to investigate for the property" as
+                | React.ReactNode
+                | null
+                | undefined
             },
             name: "other-comments-notes"
           },

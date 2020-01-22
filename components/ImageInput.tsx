@@ -6,7 +6,9 @@ import {
   DynamicComponent
 } from "remultiform/component-wrapper";
 
-import { PhotoIcon } from "../components/icons/PhotoIcon";
+import imageToBase64 from "../helpers/imageToBase64";
+
+import { PhotoIcon } from "./icons/PhotoIcon";
 
 type Props = DynamicComponentControlledProps<string[]> & {
   label: string;
@@ -14,22 +16,6 @@ type Props = DynamicComponentControlledProps<string[]> & {
   hintText?: string | null;
   maxCount?: number | null;
 };
-
-const toBase64 = (file: File): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (): void => {
-      if (reader.result) {
-        resolve(reader.result.toString());
-      } else {
-        reject(new Error("No result from reading file as data URL"));
-      }
-    };
-    reader.onerror = (error): void => {
-      reject(error);
-    };
-    reader.readAsDataURL(file);
-  });
 
 export const ImageInput = (props: Props): React.ReactElement => {
   const {
@@ -88,7 +74,7 @@ export const ImageInput = (props: Props): React.ReactElement => {
 
           const file = event.target.files[0];
 
-          const newImage = await toBase64(file);
+          const newImage = await imageToBase64(file);
 
           if ((images || []).includes(newImage)) {
             return;
