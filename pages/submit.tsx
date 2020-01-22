@@ -72,10 +72,6 @@ const submit = async (): Promise<void> => {
   } else {
     console.warn("No process data to persist");
   }
-
-  const { href, as } = urlsForRouter(urlObjectForSlug(PageSlugs.Confirmed));
-
-  await Router.push(href, as);
 };
 
 const SubmitPage: NextPage = () => {
@@ -139,7 +135,19 @@ const SubmitPage: NextPage = () => {
       <Button
         disabled={disabled}
         preventDoubleClick={true}
-        onClick={submit}
+        onClick={async (): Promise<void> => {
+          try {
+            await submit();
+
+            const { href, as } = urlsForRouter(
+              urlObjectForSlug(PageSlugs.Confirmed)
+            );
+
+            await Router.push(href, as);
+          } catch (err) {
+            console.error(err);
+          }
+        }}
         data-testid="submit"
       >
         {disabled

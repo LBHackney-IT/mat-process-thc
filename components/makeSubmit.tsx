@@ -1,7 +1,7 @@
 import { Button } from "lbh-frontend-react/components";
-import NextLink from "next/link";
+import { useRouter } from "next/router";
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useEffect } from "react";
 import { SubmitProps, submitPropTypes } from "remultiform/step";
 
 import urlsForRouter from "../helpers/urlsForRouter";
@@ -17,33 +17,47 @@ export const makeSubmit = (
   const buttonProps = Array.isArray(props) ? props : [props];
 
   const Submit = ({ onSubmit }: SubmitProps): React.ReactElement => {
+    const router = useRouter();
+    const buttonUrlsString = buttonProps
+      .map(({ url }) => url.pathname)
+      .join(",");
+
+    useEffect(() => {
+      buttonProps.map(({ url }) => {
+        const { href } = urlsForRouter(url);
+
+        router.prefetch(href.pathname);
+      });
+    }, [router, buttonUrlsString]);
+
     return (
       <>
         {buttonProps.map(({ url, value }, i) => {
           const { href, as } = urlsForRouter(url);
 
           return (
-            <NextLink key={i} href={href} as={as}>
-              <Button
-                className={
-                  i > 0
-                    ? "submit-button lbh-button--secondary govuk-button--secondary"
-                    : "submit-button"
+            <Button
+              key={as.pathname}
+              className={
+                i > 0
+                  ? "submit-button lbh-button--secondary govuk-button--secondary"
+                  : "submit-button"
+              }
+              onClick={async (): Promise<void> => {
+                try {
+                  await onSubmit();
+                } catch (error) {
+                  // This is invisible to the user, so we should do something to
+                  // display it to them.
+                  console.error(error);
                 }
-                onClick={async (): Promise<void> => {
-                  try {
-                    await onSubmit();
-                  } catch (error) {
-                    // This is invisible to the user, so we should do something to
-                    // display it to them.
-                    console.error(error);
-                  }
-                }}
-                data-testid={i > 0 ? undefined : "submit"}
-              >
-                {value}
-              </Button>
-            </NextLink>
+
+                await router.push(href, as);
+              }}
+              data-testid={i > 0 ? undefined : "submit"}
+            >
+              {value}
+            </Button>
           );
         })}
         <style jsx>{`
