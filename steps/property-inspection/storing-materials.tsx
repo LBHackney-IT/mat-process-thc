@@ -110,10 +110,7 @@ const step: ProcessStepDefinition = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about the stored materials if necessary." as
-                | React.ReactNode
-                | null
-                | undefined
+              value: "Add note about the stored materials if necessary." as React.ReactNode
             },
             name: "stored-materials-notes"
           },

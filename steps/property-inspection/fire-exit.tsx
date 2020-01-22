@@ -105,10 +105,7 @@ const step: ProcessStepDefinition = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about the fire exit if necessary." as
-                | React.ReactNode
-                | null
-                | undefined
+              value: "Add note about the fire exit if necessary." as React.ReactNode
             },
             name: "fire-exit-notes"
           },

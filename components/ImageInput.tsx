@@ -1,11 +1,11 @@
 import { Button, Paragraph } from "lbh-frontend-react/components";
-import PropTypes from "prop-types";
 import React, { useRef } from "react";
 import {
   DynamicComponentControlledProps,
   DynamicComponent
 } from "remultiform/component-wrapper";
 
+import PropTypes from "../helpers/PropTypes";
 import imageToBase64 from "../helpers/imageToBase64";
 
 import { PhotoIcon } from "./icons/PhotoIcon";
@@ -13,8 +13,8 @@ import { PhotoIcon } from "./icons/PhotoIcon";
 type Props = DynamicComponentControlledProps<string[]> & {
   label: string;
   name: string;
-  hintText?: string | null;
-  maxCount?: number | null;
+  hintText?: string;
+  maxCount?: number;
 };
 
 export const ImageInput = (props: Props): React.ReactElement => {

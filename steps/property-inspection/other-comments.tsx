@@ -68,7 +68,6 @@ const step: ProcessStepDefinition = {
             name: "other-comments-images",
             hintText: "You can take up to 5 different photos." as
               | string
-              | null
               | undefined,
             maxCount: 5
           },
@@ -90,10 +89,7 @@ const step: ProcessStepDefinition = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add notes about any other comments or points to investigate for the property" as
-                | React.ReactNode
-                | null
-                | undefined
+              value: "Add notes about any other comments or points to investigate for the property" as React.ReactNode
             },
             name: "other-comments-notes"
           },

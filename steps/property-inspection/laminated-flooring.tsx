@@ -114,7 +114,6 @@ const step: ProcessStepDefinition = {
             name: "laminated-flooring-images",
             hintText: "You can take up to 5 different photos" as
               | string
-              | null
               | undefined,
             maxCount: 5
           },
@@ -144,10 +143,7 @@ const step: ProcessStepDefinition = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about laminated flooring if necessary." as
-                | React.ReactNode
-                | null
-                | undefined
+              value: "Add note about laminated flooring if necessary." as React.ReactNode
             },
             name: "laminated-flooring-notes"
           },

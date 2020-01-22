@@ -68,10 +68,7 @@ const step: ProcessStepDefinition = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about access if necessary." as
-                | React.ReactNode
-                | null
-                | undefined
+              value: "Add note about access if necessary." as React.ReactNode
             },
             name: "room-entry-notes"
           },

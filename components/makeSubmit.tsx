@@ -1,9 +1,9 @@
 import { Button } from "lbh-frontend-react/components";
 import { useRouter } from "next/router";
-import PropTypes from "prop-types";
 import React, { useEffect } from "react";
 import { SubmitProps, submitPropTypes } from "remultiform/step";
 
+import PropTypes from "../helpers/PropTypes";
 import urlsForRouter from "../helpers/urlsForRouter";
 
 export interface MakeSubmitProps {

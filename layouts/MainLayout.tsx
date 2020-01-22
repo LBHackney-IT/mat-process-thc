@@ -10,8 +10,8 @@ import {
 import { Header } from "lbh-frontend-react/components/Header";
 
 interface BaseProps {
-  title?: string | null;
-  heading?: string | null;
+  title?: string;
+  heading?: string;
   children: React.ReactNode;
 }
 

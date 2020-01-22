@@ -72,7 +72,6 @@ const step: ProcessStepDefinition = {
             name: "damage-images",
             hintText: "You can take up to 5 different photos" as
               | string
-              | null
               | undefined,
             maxCount: 5
           },
@@ -99,10 +98,7 @@ const step: ProcessStepDefinition = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about damage including how it was caused and location in property." as
-                | React.ReactNode
-                | null
-                | undefined
+              value: "Add note about damage including how it was caused and location in property." as React.ReactNode
             },
             name: "damage-notes"
           },

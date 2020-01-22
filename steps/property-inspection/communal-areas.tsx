@@ -108,10 +108,7 @@ const step: ProcessStepDefinition = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about door mats / potted plants if necessary." as
-                | React.ReactNode
-                | null
-                | undefined
+              value: "Add note about door mats / potted plants if necessary." as React.ReactNode
             },
             name: "communal-areas-notes"
           },

@@ -45,12 +45,7 @@ const step: ProcessStepDefinition = {
             label: {
               id: "resident-sustainment-notes-label",
               value: "Add note for post visit referral."
-            } as
-              | {
-                  id?: string | null;
-                  value?: React.ReactNode | null;
-                }
-              | undefined,
+            } as { id?: string; value?: React.ReactNode } | undefined,
             contentAfterTextArea: (
               <Paragraph>
                 Or refer now:{" "}
@@ -62,7 +57,7 @@ const step: ProcessStepDefinition = {
                 </Link>{" "}
                 (online only, opens in a new tab)
               </Paragraph>
-            ) as React.ReactNode | undefined
+            ) as React.ReactNode
           },
           defaultValue: "",
           emptyValue: "",
@@ -95,12 +90,7 @@ const step: ProcessStepDefinition = {
             label: {
               id: "befriending-notes-label",
               value: "Add note for post visit referral."
-            } as
-              | {
-                  id?: string | null;
-                  value?: React.ReactNode | null;
-                }
-              | undefined
+            } as { id?: string; value?: React.ReactNode } | undefined
           },
           defaultValue: "",
           emptyValue: "",
@@ -133,12 +123,7 @@ const step: ProcessStepDefinition = {
             label: {
               id: "adult-safeguarding-notes-label",
               value: "Add note for post visit referral."
-            } as
-              | {
-                  id?: string | null;
-                  value?: React.ReactNode | null;
-                }
-              | undefined,
+            } as { id?: string; value?: React.ReactNode } | undefined,
             contentAfterTextArea: (
               <Paragraph>
                 Website:{" "}
@@ -168,7 +153,7 @@ const step: ProcessStepDefinition = {
                 </Link>{" "}
                 (online only, opens in a new tab)
               </Paragraph>
-            ) as React.ReactNode | undefined
+            ) as React.ReactNode
           },
           defaultValue: "",
           emptyValue: "",
@@ -201,12 +186,7 @@ const step: ProcessStepDefinition = {
             label: {
               id: "childrens-safeguarding-notes-label",
               value: "Add note for post visit referral."
-            } as
-              | {
-                  id?: string | null;
-                  value?: React.ReactNode | null;
-                }
-              | undefined,
+            } as { id?: string; value?: React.ReactNode } | undefined,
             contentAfterTextArea: (
               <>
                 <Paragraph>Or refer now:</Paragraph>
@@ -233,7 +213,7 @@ const step: ProcessStepDefinition = {
                   Out of hours: 020 8356 2710
                 </Paragraph>
               </>
-            ) as React.ReactNode | undefined
+            ) as React.ReactNode
           },
           defaultValue: "",
           emptyValue: "",
@@ -266,12 +246,7 @@ const step: ProcessStepDefinition = {
             label: {
               id: "domestic-violence-notes-label",
               value: "Add note for post visit referral."
-            } as
-              | {
-                  id?: string | null;
-                  value?: React.ReactNode | null;
-                }
-              | undefined,
+            } as { id?: string; value?: React.ReactNode } | undefined,
             contentAfterTextArea: (
               <>
                 <Paragraph>Or refer now:</Paragraph>
@@ -284,7 +259,7 @@ const step: ProcessStepDefinition = {
                   Phone: 020 8356 4458 / 4459 or 0800 056 0905
                 </Paragraph>
               </>
-            ) as React.ReactNode | undefined
+            ) as React.ReactNode
           },
           defaultValue: "",
           emptyValue: "",
@@ -317,12 +292,7 @@ const step: ProcessStepDefinition = {
             label: {
               id: "mental-health-18-65-notes-label",
               value: "Add note for post visit referral."
-            } as
-              | {
-                  id?: string | null;
-                  value?: React.ReactNode | null;
-                }
-              | undefined,
+            } as { id?: string; value?: React.ReactNode } | undefined,
             contentAfterTextArea: (
               <>
                 <Paragraph>Or refer now:</Paragraph>
@@ -337,7 +307,7 @@ const step: ProcessStepDefinition = {
                   (online only, opens in a new tab)
                 </Paragraph>
               </>
-            ) as React.ReactNode | undefined
+            ) as React.ReactNode
           },
           defaultValue: "",
           emptyValue: "",
@@ -370,12 +340,7 @@ const step: ProcessStepDefinition = {
             label: {
               id: "mental-health-over-65-notes-label",
               value: "Add note for post visit referral."
-            } as
-              | {
-                  id?: string | null;
-                  value?: React.ReactNode | null;
-                }
-              | undefined,
+            } as { id?: string; value?: React.ReactNode } | undefined,
             contentAfterTextArea: (
               <>
                 <Paragraph>Or refer now:</Paragraph>
@@ -393,7 +358,7 @@ const step: ProcessStepDefinition = {
                   (online only, opens in a new tab)
                 </Paragraph>
               </>
-            ) as React.ReactNode | undefined
+            ) as React.ReactNode
           },
           defaultValue: "",
           emptyValue: "",

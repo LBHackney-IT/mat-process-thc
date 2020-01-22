@@ -110,10 +110,7 @@ const step: ProcessStepDefinition = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about loft space if necessary." as
-                | React.ReactNode
-                | null
-                | undefined
+              value: "Add note about loft space if necessary." as React.ReactNode
             },
             name: "loft-notes"
           },

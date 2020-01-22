@@ -245,12 +245,9 @@ const step: ProcessStepDefinition = {
           props: {
             name: "disability-notes",
             label: {
-              value: "Add note about any disability concerns if necessary." as
-                | React.ReactNode
-                | null
-                | undefined
+              value: "Add note about any disability concerns if necessary." as React.ReactNode
             },
-            rows: 4 as number | null | undefined
+            rows: 4 as number | undefined
           },
           renderWhen(stepValues: {
             disability?: ComponentValue<ProcessDatabaseSchema, "disability">;

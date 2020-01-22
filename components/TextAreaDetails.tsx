@@ -3,7 +3,8 @@ import {
   DynamicComponentControlledProps,
   DynamicComponent
 } from "remultiform/component-wrapper";
-import PropTypes from "prop-types";
+
+import PropTypes from "../helpers/PropTypes";
 
 import { Details } from "./Details";
 import { TextArea } from "./TextArea";
@@ -11,12 +12,12 @@ import { TextArea } from "./TextArea";
 type Props = DynamicComponentControlledProps<string> & {
   summary: React.ReactNode;
   name: string;
-  rows?: number | null;
+  rows?: number;
   label?: {
-    id?: string | null;
-    value?: React.ReactNode | null;
+    id?: string;
+    value?: React.ReactNode;
   };
-  contentAfterTextArea?: React.ReactNode | null;
+  contentAfterTextArea?: React.ReactNode;
 };
 
 export const TextAreaDetails: React.FunctionComponent<Props> = (
@@ -58,7 +59,7 @@ TextAreaDetails.propTypes = {
   summary: PropTypes.node.isRequired,
   name: PropTypes.string.isRequired,
   rows: PropTypes.number,
-  label: PropTypes.exact({
+  label: PropTypes.shape({
     id: PropTypes.string,
     value: PropTypes.node
   }),

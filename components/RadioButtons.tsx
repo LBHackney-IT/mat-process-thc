@@ -1,10 +1,11 @@
 import { Fieldset } from "lbh-frontend-react/components";
-import PropTypes from "prop-types";
 import React from "react";
 import {
   DynamicComponentControlledProps,
   DynamicComponent
 } from "remultiform/component-wrapper";
+
+import PropTypes from "../helpers/PropTypes";
 
 export interface RadioButton {
   label: string;
@@ -13,7 +14,7 @@ export interface RadioButton {
 
 type Props = DynamicComponentControlledProps<string> & {
   name: string;
-  legend?: React.ReactNode | null;
+  legend?: React.ReactNode;
   radios: RadioButton[];
 };
 
