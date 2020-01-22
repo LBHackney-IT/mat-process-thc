@@ -24,6 +24,16 @@ const idResidencyStartedValidator = (
   )[]
 ): boolean => values.some(v => v !== undefined);
 
+const householdCompleteValidator = (
+  values: (
+    | StoreValue<ProcessDatabaseSchema["schema"], "household">
+    | undefined
+  )[]
+): boolean => {
+  const v = values[0];
+  return v !== undefined && v.otherProperty !== undefined;
+};
+
 const propertyInspectionStartedValidator = (
   values: (
     | StoreValue<ProcessDatabaseSchema["schema"], "property">
@@ -83,8 +93,11 @@ export const SectionsPage: NextPage = () => {
     "residency",
     "tenant"
   ]);
-  const householdStarted = { result: false };
-  const householdComplete = { result: false };
+  const householdStarted = useProcessSectionComplete(["household"]);
+  const householdComplete = useProcessSectionComplete(
+    ["household"],
+    householdCompleteValidator
+  );
   const propertyInspectionStarted = useProcessSectionComplete(
     ["property"],
     propertyInspectionStartedValidator
