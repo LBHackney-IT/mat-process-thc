@@ -1,6 +1,6 @@
 import {
   Button,
-  List,
+  ErrorMessage,
   Heading,
   HeadingLevels,
   Paragraph
@@ -12,6 +12,7 @@ import { nullAsUndefined } from "null-as-undefined";
 import React from "react";
 import { useAsync } from "react-async-hook";
 
+import ProgressBar from "../components/ProgressBar";
 import { TenancySummary } from "../components/TenancySummary";
 import useApi from "../helpers/api/useApi";
 import useApiWithStorage, {
@@ -153,112 +154,33 @@ export const LoadingPage: NextPage = () => {
 
   const precacheProcessPages = usePrecacheAll();
 
-  const loading =
-    processData.loading ||
-    residentData.loading ||
-    tenancyData.loading ||
-    offlineProcessDataStatus.loading ||
-    precacheProcessPages.loading;
-  const errored =
-    !loading &&
-    Boolean(
-      processData.error ||
-        residentData.error ||
-        tenancyData.error ||
-        offlineProcessDataStatus.error ||
-        precacheProcessPages.error
-    );
+  const asyncResults = [
+    processData,
+    residentData,
+    tenancyData,
+    offlineProcessDataStatus,
+    precacheProcessPages
+  ];
+
+  const loading = asyncResults.some(result => result.loading);
+  const errored = !loading && asyncResults.some(result => result.error);
   const ready =
     !loading &&
     !errored &&
-    processData.result &&
-    residentData.result &&
-    tenancyData.result &&
-    offlineProcessDataStatus.result !== undefined &&
-    precacheProcessPages.result;
+    asyncResults.every(result => result.result !== undefined);
 
-  if (processData.error) {
-    // We should give the user some way to recover from this. Perhaps we should
-    // retry in this case and dedupe the error?
-    console.error(processData.error);
+  for (const asyncResult of asyncResults) {
+    if (asyncResult.error) {
+      // We should give the user some way to recover from this. Perhaps we
+      // should retry in this case and dedupe the error?
+      console.error(asyncResult.error);
+    }
   }
 
-  if (residentData.error) {
-    // We should give the user some way to recover from this. Perhaps we should
-    // retry in this case and dedupe the error?
-    console.error(residentData.error);
-  }
-
-  if (tenancyData.error) {
-    // We should give the user some way to recover from this. Perhaps we should
-    // retry in this case and dedupe the error?
-    console.error(tenancyData.error);
-  }
-
-  if (offlineProcessDataStatus.error) {
-    // We should give the user some way to recover from this. Perhaps we should
-    // retry in this case and dedupe the error?
-    console.error(offlineProcessDataStatus.error);
-  }
-
-  if (precacheProcessPages.error) {
-    // We should give the user some way to recover from this. Perhaps we should
-    // retry in this case and dedupe the error?
-    console.error(precacheProcessPages.error);
-  }
-
-  const progressItems = [
-    `Fetching any answers previously saved to the Hub... ${
-      processData.loading
-        ? "Loading"
-        : processData.error
-        ? "Error"
-        : processData.result
-        ? "Loaded"
-        : "N/A"
-    }`,
-    `Fetching and saving resident information... ${
-      residentData.loading
-        ? "Loading"
-        : residentData.error
-        ? "Error"
-        : residentData.result
-        ? "Saved"
-        : "N/A"
-    }`,
-    `Fetching and saving tenancy information... ${
-      tenancyData.loading
-        ? "Loading"
-        : tenancyData.error
-        ? "Error"
-        : tenancyData.result
-        ? "Saved"
-        : "N/A"
-    }`,
-    `Precaching process pages... ${
-      precacheProcessPages.loading
-        ? "Loading"
-        : precacheProcessPages.error
-        ? "Error"
-        : precacheProcessPages.result
-        ? "Cached"
-        : "N/A"
-    }`
-  ] as React.ReactNode[];
-
-  if (processData.result) {
-    progressItems.push(
-      `Updating offline storage of process data... ${
-        offlineProcessDataStatus.loading
-          ? "Updating"
-          : offlineProcessDataStatus.error
-          ? "Error"
-          : offlineProcessDataStatus.result
-          ? "Updated"
-          : "Process on device is more recent than in Hub"
-      }`
-    );
-  }
+  const progress =
+    asyncResults.filter(
+      asyncResult => !asyncResult.loading && asyncResult.result !== undefined
+    ).length / asyncResults.length;
 
   const { href, as } = urlsForRouter(urlObjectForSlug(PageSlugs.VisitAttempt));
 
@@ -294,19 +216,21 @@ export const LoadingPage: NextPage = () => {
 
       <Heading level={HeadingLevels.H2}>Previsit setup</Heading>
       <Paragraph>
-        The system is currently updating the information you need for this
-        process so that you can work offline or online.
-      </Paragraph>
-      <Paragraph>
-        Please wait until the &lsquo;Go&rsquo; button is available to be clicked
-        before proceeding.
+        The system will now update the information you need for this process so
+        that you can go offline at any point.
       </Paragraph>
 
-      <List items={progressItems} />
+      <ProgressBar
+        progress={progress}
+        incompleteLabel="Loading..."
+        completeLabel={errored ? "Error" : "Ready"}
+      />
+
       {errored && (
-        <Paragraph>
-          Something went really wrong. Please contact support.
-        </Paragraph>
+        <ErrorMessage>
+          Something went wrong. Please try reopening this process from your
+          worktray.
+        </ErrorMessage>
       )}
 
       <NextLink href={href} as={as}>
