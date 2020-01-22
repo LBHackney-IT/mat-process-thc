@@ -18,6 +18,33 @@ import ProcessDatabaseSchema, {
   processStoreNames
 } from "./ProcessDatabaseSchema";
 
+const migrateProcessData = async (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  processData: any,
+  oldVersion: number,
+  newVersion: number
+  // eslint-disable-next-line @typescript-eslint/require-await
+): Promise<Required<ProcessJson>["processData"]> => {
+  let version = oldVersion;
+
+  if (version === 0) {
+    version = 1;
+  }
+
+  if (version === 1) {
+    version = 2;
+  }
+
+  if (version !== newVersion) {
+    throw new Error(
+      `Unable to upgrade to ${newVersion} due to missing ` +
+        `data migrations from ${version} onwards`
+    );
+  }
+
+  return processData;
+};
+
 export default class Storage {
   static ExternalContext:
     | DatabaseContext<ExternalDatabaseSchema>
@@ -53,7 +80,7 @@ export default class Storage {
 
     const processDatabasePromise = Database.open<ProcessDatabaseSchema>(
       processDatabaseName,
-      1,
+      2,
       {
         upgrade(upgrade) {
           let version = upgrade.oldVersion;
@@ -72,6 +99,12 @@ export default class Storage {
             upgrade.createStore("supportNeeds");
 
             version = 1;
+          }
+
+          if (version === 1) {
+            upgrade.createStore("household");
+
+            version = 2;
           }
 
           if (version !== upgrade.newVersion) {
@@ -159,12 +192,14 @@ export default class Storage {
 
     const db = await this.ProcessContext.database;
 
-    // Ideally we'd be exposing the version on the database directly, but
-    // this hack works for now.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if (dataSchemaVersion !== (db as any).db.version) {
-      throw new Error("Database schema versions don't match");
-    }
+    const migratedProcessData = await migrateProcessData(
+      processData,
+      dataSchemaVersion,
+      // Ideally we'd be exposing the version on the database directly, but
+      // this hack works for now.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (db as any).db.version
+    );
 
     let isNewer = false;
 
@@ -186,19 +221,21 @@ export default class Storage {
         await stores.lastModified.put(processRef, lastModified.toISOString());
 
         await Promise.all(
-          Object.entries(processData).map(async ([storeName, value]) => {
-            if (storeName === "lastModified") {
-              return;
-            }
+          Object.entries(migratedProcessData).map(
+            async ([storeName, value]) => {
+              if (storeName === "lastModified") {
+                return;
+              }
 
-            await stores[
-              storeName as StoreNames<ProcessDatabaseSchema["schema"]>
-            ].put(
-              processRef,
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              value as any
-            );
-          })
+              await stores[
+                storeName as StoreNames<ProcessDatabaseSchema["schema"]>
+              ].put(
+                processRef,
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                value as any
+              );
+            }
+          )
         );
       },
       TransactionMode.ReadWrite

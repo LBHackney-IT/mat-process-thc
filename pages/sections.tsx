@@ -74,15 +74,15 @@ const wellbeingCompleteValidator = (
 export const SectionsPage: NextPage = () => {
   const tenancyData = useData(Storage.ExternalContext, "tenancy");
   const residentData = useData(Storage.ExternalContext, "residents");
+  const idAndResidencyStarted = useProcessSectionComplete(
+    ["id", "residency", "tenant"],
+    idResidencyStartedValidator
+  );
   const idAndResidencyComplete = useProcessSectionComplete([
     "id",
     "residency",
     "tenant"
   ]);
-  const idAndResidencyStarted = useProcessSectionComplete(
-    ["id", "residency", "tenant"],
-    idResidencyStartedValidator
-  );
   const householdStarted = { result: false };
   const householdComplete = { result: false };
   const propertyInspectionStarted = useProcessSectionComplete(

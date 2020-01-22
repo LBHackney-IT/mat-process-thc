@@ -8,7 +8,7 @@ export const processDatabaseName = `mat-process-thc-process-${process.env
 
 type ProcessDatabaseSchema = NamedSchema<
   typeof processDatabaseName,
-  1,
+  2,
   {
     lastModified: {
       key: ProcessRef;
@@ -175,6 +175,21 @@ type ProcessDatabaseSchema = NamedSchema<
       };
     };
 
+    household: {
+      key: ProcessRef;
+      value: {
+        documents: {
+          images: string[];
+        };
+        houseMovingSchemes: {
+          notes: string;
+        };
+        memberChanges: {
+          notes: string;
+        };
+      };
+    };
+
     homeCheck: {
       key: ProcessRef;
       value: {
@@ -241,6 +256,7 @@ const storeNames: {
   id: true,
   residency: true,
   tenant: true,
+  household: true,
   homeCheck: true,
   healthConcerns: true,
   disability: true,

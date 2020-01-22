@@ -59,6 +59,11 @@ Feature: Accessibility
     Then the page should be accessible
     And the page should have a descriptive title
 
+  Scenario: Household page is accessible
+    When I visit /thc/household
+    Then the page should be accessible
+    And the page should have a descriptive title
+
   Scenario: Rooms page is accessible
     When I visit /thc/rooms
     Then the page should be accessible
