@@ -6,7 +6,7 @@ import {
 } from "lbh-frontend-react";
 import { NextPage } from "next";
 import Router from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import { TransactionMode } from "remultiform/database";
 
 import getProcessApiJwt from "../helpers/getProcessApiJwt";
@@ -76,6 +76,7 @@ const submit = async (): Promise<void> => {
 
 const SubmitPage: NextPage = () => {
   const online = useOnlineWithRetry();
+  const [submitting, setSubmitting] = useState(false);
 
   const address = "1 Mare Street, London, E8 3AA";
   const tenants = ["Jane Doe", "John Doe"];
@@ -127,16 +128,19 @@ const SubmitPage: NextPage = () => {
       {online.error && (
         <ErrorMessage>
           Something went wrong while checking whether you are online or not.
+          Please reload the page and try again.
         </ErrorMessage>
       )}
 
       {content}
 
       <Button
-        disabled={disabled}
-        preventDoubleClick={true}
+        disabled={disabled || submitting}
+        preventDoubleClick
         onClick={async (): Promise<void> => {
           try {
+            setSubmitting(true);
+
             await submit();
 
             const { href, as } = urlsForRouter(
@@ -146,12 +150,16 @@ const SubmitPage: NextPage = () => {
             await Router.push(href, as);
           } catch (err) {
             console.error(err);
+
+            setSubmitting(false);
           }
         }}
         data-testid="submit"
       >
         {disabled
           ? "Waiting for connectivity..."
+          : submitting
+          ? "Submitting..."
           : "Save and submit to manager"}
       </Button>
     </MainLayout>

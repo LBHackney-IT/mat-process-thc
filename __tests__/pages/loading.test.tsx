@@ -268,32 +268,38 @@ it("renders correctly when online", async () => {
           <p
             className="lbh-body"
           >
-            The system is currently updating the information you need for this process so that you can work offline or online.
+            The system will now update the information you need for this process so that you can go offline at any point.
           </p>
-          <p
-            className="lbh-body"
+          <label
+            className="govuk-label lbh-label"
           >
-            Please wait until the ‘Go’ button is available to be clicked before proceeding.
-          </p>
-          <ul
-            className="govuk-list lbh-list"
-          >
-            <li>
-              Fetching any answers previously saved to the Hub... Loaded
-            </li>
-            <li>
-              Fetching and saving resident information... Saved
-            </li>
-            <li>
-              Fetching and saving tenancy information... Saved
-            </li>
-            <li>
-              Precaching process pages... Cached
-            </li>
-            <li>
-              Updating offline storage of process data... Process on device is more recent than in Hub
-            </li>
-          </ul>
+            Ready
+            <div>
+              <div
+                style={
+                  Object {
+                    "width": "100%",
+                  }
+                }
+              />
+            </div>
+            <style
+              jsx={true}
+            >
+              
+            div {
+              width: 100%;
+              height: 1em;
+              background-color: #7fb2a7;
+            }
+
+            div &gt; div {
+              width: 0;
+              background-color: #00513f;
+            }
+          
+            </style>
+          </label>
           <button
             aria-disabled={false}
             className="govuk-button lbh-button"
@@ -532,34 +538,49 @@ it("renders correctly when offline", async () => {
           <p
             className="lbh-body"
           >
-            The system is currently updating the information you need for this process so that you can work offline or online.
+            The system will now update the information you need for this process so that you can go offline at any point.
           </p>
-          <p
-            className="lbh-body"
+          <label
+            className="govuk-label lbh-label"
           >
-            Please wait until the ‘Go’ button is available to be clicked before proceeding.
-          </p>
-          <ul
-            className="govuk-list lbh-list"
+            Loading...
+            <div>
+              <div
+                style={
+                  Object {
+                    "width": "20%",
+                  }
+                }
+              />
+            </div>
+            <style
+              jsx={true}
+            >
+              
+            div {
+              width: 100%;
+              height: 1em;
+              background-color: #7fb2a7;
+            }
+
+            div &gt; div {
+              width: 0;
+              background-color: #00513f;
+            }
+          
+            </style>
+          </label>
+          <span
+            className="govuk-error-message lbh-error-message"
           >
-            <li>
-              Fetching any answers previously saved to the Hub... Error
-            </li>
-            <li>
-              Fetching and saving resident information... Error
-            </li>
-            <li>
-              Fetching and saving tenancy information... Error
-            </li>
-            <li>
-              Precaching process pages... Cached
-            </li>
-          </ul>
-          <p
-            className="lbh-body"
-          >
-            Something went really wrong. Please contact support.
-          </p>
+            <span
+              className="govuk-visually-hidden"
+            >
+              Error
+              :
+            </span>
+            Something went wrong. Please try reopening this process from your worktray.
+          </span>
           <button
             aria-disabled={true}
             className="govuk-button lbh-button"
