@@ -17,6 +17,7 @@ type Props = DynamicComponentControlledProps<string> & {
     id?: string;
     value?: React.ReactNode;
   };
+  contentBeforeTextArea?: React.ReactNode;
   contentAfterTextArea?: React.ReactNode;
 };
 
@@ -28,6 +29,7 @@ export const TextAreaDetails: React.FunctionComponent<Props> = (
     name,
     rows,
     label,
+    contentBeforeTextArea,
     contentAfterTextArea,
     value,
     onValueChange,
@@ -38,6 +40,7 @@ export const TextAreaDetails: React.FunctionComponent<Props> = (
 
   return (
     <Details summary={{ id: summaryId, value: summary }}>
+      {contentBeforeTextArea}
       <TextArea
         label={{
           id: label && label.id ? label.id : summaryId,
@@ -63,5 +66,6 @@ TextAreaDetails.propTypes = {
     id: PropTypes.string,
     value: PropTypes.node
   }),
+  contentBeforeTextArea: PropTypes.node,
   contentAfterTextArea: PropTypes.node
 };
