@@ -231,19 +231,30 @@ export interface ProcessJson {
   >;
 }
 
-export const processStoreNames: StoreNames<
-  ProcessDatabaseSchema["schema"]
->[] = [
-  "lastModified",
-  "property",
-  "isUnannouncedVisit",
-  "isVisitInside",
-  "residency",
-  "tenant",
-  "homeCheck",
-  "healthConcerns",
-  "disability",
-  "supportNeeds"
-];
+const storeNames: {
+  [Name in StoreNames<ProcessDatabaseSchema["schema"]>]: boolean;
+} = {
+  lastModified: true,
+  property: true,
+  isUnannouncedVisit: true,
+  isVisitInside: true,
+  id: true,
+  residency: true,
+  tenant: true,
+  homeCheck: true,
+  healthConcerns: true,
+  disability: true,
+  supportNeeds: true
+};
+
+export const processStoreNames = Object.entries(storeNames)
+  .filter(([, include]) => include)
+  .reduce(
+    (names, [name]) => [
+      ...names,
+      name as StoreNames<ProcessDatabaseSchema["schema"]>
+    ],
+    [] as StoreNames<ProcessDatabaseSchema["schema"]>[]
+  );
 
 export default ProcessDatabaseSchema;

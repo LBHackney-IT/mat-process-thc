@@ -28,8 +28,21 @@ type ExternalDatabaseSchema = NamedSchema<
   }
 >;
 
-export const externalStoreNames: StoreNames<
-  ExternalDatabaseSchema["schema"]
->[] = ["tenancy", "residents"];
+const storeNames: {
+  [Name in StoreNames<ExternalDatabaseSchema["schema"]>]: boolean;
+} = {
+  tenancy: true,
+  residents: true
+};
+
+export const externalStoreNames = Object.entries(storeNames)
+  .filter(([, include]) => include)
+  .reduce(
+    (names, [name]) => [
+      ...names,
+      name as StoreNames<ExternalDatabaseSchema["schema"]>
+    ],
+    [] as StoreNames<ExternalDatabaseSchema["schema"]>[]
+  );
 
 export default ExternalDatabaseSchema;
