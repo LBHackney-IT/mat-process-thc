@@ -75,8 +75,9 @@ const step: ProcessStepDefinition = {
             name: "outside-property-images",
             hintText: "You can take up to 5 different photos of the outside of the property." as
               | string
+              | null
               | undefined,
-            maxCount: 5
+            maxCount: 5 as number | null | undefined
           },
           defaultValue: [],
           emptyValue: [] as string[],
@@ -109,8 +110,9 @@ const step: ProcessStepDefinition = {
             name: "metal-gate-images",
             hintText: "You can take up to 3 different photos of metal gates. These photos will also be displayed later in the process." as
               | string
+              | null
               | undefined,
-            maxCount: 3
+            maxCount: 3 as number | null | undefined
           },
           defaultValue: [],
           emptyValue: [] as string[],

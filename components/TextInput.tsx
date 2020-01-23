@@ -11,7 +11,7 @@ type Props = DynamicComponentControlledProps<string> & {
   name: string;
 };
 
-export const TextInput = (props: Props): JSX.Element => {
+export const TextInput: React.FunctionComponent<Props> = props => {
   const { label, name, value, onValueChange } = props;
 
   const labelId = `${name}-label`;

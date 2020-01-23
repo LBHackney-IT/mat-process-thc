@@ -18,7 +18,7 @@ type Props = DynamicComponentControlledProps<string> & {
   radios: RadioButton[];
 };
 
-export const RadioButtons = (props: Props): JSX.Element => {
+export const RadioButtons: React.FunctionComponent<Props> = props => {
   const {
     name,
     legend,

@@ -150,8 +150,9 @@ const step: ProcessStepDefinition = {
             name: "garden-images",
             hintText: "You can take up to 3 different photos" as
               | string
+              | null
               | undefined,
-            maxCount: 3
+            maxCount: 3 as number | null | undefined
           },
           renderWhen(stepValues: {
             "has-garden"?: ComponentValue<ProcessDatabaseSchema, "property">;
@@ -176,8 +177,8 @@ const step: ProcessStepDefinition = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about upkeep of garden if necessary." as React.ReactNode
-            },
+              value: "Add note about upkeep of garden if necessary."
+            } as { id?: string; value?: React.ReactNode },
             name: "garden-notes"
           },
           renderWhen(stepValues: {

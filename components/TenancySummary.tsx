@@ -2,7 +2,9 @@ import format from "date-fns/format";
 import { SummaryList } from "lbh-frontend-react/components";
 import React from "react";
 
-interface TenancySummaryProps {
+import PropTypes from "../helpers/PropTypes";
+
+interface Props {
   details?: {
     address?: string[];
     tenants?: string[];
@@ -11,9 +13,7 @@ interface TenancySummaryProps {
   };
 }
 
-export const TenancySummary = (
-  props: TenancySummaryProps
-): React.ReactElement => {
+export const TenancySummary: React.FunctionComponent<Props> = props => {
   const { details } = props;
   const { address, tenants, tenureType, startDate } = details || {};
 
@@ -54,4 +54,18 @@ export const TenancySummary = (
       `}</style>
     </>
   );
+};
+
+TenancySummary.displayName = "TenancySummary";
+
+TenancySummary.propTypes = {
+  details: PropTypes.shape({
+    address: PropTypes.arrayOf(PropTypes.string.isRequired),
+    tenants: PropTypes.arrayOf(PropTypes.string.isRequired),
+    tenureType: PropTypes.string,
+    startDate: PropTypes.oneOfType([
+      PropTypes.string.isRequired,
+      PropTypes.instanceOf(Date).isRequired
+    ])
+  })
 };

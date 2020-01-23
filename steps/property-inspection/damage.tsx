@@ -72,8 +72,9 @@ const step: ProcessStepDefinition = {
             name: "damage-images",
             hintText: "You can take up to 5 different photos" as
               | string
+              | null
               | undefined,
-            maxCount: 5
+            maxCount: 5 as number | null | undefined
           },
           renderWhen(stepValues: {
             "has-damage"?: ComponentValue<ProcessDatabaseSchema, "property">;
@@ -98,8 +99,9 @@ const step: ProcessStepDefinition = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about damage including how it was caused and location in property." as React.ReactNode
-            },
+              value:
+                "Add note about damage including how it was caused and location in property."
+            } as { id?: string; value?: React.ReactNode },
             name: "damage-notes"
           },
           renderWhen(stepValues: {

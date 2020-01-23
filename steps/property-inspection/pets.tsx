@@ -183,7 +183,7 @@ const step: ProcessStepDefinition = {
           props: {
             label: "Take photo of permission document",
             name: "pets-permission-images",
-            maxCount: 1
+            maxCount: 1 as number | null | undefined
           },
           renderWhen(stepValues: {
             "has-permission"?: ComponentValue<
@@ -211,8 +211,8 @@ const step: ProcessStepDefinition = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about pets if necessary." as React.ReactNode
-            },
+              value: "Add note about pets if necessary."
+            } as { id?: string; value?: React.ReactNode },
             name: "pets-notes"
           },
           renderWhen(stepValues: {

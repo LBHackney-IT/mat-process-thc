@@ -13,7 +13,7 @@ type Props = DynamicComponentControlledProps<{
   name: string;
 };
 
-export const DateInput = (props: Props): React.ReactElement => {
+export const DateInput: React.FunctionComponent<Props> = props => {
   const { name, value: date, onValueChange, disabled } = props;
 
   const monthLabelId = `${name}-month-label`;

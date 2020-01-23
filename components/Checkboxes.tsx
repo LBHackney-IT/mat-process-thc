@@ -18,7 +18,7 @@ type Props = DynamicComponentControlledProps<string[]> & {
   checkboxes: Box[];
 };
 
-export const Checkboxes = (props: Props): JSX.Element => {
+export const Checkboxes: React.FunctionComponent<Props> = props => {
   const {
     name,
     legend,

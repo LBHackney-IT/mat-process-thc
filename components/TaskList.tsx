@@ -2,7 +2,7 @@ import { Link, List, Tag } from "lbh-frontend-react/components";
 import querystring from "querystring";
 import React from "react";
 
-import PropTypes from "../helpers/PropTypes";
+import PropTypes, { PropTypesTypes } from "../helpers/PropTypes";
 
 export enum TaskListStatus {
   Unavailable = "unavailable",
@@ -33,11 +33,11 @@ export interface TaskListItem {
   "data-testid"?: string;
 }
 
-export interface TaskListprops {
+export interface Props {
   items: TaskListItem[];
 }
 
-export const TaskList = (props: TaskListprops): JSX.Element => {
+export const TaskList: React.FunctionComponent<Props> = props => {
   const { items } = props;
 
   return (
@@ -96,7 +96,8 @@ TaskList.propTypes = {
         pathname: PropTypes.string.isRequired,
         query: PropTypes.object
       }).isRequired,
-      status: PropTypes.string.isRequired,
+      status: (PropTypes.string as PropTypesTypes.Requireable<TaskListStatus>)
+        .isRequired,
       "data-testid": PropTypes.string
     }).isRequired
   ).isRequired

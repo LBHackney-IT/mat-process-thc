@@ -156,8 +156,9 @@ const step: ProcessStepDefinition = {
             name: "metal-gate-images",
             hintText: "You can take up to 3 different photos of metal gates." as
               | string
+              | null
               | undefined,
-            maxCount: 3
+            maxCount: 3 as number | null | undefined
           },
           renderWhen(stepValues: {
             "has-metal-gates"?: ComponentValue<
@@ -185,8 +186,9 @@ const step: ProcessStepDefinition = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about metal gates / combustible items if necessary." as React.ReactNode
-            },
+              value:
+                "Add note about metal gates / combustible items if necessary."
+            } as { id?: string; value?: React.ReactNode },
             name: "metal-gates-notes"
           },
           renderWhen(stepValues: {
