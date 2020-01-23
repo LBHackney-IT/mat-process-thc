@@ -13,11 +13,11 @@ import { PhotoIcon } from "./icons/PhotoIcon";
 type Props = DynamicComponentControlledProps<string[]> & {
   label: string;
   name: string;
-  hintText?: string;
-  maxCount?: number;
+  hintText?: string | null;
+  maxCount?: number | null;
 };
 
-export const ImageInput = (props: Props): React.ReactElement => {
+export const ImageInput: React.FunctionComponent<Props> = props => {
   const {
     label,
     name,
@@ -167,5 +167,5 @@ ImageInput.propTypes = {
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   hintText: PropTypes.string,
-  maxImages: PropTypes.number
+  maxCount: PropTypes.number
 };

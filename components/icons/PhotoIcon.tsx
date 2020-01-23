@@ -12,9 +12,7 @@ export interface PhotoIconProps {
 /**
  * An icon to display in the add image button when users need to add an image.
  */
-export const PhotoIcon: React.FunctionComponent<PhotoIconProps> = (
-  props: PhotoIconProps
-): React.ReactElement => {
+export const PhotoIcon: React.FunctionComponent<PhotoIconProps> = props => {
   const { className } = props;
 
   return (

@@ -98,8 +98,9 @@ const step: ProcessStepDefinition = {
             buttonText: "Take photo of proof of residency",
             hintText: "You can take up to 3 different photos for proof of residency." as
               | string
+              | null
               | undefined,
-            maxCount: 3
+            maxCount: 3 as number | null | undefined
           },
           defaultValue: [],
           emptyValue: [] as string[],

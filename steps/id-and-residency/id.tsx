@@ -83,8 +83,9 @@ const step: ProcessStepDefinition = {
             buttonText: "Take photo of ID",
             hintText: "You can take up to 3 different photos for ID verification." as
               | string
+              | null
               | undefined,
-            maxCount: 3
+            maxCount: 3 as number | null | undefined
           },
           defaultValue: [],
           emptyValue: [] as string[],

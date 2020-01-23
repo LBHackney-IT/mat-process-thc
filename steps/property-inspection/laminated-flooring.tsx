@@ -114,8 +114,9 @@ const step: ProcessStepDefinition = {
             name: "laminated-flooring-images",
             hintText: "You can take up to 5 different photos" as
               | string
+              | null
               | undefined,
-            maxCount: 5
+            maxCount: 5 as number | null | undefined
           },
           renderWhen(stepValues: {
             "has-laminated-flooring"?: ComponentValue<
@@ -143,8 +144,8 @@ const step: ProcessStepDefinition = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about laminated flooring if necessary." as React.ReactNode
-            },
+              value: "Add note about laminated flooring if necessary."
+            } as { id?: string; value?: React.ReactNode },
             name: "laminated-flooring-notes"
           },
           renderWhen(stepValues: {

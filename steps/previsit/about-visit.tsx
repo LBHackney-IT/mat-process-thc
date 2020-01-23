@@ -66,8 +66,8 @@ const step: ProcessStepDefinition = {
           Component: TextArea,
           props: {
             label: {
-              value: "Explain why this visit was pre-arranged." as React.ReactNode
-            },
+              value: "Explain why this visit was pre-arranged."
+            } as { id?: string; value?: React.ReactNode },
             name: "unannounced-visit-notes"
           },
           renderWhen(stepValues: {
@@ -130,8 +130,9 @@ const step: ProcessStepDefinition = {
           Component: TextArea,
           props: {
             label: {
-              value: "Explain why this visit is not happening inside a tenant's home." as React.ReactNode
-            },
+              value:
+                "Explain why this visit is not happening inside a tenant's home."
+            } as { id?: string; value?: React.ReactNode },
             name: "inside-property-notes"
           },
           renderWhen(stepValues: {

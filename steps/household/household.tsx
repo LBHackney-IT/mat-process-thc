@@ -56,8 +56,9 @@ const step: ProcessStepDefinition = {
             name: "household-document-images",
             hintText: "You can take up to 3 different photos" as
               | string
+              | null
               | undefined,
-            maxCount: 3
+            maxCount: 3 as number | null | undefined
           },
           defaultValue: [],
           emptyValue: [] as string[],

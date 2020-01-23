@@ -12,7 +12,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-export const Details = (props: Props): JSX.Element => {
+export const Details: React.FunctionComponent<Props> = props => {
   const { summary, children } = props;
 
   let summaryId: string | undefined = undefined;

@@ -107,8 +107,8 @@ const step: ProcessStepDefinition = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about door mats / potted plants if necessary." as React.ReactNode
-            },
+              value: "Add note about door mats / potted plants if necessary."
+            } as { id?: string; value?: React.ReactNode },
             name: "door-mats-notes"
           },
           renderWhen(stepValues: {

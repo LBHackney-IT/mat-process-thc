@@ -132,8 +132,8 @@ const step: ProcessStepDefinition = {
           props: {
             name: "next-of-kin-address",
             label: {
-              value: "Address" as React.ReactNode
-            },
+              value: "Address"
+            } as { id?: string; value?: React.ReactNode },
             rows: 4 as number | undefined
           },
           defaultValue: "",

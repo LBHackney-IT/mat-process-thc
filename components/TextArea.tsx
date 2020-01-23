@@ -15,7 +15,7 @@ type Props = DynamicComponentControlledProps<string> & {
   rows?: number;
 };
 
-export const TextArea = (props: Props): React.ReactElement => {
+export const TextArea: React.FunctionComponent<Props> = props => {
   const { label, name, rows, value, onValueChange, disabled } = props;
 
   const labelId = label.id || `${name}-label`;

@@ -123,8 +123,8 @@ const step: ProcessStepDefinition = {
                   Add note about anti social behaviour <b>by</b> or{" "}
                   <b>against</b> tenant if necessary.
                 </>
-              ) as React.ReactNode
-            },
+              )
+            } as { id?: string; value?: React.ReactNode },
             name: "antisocial-behaviour-notes"
           },
           defaultValue: "",

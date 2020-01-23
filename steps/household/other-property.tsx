@@ -68,10 +68,9 @@ const step: ProcessStepDefinition = {
           Component: TextArea,
           props: {
             label: {
-              value: "Provide details: with / without mortgage, address of property" as
-                | React.ReactNode
-                | undefined
-            },
+              value:
+                "Provide details: with / without mortgage, address of property"
+            } as { id?: string; value?: React.ReactNode },
             name: "other-property-notes"
           },
           renderWhen(stepValues: {

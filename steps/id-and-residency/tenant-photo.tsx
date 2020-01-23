@@ -74,8 +74,8 @@ const step: ProcessStepDefinition = {
           Component: TextArea,
           props: {
             label: {
-              value: "Explain why." as React.ReactNode
-            },
+              value: "Explain why."
+            } as { id?: string; value?: React.ReactNode },
             name: "tenant-photo-willing-notes"
           },
           renderWhen(stepValues: {
@@ -125,8 +125,9 @@ const step: ProcessStepDefinition = {
             name: "tenant-photo",
             hintText: "Take a passport style photo of the tenant" as
               | string
+              | null
               | undefined,
-            maxCount: 1
+            maxCount: 1 as number | null | undefined
           },
           renderWhen(stepValues: {
             "tenant-photo-willing"?: ComponentValue<

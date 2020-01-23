@@ -7,7 +7,7 @@ interface Props {
   rows: string[][];
 }
 
-export const Table = (props: Props): JSX.Element => {
+export const Table: React.FunctionComponent<Props> = props => {
   const { headings, rows } = props;
 
   return (

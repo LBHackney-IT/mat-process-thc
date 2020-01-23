@@ -116,8 +116,9 @@ const step: ProcessStepDefinition = {
             name: "structural-changes-images",
             hintText: "You can take up to 5 different photos" as
               | string
+              | null
               | undefined,
-            maxCount: 5
+            maxCount: 5 as number | null | undefined
           },
           renderWhen(stepValues: {
             "has-structural-changes"?: ComponentValue<
@@ -145,8 +146,9 @@ const step: ProcessStepDefinition = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about structural changes including when it was done and location in property." as React.ReactNode
-            },
+              value:
+                "Add note about structural changes including when it was done and location in property."
+            } as { id?: string; value?: React.ReactNode },
             name: "structural-changes-notes"
           },
           renderWhen(stepValues: {

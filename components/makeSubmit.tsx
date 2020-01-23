@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { SubmitProps, submitPropTypes } from "remultiform/step";
 
-import PropTypes from "../helpers/PropTypes";
 import urlsForRouter from "../helpers/urlsForRouter";
 
 export interface MakeSubmitProps {
@@ -16,7 +15,7 @@ export const makeSubmit = (
 ): React.FunctionComponent<SubmitProps> => {
   const buttonProps = Array.isArray(props) ? props : [props];
 
-  const Submit = ({ onSubmit }: SubmitProps): React.ReactElement => {
+  const Submit: React.FunctionComponent<SubmitProps> = ({ onSubmit }) => {
     const router = useRouter();
     const buttonUrlsString = buttonProps
       .map(({ url }) => url.pathname)
@@ -70,11 +69,7 @@ export const makeSubmit = (
   };
 
   Submit.displayName = "Submit";
-
-  Submit.propTypes = {
-    ...submitPropTypes,
-    children: PropTypes.arrayOf(PropTypes.node.isRequired)
-  };
+  Submit.propTypes = submitPropTypes;
 
   return Submit;
 };

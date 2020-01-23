@@ -1,6 +1,8 @@
 import PropTypes from "prop-types";
 import React from "react";
 
+export { PropTypes as PropTypesTypes };
+
 export default {
   ...PropTypes,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -21,9 +21,7 @@ type Props = DynamicComponentControlledProps<string> & {
   contentAfterTextArea?: React.ReactNode;
 };
 
-export const TextAreaDetails: React.FunctionComponent<Props> = (
-  props
-): React.ReactElement => {
+export const TextAreaDetails: React.FunctionComponent<Props> = props => {
   const {
     summary,
     name,
