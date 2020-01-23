@@ -14,14 +14,14 @@ const isOnlineMock = (isOnline as unknown) as jest.MockInstance<
   [isOnline.Options?]
 >;
 
-let routerPushMock: jest.SpyInstance<router.NextRouter, []>;
+let routerReplaceMock: jest.SpyInstance<router.NextRouter, []>;
 
 beforeEach(() => {
-  routerPushMock = jest.fn();
+  routerReplaceMock = jest.fn();
 
   jest.spyOn(router, "useRouter").mockImplementation(() => ({
     ...jest.fn()(),
-    push: routerPushMock
+    replace: routerReplaceMock
   }));
 });
 
@@ -34,8 +34,8 @@ it("redirects to the loading page when online", async () => {
     await promiseToWaitForNextTick();
   });
 
-  expect(routerPushMock).toHaveBeenCalledTimes(1);
-  expect(routerPushMock).toHaveBeenCalledWith(
+  expect(routerReplaceMock).toHaveBeenCalledTimes(1);
+  expect(routerReplaceMock).toHaveBeenCalledWith(
     { pathname: "/loading" },
     { pathname: "/thc/loading" }
   );
