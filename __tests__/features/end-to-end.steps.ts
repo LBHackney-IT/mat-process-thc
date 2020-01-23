@@ -152,6 +152,33 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
           notes: "Carer notes"
         }
       },
+      household: {
+        documents: {
+          images: [imagePath]
+        },
+        houseMovingSchemes: {
+          notes: "House moving schemes notes"
+        },
+        memberChanges: {
+          notes: "Member changes notes"
+        },
+        rentArrears: {
+          type: "yes has plan",
+          notes: "Rent arrears notes"
+        },
+        housingBenefits: {
+          hasApplied: "yes application declined",
+          notes: "Housing benefits notes"
+        },
+        incomeOfficer: {
+          wantsToContact: "yes",
+          notes: "Income officer notes"
+        },
+        otherProperty: {
+          hasOtherProperty: "yes",
+          notes: "Other property notes"
+        }
+      },
       homeCheck: {
         value: "yes"
       },
@@ -395,6 +422,107 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!
         .waitForEnabledElement({ name: "carer-notes" })
         .sendKeys(processData.tenant.carer.notes);
+
+      await browser!.submit();
+
+      // Sections page
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/thc/sections"
+      );
+
+      await browser!.waitForEnabledElement(
+        { css: '[href^="/thc/household"]' },
+        10000
+      );
+
+      await browser!.submit({ css: '[href^="/thc/household"]' });
+
+      // Household page
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/thc/household"
+      );
+
+      await browser!
+        .waitForEnabledElement({
+          name: "household-document-images"
+        })
+        .sendKeys(processData.household.documents.images[0]);
+      await browser!
+        .waitForEnabledElement({ id: "house-moving-schemes-notes-summary" })
+        .click();
+      await browser!
+        .waitForEnabledElement({ name: "house-moving-schemes-notes" })
+        .sendKeys(processData.household.houseMovingSchemes.notes);
+      await browser!
+        .waitForEnabledElement({ id: "member-changes-notes-summary" })
+        .click();
+      await browser!
+        .waitForEnabledElement({ name: "member-changes-notes" })
+        .sendKeys(processData.household.memberChanges.notes);
+
+      await browser!.submit();
+
+      // Rent page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/rent");
+
+      await browser!
+        .waitForEnabledElement({
+          id: `rent-arrears-type-${processData.household.rentArrears.type.replace(
+            /\s/g,
+            "-"
+          )}`
+        })
+        .click();
+      await browser!
+        .waitForEnabledElement({ id: "rent-arrears-notes-summary" })
+        .click();
+      await browser!
+        .waitForEnabledElement({ name: "rent-arrears-notes" })
+        .sendKeys(processData.household.rentArrears.notes);
+      await browser!
+        .waitForEnabledElement({
+          id: `has-applied-for-housing-benefit-${processData.household.housingBenefits.hasApplied.replace(
+            /\s/g,
+            "-"
+          )}`
+        })
+        .click();
+      await browser!
+        .waitForEnabledElement({ id: "housing-benefits-notes-summary" })
+        .click();
+      await browser!
+        .waitForEnabledElement({ name: "housing-benefits-notes" })
+        .sendKeys(processData.household.housingBenefits.notes);
+      await browser!
+        .waitForEnabledElement({
+          id: `contact-income-officer-${processData.household.incomeOfficer.wantsToContact.replace(
+            /\s/g,
+            "-"
+          )}`
+        })
+        .click();
+      await browser!
+        .waitForEnabledElement({ id: "income-officer-notes-summary" })
+        .click();
+      await browser!
+        .waitForEnabledElement({ name: "income-officer-notes" })
+        .sendKeys(processData.household.incomeOfficer.notes);
+
+      await browser!.submit();
+
+      // Other property page
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/thc/other-property"
+      );
+
+      await browser!
+        .waitForEnabledElement({
+          id: `has-other-property-${processData.household.otherProperty.hasOtherProperty}`
+        })
+        .click();
+      await browser!
+        .waitForEnabledElement({ name: "other-property-notes" })
+        .sendKeys(processData.household.otherProperty.notes);
 
       await browser!.submit();
 

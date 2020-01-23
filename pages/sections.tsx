@@ -24,6 +24,16 @@ const idResidencyStartedValidator = (
   )[]
 ): boolean => values.some(v => v !== undefined);
 
+const householdCompleteValidator = (
+  values: (
+    | StoreValue<ProcessDatabaseSchema["schema"], "household">
+    | undefined
+  )[]
+): boolean => {
+  const v = values[0];
+  return v !== undefined && v.otherProperty !== undefined;
+};
+
 const propertyInspectionStartedValidator = (
   values: (
     | StoreValue<ProcessDatabaseSchema["schema"], "property">
@@ -74,17 +84,20 @@ const wellbeingCompleteValidator = (
 export const SectionsPage: NextPage = () => {
   const tenancyData = useData(Storage.ExternalContext, "tenancy");
   const residentData = useData(Storage.ExternalContext, "residents");
+  const idAndResidencyStarted = useProcessSectionComplete(
+    ["id", "residency", "tenant"],
+    idResidencyStartedValidator
+  );
   const idAndResidencyComplete = useProcessSectionComplete([
     "id",
     "residency",
     "tenant"
   ]);
-  const idAndResidencyStarted = useProcessSectionComplete(
-    ["id", "residency", "tenant"],
-    idResidencyStartedValidator
+  const householdStarted = useProcessSectionComplete(["household"]);
+  const householdComplete = useProcessSectionComplete(
+    ["household"],
+    householdCompleteValidator
   );
-  const householdStarted = { result: false };
-  const householdComplete = { result: false };
   const propertyInspectionStarted = useProcessSectionComplete(
     ["property"],
     propertyInspectionStartedValidator

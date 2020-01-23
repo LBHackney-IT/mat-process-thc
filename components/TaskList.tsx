@@ -1,7 +1,8 @@
 import { Link, List, Tag } from "lbh-frontend-react/components";
 import querystring from "querystring";
-import PropTypes from "prop-types";
 import React from "react";
+
+import PropTypes from "../helpers/PropTypes";
 
 export enum TaskListStatus {
   Unavailable = "unavailable",
@@ -19,7 +20,7 @@ export interface TaskListItem {
    */
   name: string;
 
-  url: { pathname: string; query?: { [s: string]: string } | null };
+  url: { pathname: string; query?: { [s: string]: string } };
 
   /**
    * The status to display against the task.
@@ -29,7 +30,7 @@ export interface TaskListItem {
   /**
    * @ignore
    */
-  "data-testid"?: string | null;
+  "data-testid"?: string;
 }
 
 export interface TaskListprops {

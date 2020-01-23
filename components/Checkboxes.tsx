@@ -1,10 +1,11 @@
 import { Fieldset } from "lbh-frontend-react/components";
-import PropTypes from "prop-types";
 import React from "react";
 import {
   DynamicComponentControlledProps,
   DynamicComponent
 } from "remultiform/component-wrapper";
+
+import PropTypes from "../helpers/PropTypes";
 
 interface Box {
   label: string;
@@ -13,7 +14,7 @@ interface Box {
 
 type Props = DynamicComponentControlledProps<string[]> & {
   name: string;
-  legend?: React.ReactNode | null;
+  legend?: React.ReactNode;
   checkboxes: Box[];
 };
 

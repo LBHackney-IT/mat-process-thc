@@ -2,9 +2,9 @@ import { FieldsetLegend } from "lbh-frontend-react/components";
 import React from "react";
 import {
   ComponentDatabaseMap,
-  ComponentValue,
   ComponentWrapper,
-  DynamicComponent
+  DynamicComponent,
+  ComponentValue
 } from "remultiform/component-wrapper";
 
 import { makeSubmit } from "../../components/makeSubmit";
@@ -18,25 +18,25 @@ import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const step: ProcessStepDefinition = {
-  title: PageTitles.Rooms,
-  heading: "Can you enter all rooms within the property?",
+  title: PageTitles.OtherProperty,
+  heading: "Other property",
   step: {
-    slug: PageSlugs.Rooms,
-    nextSlug: PageSlugs.LaminatedFlooring,
+    slug: PageSlugs.OtherProperty,
+    nextSlug: PageSlugs.Sections,
     Submit: makeSubmit({
-      url: urlObjectForSlug(PageSlugs.LaminatedFlooring),
+      url: urlObjectForSlug(PageSlugs.Sections),
       value: "Save and continue"
     }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "can-enter-all-rooms",
+          key: "has-other-property",
           Component: RadioButtons,
           props: {
-            name: "can-enter-all-rooms",
+            name: "has-other-property",
             legend: (
               <FieldsetLegend>
-                Can you enter all rooms within the property?
+                Does the tenant(s) own or rent any other property?
               </FieldsetLegend>
             ) as React.ReactNode,
             radios: [
@@ -54,41 +54,43 @@ const step: ProcessStepDefinition = {
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
-            "property"
+            "household"
           >({
-            storeName: "property",
+            storeName: "household",
             key: processRef,
-            property: ["rooms", "canEnterAll"]
+            property: ["otherProperty", "hasOtherProperty"]
           })
         })
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "room-entry-notes",
+          key: "other-property-notes",
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about access if necessary." as React.ReactNode
+              value: "Provide details: with / without mortgage, address of property" as
+                | React.ReactNode
+                | undefined
             },
-            name: "room-entry-notes"
+            name: "other-property-notes"
           },
           renderWhen(stepValues: {
-            "can-enter-all-rooms"?: ComponentValue<
+            "has-other-property"?: ComponentValue<
               ProcessDatabaseSchema,
-              "property"
+              "household"
             >;
           }): boolean {
-            return stepValues["can-enter-all-rooms"] === "no";
+            return stepValues["has-other-property"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
-            "property"
+            "household"
           >({
-            storeName: "property",
+            storeName: "household",
             key: processRef,
-            property: ["rooms", "notes"]
+            property: ["otherProperty", "notes"]
           })
         })
       )

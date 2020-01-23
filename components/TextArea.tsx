@@ -3,15 +3,16 @@ import {
   DynamicComponentControlledProps,
   DynamicComponent
 } from "remultiform/component-wrapper";
-import PropTypes from "prop-types";
+
+import PropTypes from "../helpers/PropTypes";
 
 type Props = DynamicComponentControlledProps<string> & {
   label: {
-    id?: string | null;
-    value?: React.ReactNode | null;
+    id?: string;
+    value?: React.ReactNode;
   };
   name: string;
-  rows?: number | null;
+  rows?: number;
 };
 
 export const TextArea = (props: Props): React.ReactElement => {

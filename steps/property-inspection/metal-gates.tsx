@@ -156,7 +156,6 @@ const step: ProcessStepDefinition = {
             name: "metal-gate-images",
             hintText: "You can take up to 3 different photos of metal gates." as
               | string
-              | null
               | undefined,
             maxCount: 3
           },
@@ -186,10 +185,7 @@ const step: ProcessStepDefinition = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about metal gates / combustible items if necessary." as
-                | React.ReactNode
-                | null
-                | undefined
+              value: "Add note about metal gates / combustible items if necessary." as React.ReactNode
             },
             name: "metal-gates-notes"
           },

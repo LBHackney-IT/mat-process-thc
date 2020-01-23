@@ -1,9 +1,10 @@
-import PropTypes from "prop-types";
 import React from "react";
 import {
   DynamicComponentControlledProps,
   DynamicComponent
 } from "remultiform/component-wrapper";
+
+import PropTypes from "../helpers/PropTypes";
 
 type Props = DynamicComponentControlledProps<string> & {
   label: string;

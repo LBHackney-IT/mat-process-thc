@@ -150,7 +150,6 @@ const step: ProcessStepDefinition = {
             name: "garden-images",
             hintText: "You can take up to 3 different photos" as
               | string
-              | null
               | undefined,
             maxCount: 3
           },
@@ -177,10 +176,7 @@ const step: ProcessStepDefinition = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about upkeep of garden if necessary." as
-                | React.ReactNode
-                | null
-                | undefined
+              value: "Add note about upkeep of garden if necessary." as React.ReactNode
             },
             name: "garden-notes"
           },

@@ -171,12 +171,9 @@ const step: ProcessStepDefinition = {
           props: {
             name: "health-notes",
             label: {
-              value: "Add note about any health concerns if necessary." as
-                | React.ReactNode
-                | null
-                | undefined
+              value: "Add note about any health concerns if necessary." as React.ReactNode
             },
-            rows: 4 as number | null | undefined
+            rows: 4 as number | undefined
           },
           renderWhen(stepValues: {
             "health-concerns"?: ComponentValue<

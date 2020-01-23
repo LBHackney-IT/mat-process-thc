@@ -120,10 +120,10 @@ const step: ProcessStepDefinition = {
             label: {
               value: (
                 <>
-                  Add note about anti social behaviour <b>by</b> or
-                  <b> against</b> tenant if necessary.
+                  Add note about anti social behaviour <b>by</b> or{" "}
+                  <b>against</b> tenant if necessary.
                 </>
-              ) as React.ReactNode | null
+              ) as React.ReactNode
             },
             name: "antisocial-behaviour-notes"
           },

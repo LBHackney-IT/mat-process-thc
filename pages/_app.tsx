@@ -11,12 +11,11 @@ import NextApp from "next/app";
 import NextLink from "next/link";
 import { Router } from "next/router";
 import ErrorPage from "next/error";
-
-import PropTypes from "prop-types";
 import { DatabaseProvider } from "remultiform/database-context";
 
 import "normalize.css";
 
+import PropTypes from "../helpers/PropTypes";
 import urlsForRouter from "../helpers/urlsForRouter";
 import { precacheAll } from "../helpers/usePrecacheAll";
 import Storage from "../storage/Storage";
