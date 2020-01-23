@@ -50,6 +50,7 @@ export const TextArea = (props: Props): React.ReactElement => {
         }
         textarea {
           display: block;
+          width: 100%;
           margin: 10px 0;
         }
       `}</style>
