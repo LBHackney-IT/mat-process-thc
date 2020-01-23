@@ -8,7 +8,7 @@ import PageSlugs from "../steps/PageSlugs";
 import PageTitles from "../steps/PageTitles";
 
 export const IndexPage: NextPage = () => {
-  const online = useRedirectWhenOnline(PageSlugs.Loading, "push");
+  const online = useRedirectWhenOnline(PageSlugs.Loading, "replace");
 
   let content: React.ReactNode;
 
