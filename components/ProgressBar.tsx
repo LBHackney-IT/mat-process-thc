@@ -31,7 +31,7 @@ const ProgressBar: React.FunctionComponent<Props> = props => {
 
         div > div {
           width: 0;
-          background-color: #00513f;
+          background-color: #00664f;
         }
       `}</style>
     </label>
