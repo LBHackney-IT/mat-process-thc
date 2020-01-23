@@ -214,7 +214,14 @@ export const LoadingPage: NextPage = () => {
         }}
       />
 
-      <Heading level={HeadingLevels.H2}>Previsit setup</Heading>
+      {errored && (
+        <ErrorMessage>
+          Something went wrong. Please try reopening this process from your
+          worktray.
+        </ErrorMessage>
+      )}
+
+      <Heading level={HeadingLevels.H2}>Data loading</Heading>
       <Paragraph>
         The system will now update the information you need for this process so
         that you can go offline at any point.
@@ -225,13 +232,6 @@ export const LoadingPage: NextPage = () => {
         incompleteLabel="Loading..."
         completeLabel={errored ? "Error" : "Ready"}
       />
-
-      {errored && (
-        <ErrorMessage>
-          Something went wrong. Please try reopening this process from your
-          worktray.
-        </ErrorMessage>
-      )}
 
       <NextLink href={href} as={as}>
         <Button disabled={!ready} data-testid="submit">
