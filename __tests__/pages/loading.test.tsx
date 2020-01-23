@@ -263,7 +263,7 @@ it("renders correctly when online", async () => {
           <h2
             className="lbh-heading-h2"
           >
-            Previsit setup
+            Data loading
           </h2>
           <p
             className="lbh-body"
@@ -530,10 +530,21 @@ it("renders correctly when offline", async () => {
             }
           
           </style>
+          <span
+            className="govuk-error-message lbh-error-message"
+          >
+            <span
+              className="govuk-visually-hidden"
+            >
+              Error
+              :
+            </span>
+            Something went wrong. Please try reopening this process from your worktray.
+          </span>
           <h2
             className="lbh-heading-h2"
           >
-            Previsit setup
+            Data loading
           </h2>
           <p
             className="lbh-body"
@@ -570,17 +581,6 @@ it("renders correctly when offline", async () => {
           
             </style>
           </label>
-          <span
-            className="govuk-error-message lbh-error-message"
-          >
-            <span
-              className="govuk-visually-hidden"
-            >
-              Error
-              :
-            </span>
-            Something went wrong. Please try reopening this process from your worktray.
-          </span>
           <button
             aria-disabled={true}
             className="govuk-button lbh-button"
