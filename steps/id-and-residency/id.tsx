@@ -75,11 +75,11 @@ const step: ProcessStepDefinition = {
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "id-proof-images",
+          key: "id-images",
           Component: ImageInput,
           props: {
             label: "Take photo of ID",
-            name: "id-proof-images",
+            name: "id-images",
             buttonText: "Take photo of ID",
             hintText: "You can take up to 3 different photos for ID verification." as
               | string

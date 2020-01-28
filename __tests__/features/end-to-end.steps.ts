@@ -301,7 +301,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         })
         .click();
       await browser!
-        .waitForEnabledElement({ name: "id-proof-images" })
+        .waitForEnabledElement({ name: "id-images" })
         .sendKeys(processData.id.images[0]);
       await browser!.waitForEnabledElement({ id: "id-notes-summary" }).click();
       await browser!
