@@ -1,7 +1,6 @@
 /* eslint-env node */
 require("dotenv/config");
 
-const withCSS = require("@zeit/next-css");
 const withOffline = require("next-offline");
 const { join } = require("path");
 
@@ -23,18 +22,16 @@ if (dev) {
   });
 }
 
-module.exports = withOffline(
-  withCSS({
-    assetPrefix: process.env.BASE_PATH || "",
-    distDir: process.env.NEXT_DIST_DIR || ".next",
-    publicRuntimeConfig: {
-      allRoutes: findAllRoutes(
-        join(__dirname, "pages"),
-        new RegExp(`\\.(?:${["js", "jsx", "ts", "tsx"].join("|")})$`)
-      )
-    },
-    env,
-    registerSwPrefix: env.BASE_PATH,
-    scope: `${env.BASE_PATH}/`
-  })
-);
+module.exports = withOffline({
+  assetPrefix: process.env.BASE_PATH || "",
+  distDir: process.env.NEXT_DIST_DIR || ".next",
+  publicRuntimeConfig: {
+    allRoutes: findAllRoutes(
+      join(__dirname, "pages"),
+      new RegExp(`\\.(?:${["js", "jsx", "ts", "tsx"].join("|")})$`)
+    )
+  },
+  env,
+  registerSwPrefix: env.BASE_PATH,
+  scope: `${env.BASE_PATH}/`
+});

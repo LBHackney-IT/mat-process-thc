@@ -24,7 +24,6 @@
     "format:check": "prettier --check '**/*'"
   },
   "dependencies": {
-    "@zeit/next-css": "^1.0.1",
     "cross-fetch": "^3.0.4",
     "date-fns": "^2.9.0",
     "dotenv": "^8.2.0",
