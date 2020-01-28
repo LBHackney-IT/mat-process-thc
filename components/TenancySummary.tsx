@@ -1,4 +1,4 @@
-import format from "date-fns/format";
+import formatDate from "date-fns/format";
 import { SummaryList } from "lbh-frontend-react/components";
 import React from "react";
 
@@ -41,7 +41,7 @@ export const TenancySummary: React.FunctionComponent<Props> = props => {
             value: startDate
               ? typeof startDate === "string"
                 ? startDate
-                : format(startDate, "d MMMM yyyy")
+                : formatDate(startDate, "d MMMM yyyy")
               : loading
           }
         ]}
