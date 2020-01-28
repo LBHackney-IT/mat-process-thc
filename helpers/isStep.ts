@@ -1,10 +1,9 @@
-import steps from "../steps";
-import { urlObjectForSlug } from "../steps/PageSlugs";
+import { stepSlugs, urlObjectForSlug } from "../steps/PageSlugs";
 
 const isStep = (url: { pathname: string }): boolean => {
   return Boolean(
-    steps.find(({ step }) => {
-      const slugUrl = urlObjectForSlug(step.slug);
+    stepSlugs.find(slug => {
+      const slugUrl = urlObjectForSlug(slug);
 
       return url.pathname === slugUrl.pathname;
     })

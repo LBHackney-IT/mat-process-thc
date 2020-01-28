@@ -56,7 +56,58 @@ enum PageSlugs {
   Confirmed = "confirmed"
 }
 
-export const urlObjectForSlug = (slug: PageSlugs): { pathname: string } => ({
+const slugs: {
+  [Name in PageSlugs]: boolean;
+} = {
+  "": false,
+  loading: false,
+  sections: false,
+  "visit-attempt": true,
+  "start-check": true,
+  "about-visit": true,
+  "present-for-check": true,
+  verify: true,
+  id: true,
+  residency: true,
+  "tenant-photo": true,
+  "next-of-kin": true,
+  carer: true,
+  "other-support": true,
+  household: true,
+  rent: true,
+  "other-property": true,
+  "about-property": true,
+  rooms: true,
+  "laminated-flooring": true,
+  "structural-changes": true,
+  damage: true,
+  roof: true,
+  loft: true,
+  garden: true,
+  repairs: true,
+  "storing-materials": true,
+  "fire-exit": true,
+  "smoke-alarm": true,
+  "metal-gates": true,
+  "door-mats": true,
+  "communal-areas": true,
+  pets: true,
+  "antisocial-behaviour": true,
+  "other-comments": true,
+  "home-check": true,
+  health: true,
+  disability: true,
+  "support-needs": true,
+  review: false,
+  submit: false,
+  confirmed: false
+};
+
+export const stepSlugs = Object.entries(slugs)
+  .filter(([, include]) => include)
+  .reduce((s, [slug]) => [...s, slug as PageSlugs], [] as PageSlugs[]);
+
+export const urlObjectForSlug = (slug: string): { pathname: string } => ({
   pathname: `/${slug}`
 });
 
