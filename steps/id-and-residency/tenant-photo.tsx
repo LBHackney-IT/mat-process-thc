@@ -16,15 +16,42 @@ import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import yesNoRadios from "../../helpers/yesNoRadios";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step = {
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
   title: PageTitles.TenantPhoto,
   heading: "Update tenant's photo",
+  review: {
+    rows: [
+      {
+        label: "Tenant photo",
+        values: {
+          "tenant-photo-willing": {
+            renderValue(willing: string): React.ReactNode {
+              return (
+                willing &&
+                (willing === "yes"
+                  ? "Tenant agreed to be photographed"
+                  : "Tenant does not want to be photographed")
+              );
+            }
+          },
+          "tenant-photo-willing-notes": {
+            renderValue(notes: string): React.ReactNode {
+              return notes;
+            }
+          }
+        },
+        images: "tenant-photo"
+      }
+    ]
+  },
   step: {
     slug: PageSlugs.TenantPhoto,
     nextSlug: PageSlugs.NextOfKin,
@@ -44,16 +71,7 @@ const step = {
                 Is the tenant willing to be photographed?
               </FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios
           },
           defaultValue: "",
           emptyValue: "",
@@ -114,7 +132,7 @@ const step = {
             return stepValues["tenant-photo-willing"] === "yes";
           }
         })
-      ),
+      ) as ComponentWrapper<ProcessDatabaseSchema, "tenant">,
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "tenant-photo",

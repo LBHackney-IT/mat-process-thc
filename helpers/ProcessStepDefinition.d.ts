@@ -21,9 +21,7 @@ interface BaseStepDefinition<
             }
           | undefined;
       };
-      images?: {
-        [s: string]: boolean | undefined;
-      };
+      images?: string;
     }[];
   };
   step: StepDefinition<DBSchema, Names>;

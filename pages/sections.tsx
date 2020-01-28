@@ -114,8 +114,6 @@ export const SectionsPage: NextPage = () => {
     ["homeCheck", "healthConcerns", "disability"],
     wellbeingCompleteValidator
   );
-  const reviewStarted = { result: false };
-  const reviewComplete = { result: false };
 
   return (
     <MainLayout title={PageTitles.Sections}>
@@ -204,14 +202,14 @@ export const SectionsPage: NextPage = () => {
               },
               {
                 name: "Review and submit",
-                url: urlObjectForSlug(PageSlugs.Submit),
-                status: idAndResidencyComplete.result
-                  ? reviewComplete.result
-                    ? TaskListStatus.Completed
-                    : reviewStarted.result
-                    ? TaskListStatus.Started
-                    : TaskListStatus.NotStarted
-                  : TaskListStatus.Unavailable
+                url: urlObjectForSlug(PageSlugs.Review),
+                status:
+                  idAndResidencyComplete.result &&
+                  householdComplete.result &&
+                  propertyInspectionComplete.result &&
+                  wellbeingSupportComplete.result
+                    ? TaskListStatus.NotStarted
+                    : TaskListStatus.Unavailable
               }
             ]}
           />
