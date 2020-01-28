@@ -18,14 +18,13 @@ import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
 import { TextAreaDetails } from "../../components/TextAreaDetails";
 import { TextInput } from "../../components/TextInput";
-import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step: ProcessStepDefinition = {
+const step = {
   title: PageTitles.Carer,
   heading: "Carer",
   step: {

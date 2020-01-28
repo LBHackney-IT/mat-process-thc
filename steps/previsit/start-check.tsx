@@ -11,12 +11,11 @@ import {
 import React from "react";
 
 import { makeSubmit } from "../../components/makeSubmit";
-import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step: ProcessStepDefinition = {
+const step = {
   title: PageTitles.StartCheck,
   heading: "Start Tenancy and Household Check",
   step: {

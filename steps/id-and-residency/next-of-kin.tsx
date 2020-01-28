@@ -7,14 +7,13 @@ import {
 import { makeSubmit } from "../../components/makeSubmit";
 import { TextArea } from "../../components/TextArea";
 import { TextInput } from "../../components/TextInput";
-import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step: ProcessStepDefinition = {
+const step = {
   title: PageTitles.NextOfKin,
   heading: "Next of kin details",
   step: {

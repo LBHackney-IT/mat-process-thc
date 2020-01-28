@@ -12,14 +12,14 @@ import {
 
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
-import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step: ProcessStepDefinition = {
+const step = {
   title: PageTitles.VisitAttempt,
   heading: "Tenancy and Household Check",
   step: {
