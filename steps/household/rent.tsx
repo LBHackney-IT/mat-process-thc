@@ -41,7 +41,9 @@ const step = {
             name: "rent-arrears-type",
             legend: (
               <FieldsetLegend>
-                Are there rent arrears on the account?
+                <Heading level={HeadingLevels.H2}>
+                  Are there rent arrears on the account?
+                </Heading>
               </FieldsetLegend>
             ) as React.ReactNode,
             radios: [
@@ -104,7 +106,9 @@ const step = {
             name: "has-applied-for-housing-benefit",
             legend: (
               <FieldsetLegend>
-                Has Housing Benefit / Universal Credit been applied for?
+                <Heading level={HeadingLevels.H2}>
+                  Has Housing Benefit / Universal Credit been applied for?
+                </Heading>
               </FieldsetLegend>
             ) as React.ReactNode,
             radios: [
@@ -198,10 +202,7 @@ const step = {
               "household"
             >;
           }): boolean {
-            return (
-              stepValues["rent-arrears-type"] === "yes has plan" ||
-              stepValues["rent-arrears-type"] === "yes has no plan"
-            );
+            return Boolean(stepValues["rent-arrears-type"]);
           }
         })
       ),
@@ -219,10 +220,7 @@ const step = {
               "household"
             >;
           }): boolean {
-            return (
-              stepValues["rent-arrears-type"] === "yes has plan" ||
-              stepValues["rent-arrears-type"] === "yes has no plan"
-            );
+            return Boolean(stepValues["rent-arrears-type"]);
           }
         })
       ),
@@ -239,10 +237,7 @@ const step = {
               "household"
             >;
           }): boolean {
-            return (
-              stepValues["rent-arrears-type"] === "yes has plan" ||
-              stepValues["rent-arrears-type"] === "yes has no plan"
-            );
+            return Boolean(stepValues["rent-arrears-type"]);
           }
         })
       ),
@@ -254,8 +249,10 @@ const step = {
             name: "contact-income-officer",
             legend: (
               <FieldsetLegend>
-                Would the tenant like to be put in contact with the Income
-                Officer?
+                <Heading level={HeadingLevels.H3}>
+                  Would the tenant like to be put in contact with the Income
+                  Officer?
+                </Heading>
               </FieldsetLegend>
             ) as React.ReactNode,
             radios: [
@@ -275,10 +272,7 @@ const step = {
               "household"
             >;
           }): boolean {
-            return (
-              stepValues["rent-arrears-type"] === "yes has plan" ||
-              stepValues["rent-arrears-type"] === "yes has no plan"
-            );
+            return Boolean(stepValues["rent-arrears-type"]);
           },
           defaultValue: "",
           emptyValue: "",
@@ -306,10 +300,7 @@ const step = {
               "household"
             >;
           }): boolean {
-            return (
-              stepValues["rent-arrears-type"] === "yes has plan" ||
-              stepValues["rent-arrears-type"] === "yes has no plan"
-            );
+            return Boolean(stepValues["rent-arrears-type"]);
           },
           defaultValue: "",
           emptyValue: "",
