@@ -50,9 +50,7 @@ const submit = async (): Promise<void> => {
       );
 
       if (!response.ok) {
-        console.error(`${response.status}: ${response.statusText}`);
-
-        return;
+        throw new Error(`${response.status}: ${response.statusText}`);
       }
 
       const db = await Storage.ProcessContext.database;
@@ -79,6 +77,7 @@ const submit = async (): Promise<void> => {
 const SubmitPage: NextPage = () => {
   const online = useOnlineWithRetry();
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState();
 
   const address = "1 Mare Street, London, E8 3AA";
   const tenants = ["Jane Doe", "John Doe"];
@@ -129,8 +128,16 @@ const SubmitPage: NextPage = () => {
     <MainLayout title={PageTitles.Submit}>
       {online.error && (
         <ErrorMessage>
-          Something went wrong while checking whether you are online or not.
-          Please reload the page and try again.
+          Something went wrong while checking your online status. Please reload
+          the page and try again. If the problem persists, please try reopening
+          this process from your worktray.
+        </ErrorMessage>
+      )}
+
+      {submitError && (
+        <ErrorMessage>
+          Something went wrong. Please try reopening this process from your
+          worktray and submitting it again.
         </ErrorMessage>
       )}
 
@@ -153,7 +160,7 @@ const SubmitPage: NextPage = () => {
           } catch (err) {
             console.error(err);
 
-            setSubmitting(false);
+            setSubmitError(err);
           }
         }}
         data-testid="submit"
