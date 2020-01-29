@@ -151,7 +151,7 @@ const useReviewSectionRows = <
           (names, sectionStoreNames) => [...names, ...sectionStoreNames],
           [] as StoreNames<ProcessDatabaseSchema["schema"]>[]
         )
-        .filter((storeName, i, names) => names[i] === storeName),
+        .filter((storeName, i, names) => names.indexOf(storeName) === i),
     [rows]
   );
 
