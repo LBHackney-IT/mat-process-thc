@@ -42,23 +42,33 @@ afterEach(() => {
 it("renders correctly when online", async () => {
   fetchMock.mockResponse(
     ({ method, url }): Promise<string> => {
+      const relativeUrl = process.env.BASE_PATH
+        ? url.replace(process.env.BASE_PATH, "")
+        : url;
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let body: any = {};
 
-      if (url.includes("/api/v1/process") && method === "GET") {
+      if (relativeUrl.startsWith("/api/v1/processes") && method === "GET") {
         body = {
           dateCreated: new Date(2019, 1),
           dateLastModified: new Date(2019, 3),
           processData: {}
         };
-      } else if (url.includes("/api/v1/tenancies") && method === "GET") {
+      } else if (
+        relativeUrl.startsWith("/api/v1/tenancies") &&
+        method === "GET"
+      ) {
         body = {
           results: {
             tenuretype: "Secure",
             tenancyStartDate: "2019-01-01"
           }
         };
-      } else if (url.includes("/api/v1/residents") && method === "GET") {
+      } else if (
+        relativeUrl.startsWith("/api/v1/residents") &&
+        method === "GET"
+      ) {
         body = {
           results: [
             {

@@ -39,7 +39,7 @@ const submit = async (): Promise<void> => {
 
     if (processJson) {
       const response = await fetch(
-        `${process.env.BASE_PATH}api/v1/process/${processRef}/processData?jwt=${processApiJwt}`,
+        `${process.env.BASE_PATH}/api/v1/processes/${processRef}/processData?jwt=${processApiJwt}`,
         {
           method: "PATCH",
           headers: {

@@ -126,7 +126,7 @@ export const LoadingPage: NextPage = () => {
   const processRef = getProcessRef();
 
   const processData = useApi({
-    endpoint: `${process.env.BASE_PATH}/api/v1/process/${processRef}/processData`,
+    endpoint: `${process.env.BASE_PATH}/api/v1/processes/${processRef}/processData`,
     jwt: { sessionStorageKey: `${processRef}:processApiJwt` },
     execute: Boolean(processRef)
   });

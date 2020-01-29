@@ -97,14 +97,14 @@ const proxy = (options, req, res) => {
 
 router.use(json({ limit: "1gb" }));
 
-router.get("/v1/process/:ref/processData", (req, res) => {
-  const { ref } = req.params;
-
+router.get("/v1/processes/:ref/processData", (req, res) => {
   if (!verifyJwt(req.query.jwt, processApiJwtSecret)) {
     res.status(401).send("Invalid JWT");
 
     return;
   }
+
+  const { ref } = req.params;
 
   const options = {
     host: processApiHost,
@@ -120,14 +120,14 @@ router.get("/v1/process/:ref/processData", (req, res) => {
   proxy(options, req, res);
 });
 
-router.patch("/v1/process/:ref/processData", (req, res) => {
-  const { ref } = req.params;
-
+router.patch("/v1/processes/:ref/processData", (req, res) => {
   if (!verifyJwt(req.query.jwt, processApiJwtSecret)) {
     res.status(401).send("Invalid JWT");
 
     return;
   }
+
+  const { ref } = req.params;
 
   const options = {
     host: processApiHost,
