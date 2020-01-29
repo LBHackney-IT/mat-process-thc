@@ -24,8 +24,7 @@ import PageTitles from "../PageTitles";
 
 const step = {
   title: PageTitles.OtherComments,
-  heading:
-    "Are there any other comments or points to investigate for the property?",
+  heading: "Other comments",
   step: {
     slug: PageSlugs.OtherComments,
     nextSlug: PageSlugs.Sections,

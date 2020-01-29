@@ -19,7 +19,7 @@ import PageTitles from "../PageTitles";
 
 const step = {
   title: PageTitles.Loft,
-  heading: "Does the tenant have access to loft space?",
+  heading: "Loft access",
   step: {
     slug: PageSlugs.Loft,
     nextSlug: PageSlugs.Garden,

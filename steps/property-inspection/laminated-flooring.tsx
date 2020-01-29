@@ -20,7 +20,7 @@ import PageTitles from "../PageTitles";
 
 const step = {
   title: PageTitles.LaminatedFlooring,
-  heading: "Is there any laminated flooring in the property?",
+  heading: "Laminated flooring",
   step: {
     slug: PageSlugs.LaminatedFlooring,
     nextSlug: PageSlugs.StructuralChanges,
@@ -110,7 +110,7 @@ const step = {
           key: "laminated-flooring-images",
           Component: ImageInput,
           props: {
-            label: "Take a photo of laminated flooring and any document(s)",
+            label: "Take a photo of laminated flooring and any documents",
             name: "laminated-flooring-images",
             hintText: "You can take up to 5 different photos" as
               | string

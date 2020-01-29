@@ -1,8 +1,10 @@
+import { Heading, HeadingLevels } from "lbh-frontend-react";
 import React from "react";
 import {
   ComponentDatabaseMap,
   ComponentWrapper,
-  DynamicComponent
+  DynamicComponent,
+  StaticComponent
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import { TextAreaDetails } from "../../components/TextAreaDetails";
@@ -16,7 +18,7 @@ import PageTitles from "../PageTitles";
 
 const step = {
   title: PageTitles.SupportNeeds,
-  heading: "Does anyone have support needs?",
+  heading: "Support needs",
   step: {
     slug: PageSlugs.SupportNeeds,
     nextSlug: PageSlugs.Sections,
@@ -25,6 +27,16 @@ const step = {
       value: "Save and continue"
     }),
     componentWrappers: [
+      ComponentWrapper.wrapStatic(
+        new StaticComponent({
+          key: "support-needs-heading",
+          Component: Heading,
+          props: {
+            level: HeadingLevels.H2,
+            children: "Does anyone have support needs?"
+          }
+        })
+      ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "resident-sustainment",

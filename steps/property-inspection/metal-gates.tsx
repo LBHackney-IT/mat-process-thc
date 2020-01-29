@@ -20,8 +20,7 @@ import PageTitles from "../PageTitles";
 
 const step = {
   title: PageTitles.MetalGates,
-  heading:
-    "Has the tenant had metal gates erected across front entrance doors?",
+  heading: "Metal gates",
   step: {
     slug: PageSlugs.MetalGates,
     nextSlug: PageSlugs.DoorMats,

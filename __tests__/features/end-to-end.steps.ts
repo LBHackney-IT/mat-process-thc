@@ -235,9 +235,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Visit attempt page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/visit-attempt"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/outside");
 
       await browser!
         .waitForEnabledElement({
@@ -251,9 +249,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Start check page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/start-check"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/start");
 
       await browser!.submit();
 

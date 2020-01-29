@@ -20,7 +20,7 @@ import PageTitles from "../PageTitles";
 
 const step = {
   title: PageTitles.Garden,
-  heading: "Does the property have a garden?",
+  heading: "Garden",
   step: {
     slug: PageSlugs.Garden,
     nextSlug: PageSlugs.StoringMaterials,

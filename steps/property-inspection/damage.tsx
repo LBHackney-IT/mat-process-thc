@@ -20,7 +20,7 @@ import PageTitles from "../PageTitles";
 
 const step = {
   title: PageTitles.Damage,
-  heading: "Are there any signs of damage caused to the property?",
+  heading: "Damage",
   step: {
     slug: PageSlugs.Damage,
     nextSlug: PageSlugs.Roof,

@@ -26,7 +26,7 @@ import PageTitles from "../PageTitles";
 
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
   title: PageTitles.TenantPhoto,
-  heading: "Update tenant's photo",
+  heading: "Tenant photo",
   review: {
     rows: [
       {

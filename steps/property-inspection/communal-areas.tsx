@@ -19,7 +19,7 @@ import PageTitles from "../PageTitles";
 
 const step = {
   title: PageTitles.CommunalAreas,
-  heading: "Has the tenant left combustible items in communal areas?",
+  heading: "Combustible items in communal areas",
   step: {
     slug: PageSlugs.CommunalAreas,
     nextSlug: PageSlugs.Pets,

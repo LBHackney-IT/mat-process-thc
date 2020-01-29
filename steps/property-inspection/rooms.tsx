@@ -19,7 +19,7 @@ import PageTitles from "../PageTitles";
 
 const step = {
   title: PageTitles.Rooms,
-  heading: "Can you enter all rooms within the property?",
+  heading: "Room access",
   step: {
     slug: PageSlugs.Rooms,
     nextSlug: PageSlugs.LaminatedFlooring,

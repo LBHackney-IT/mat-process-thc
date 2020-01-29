@@ -25,7 +25,7 @@ import PageTitles from "../PageTitles";
 
 const step = {
   title: PageTitles.AntisocialBehaviour,
-  heading: "Does the tenant understand about anti social behaviour?",
+  heading: "Antisocial behaviour",
   step: {
     slug: PageSlugs.AntisocialBehaviour,
     nextSlug: PageSlugs.OtherComments,
@@ -39,7 +39,7 @@ const step = {
           key: "paragraph-1",
           Component: Paragraph,
           props: {
-            children: `Anti social behaviour is defined as "behaviour by a 
+            children: `Antisocial behaviour is defined as "behaviour by a 
             person which causes, or is likely to cause, harassment, alarm or 
             distress to one or more persons not of the same household as the 
             person".`
@@ -77,7 +77,7 @@ const step = {
             name: "tenant-understands",
             legend: (
               <FieldsetLegend>
-                Does the tenant understand about anti social behaviour?
+                Does the tenant understand about antisocial behaviour?
               </FieldsetLegend>
             ) as React.ReactNode,
             radios: [
@@ -108,7 +108,7 @@ const step = {
           key: "paragraph-3",
           Component: Paragraph,
           props: {
-            children: `Explain about anti social behaviour and give examples.`
+            children: `Explain about antisocial behaviour and give examples.`
           }
         })
       ),
@@ -120,7 +120,7 @@ const step = {
             label: {
               value: (
                 <>
-                  Add note about anti social behaviour <b>by</b> or{" "}
+                  Add note about antisocial behaviour <b>by</b> or{" "}
                   <b>against</b> tenant if necessary.
                 </>
               )
