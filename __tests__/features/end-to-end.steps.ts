@@ -1013,6 +1013,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
+      // Wait for the submission to finish.
+      await browser!.wait(until.urlMatches(/\/confirmed$/));
+
       // Confirmed page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/confirmed");
     });

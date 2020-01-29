@@ -8,17 +8,5 @@ Feature: Process submission
     Given I am at the end of the process
     And I am online
     When I submit the process
+    And I wait for the submission to finish
     Then I should see that the process has been submitted
-
-# Scenario: Waiting for connection
-#   Given I am at the end of the process
-#   And I am offline
-#   Then I should see that I need to go online to continue
-#   And I shouldn't be able to continue
-
-# Scenario: Going online to submit
-#   Given I am at the end of the process
-#   And I am offline
-#   When I go online
-#   And I submit the process
-#   Then I should see that the process has been submitted

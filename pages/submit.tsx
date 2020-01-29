@@ -9,6 +9,7 @@ import Router from "next/router";
 import React, { useState } from "react";
 import { TransactionMode } from "remultiform/database";
 
+import ProgressBar from "../components/ProgressBar";
 import getProcessApiJwt from "../helpers/getProcessApiJwt";
 import getProcessRef from "../helpers/getProcessRef";
 import urlsForRouter from "../helpers/urlsForRouter";
@@ -20,7 +21,11 @@ import { processStoreNames } from "../storage/ProcessDatabaseSchema";
 import Storage from "../storage/Storage";
 import tmpProcessRef from "../storage/processRef";
 
-const submit = async (): Promise<void> => {
+const submit = async (
+  setProgress: (progress: number) => void
+): Promise<void> => {
+  setProgress(0);
+
   if (Storage.ProcessContext && Storage.ProcessContext.database) {
     const processRef = getProcessRef();
     const processApiJwt = getProcessApiJwt(processRef);
@@ -53,6 +58,8 @@ const submit = async (): Promise<void> => {
         throw new Error(`${response.status}: ${response.statusText}`);
       }
 
+      setProgress(0.5);
+
       const db = await Storage.ProcessContext.database;
 
       // To reduce risk of data loss, we only clear up the data if we sent
@@ -68,6 +75,8 @@ const submit = async (): Promise<void> => {
       );
 
       sessionStorage.clear();
+
+      setProgress(1);
     }
   } else {
     console.warn("No process data to persist");
@@ -76,6 +85,7 @@ const submit = async (): Promise<void> => {
 
 const SubmitPage: NextPage = () => {
   const online = useOnlineWithRetry();
+  const [progress, setProgress] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState();
 
@@ -122,7 +132,8 @@ const SubmitPage: NextPage = () => {
     );
   }
 
-  const disabled = online.loading || Boolean(online.error) || !online.result;
+  const disabled =
+    online.loading || Boolean(online.error) || !online.result || submitting;
 
   return (
     <MainLayout title={PageTitles.Submit}>
@@ -143,34 +154,41 @@ const SubmitPage: NextPage = () => {
 
       {content}
 
-      <Button
-        disabled={disabled || submitting}
-        preventDoubleClick
-        onClick={async (): Promise<void> => {
-          try {
-            setSubmitting(true);
+      {submitting && (
+        <ProgressBar
+          progress={progress}
+          incompleteLabel={submitError ? "Error" : "Submitting..."}
+          completeLabel={submitError ? "Error" : "Submitted"}
+        />
+      )}
 
-            await submit();
+      {!submitting && (
+        <Button
+          disabled={disabled}
+          preventDoubleClick
+          onClick={async (): Promise<void> => {
+            try {
+              setSubmitting(true);
 
-            const { href, as } = urlsForRouter(
-              urlObjectForSlug(PageSlugs.Confirmed)
-            );
+              await submit(setProgress);
 
-            await Router.push(href, as);
-          } catch (err) {
-            console.error(err);
+              const { href, as } = urlsForRouter(
+                urlObjectForSlug(PageSlugs.Confirmed)
+              );
 
-            setSubmitError(err);
-          }
-        }}
-        data-testid="submit"
-      >
-        {disabled
-          ? "Waiting for connectivity..."
-          : submitting
-          ? "Submitting..."
-          : "Save and submit to manager"}
-      </Button>
+              await Router.push(href, as);
+            } catch (err) {
+              console.error(err);
+              setSubmitError(err);
+            }
+          }}
+          data-testid="submit"
+        >
+          {disabled
+            ? "Waiting for connectivity..."
+            : "Save and submit to manager"}
+        </Button>
+      )}
     </MainLayout>
   );
 };
