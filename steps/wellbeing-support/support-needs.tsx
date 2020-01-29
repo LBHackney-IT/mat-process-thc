@@ -5,7 +5,6 @@ import {
   DynamicComponent
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
-import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import { TextAreaDetails } from "../../components/TextAreaDetails";
 import { Paragraph } from "lbh-frontend-react/components/typography/Paragraph";
 import { Link } from "lbh-frontend-react/components/Link";
@@ -15,7 +14,7 @@ import processRef from "../../storage/processRef";
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step: ProcessStepDefinition = {
+const step = {
   title: PageTitles.SupportNeeds,
   heading: "Does anyone have support needs?",
   step: {

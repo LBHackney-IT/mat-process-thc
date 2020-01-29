@@ -301,7 +301,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         })
         .click();
       await browser!
-        .waitForEnabledElement({ name: "id-proof-images" })
+        .waitForEnabledElement({ name: "id-images" })
         .sendKeys(processData.id.images[0]);
       await browser!.waitForEnabledElement({ id: "id-notes-summary" }).click();
       await browser!
@@ -1037,11 +1037,16 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       );
 
       await browser!.waitForEnabledElement(
-        { css: '[href^="/thc/submit"]' },
+        { css: '[href^="/thc/review"]' },
         10000
       );
 
-      await browser!.submit({ css: '[href^="/thc/submit"]' });
+      await browser!.submit({ css: '[href^="/thc/review"]' });
+
+      // Review page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/review");
+
+      await browser!.submit();
 
       // Submit page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/submit");

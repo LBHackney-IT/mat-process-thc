@@ -16,14 +16,13 @@ import {
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextAreaDetails } from "../../components/TextAreaDetails";
-import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step: ProcessStepDefinition = {
+const step = {
   title: PageTitles.Rent,
   heading: "Rent arrears",
   step: {
@@ -34,15 +33,6 @@ const step: ProcessStepDefinition = {
       value: "Save and continue"
     }),
     componentWrappers: [
-      ComponentWrapper.wrapStatic(
-        new StaticComponent({
-          key: "rent-balance-paragraph",
-          Component: Paragraph,
-          props: {
-            children: "Current rent balance:"
-          }
-        })
-      ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "rent-arrears-type",
@@ -147,7 +137,8 @@ const step: ProcessStepDefinition = {
             >;
           }): boolean {
             return (
-              stepValues["rent-arrears-type"] !== "yes waiting for payment"
+              stepValues["rent-arrears-type"] === "yes has plan" ||
+              stepValues["rent-arrears-type"] === "yes has no plan"
             );
           },
           defaultValue: "",
@@ -177,8 +168,8 @@ const step: ProcessStepDefinition = {
             >;
           }): boolean {
             return (
-              stepValues["rent-arrears-type"] ===
-              ("yes has plan" || "yes has no plan")
+              stepValues["rent-arrears-type"] === "yes has plan" ||
+              stepValues["rent-arrears-type"] === "yes has no plan"
             );
           },
           defaultValue: "",
@@ -208,8 +199,8 @@ const step: ProcessStepDefinition = {
             >;
           }): boolean {
             return (
-              stepValues["rent-arrears-type"] ===
-              ("yes has plan" || "yes has no plan")
+              stepValues["rent-arrears-type"] === "yes has plan" ||
+              stepValues["rent-arrears-type"] === "yes has no plan"
             );
           }
         })
@@ -229,8 +220,8 @@ const step: ProcessStepDefinition = {
             >;
           }): boolean {
             return (
-              stepValues["rent-arrears-type"] ===
-              ("yes has plan" || "yes has no plan")
+              stepValues["rent-arrears-type"] === "yes has plan" ||
+              stepValues["rent-arrears-type"] === "yes has no plan"
             );
           }
         })
@@ -249,8 +240,8 @@ const step: ProcessStepDefinition = {
             >;
           }): boolean {
             return (
-              stepValues["rent-arrears-type"] ===
-              ("yes has plan" || "yes has no plan")
+              stepValues["rent-arrears-type"] === "yes has plan" ||
+              stepValues["rent-arrears-type"] === "yes has no plan"
             );
           }
         })
@@ -285,8 +276,8 @@ const step: ProcessStepDefinition = {
             >;
           }): boolean {
             return (
-              stepValues["rent-arrears-type"] ===
-              ("yes has plan" || "yes has no plan")
+              stepValues["rent-arrears-type"] === "yes has plan" ||
+              stepValues["rent-arrears-type"] === "yes has no plan"
             );
           },
           defaultValue: "",
@@ -316,8 +307,8 @@ const step: ProcessStepDefinition = {
             >;
           }): boolean {
             return (
-              stepValues["rent-arrears-type"] ===
-              ("yes has plan" || "yes has no plan")
+              stepValues["rent-arrears-type"] === "yes has plan" ||
+              stepValues["rent-arrears-type"] === "yes has no plan"
             );
           },
           defaultValue: "",

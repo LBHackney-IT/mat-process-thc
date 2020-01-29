@@ -295,7 +295,7 @@ it("renders correctly when online", async () => {
 
             div &gt; div {
               width: 0;
-              background-color: #00513f;
+              background-color: #00664f;
             }
           
             </style>
@@ -576,7 +576,7 @@ it("renders correctly when offline", async () => {
 
             div &gt; div {
               width: 0;
-              background-color: #00513f;
+              background-color: #00664f;
             }
           
             </style>

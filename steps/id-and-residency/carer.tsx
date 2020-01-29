@@ -1,3 +1,4 @@
+import formatDate from "date-fns/format";
 import {
   FieldsetLegend,
   Heading,
@@ -19,15 +20,118 @@ import { TextArea } from "../../components/TextArea";
 import { TextAreaDetails } from "../../components/TextAreaDetails";
 import { TextInput } from "../../components/TextInput";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import yesNoRadios from "../../helpers/yesNoRadios";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step: ProcessStepDefinition = {
+const questions = {
+  "carer-needed": "Does the tenant have a carer?",
+  "carer-type": "Who provides the care?",
+  "carer-live-in": "Does the carer live in the property?",
+  "carer-details": "Carer details"
+};
+
+const carerTypeRadios = [
+  {
+    label: "A registered carer",
+    value: "registered"
+  },
+  {
+    label: "A voluntary arrangement, e.g. a family member",
+    value: "voluntary"
+  }
+];
+
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
   title: PageTitles.Carer,
   heading: "Carer",
+  review: {
+    rows: [
+      {
+        label: questions["carer-needed"],
+        values: {
+          "carer-needed": {
+            renderValue(needed: string): React.ReactNode {
+              return yesNoRadios.find(({ value }) => value === needed)?.label;
+            }
+          }
+        }
+      },
+      {
+        label: questions["carer-type"],
+        values: {
+          "carer-type": {
+            renderValue(type: string): React.ReactNode {
+              return carerTypeRadios.find(({ value }) => value === type)?.label;
+            }
+          }
+        }
+      },
+      {
+        label: questions["carer-live-in"],
+        values: {
+          "carer-live-in": {
+            renderValue(liveIn: string): React.ReactNode {
+              return yesNoRadios.find(({ value }) => value === liveIn)?.label;
+            }
+          },
+          "carer-live-in-start-date": {
+            renderValue(startDate: {
+              month?: string;
+              year?: string;
+            }): React.ReactNode {
+              return startDate.year
+                ? `Since ${
+                    startDate.month
+                      ? formatDate(
+                          new Date(
+                            parseInt(startDate.year),
+                            parseInt(startDate.month) - 1
+                          ),
+                          "MMMM yyyy"
+                        )
+                      : startDate.year
+                  }`
+                : undefined;
+            }
+          }
+        }
+      },
+      {
+        label: questions["carer-details"],
+        values: {
+          "carer-full-name": {
+            renderValue(name: string): React.ReactNode {
+              return name;
+            }
+          },
+          "carer-relationship": {
+            renderValue(relationship: string): React.ReactNode {
+              return relationship;
+            }
+          },
+          "carer-phone-number": {
+            renderValue(phone: string): React.ReactNode {
+              return phone;
+            }
+          },
+          "carer-address": {
+            renderValue(address: string): React.ReactNode {
+              return address;
+            }
+          },
+          "carer-notes": {
+            renderValue(notes: string): React.ReactNode {
+              return notes;
+            }
+          }
+        }
+      }
+    ]
+  },
   step: {
     slug: PageSlugs.Carer,
     nextSlug: PageSlugs.Sections,
@@ -43,18 +147,9 @@ const step: ProcessStepDefinition = {
           props: {
             name: "carer-needed",
             legend: (
-              <FieldsetLegend>Does the tenant have a carer?</FieldsetLegend>
+              <FieldsetLegend>{questions["carer-needed"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios
           },
           defaultValue: "",
           emptyValue: "",
@@ -75,18 +170,9 @@ const step: ProcessStepDefinition = {
           props: {
             name: "carer-type",
             legend: (
-              <FieldsetLegend>Who provides the care?</FieldsetLegend>
+              <FieldsetLegend>{questions["carer-type"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "A registered carer",
-                value: "registered"
-              },
-              {
-                label: "A voluntary arrangement, e.g. a family member",
-                value: "voluntary"
-              }
-            ]
+            radios: carerTypeRadios
           },
           renderWhen(stepValues: {
             "carer-needed"?: ComponentValue<ProcessDatabaseSchema, "tenant">;
@@ -112,20 +198,9 @@ const step: ProcessStepDefinition = {
           props: {
             name: "carer-live-in",
             legend: (
-              <FieldsetLegend>
-                Does the carer live in the property?
-              </FieldsetLegend>
+              <FieldsetLegend>{questions["carer-live-in"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios
           },
           renderWhen(stepValues: {
             "carer-needed"?: ComponentValue<ProcessDatabaseSchema, "tenant">;
@@ -157,7 +232,7 @@ const step: ProcessStepDefinition = {
             return stepValues["carer-live-in"] === "yes";
           }
         })
-      ),
+      ) as ComponentWrapper<ProcessDatabaseSchema, "tenant">,
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "carer-live-in-start-date",
@@ -188,7 +263,7 @@ const step: ProcessStepDefinition = {
           Component: Heading,
           props: {
             level: HeadingLevels.H2,
-            children: "Carer details"
+            children: questions["carer-details"]
           },
           renderWhen(stepValues: {
             "carer-needed"?: ComponentValue<ProcessDatabaseSchema, "tenant">;
@@ -196,7 +271,7 @@ const step: ProcessStepDefinition = {
             return stepValues["carer-needed"] === "yes";
           }
         })
-      ),
+      ) as ComponentWrapper<ProcessDatabaseSchema, "tenant">,
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "carer-full-name",

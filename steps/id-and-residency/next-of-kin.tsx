@@ -14,9 +14,48 @@ import processRef from "../../storage/processRef";
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step: ProcessStepDefinition = {
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
   title: PageTitles.NextOfKin,
   heading: "Next of kin details",
+  review: {
+    rows: [
+      {
+        label: "Next of kin details",
+        values: {
+          "next-of-kin-full-name": {
+            renderValue(name: string): React.ReactNode {
+              return name;
+            }
+          },
+          "next-of-kin-relationship": {
+            renderValue(relationship: string): React.ReactNode {
+              return relationship;
+            }
+          },
+          "next-of-kin-mobile-number": {
+            renderValue(mobile: string): React.ReactNode {
+              return mobile;
+            }
+          },
+          "next-of-kin-other-number": {
+            renderValue(otherNumber: string): React.ReactNode {
+              return otherNumber;
+            }
+          },
+          "next-of-kin-email": {
+            renderValue(email: string): React.ReactNode {
+              return email;
+            }
+          },
+          "next-of-kin-address": {
+            renderValue(address: string): React.ReactNode {
+              return address.trim().replace(/\n/g, ", ");
+            }
+          }
+        }
+      }
+    ]
+  },
   step: {
     slug: PageSlugs.NextOfKin,
     nextSlug: PageSlugs.Carer,

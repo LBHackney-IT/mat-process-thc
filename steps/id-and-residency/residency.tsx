@@ -17,9 +17,70 @@ import processRef from "../../storage/processRef";
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step: ProcessStepDefinition = {
+const residencyProofTypeRadios = [
+  {
+    label: "Bank statement",
+    value: "bank statement"
+  },
+  {
+    label: "DWP document (e.g. benefits / pension)",
+    value: "dwp document"
+  },
+  {
+    label: "P45",
+    value: "p45"
+  },
+  {
+    label: "P60",
+    value: "p60"
+  },
+  {
+    label: "Tax Credit / Working Tax Credit",
+    value: "tax credit"
+  },
+  {
+    label: "Utility bill",
+    value: "utility bill"
+  },
+  {
+    label: "Valid UK residence permit",
+    value: "residence permit"
+  },
+  {
+    label: "Payslip",
+    value: "payslip"
+  },
+  {
+    label: "Unable to provide proof of residency",
+    value: "no residency"
+  }
+];
+
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "residency"> = {
   title: PageTitles.Residency,
   heading: "Verify proof of residency",
+  review: {
+    rows: [
+      {
+        label: "Proof of residency",
+        values: {
+          "residency-proof-type": {
+            renderValue(type: string): React.ReactNode {
+              return residencyProofTypeRadios.find(
+                ({ value }) => value === type
+              )?.label;
+            }
+          },
+          "residency-notes": {
+            renderValue(notes: string): React.ReactNode {
+              return notes;
+            }
+          }
+        },
+        images: "residency-proof-images"
+      }
+    ]
+  },
   step: {
     slug: PageSlugs.Residency,
     nextSlug: PageSlugs.TenantPhoto,
@@ -37,44 +98,7 @@ const step: ProcessStepDefinition = {
             legend: (
               <FieldsetLegend>What type of proof of residency?</FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Bank statement",
-                value: "bank statement"
-              },
-              {
-                label: "DWP document (e.g. benefits / pension)",
-                value: "dwp document"
-              },
-              {
-                label: "P45",
-                value: "p45"
-              },
-              {
-                label: "P60",
-                value: "p60"
-              },
-              {
-                label: "Tax Credit / Working Tax Credit",
-                value: "tax credit"
-              },
-              {
-                label: "Utility bill",
-                value: "utility bill"
-              },
-              {
-                label: "Valid UK residence permit",
-                value: "residence permit"
-              },
-              {
-                label: "Payslip",
-                value: "payslip"
-              },
-              {
-                label: "Unable to provide proof of residency",
-                value: "no residency"
-              }
-            ]
+            radios: residencyProofTypeRadios
           },
           defaultValue: "",
           emptyValue: "",

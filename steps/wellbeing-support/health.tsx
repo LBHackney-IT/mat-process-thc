@@ -8,7 +8,7 @@ import {
 } from "remultiform/component-wrapper";
 
 import { makeSubmit } from "../../components/makeSubmit";
-import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+
 import { RadioButtons } from "../../components/RadioButtons";
 import { Checkboxes } from "../../components/Checkboxes";
 import { TextArea } from "../../components/TextArea";
@@ -18,7 +18,7 @@ import processRef from "../../storage/processRef";
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step: ProcessStepDefinition = {
+const step = {
   title: PageTitles.Health,
   heading: "Health concerns",
   step: {

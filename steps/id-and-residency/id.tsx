@@ -17,9 +17,56 @@ import processRef from "../../storage/processRef";
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step: ProcessStepDefinition = {
+const idTypeRadios = [
+  {
+    label: "Valid passport",
+    value: "valid passport"
+  },
+  {
+    label: "Driving license",
+    value: "driving passport"
+  },
+  {
+    label: "Freedom pass",
+    value: "freedom pass"
+  },
+  {
+    label: "Photographic work ID",
+    value: "photographic work id"
+  },
+  {
+    label: "Photographic student ID",
+    value: "photographic student id"
+  },
+  {
+    label: "Unable to verify ID",
+    value: "no id"
+  }
+];
+
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "id"> = {
   title: PageTitles.Id,
   heading: "Verify proof of ID",
+  review: {
+    rows: [
+      {
+        label: "Proof of ID",
+        values: {
+          "id-type": {
+            renderValue(type: string): React.ReactNode {
+              return idTypeRadios.find(({ value }) => value === type)?.label;
+            }
+          },
+          "id-notes": {
+            renderValue(notes: string): React.ReactNode {
+              return notes;
+            }
+          }
+        },
+        images: "id-images"
+      }
+    ]
+  },
   step: {
     slug: PageSlugs.Id,
     nextSlug: PageSlugs.Residency,
@@ -37,32 +84,7 @@ const step: ProcessStepDefinition = {
             legend: (
               <FieldsetLegend>What type of ID?</FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Valid passport",
-                value: "valid passport"
-              },
-              {
-                label: "Driving license",
-                value: "driving passport"
-              },
-              {
-                label: "Freedom pass",
-                value: "freedom pass"
-              },
-              {
-                label: "Photographic work ID",
-                value: "photographic work id"
-              },
-              {
-                label: "Photographic student ID",
-                value: "photographic student id"
-              },
-              {
-                label: "Unable to verify ID",
-                value: "no id"
-              }
-            ]
+            radios: idTypeRadios
           },
           defaultValue: "",
           emptyValue: "",
@@ -75,11 +97,11 @@ const step: ProcessStepDefinition = {
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "id-proof-images",
+          key: "id-images",
           Component: ImageInput,
           props: {
             label: "Take photo of ID",
-            name: "id-proof-images",
+            name: "id-images",
             buttonText: "Take photo of ID",
             hintText: "You can take up to 3 different photos for ID verification." as
               | string

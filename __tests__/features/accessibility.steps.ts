@@ -58,6 +58,7 @@ defineFeature(loadFeature("./accessibility.feature"), test => {
   testAccessibility(test, "Health");
   testAccessibility(test, "Disability");
   testAccessibility(test, "Support needs");
+  testAccessibility(test, "Review");
   testAccessibility(test, "Submit");
   testAccessibility(test, "Confirmed");
 });
