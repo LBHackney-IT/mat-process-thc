@@ -19,7 +19,7 @@ import PageTitles from "../PageTitles";
 
 const step = {
   title: PageTitles.SmokeAlarm,
-  heading: "Is there is a hard wired smoke alarm in the property?",
+  heading: "Smoke alarm",
   step: {
     slug: PageSlugs.SmokeAlarm,
     nextSlug: PageSlugs.MetalGates,

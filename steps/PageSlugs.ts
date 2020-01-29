@@ -5,8 +5,8 @@ enum PageSlugs {
   Sections = "sections",
 
   // Previsit
-  VisitAttempt = "visit-attempt",
-  StartCheck = "start-check",
+  Outside = "outside",
+  Start = "start",
   AboutVisit = "about-visit",
 
   // ID, residency, and tenant information
@@ -62,8 +62,8 @@ const slugs: {
   "": false,
   loading: false,
   sections: false,
-  "visit-attempt": true,
-  "start-check": true,
+  outside: true,
+  start: true,
   "about-visit": true,
   "present-for-check": true,
   verify: true,

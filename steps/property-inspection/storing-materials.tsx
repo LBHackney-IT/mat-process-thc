@@ -19,8 +19,7 @@ import PageTitles from "../PageTitles";
 
 const step = {
   title: PageTitles.StoringMaterials,
-  heading:
-    "Is the tenant storing materials in their home that can catch fire, other than those needed for normal household use?",
+  heading: "Storing materials",
   step: {
     slug: PageSlugs.StoringMaterials,
     nextSlug: PageSlugs.FireExit,

@@ -24,7 +24,7 @@ import PageTitles from "../PageTitles";
 
 const step = {
   title: PageTitles.Rent,
-  heading: "Rent arrears",
+  heading: "Rent, housing benefits, and income officer",
   step: {
     slug: PageSlugs.Rent,
     nextSlug: PageSlugs.OtherProperty,
@@ -212,7 +212,7 @@ const step = {
           Component: Paragraph,
           props: {
             children:
-              "The Income Officer can provide advice and assistance on debt management, housing benefit and other welfare benefits."
+              "The Income Officer can provide advice and assistance on debt management, housing benefit, and other welfare benefits."
           },
           renderWhen(stepValues: {
             "rent-arrears-type"?: ComponentValue<

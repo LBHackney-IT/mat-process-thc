@@ -28,9 +28,10 @@ const ReviewPage: NextPage = () => {
   const { href, as } = urlsForRouter(urlObjectForSlug(PageSlugs.Submit));
 
   return (
-    <MainLayout title={PageTitles.Review}>
-      <Heading level={HeadingLevels.H1}>Tenancy and Household Check</Heading>
-
+    <MainLayout
+      title={PageTitles.Review}
+      heading="Review Tenancy and Household Check"
+    >
       {sections.map(({ heading, rows }) => (
         <React.Fragment key={heading}>
           <Heading level={HeadingLevels.H2}>{heading}</Heading>

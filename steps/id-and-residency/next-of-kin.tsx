@@ -1,7 +1,9 @@
+import { Heading, HeadingLevels } from "lbh-frontend-react";
 import {
   ComponentDatabaseMap,
   ComponentWrapper,
-  DynamicComponent
+  DynamicComponent,
+  StaticComponent
 } from "remultiform/component-wrapper";
 
 import { makeSubmit } from "../../components/makeSubmit";
@@ -14,13 +16,17 @@ import processRef from "../../storage/processRef";
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
+const questions = {
+  "next-of-kin-details": "Next of kin details"
+};
+
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
   title: PageTitles.NextOfKin,
-  heading: "Next of kin details",
+  heading: "Next of kin",
   review: {
     rows: [
       {
-        label: "Next of kin details",
+        label: questions["next-of-kin-details"],
         values: {
           "next-of-kin-full-name": {
             renderValue(name: string): React.ReactNode {
@@ -64,6 +70,16 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
       value: "Save and continue"
     }),
     componentWrappers: [
+      ComponentWrapper.wrapStatic(
+        new StaticComponent({
+          key: "next-of-kin-heading",
+          Component: Heading,
+          props: {
+            level: HeadingLevels.H2,
+            children: questions["next-of-kin-details"]
+          }
+        })
+      ) as ComponentWrapper<ProcessDatabaseSchema, "tenant">,
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "next-of-kin-full-name",

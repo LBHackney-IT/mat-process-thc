@@ -1,8 +1,4 @@
-import {
-  Heading,
-  HeadingLevels,
-  Paragraph
-} from "lbh-frontend-react/components";
+import { Paragraph } from "lbh-frontend-react/components";
 import { NextPage } from "next";
 import React from "react";
 
@@ -116,11 +112,10 @@ export const SectionsPage: NextPage = () => {
   );
 
   return (
-    <MainLayout title={PageTitles.Sections}>
-      <Heading level={HeadingLevels.H1}>
-        Tenancy and Household Check sections
-      </Heading>
-
+    <MainLayout
+      title={PageTitles.Sections}
+      heading="Tenancy and Household Check"
+    >
       <TenancySummary
         details={{
           address: residentData.result

@@ -182,7 +182,7 @@ export const LoadingPage: NextPage = () => {
       asyncResult => !asyncResult.loading && asyncResult.result !== undefined
     ).length / asyncResults.length;
 
-  const { href, as } = urlsForRouter(urlObjectForSlug(PageSlugs.VisitAttempt));
+  const { href, as } = urlsForRouter(urlObjectForSlug(PageSlugs.Outside));
 
   return (
     <MainLayout
@@ -221,7 +221,7 @@ export const LoadingPage: NextPage = () => {
         </ErrorMessage>
       )}
 
-      <Heading level={HeadingLevels.H2}>Data loading</Heading>
+      <Heading level={HeadingLevels.H2}>Loading</Heading>
       <Paragraph>
         The system will now update the information you need for this process so
         that you can go offline at any point.

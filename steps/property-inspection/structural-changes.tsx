@@ -20,8 +20,7 @@ import PageTitles from "../PageTitles";
 
 const step = {
   title: PageTitles.StructuralChanges,
-  heading:
-    "Have any structural changes been made within the property since it was originally let?",
+  heading: "Structural changes",
   step: {
     slug: PageSlugs.StructuralChanges,
     nextSlug: PageSlugs.Damage,

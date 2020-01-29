@@ -19,8 +19,7 @@ import PageTitles from "../PageTitles";
 
 const step = {
   title: PageTitles.HomeCheck,
-  heading:
-    "Are you doing a Home Check as part of the Tenancy and Household Check?",
+  heading: "Home Check",
   step: {
     slug: PageSlugs.HomeCheck,
     nextSlug: PageSlugs.Health,
@@ -35,7 +34,7 @@ const step = {
           Component: Paragraph,
           props: {
             children:
-              "The Wellbeing support section is the Home Check part of the Tenancy and Household Check process. It includes questions about health, disability, anti social behaviour and referrals."
+              "The Wellbeing support section is the Home Check part of the Tenancy and Household Check process. It includes questions about health, disability, antisocial behaviour, and referrals."
           }
         })
       ),

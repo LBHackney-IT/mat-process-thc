@@ -19,13 +19,13 @@ Feature: Accessibility
     Then the page should be accessible
     And the page should have a descriptive title
 
-  Scenario: Visit attempt page is accessible
-    When I visit /thc/visit-attempt
+  Scenario: Outside page is accessible
+    When I visit /thc/outside
     Then the page should be accessible
     And the page should have a descriptive title
 
-  Scenario: Start check page is accessible
-    When I visit /thc/start-check
+  Scenario: Start page is accessible
+    When I visit /thc/start
     Then the page should be accessible
     And the page should have a descriptive title
 

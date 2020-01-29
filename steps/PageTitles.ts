@@ -5,8 +5,8 @@ enum PageTitles {
   Sections = "Sections",
 
   // Previsit
-  VisitAttempt = "Visit attempt",
-  StartCheck = "Start check",
+  Outside = "Outside",
+  Start = "Start",
   AboutVisit = "About visit",
 
   // ID, residency, and tenant information

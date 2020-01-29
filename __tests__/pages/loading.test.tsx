@@ -263,7 +263,7 @@ it("renders correctly when online", async () => {
           <h2
             className="lbh-heading-h2"
           >
-            Data loading
+            Loading
           </h2>
           <p
             className="lbh-body"
@@ -544,7 +544,7 @@ it("renders correctly when offline", async () => {
           <h2
             className="lbh-heading-h2"
           >
-            Data loading
+            Loading
           </h2>
           <p
             className="lbh-body"

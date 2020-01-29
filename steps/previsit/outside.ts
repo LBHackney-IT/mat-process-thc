@@ -20,14 +20,14 @@ import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const step = {
-  title: PageTitles.VisitAttempt,
+  title: PageTitles.Outside,
   heading: "Tenancy and Household Check",
   step: {
-    slug: PageSlugs.VisitAttempt,
-    nextSlug: PageSlugs.StartCheck,
+    slug: PageSlugs.Outside,
+    nextSlug: PageSlugs.Start,
     Submit: makeSubmit([
       {
-        url: urlObjectForSlug(PageSlugs.StartCheck),
+        url: urlObjectForSlug(PageSlugs.Start),
         value: "Enter the property"
       },
       {
@@ -38,20 +38,10 @@ const step = {
     componentWrappers: [
       ComponentWrapper.wrapStatic(
         new StaticComponent({
-          key: "heading",
-          Component: Heading,
-          props: {
-            level: HeadingLevels.H2,
-            children: "Visit attempt"
-          }
-        })
-      ),
-      ComponentWrapper.wrapStatic(
-        new StaticComponent({
           key: "outside-property-heading",
           Component: Heading,
           props: {
-            level: HeadingLevels.H3,
+            level: HeadingLevels.H2,
             children: "Outside property"
           }
         })
@@ -96,7 +86,7 @@ const step = {
           key: "metal-gate-heading",
           Component: Heading,
           props: {
-            level: HeadingLevels.H3,
+            level: HeadingLevels.H2,
             children: "Metal gate across entrance?"
           }
         })
@@ -131,7 +121,7 @@ const step = {
           key: "next-heading",
           Component: Heading,
           props: {
-            level: HeadingLevels.H4,
+            level: HeadingLevels.H3,
             children: "What do you want to do next?"
           }
         })

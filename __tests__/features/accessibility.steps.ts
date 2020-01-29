@@ -27,8 +27,8 @@ defineFeature(loadFeature("./accessibility.feature"), test => {
   testAccessibility(test, "Index", "Loading");
   testAccessibility(test, "Loading");
   testAccessibility(test, "Sections");
-  testAccessibility(test, "Visit attempt");
-  testAccessibility(test, "Start check");
+  testAccessibility(test, "Outside");
+  testAccessibility(test, "Start");
   testAccessibility(test, "About visit");
   testAccessibility(test, "ID");
   testAccessibility(test, "Residency");

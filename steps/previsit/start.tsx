@@ -16,10 +16,10 @@ import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const step = {
-  title: PageTitles.StartCheck,
+  title: PageTitles.Start,
   heading: "Start Tenancy and Household Check",
   step: {
-    slug: PageSlugs.StartCheck,
+    slug: PageSlugs.Start,
     nextSlug: PageSlugs.AboutVisit,
     Submit: makeSubmit([
       {

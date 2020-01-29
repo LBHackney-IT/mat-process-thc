@@ -19,7 +19,7 @@ import PageTitles from "../PageTitles";
 
 const step = {
   title: PageTitles.FireExit,
-  heading: "Does the property have a secondary fire exit?",
+  heading: "Fire exit",
   step: {
     slug: PageSlugs.FireExit,
     nextSlug: PageSlugs.SmokeAlarm,

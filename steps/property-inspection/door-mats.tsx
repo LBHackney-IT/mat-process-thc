@@ -19,8 +19,7 @@ import PageTitles from "../PageTitles";
 
 const step = {
   title: PageTitles.DoorMats,
-  heading:
-    "Has the tenant placed door mats and/or potted plants in communal areas?",
+  heading: "Door mats or potted plants",
   step: {
     slug: PageSlugs.DoorMats,
     nextSlug: PageSlugs.CommunalAreas,
@@ -37,7 +36,7 @@ const step = {
             name: "has-placed",
             legend: (
               <FieldsetLegend>
-                Has the tenant placed door mats and/or potted plants in communal
+                Has the tenant placed door mats or potted plants in communal
                 areas?
               </FieldsetLegend>
             ) as React.ReactNode,
