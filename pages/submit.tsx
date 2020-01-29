@@ -59,7 +59,7 @@ const submit = async (): Promise<void> => {
 
       // To reduce risk of data loss, we only clear up the data if we sent
       // something to the backend.
-      db.transaction(
+      await db.transaction(
         processStoreNames,
         async stores => {
           await Promise.all(
@@ -68,6 +68,8 @@ const submit = async (): Promise<void> => {
         },
         TransactionMode.ReadWrite
       );
+
+      sessionStorage.clear();
     }
   } else {
     console.warn("No process data to persist");
