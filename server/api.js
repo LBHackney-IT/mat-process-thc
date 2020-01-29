@@ -148,6 +148,59 @@ router.patch("/v1/processes/:ref/processData", (req, res) => {
   proxy(options, req, res);
 });
 
+router.get("/v1/processes/:ref/images/:imageId/:ext", (req, res) => {
+  if (!verifyJwt(req.query.jwt, processApiJwtSecret)) {
+    res.status(401).send("Invalid JWT");
+
+    return;
+  }
+
+  const { ref, imageId, ext } = req.params;
+
+  const options = {
+    host: processApiHost,
+    port: 443,
+    path: `${processApiBaseUrl}/v1/processImageData/thc/${ref}/${imageId}/${ext}`,
+    method: req.method,
+    headers: {
+      "Content-Type": "application/json",
+      "X-API-KEY": processApiKey
+    }
+  };
+
+  proxy(options, req, res);
+});
+
+router.post("/v1/processes/:ref/images", (req, res) => {
+  if (!verifyJwt(req.query.jwt, processApiJwtSecret)) {
+    res.status(401).send("Invalid JWT");
+
+    return;
+  }
+
+  const options = {
+    host: processApiHost,
+    port: 443,
+    path: `${processApiBaseUrl}/v1/processImageData`,
+    method: req.method,
+    headers: {
+      "Content-Type": "application/json",
+      "X-API-KEY": processApiKey
+    }
+  };
+
+  const { id, image, processRef } = req.body;
+
+  req.body = {
+    processRef,
+    imageId: id,
+    base64Image: image,
+    processType: "thc"
+  };
+
+  proxy(options, req, res);
+});
+
 router.get("/v1/tenancies", (req, res) => {
   if (!verifyJwt(req.query.jwt, matApiJwtSecret)) {
     res.status(401).send("Invalid JWT");
