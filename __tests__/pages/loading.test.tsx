@@ -278,7 +278,7 @@ it("renders correctly when online", async () => {
           <p
             className="lbh-body"
           >
-            The system will now update the information you need for this process so that you can go offline at any point.
+            The system is updating the information you need for this process so that you can go offline at any point.
           </p>
           <label
             className="govuk-label lbh-label"
@@ -559,7 +559,7 @@ it("renders correctly when offline", async () => {
           <p
             className="lbh-body"
           >
-            The system will now update the information you need for this process so that you can go offline at any point.
+            The system is updating the information you need for this process so that you can go offline at any point.
           </p>
           <label
             className="govuk-label lbh-label"

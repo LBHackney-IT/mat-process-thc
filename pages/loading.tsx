@@ -169,17 +169,17 @@ export const LoadingPage: NextPage = () => {
     !errored &&
     asyncResults.every(result => result.result !== undefined);
 
-  for (const asyncResult of asyncResults) {
-    if (asyncResult.error) {
+  for (const result of asyncResults) {
+    if (result.error) {
       // We should give the user some way to recover from this. Perhaps we
       // should retry in this case and dedupe the error?
-      console.error(asyncResult.error);
+      console.error(result.error);
     }
   }
 
   const progress =
     asyncResults.filter(
-      asyncResult => !asyncResult.loading && asyncResult.result !== undefined
+      result => !result.loading && !result.error && result.result !== undefined
     ).length / asyncResults.length;
 
   const { href, as } = urlsForRouter(urlObjectForSlug(PageSlugs.Outside));
@@ -223,13 +223,13 @@ export const LoadingPage: NextPage = () => {
 
       <Heading level={HeadingLevels.H2}>Loading</Heading>
       <Paragraph>
-        The system will now update the information you need for this process so
-        that you can go offline at any point.
+        The system is updating the information you need for this process so that
+        you can go offline at any point.
       </Paragraph>
 
       <ProgressBar
         progress={progress}
-        incompleteLabel="Loading..."
+        incompleteLabel={errored ? "Error" : "Loading..."}
         completeLabel={errored ? "Error" : "Ready"}
       />
 
