@@ -165,7 +165,8 @@ router.get("/v1/processes/:ref/images/:imageId/:ext", (req, res) => {
     headers: {
       "Content-Type": "application/json",
       "X-API-KEY": processApiKey
-    }
+    },
+    timeout: 10 * 1000
   };
 
   proxy(options, req, res);
@@ -186,16 +187,18 @@ router.post("/v1/processes/:ref/images", (req, res) => {
     headers: {
       "Content-Type": "application/json",
       "X-API-KEY": processApiKey
-    }
+    },
+    timeout: 10 * 1000
   };
 
-  const { id, image, processRef } = req.body;
+  const { ref } = req.params;
+  const { id, image } = req.body;
 
   req.body = {
-    processRef,
+    processRef: ref,
     imageId: id,
     base64Image: image,
-    processType: "thc"
+    processType: "Tenancy and household check"
   };
 
   proxy(options, req, res);
