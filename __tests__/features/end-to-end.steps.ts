@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { readFileSync } from "fs";
 import { request } from "http";
 import { defineFeature, loadFeature } from "jest-cucumber";
 import { join } from "path";
@@ -12,202 +11,198 @@ import Expect from "../helpers/Expect";
 
 jest.setTimeout(60 * 1000);
 
+const imagePath = join(__dirname, "..", "__fixtures__", "image.jpg");
+const processData = {
+  property: {
+    outside: {
+      images: [imagePath]
+    },
+    rooms: {
+      canEnterAll: "no",
+      notes: "Room notes"
+    },
+    laminatedFlooring: {
+      hasLaminatedFlooring: "yes",
+      hasPermission: "yes",
+      images: [imagePath],
+      notes: "Laminated flooring notes"
+    },
+    structuralChanges: {
+      hasStructuralChanges: "yes",
+      changesAuthorised: "yes",
+      images: [imagePath],
+      notes: "Structural changes notes"
+    },
+    damage: {
+      hasDamage: "yes",
+      images: [imagePath],
+      notes: "Damage notes"
+    },
+    roof: {
+      hasAccess: "yes",
+      itemsStoredOnRoof: "yes",
+      notes: "Roof notes"
+    },
+    loft: {
+      hasAccess: "yes",
+      itemsStored: "yes",
+      notes: "Loft notes"
+    },
+    garden: {
+      hasGarden: "yes",
+      type: "private",
+      isMaintained: "yes",
+      images: [imagePath],
+      notes: "Garden notes"
+    },
+    storingMaterials: {
+      isStoringMaterials: "yes",
+      furtherActionRequired: "yes",
+      notes: "Storing materials notes"
+    },
+    fireExit: {
+      hasFireExit: "yes",
+      isAccessible: "yes",
+      notes: "Fire exit notes"
+    },
+    smokeAlarm: {
+      hasSmokeAlarm: "yes",
+      isWorking: "yes",
+      notes: "Smoke alarm notes"
+    },
+    metalGates: {
+      hasMetalGates: "yes",
+      combustibleItemsBehind: "yes",
+      furtherActionRequired: "yes",
+      images: [imagePath],
+      notes: "Metal gates notes"
+    },
+    doorMats: {
+      hasPlaced: "yes",
+      furtherActionRequired: "yes",
+      notes: "Door mats notes"
+    },
+    communalAreas: {
+      hasLeftCombustibleItems: "yes",
+      furtherActionRequired: "yes",
+      notes: "Communal areas notes"
+    },
+    pets: {
+      hasPets: "yes",
+      petTypes: ["dog", "cat"],
+      hasPermission: "yes",
+      images: [imagePath],
+      notes: "Pets notes"
+    },
+    antisocialBehaviour: {
+      tenantUnderstands: "yes",
+      notes: "Antisocial behaviour notes"
+    },
+    otherComments: {
+      images: [imagePath],
+      notes: "Other comments notes"
+    }
+  },
+  isUnannouncedVisit: {
+    value: "no",
+    notes: "Unannounced visit notes"
+  },
+  isVisitInside: {
+    value: "no",
+    notes: "Visit inside notes"
+  },
+  id: {
+    type: "valid passport",
+    images: [imagePath],
+    notes: "ID notes"
+  },
+  residency: {
+    type: "bank statement",
+    images: [imagePath],
+    notes: "Residency notes"
+  },
+  tenant: {
+    photo: {
+      isWilling: "yes",
+      images: [imagePath]
+    },
+    nextOfKin: {
+      fullName: "Next of kin name",
+      relationship: "Next of kin relationship",
+      mobileNumber: "0123455789",
+      otherNumber: "9876543210",
+      email: "next@of.kin",
+      address: "1 Next of Kin Road\nKinsville\nNK0 0NK"
+    },
+    carer: {
+      hasCarer: "yes",
+      type: "registered",
+      isLiveIn: "yes",
+      liveInStartDate: { month: 1, year: 2019 },
+      fullName: "Carer name",
+      phoneNumber: "0123455789",
+      relationship: "Carer relationship",
+      notes: "Carer notes"
+    }
+  },
+  household: {
+    documents: {
+      images: [imagePath]
+    },
+    houseMovingSchemes: {
+      notes: "House moving schemes notes"
+    },
+    memberChanges: {
+      notes: "Member changes notes"
+    },
+    rentArrears: {
+      type: "yes has plan",
+      notes: "Rent arrears notes"
+    },
+    housingBenefits: {
+      hasApplied: "yes application declined",
+      notes: "Housing benefits notes"
+    },
+    incomeOfficer: {
+      wantsToContact: "yes",
+      notes: "Income officer notes"
+    },
+    otherProperty: {
+      hasOtherProperty: "yes",
+      notes: "Other property notes"
+    }
+  },
+  homeCheck: {
+    value: "yes"
+  },
+  healthConcerns: {
+    value: "yes",
+    who: ["tenant 1"],
+    moreInfo: ["dementia", "smoking"],
+    notes: "Health concerns notes"
+  },
+  disability: {
+    value: "yes",
+    whoDisability: ["tenant 1"],
+    pipOrDLA: "yes",
+    whoPIP: ["tenant 1"],
+    whoDLA: ["tenant 1"],
+    notes: "Disability notes"
+  },
+  supportNeeds: {
+    residentSustainmentNotes: "Resident sustainment notes",
+    befriendingNotes: "Befriending notes",
+    adultSafeguardingNotes: "Adult safeguarding notes",
+    childrenYoungPeopleSafeguardingNotes:
+      "Children young people safeguarding notes",
+    domesticSexualViolenceNotes: "Domestic sexual violence notes",
+    mentalHealth18To65Notes: "Mental health 18 to 65 notes",
+    mentalHealthOver65Notes: "Mental health over 65 notes"
+  }
+};
+
 defineFeature(loadFeature("./end-to-end.feature"), test => {
   test("Performing a check while online", ({ defineStep, when, then }) => {
-    const imagePath = join(__dirname, "..", "__fixtures__", "image.jpg");
-    const base64Image = readFileSync(
-      imagePath.replace(/jpg$/, "base64")
-    ).toString();
-
-    const processData = {
-      property: {
-        outside: {
-          images: [imagePath]
-        },
-        rooms: {
-          canEnterAll: "no",
-          notes: "Room notes"
-        },
-        laminatedFlooring: {
-          hasLaminatedFlooring: "yes",
-          hasPermission: "yes",
-          images: [imagePath],
-          notes: "Laminated flooring notes"
-        },
-        structuralChanges: {
-          hasStructuralChanges: "yes",
-          changesAuthorised: "yes",
-          images: [imagePath],
-          notes: "Structural changes notes"
-        },
-        damage: {
-          hasDamage: "yes",
-          images: [imagePath],
-          notes: "Damage notes"
-        },
-        roof: {
-          hasAccess: "yes",
-          itemsStoredOnRoof: "yes",
-          notes: "Roof notes"
-        },
-        loft: {
-          hasAccess: "yes",
-          itemsStored: "yes",
-          notes: "Loft notes"
-        },
-        garden: {
-          hasGarden: "yes",
-          type: "private",
-          isMaintained: "yes",
-          images: [imagePath],
-          notes: "Garden notes"
-        },
-        storingMaterials: {
-          isStoringMaterials: "yes",
-          furtherActionRequired: "yes",
-          notes: "Storing materials notes"
-        },
-        fireExit: {
-          hasFireExit: "yes",
-          isAccessible: "yes",
-          notes: "Fire exit notes"
-        },
-        smokeAlarm: {
-          hasSmokeAlarm: "yes",
-          isWorking: "yes",
-          notes: "Smoke alarm notes"
-        },
-        metalGates: {
-          hasMetalGates: "yes",
-          combustibleItemsBehind: "yes",
-          furtherActionRequired: "yes",
-          images: [imagePath],
-          notes: "Metal gates notes"
-        },
-        doorMats: {
-          hasPlaced: "yes",
-          furtherActionRequired: "yes",
-          notes: "Door mats notes"
-        },
-        communalAreas: {
-          hasLeftCombustibleItems: "yes",
-          furtherActionRequired: "yes",
-          notes: "Communal areas notes"
-        },
-        pets: {
-          hasPets: "yes",
-          petTypes: ["dog", "cat"],
-          hasPermission: "yes",
-          images: [imagePath],
-          notes: "Pets notes"
-        },
-        antisocialBehaviour: {
-          tenantUnderstands: "yes",
-          notes: "Antisocial behaviour notes"
-        },
-        otherComments: {
-          images: [imagePath],
-          notes: "Other comments notes"
-        }
-      },
-      isUnannouncedVisit: {
-        value: "no",
-        notes: "Unannounced visit notes"
-      },
-      isVisitInside: {
-        value: "no",
-        notes: "Visit inside notes"
-      },
-      id: {
-        type: "valid passport",
-        images: [imagePath],
-        notes: "ID notes"
-      },
-      residency: {
-        type: "bank statement",
-        images: [imagePath],
-        notes: "Residency notes"
-      },
-      tenant: {
-        photo: {
-          isWilling: "yes",
-          images: [imagePath]
-        },
-        nextOfKin: {
-          fullName: "Next of kin name",
-          relationship: "Next of kin relationship",
-          mobileNumber: "0123455789",
-          otherNumber: "9876543210",
-          email: "next@of.kin",
-          address: "1 Next of Kin Road\nKinsville\nNK0 0NK"
-        },
-        carer: {
-          hasCarer: "yes",
-          type: "registered",
-          isLiveIn: "yes",
-          liveInStartDate: { month: 1, year: 2019 },
-          fullName: "Carer name",
-          phoneNumber: "0123455789",
-          relationship: "Carer relationship",
-          notes: "Carer notes"
-        }
-      },
-      household: {
-        documents: {
-          images: [imagePath]
-        },
-        houseMovingSchemes: {
-          notes: "House moving schemes notes"
-        },
-        memberChanges: {
-          notes: "Member changes notes"
-        },
-        rentArrears: {
-          type: "yes has plan",
-          notes: "Rent arrears notes"
-        },
-        housingBenefits: {
-          hasApplied: "yes application declined",
-          notes: "Housing benefits notes"
-        },
-        incomeOfficer: {
-          wantsToContact: "yes",
-          notes: "Income officer notes"
-        },
-        otherProperty: {
-          hasOtherProperty: "yes",
-          notes: "Other property notes"
-        }
-      },
-      homeCheck: {
-        value: "yes"
-      },
-      healthConcerns: {
-        value: "yes",
-        who: ["tenant 1"],
-        moreInfo: ["dementia", "smoking"],
-        notes: "Health concerns notes"
-      },
-      disability: {
-        value: "yes",
-        whoDisability: ["tenant 1"],
-        pipOrDLA: "yes",
-        whoPIP: ["tenant 1"],
-        whoDLA: ["tenant 1"],
-        notes: "Disability notes"
-      },
-      supportNeeds: {
-        residentSustainmentNotes: "Resident sustainment notes",
-        befriendingNotes: "Befriending notes",
-        adultSafeguardingNotes: "Adult safeguarding notes",
-        childrenYoungPeopleSafeguardingNotes:
-          "Children young people safeguarding notes",
-        domesticSexualViolenceNotes: "Domestic sexual violence notes",
-        mentalHealth18To65Notes: "Mental health 18 to 65 notes",
-        mentalHealthOver65Notes: "Mental health over 65 notes"
-      }
-    };
-
     Given.iAmOnline(defineStep);
 
     when("I complete a process", async () => {
@@ -1073,12 +1068,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       const persistedProcessData = JSON.parse(
         JSON.stringify(responseData.processData.processData).replace(
-          new RegExp(
-            base64Image
-              .replace(/\n/g, "")
-              .replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&"),
-            "g"
-          ),
+          /image:[\w-]+?.+?(?=")/g,
           imagePath
         )
       );

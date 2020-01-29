@@ -19,12 +19,13 @@ import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 import PageTitles from "../steps/PageTitles";
 import { processStoreNames } from "../storage/ProcessDatabaseSchema";
 import Storage from "../storage/Storage";
-import tmpProcessRef from "../storage/processRef";
 
 const submit = async (
   setProgress: (progress: number) => void
 ): Promise<void> => {
-  setProgress(0);
+  let progress = 0;
+
+  setProgress(progress);
 
   if (Storage.ProcessContext && Storage.ProcessContext.database) {
     const processRef = getProcessRef();
@@ -38,11 +39,36 @@ const submit = async (
       return;
     }
 
-    // The steps still use the hardcoded `processRef`, so we need to also use
-    // it, even though we're using the correct value to persist to the backend.
-    const processJson = await Storage.getProcessJson(tmpProcessRef);
+    const json = await Storage.getProcessJson(processRef);
 
-    if (processJson) {
+    if (json) {
+      const { processJson, imagesJson } = json;
+
+      const progressIncrement = 1 / (imagesJson.length + 2);
+
+      await Promise.all(
+        imagesJson.map(async ({ id, image }) => {
+          const response = await fetch(
+            `${process.env.BASE_PATH}/api/v1/processes/${processRef}/images?jwt=${processApiJwt}`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({ id, image })
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error(`${response.status}: ${response.statusText}`);
+          }
+
+          progress += progressIncrement;
+
+          setProgress(progress);
+        })
+      );
+
       const response = await fetch(
         `${process.env.BASE_PATH}/api/v1/processes/${processRef}/processData?jwt=${processApiJwt}`,
         {
@@ -58,7 +84,9 @@ const submit = async (
         throw new Error(`${response.status}: ${response.statusText}`);
       }
 
-      setProgress(0.5);
+      progress += progressIncrement;
+
+      setProgress(progress);
 
       const db = await Storage.ProcessContext.database;
 
