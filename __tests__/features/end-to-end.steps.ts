@@ -1066,7 +1066,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
             {
               host: "localhost",
               port: process.env.PORT || 3000,
-              path: `${process.env.BASE_PATH}api/v1/process/${process.env.TEST_PROCESS_REF}/processData?jwt=${process.env.TEST_PROCESS_API_JWT}`,
+              path: `${process.env.BASE_PATH}/api/v1/process/${process.env.TEST_PROCESS_REF}/processData?jwt=${process.env.TEST_PROCESS_API_JWT}`,
               method: "GET",
               headers: {
                 "Content-Type": "application/json",
