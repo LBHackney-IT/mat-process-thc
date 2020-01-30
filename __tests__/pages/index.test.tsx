@@ -37,7 +37,7 @@ it("redirects to the loading page when online", async () => {
   expect(routerReplaceMock).toHaveBeenCalledTimes(1);
   expect(routerReplaceMock).toHaveBeenCalledWith(
     { pathname: "/loading" },
-    { pathname: "/thc/loading" }
+    { pathname: "/loading" }
   );
 });
 

@@ -42,15 +42,6 @@ const urlsForRouter = (
     href.pathname = "/[...slug]";
   }
 
-  if (
-    process.env.BASE_PATH &&
-    as.pathname.startsWith("/") &&
-    !as.pathname.startsWith("//") &&
-    !as.pathname.startsWith(process.env.BASE_PATH)
-  ) {
-    as.pathname = process.env.BASE_PATH + as.pathname;
-  }
-
   return { href, as };
 };
 

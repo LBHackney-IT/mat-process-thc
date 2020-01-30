@@ -23,15 +23,18 @@ if (dev) {
 }
 
 module.exports = withOffline({
-  assetPrefix: process.env.BASE_PATH || "",
   distDir: process.env.NEXT_DIST_DIR || ".next",
   publicRuntimeConfig: {
     allRoutes: findAllRoutes(
       join(__dirname, "pages"),
-      new RegExp(`\\.(?:${["js", "jsx", "ts", "tsx"].join("|")})$`)
+      new RegExp(`\\.(?:${["js", "jsx", "ts", "tsx"].join("|")})$`),
+      /^api/
     )
   },
   env,
-  registerSwPrefix: env.BASE_PATH,
-  scope: `${env.BASE_PATH}/`
+  registerSwPrefix: process.env.BASE_PATH || "",
+  scope: `${process.env.BASE_PATH}/`,
+  experimental: {
+    basePath: process.env.BASE_PATH || ""
+  }
 });

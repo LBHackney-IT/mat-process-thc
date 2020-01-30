@@ -25,38 +25,15 @@ if (dev) {
 app
   .prepare()
   .then(() => {
-    if (dev) {
-      // Handle hot module reloading, which aren't rewritten for us.
-      server.use("/_next/*", (req, res) => {
-        const url = req.originalUrl.replace(
-          "/_next",
-          `${nextConfig.assetPrefix}/_next`
-        );
-
-        res.redirect(url);
-      });
-    }
-
     server
-      .use((req, _res, next) => {
-        req.url = req.originalUrl.replace(nextConfig.assetPrefix, "") || "/";
-
-        if (!req.url.startsWith("/")) {
-          req.url = "/" + req.url;
-        }
-
-        next();
-      })
-      .use("/api", api)
-      .get("/service-worker.js", (req, res) => {
-        const parsedUrl = parse(req.url, true);
-        const { pathname } = parsedUrl;
-        const filePath = join(
-          __dirname,
-          "..",
-          process.env.NEXT_DIST_DIR || ".next",
-          pathname
+      .use(process.env.BASE_PATH + "/api", api)
+      .get(process.env.BASE_PATH + "/service-worker.js", (req, res) => {
+        const { pathname } = parse(
+          req.url.replace(process.env.BASE_PATH, "") || "/",
+          true
         );
+        const filePath = join(__dirname, "..", nextConfig.distDir, pathname);
+
         app.serveStatic(req, res, filePath);
       })
       .get("*", (req, res) => {
