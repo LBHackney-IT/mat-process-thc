@@ -244,7 +244,7 @@ export default class Storage {
 
     const migratedProcessData = await migrateProcessData(
       processData,
-      dataSchemaVersion,
+      dataSchemaVersion || 0,
       // Ideally we'd be exposing the version on the database directly, but
       // this hack works for now.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
