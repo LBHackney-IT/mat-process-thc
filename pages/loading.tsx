@@ -9,7 +9,7 @@ import { NextPage } from "next";
 import NextLink from "next/link";
 import { nullAsUndefined } from "null-as-undefined";
 
-import React from "react";
+import React, { useState, useMemo } from "react";
 import { useAsync } from "react-async-hook";
 
 import ProgressBar from "../components/ProgressBar";
@@ -26,12 +26,251 @@ import MainLayout from "../layouts/MainLayout";
 import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 import PageTitles from "../steps/PageTitles";
 import ExternalDatabaseSchema from "../storage/ExternalDatabaseSchema";
+import { ProcessJson } from "../storage/ProcessDatabaseSchema";
 import Storage from "../storage/Storage";
 import tmpProcessRef from "../storage/processRef";
 
-const useFetchResidentData = (
-  processRef: string | undefined
-): UseApiWithStorageReturn<ExternalDatabaseSchema, "residents"> => {
+const useFetchProcessJson = (): {
+  loading: boolean;
+  result?: ProcessJson;
+  error?: Error;
+} => {
+  const processRef = getProcessRef();
+
+  const processData = useApi<{ processData: ProcessJson }>({
+    endpoint: `${process.env.BASE_PATH}/api/v1/processes/${processRef}/processData`,
+    jwt: { sessionStorageKey: `${processRef}:processApiJwt` },
+    execute: Boolean(processRef)
+  });
+
+  return {
+    loading: processData.loading,
+    error: processData.error,
+    result: processData.result?.processData
+  };
+};
+
+const useFetchImages = (
+  processData: ProcessJson["processData"] | undefined
+): {
+  loading: boolean;
+  result?: { id: string; ext: string; image: string }[];
+  error?: Error;
+  fetchedImageCount: number;
+  expectedImageCount: number;
+} => {
+  const processRef = getProcessRef();
+
+  let jwt: string | undefined = undefined;
+
+  if (process.browser) {
+    jwt = nullAsUndefined(
+      sessionStorage.getItem(`${processRef}:processApiJwt`)
+    );
+  }
+
+  let images:
+    | ReturnType<typeof Storage.getImagesToFetch>
+    | undefined = undefined;
+
+  if (processData) {
+    images = Storage.getImagesToFetch(processData);
+  }
+
+  const [fetchedImageCount, setFetchedImageCount] = useState(0);
+
+  const imageResults = useAsync(async () => {
+    if (!process.browser) {
+      return;
+    }
+
+    if (!images) {
+      return;
+    }
+
+    if (!processRef) {
+      throw new Error("Process ref is missing from session storage");
+    }
+
+    if (!jwt) {
+      throw new Error("JWT is missing from session storage");
+    }
+
+    return Promise.all(
+      images.map(async ({ id, ext }) => {
+        const response = await fetch(
+          `${process.env.BASE_PATH}/api/v1/processes/${processRef}/images/${id}/${ext}?jwt=${jwt}`,
+          { method: "GET" }
+        );
+        const responseBody = await response.text();
+
+        let image: { base64Image: string } | undefined = undefined;
+
+        try {
+          image = JSON.parse(responseBody);
+        } catch (err) {
+          if (err.name !== "SyntaxError") {
+            throw err;
+          }
+        }
+
+        if (!response.ok) {
+          console.error(`${response.status}: ${response.statusText}`);
+
+          throw new Error("Error accessing API");
+        }
+
+        if (image === undefined) {
+          console.error(responseBody);
+
+          throw new Error("Invalid JSON response from API");
+        }
+
+        setFetchedImageCount(count => count + 1);
+
+        return { id, ext, image: image.base64Image };
+      })
+    );
+  }, [processRef, jwt, JSON.stringify(images)]);
+
+  return {
+    loading: !process.browser || imageResults.loading || !images,
+    result: images ? imageResults.result : undefined,
+    error: imageResults.error,
+    fetchedImageCount,
+    expectedImageCount: images ? images.length : 0
+  };
+};
+
+const useFetchProcessJsonWithImages = (): {
+  loading: boolean;
+  result?: ProcessJson;
+  error?: Error;
+  completedStepCount: number;
+  expectedStepCount: number;
+} => {
+  const processJson = useFetchProcessJson();
+  const images = useFetchImages(processJson.result?.processData);
+
+  const processJsonWithImages = useMemo(() => {
+    let loading = true;
+    let error: Error | undefined;
+    let result: ProcessJson | undefined = undefined;
+
+    if (
+      !processJson.loading &&
+      !processJson.error &&
+      processJson.result &&
+      processJson.result.processData &&
+      !images.loading &&
+      !images.error &&
+      images.result
+    ) {
+      try {
+        if (images.result.length) {
+          let processDataString = JSON.stringify(
+            processJson.result.processData
+          );
+
+          for (const { id, ext, image } of images.result) {
+            processDataString = processDataString.replace(
+              new RegExp(`image:${id}\\.${ext}`, "g"),
+              image
+            );
+          }
+
+          result = {
+            ...processJson.result,
+            processData: JSON.parse(processDataString)
+          };
+        } else {
+          result = processJson.result;
+        }
+      } catch (err) {
+        error = err;
+      }
+
+      loading = false;
+    }
+
+    return { loading, result, error };
+  }, [
+    processJson.loading,
+    processJson.error,
+    processJson.result,
+    images.loading,
+    images.error,
+    images.result
+  ]);
+
+  const loading =
+    processJson.loading || images.loading || processJsonWithImages.loading;
+  const error =
+    processJson.error || images.error || processJsonWithImages.error;
+
+  return {
+    loading,
+    result: loading || error ? undefined : processJsonWithImages.result,
+    error,
+    completedStepCount:
+      images.fetchedImageCount +
+      (processJson.loading ? 0 : 1) +
+      (processJsonWithImages.loading ? 0 : 1),
+    expectedStepCount: images.expectedImageCount + 2
+  };
+};
+
+const useFetchAndStoreProcessJson = (): {
+  loading: boolean;
+  result?: boolean;
+  error?: Error;
+  completedStepCount: number;
+  expectedStepCount: number;
+} => {
+  const processRef = getProcessRef();
+
+  const processJson = useFetchProcessJsonWithImages();
+
+  const offlineSync = useAsync(async () => {
+    if (
+      !processRef ||
+      processJson.loading ||
+      processJson.error ||
+      !processJson.result
+    ) {
+      return;
+    }
+
+    // The steps still use the hardcoded `processRef`, so we need to also use
+    // it, even though we're using the correct value to fetch from the
+    // backend.
+    return Storage.updateProcessData(tmpProcessRef, processJson.result);
+  }, [
+    processRef,
+    processJson.loading,
+    processJson.error,
+    JSON.stringify(processJson.result)
+  ]);
+
+  const loading = processJson.loading || offlineSync.loading;
+  const error = processJson.error || offlineSync.error;
+
+  return {
+    loading,
+    result: loading ? undefined : offlineSync.result,
+    error,
+    completedStepCount:
+      processJson.completedStepCount + (offlineSync.loading ? 0 : 1),
+    expectedStepCount: processJson.expectedStepCount + 1
+  };
+};
+
+const useFetchResidentData = (): UseApiWithStorageReturn<
+  ExternalDatabaseSchema,
+  "residents"
+> => {
+  const processRef = getProcessRef();
+
   let data: string | undefined;
 
   if (process.browser) {
@@ -43,8 +282,14 @@ const useFetchResidentData = (
     query: { data },
     jwt: { sessionStorageKey: `${processRef}:matApiJwt` },
     execute: Boolean(processRef),
-    parse(data) {
-      const fullAddress = data.results[0].fullAddressDisplay as string;
+    parse(data: {
+      results: {
+        fullName: string;
+        responsible: boolean;
+        fullAddressDisplay: string;
+      }[];
+    }) {
+      const fullAddress = data.results[0].fullAddressDisplay;
       const address = fullAddress
         .split("\n")
         .map(line => titleCase(line.replace("\r", "")));
@@ -62,19 +307,15 @@ const useFetchResidentData = (
       address.push(...cityAndPostcode);
 
       const tenants = data.results
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .filter((contact: any) => contact.responsible)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .map((contact: any) => ({
-          fullName: contact.fullName as string
+        .filter(contact => contact.responsible)
+        .map(contact => ({
+          fullName: contact.fullName
         }));
 
       const householdMembers = data.results
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .filter((contact: any) => !contact.responsible)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .map((contact: any) => ({
-          fullName: contact.fullName as string
+        .filter(contact => !contact.responsible)
+        .map(contact => ({
+          fullName: contact.fullName
         }));
 
       return {
@@ -91,9 +332,12 @@ const useFetchResidentData = (
   });
 };
 
-const useFetchTenancyData = (
-  processRef: string | undefined
-): UseApiWithStorageReturn<ExternalDatabaseSchema, "tenancy"> => {
+const useFetchTenancyData = (): UseApiWithStorageReturn<
+  ExternalDatabaseSchema,
+  "tenancy"
+> => {
+  const processRef = getProcessRef();
+
   let data: string | undefined;
 
   if (process.browser) {
@@ -105,9 +349,14 @@ const useFetchTenancyData = (
     query: { data },
     jwt: { sessionStorageKey: `${processRef}:matApiJwt` },
     execute: Boolean(processRef),
-    parse(data) {
-      const tenureType = data.results.tenuretype as string;
-      const tenancyStartDate = data.results.tenancyStartDate as string;
+    parse(data: {
+      results: {
+        tenuretype: string;
+        tenancyStartDate: string;
+      };
+    }) {
+      const tenureType = data.results.tenuretype;
+      const tenancyStartDate = data.results.tenancyStartDate;
 
       return {
         tenureType,
@@ -123,53 +372,26 @@ const useFetchTenancyData = (
 };
 
 export const LoadingPage: NextPage = () => {
-  const processRef = getProcessRef();
-
-  const processData = useApi({
-    endpoint: `${process.env.BASE_PATH}/api/v1/processes/${processRef}/processData`,
-    jwt: { sessionStorageKey: `${processRef}:processApiJwt` },
-    execute: Boolean(processRef)
-  });
-
-  const residentData = useFetchResidentData(processRef);
-  const tenancyData = useFetchTenancyData(processRef);
-
-  const offlineProcessDataStatus = useAsync(async () => {
-    if (processData.loading) {
-      return;
-    }
-
-    if (!processRef || !processData.result || !processData.result.processData) {
-      return;
-    }
-
-    // The steps still use the hardcoded `processRef`, so we need to also use
-    // it, even though we're using the correct value to fetch from the
-    // backend.
-    return Storage.updateProcessData(
-      tmpProcessRef,
-      processData.result.processData
-    );
-  }, [processRef, processData.loading, JSON.stringify(processData.result)]);
-
+  const processDataSyncStatus = useFetchAndStoreProcessJson();
+  const residentData = useFetchResidentData();
+  const tenancyData = useFetchTenancyData();
   const precacheProcessPages = usePrecacheAll();
 
-  const asyncResults = [
-    processData,
-    residentData,
-    tenancyData,
-    offlineProcessDataStatus,
-    precacheProcessPages
-  ];
+  const extraResults = [residentData, tenancyData, precacheProcessPages];
 
-  const loading = asyncResults.some(result => result.loading);
-  const errored = !loading && asyncResults.some(result => result.error);
+  const loading =
+    processDataSyncStatus.loading ||
+    extraResults.some(result => result.loading);
+  const errored =
+    Boolean(processDataSyncStatus.error) ||
+    extraResults.some(result => result.error);
   const ready =
     !loading &&
     !errored &&
-    asyncResults.every(result => result.result !== undefined);
+    processDataSyncStatus.result !== undefined &&
+    extraResults.every(result => result.result !== undefined);
 
-  for (const result of asyncResults) {
+  for (const result of [processDataSyncStatus, ...extraResults]) {
     if (result.error) {
       // We should give the user some way to recover from this. Perhaps we
       // should retry in this case and dedupe the error?
@@ -178,9 +400,11 @@ export const LoadingPage: NextPage = () => {
   }
 
   const progress =
-    asyncResults.filter(
+    (extraResults.filter(
       result => !result.loading && !result.error && result.result !== undefined
-    ).length / asyncResults.length;
+    ).length +
+      processDataSyncStatus.completedStepCount) /
+    (extraResults.length + processDataSyncStatus.expectedStepCount);
 
   const { href, as } = urlsForRouter(urlObjectForSlug(PageSlugs.Outside));
 
@@ -230,7 +454,13 @@ export const LoadingPage: NextPage = () => {
       <ProgressBar
         progress={progress}
         incompleteLabel={errored ? "Error" : "Loading..."}
-        completeLabel={errored ? "Error" : "Ready"}
+        completeLabel={
+          errored
+            ? "Error"
+            : processDataSyncStatus.result
+            ? "Ready (updated)"
+            : "Ready (no update needed)"
+        }
       />
 
       <NextLink href={href} as={as}>

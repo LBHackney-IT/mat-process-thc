@@ -6,7 +6,6 @@ import {
   StoreValue
 } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
-import { DeepPartial } from "utility-types";
 import uuid from "uuid/v5";
 
 import ExternalDatabaseSchema, {
@@ -50,6 +49,11 @@ const migrateProcessData = async (
 interface ImageJson {
   id: string;
   image: string;
+}
+
+interface ImageIdentifier {
+  id: string;
+  ext: string;
 }
 
 export default class Storage {
@@ -132,7 +136,7 @@ export default class Storage {
     processRef: ProcessRef
   ): Promise<
     | {
-        processJson: DeepPartial<ProcessJson>;
+        processJson: Partial<ProcessJson>;
         imagesJson: ImageJson[];
       }
     | undefined
@@ -217,9 +221,29 @@ export default class Storage {
     };
   }
 
+  static getImagesToFetch(
+    processData: ProcessJson["processData"]
+  ): ImageIdentifier[] {
+    const processDataString = JSON.stringify(processData);
+
+    const imageKeys = (
+      processDataString.match(/image:[\w-]+?.+?(?=")/g) || []
+    ).filter((match, i, matches) => matches.indexOf(match) === i);
+
+    const images = [] as ImageIdentifier[];
+
+    for (const image of imageKeys) {
+      const [id, ext] = image.replace("image:", "").split(".", 2);
+
+      images.push({ id, ext });
+    }
+
+    return images;
+  }
+
   static async updateProcessData(
     processRef: ProcessRef,
-    data: ProcessJson & { processData: DeepPartial<ProcessJson["processData"]> }
+    data: ProcessJson
   ): Promise<boolean> {
     const {
       dateCreated,
@@ -268,8 +292,6 @@ export default class Storage {
           return;
         }
 
-        await stores.lastModified.put(processRef, lastModified.toISOString());
-
         await Promise.all(
           Object.entries(migratedProcessData).map(
             async ([storeName, value]) => {
@@ -287,6 +309,8 @@ export default class Storage {
             }
           )
         );
+
+        await stores.lastModified.put(processRef, lastModified.toISOString());
       },
       TransactionMode.ReadWrite
     );

@@ -95,7 +95,7 @@ const proxy = (options, req, res) => {
   clientReq.end();
 };
 
-router.use(json({ limit: "1gb" }));
+router.use(json({ limit: "500mb" }));
 
 router.get("/v1/processes/:ref/processData", (req, res) => {
   if (!verifyJwt(req.query.jwt, processApiJwtSecret)) {
@@ -160,7 +160,9 @@ router.get("/v1/processes/:ref/images/:imageId/:ext", (req, res) => {
   const options = {
     host: processApiHost,
     port: 443,
-    path: `${processApiBaseUrl}/v1/processImageData/thc/${ref}/${imageId}/${ext}`,
+    path: encodeURI(
+      `${processApiBaseUrl}/v1/processImageData/Tenancy and household check/${ref}/${imageId}/${ext}`
+    ),
     method: req.method,
     headers: {
       "Content-Type": "application/json",

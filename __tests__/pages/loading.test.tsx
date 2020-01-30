@@ -26,7 +26,33 @@ beforeEach(() => {
 
   Storage.ExternalContext = {
     ...jest.fn()(),
-    database: { ...jest.fn()(), put: jest.fn() }
+    database: {
+      ...jest.fn()(),
+      put: jest.fn()
+    }
+  };
+
+  Storage.ProcessContext = {
+    ...jest.fn()(),
+    database: {
+      ...jest.fn()(),
+      db: { version: 2 },
+      put: jest.fn(),
+      transaction: async (_, tx): Promise<void> => {
+        await tx({
+          ...jest.fn()(),
+          lastModified: {
+            ...jest.fn()(),
+            get: (): undefined => undefined,
+            put: jest.fn()
+          },
+          property: {
+            ...jest.fn()(),
+            put: jest.fn()
+          }
+        });
+      }
+    }
   };
 });
 
@@ -49,11 +75,31 @@ it("renders correctly when online", async () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let body: any = {};
 
-      if (relativeUrl.startsWith("/api/v1/processes") && method === "GET") {
+      if (
+        relativeUrl.startsWith("/api/v1/processes") &&
+        relativeUrl.includes("/images/") &&
+        method === "GET"
+      ) {
         body = {
-          dateCreated: new Date(2019, 1),
-          dateLastModified: new Date(2019, 3),
-          processData: {}
+          base64Image: "data:image/jpeg;base64,someimagedata"
+        };
+      } else if (
+        relativeUrl.startsWith("/api/v1/processes") &&
+        method === "GET"
+      ) {
+        body = {
+          processData: {
+            dateCreated: new Date(2019, 1),
+            dateLastModified: new Date(2019, 3),
+            dataSchemaVersion: 0,
+            processData: {
+              property: {
+                outside: {
+                  images: ["image:imageid.jpeg"]
+                }
+              }
+            }
+          }
         };
       } else if (
         relativeUrl.startsWith("/api/v1/tenancies") &&
@@ -283,7 +329,7 @@ it("renders correctly when online", async () => {
           <label
             className="govuk-label lbh-label"
           >
-            Ready
+            Ready (updated)
             <div>
               <div
                 style={
@@ -564,12 +610,12 @@ it("renders correctly when offline", async () => {
           <label
             className="govuk-label lbh-label"
           >
-            Loading...
+            Error
             <div>
               <div
                 style={
                   Object {
-                    "width": "20%",
+                    "width": "50%",
                   }
                 }
               />
