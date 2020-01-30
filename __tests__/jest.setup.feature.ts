@@ -25,7 +25,7 @@ afterEach(async () => {
       .logs()
       .get(logging.Type.BROWSER)) || [];
 
-  log.forEach(line => {
+  for (const line of log) {
     switch (line.level) {
       case logging.Level.SEVERE:
         console.error(line.level.name, line.message);
@@ -37,7 +37,12 @@ afterEach(async () => {
         console.log(line.level.name, line.message);
         break;
     }
-  });
+  }
+
+  expect(log.filter(({ level }) => level === logging.Level.SEVERE)).toEqual([]);
+  expect(log.filter(({ level }) => level === logging.Level.WARNING)).toEqual(
+    []
+  );
 });
 
 afterAll(async () => {
