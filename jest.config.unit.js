@@ -8,7 +8,8 @@ module.exports = {
     "dotenv/config",
     "jest-axe/extend-expect",
     "jest-localstorage-mock",
-    "<rootDir>/__tests__/jest.setup.ts"
+    "jest-date-mock",
+    "<rootDir>/__tests__/jest.setup.unit.ts"
   ],
   moduleNameMapper: {
     "^.+\\.css$": "<rootDir>/__tests__/helpers/transformers/fileTransformer"

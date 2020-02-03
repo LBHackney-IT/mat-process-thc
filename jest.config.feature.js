@@ -7,7 +7,6 @@ module.exports = {
   setupFilesAfterEnv: [
     "dotenv/config",
     "jest-axe/extend-expect",
-    "<rootDir>/__tests__/jest.setup.ts",
     "<rootDir>/__tests__/jest.setup.feature.ts"
   ],
   testMatch: [
