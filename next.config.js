@@ -4,7 +4,7 @@ require("dotenv/config");
 const withOffline = require("next-offline");
 const { join } = require("path");
 
-const findAllRoutes = require("./build/utils/findAllRoutes");
+const findAllRoutes = require("./build/helpers/findAllRoutes");
 
 const dev = process.env.NODE_ENV !== "production";
 
