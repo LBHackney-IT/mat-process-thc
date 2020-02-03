@@ -112,7 +112,6 @@ router.get("/v1/processes/:ref/processData", (req, res) => {
     path: `${processApiBaseUrl}/v1/processData/${ref}`,
     method: req.method,
     headers: {
-      "Content-Type": "application/json",
       "X-API-KEY": processApiKey
     }
   };
@@ -165,7 +164,6 @@ router.get("/v1/processes/:ref/images/:imageId/:ext", (req, res) => {
     ),
     method: req.method,
     headers: {
-      "Content-Type": "application/json",
       "X-API-KEY": processApiKey
     },
     timeout: 10 * 1000
@@ -231,7 +229,6 @@ router.get("/v1/tenancies", (req, res) => {
     path: `${matApiBaseUrl}/v1/Accounts/AccountDetailsByContactId?contactid=${contactId}`,
     method: req.method,
     headers: {
-      "Content-Type": "application/json",
       Authorization: matApiToken
     }
   };
@@ -265,7 +262,6 @@ router.get("/v1/residents", (req, res) => {
     path: `${matApiBaseUrl}/v1/Contacts/GetContactsByUprn?urpn=${uprn}`,
     method: req.method,
     headers: {
-      "Content-Type": "application/json",
       Authorization: matApiToken
     }
   };
