@@ -8,6 +8,7 @@ import {
 } from "selenium-webdriver";
 import chrome from "selenium-webdriver/chrome";
 import firefox from "selenium-webdriver/firefox";
+import yn from "yn";
 
 type WebDriverWrapperCreateOptions = {
   browser?: string;
@@ -16,6 +17,26 @@ type WebDriverWrapperCreateOptions = {
 };
 
 class WebDriverWrapper implements WebDriver {
+  static async createSingleton(): Promise<void> {
+    await this.destroySingleton();
+
+    global.browser = await this.create({
+      browser: process.env.TEST_BROWSER || Browser.CHROME,
+      headless: yn(process.env.TEST_HEADLESS, { default: true }),
+      baseUrl: `http://localhost:${process.env.PORT || 3000}${
+        process.env.BASE_PATH
+      }`
+    });
+  }
+
+  static async destroySingleton(): Promise<void> {
+    const browser = global.browser;
+
+    delete global.browser;
+
+    await browser?.quit();
+  }
+
   static async create({
     browser = Browser.CHROME,
     headless = true,

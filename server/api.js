@@ -161,7 +161,7 @@ router.get("/v1/processes/:ref/images/:imageId/:ext", (req, res) => {
     host: processApiHost,
     port: 443,
     path: encodeURI(
-      `${processApiBaseUrl}/v1/processImageData/Tenancy and household check/${ref}/${imageId}/${ext}`
+      `${processApiBaseUrl}/v1/processImageData/${process.env.PROCESS_TYPE_NAME}/${ref}/${imageId}/${ext}`
     ),
     method: req.method,
     headers: {
@@ -200,7 +200,7 @@ router.post("/v1/processes/:ref/images", (req, res) => {
     processRef: ref,
     imageId: id,
     base64Image: image,
-    processType: "Tenancy and household check"
+    processType: process.env.PROCESS_TYPE_NAME
   };
 
   proxy(options, req, res);

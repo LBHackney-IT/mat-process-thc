@@ -6,6 +6,7 @@ module.exports = {
   testRunner: "jest-circus/runner",
   setupFilesAfterEnv: [
     "dotenv/config",
+    "cross-fetch/polyfill",
     "jest-axe/extend-expect",
     "<rootDir>/__tests__/jest.setup.feature.ts"
   ],

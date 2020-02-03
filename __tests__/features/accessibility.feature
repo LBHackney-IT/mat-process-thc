@@ -5,186 +5,186 @@ Feature: Accessibility
   So that I can use the service
 
   Scenario: Index page is accessible
-    When I visit /thc
+    When I visit /
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Loading page is accessible
-    When I visit /thc/loading
+    When I visit /loading
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Sections page is accessible
-    When I visit /thc/sections
+    When I visit /sections
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Outside page is accessible
-    When I visit /thc/outside
+    When I visit /outside
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Start page is accessible
-    When I visit /thc/start
+    When I visit /start
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: About visit page is accessible
-    When I visit /thc/about-visit
+    When I visit /about-visit
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: ID page is accessible
-    When I visit /thc/id
+    When I visit /id
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Residency page is accessible
-    When I visit /thc/residency
+    When I visit /residency
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Tenant photo page is accessible
-    When I visit /thc/tenant-photo
+    When I visit /tenant-photo
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Next of kin page is accessible
-    When I visit /thc/next-of-kin
+    When I visit /next-of-kin
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Carer page is accessible
-    When I visit /thc/carer
+    When I visit /carer
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Household page is accessible
-    When I visit /thc/household
+    When I visit /household
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Rent page is accessible
-    When I visit /thc/rent
+    When I visit /rent
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Other property page is accessible
-    When I visit /thc/other-property
+    When I visit /other-property
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Rooms page is accessible
-    When I visit /thc/rooms
+    When I visit /rooms
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Laminated flooring page is accessible
-    When I visit /thc/laminated-flooring
+    When I visit /laminated-flooring
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Structural changes page is accessible
-    When I visit /thc/structural-changes
+    When I visit /structural-changes
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Damage page is accessible
-    When I visit /thc/damage
+    When I visit /damage
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Roof page is accessible
-    When I visit /thc/roof
+    When I visit /roof
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Loft page is accessible
-    When I visit /thc/loft
+    When I visit /loft
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Garden page is accessible
-    When I visit /thc/garden
+    When I visit /garden
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Storing materials page is accessible
-    When I visit /thc/storing-materials
+    When I visit /storing-materials
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Fire exit page is accessible
-    When I visit /thc/fire-exit
+    When I visit /fire-exit
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Smoke alarm page is accessible
-    When I visit /thc/smoke-alarm
+    When I visit /smoke-alarm
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Metal gates page is accessible
-    When I visit /thc/metal-gates
+    When I visit /metal-gates
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Door mats page is accessible
-    When I visit /thc/door-mats
+    When I visit /door-mats
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Communal areas page is accessible
-    When I visit /thc/communal-areas
+    When I visit /communal-areas
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Pets page is accessible
-    When I visit /thc/pets
+    When I visit /pets
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Antisocial behaviour page is accessible
-    When I visit /thc/antisocial-behaviour
+    When I visit /antisocial-behaviour
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Other comments page is accessible
-    When I visit /thc/other-comments
+    When I visit /other-comments
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Home check page is accessible
-    When I visit /thc/home-check
+    When I visit /home-check
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Health page is accessible
-    When I visit /thc/health
+    When I visit /health
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Disability page is accessible
-    When I visit /thc/disability
+    When I visit /disability
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Support needs page is accessible
-    When I visit /thc/support-needs
+    When I visit /support-needs
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Review page is accessible
-    When I visit /thc/review
+    When I visit /review
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Submit page is accessible
-    When I visit /thc/submit
+    When I visit /submit
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Confirmed page is accessible
-    When I visit /thc/confirmed
+    When I visit /confirmed
     Then the page should be accessible
     And the page should have a descriptive title

@@ -8,4 +8,4 @@ Feature: End to end
     Given I am online
     When I complete a process
     Then I should see that the process has been submitted
-    And the data in the backend should match
+    And the data in the backend should match the answers given

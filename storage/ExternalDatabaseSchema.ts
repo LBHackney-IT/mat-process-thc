@@ -2,8 +2,9 @@ import { NamedSchema, StoreNames } from "remultiform/database";
 
 import { ProcessRef } from "./ProcessDatabaseSchema";
 
-export const externalDatabaseName = `mat-process-thc-external-${process.env
-  .ENVIRONMENT_NAME || "unknown"}`;
+export const externalDatabaseName = `mat-process-${
+  process.env.PROCESS_NAME
+}-external-${process.env.ENVIRONMENT_NAME || "unknown"}`;
 
 type ExternalDatabaseSchema = NamedSchema<
   typeof externalDatabaseName,

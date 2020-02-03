@@ -3,8 +3,9 @@ import { DeepPartial } from "utility-types";
 
 export type ProcessRef = string;
 
-export const processDatabaseName = `mat-process-thc-process-${process.env
-  .ENVIRONMENT_NAME || "unknown"}`;
+export const processDatabaseName = `mat-process-${
+  process.env.PROCESS_NAME
+}-process-${process.env.ENVIRONMENT_NAME || "unknown"}`;
 
 type ProcessDatabaseSchema = NamedSchema<
   typeof processDatabaseName,

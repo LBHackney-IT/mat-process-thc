@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { request } from "http";
 import { defineFeature, loadFeature } from "jest-cucumber";
 import { join } from "path";
 import { until } from "selenium-webdriver";
-
-import { ProcessJson } from "../../storage/ProcessDatabaseSchema";
 
 import Given from "../helpers/steps/Given";
 import Expect from "../helpers/Expect";
@@ -207,7 +204,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
     when("I complete a process", async () => {
       // Index page
-      await browser!.getRelative("/thc");
+      await browser!.getRelative("");
 
       // Wait for redirect.
       await browser!.wait(
@@ -1019,52 +1016,20 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await Expect.pageToContain("has been submitted for manager review");
     });
 
-    then("the data in the backend should match", async () => {
-      const responseData = await new Promise<{ processData: ProcessJson }>(
-        (resolve, reject) => {
-          const req = request(
-            {
-              host: "localhost",
-              port: process.env.PORT || 3000,
-              path: `${process.env.BASE_PATH}/api/v1/process/${process.env.TEST_PROCESS_REF}/processData?jwt=${process.env.TEST_PROCESS_API_JWT}`,
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-                "X-API-KEY": process.env.PROCESS_API_KEY || ""
-              }
-            },
-            res => {
-              res.setEncoding("utf8");
-
-              let rawData = "";
-
-              res.on("data", chunk => {
-                rawData += chunk;
-              });
-
-              res.on("end", () => {
-                try {
-                  const parsedData = JSON.parse(rawData);
-
-                  resolve(parsedData);
-                } catch (err) {
-                  reject(err);
-                }
-              });
-
-              res.on("error", err => {
-                reject(err);
-              });
-            }
-          );
-
-          req.on("error", err => {
-            reject(err);
-          });
-
-          req.end();
+    then("the data in the backend should match the answers given", async () => {
+      const response = await fetch(
+        `https://${process.env.PROCESS_API_HOST}${process.env.PROCESS_API_BASE_URL}/v1/processData/${process.env.TEST_PROCESS_REF}`,
+        {
+          method: "GET",
+          headers: {
+            "X-API-KEY": process.env.PROCESS_API_KEY || ""
+          }
         }
       );
+
+      expect(response.status).toEqual(200);
+
+      const responseData = await response.json();
 
       const persistedProcessData = JSON.parse(
         JSON.stringify(responseData.processData.processData).replace(
