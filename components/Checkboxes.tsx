@@ -24,7 +24,9 @@ export const Checkboxes: React.FunctionComponent<Props> = props => {
     legend,
     checkboxes,
     value: currentValues,
-    onValueChange
+    onValueChange,
+    required,
+    disabled
   } = props;
 
   return (
@@ -46,6 +48,8 @@ export const Checkboxes: React.FunctionComponent<Props> = props => {
                   type="checkbox"
                   value={checkbox.value}
                   checked={currentValues.includes(checkbox.value)}
+                  required={required}
+                  disabled={disabled}
                   onChange={(event): void => {
                     let newValues = [...currentValues];
 

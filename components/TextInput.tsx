@@ -12,7 +12,7 @@ type Props = DynamicComponentControlledProps<string> & {
 };
 
 export const TextInput: React.FunctionComponent<Props> = props => {
-  const { label, name, value, onValueChange } = props;
+  const { label, name, value, onValueChange, required, disabled } = props;
 
   const labelId = `${name}-label`;
   const inputId = `${name}-input`;
@@ -27,6 +27,8 @@ export const TextInput: React.FunctionComponent<Props> = props => {
         name={name}
         type="text"
         value={value}
+        required={required}
+        disabled={disabled}
         onChange={(event): void => {
           onValueChange(event.target.value);
         }}

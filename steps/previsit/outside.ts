@@ -25,16 +25,17 @@ const step = {
   step: {
     slug: PageSlugs.Outside,
     nextSlug: PageSlugs.Start,
-    Submit: makeSubmit([
-      {
-        url: urlObjectForSlug(PageSlugs.Start),
-        value: "Enter the property"
-      },
-      {
-        url: urlObjectForSlug(PageSlugs.Index),
-        value: "Unable to enter property"
-      }
-    ]),
+    submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
+      makeSubmit([
+        {
+          url: urlObjectForSlug(nextSlug),
+          value: "Enter the property"
+        },
+        {
+          url: urlObjectForSlug(undefined),
+          value: "Unable to enter property"
+        }
+      ]),
     componentWrappers: [
       ComponentWrapper.wrapStatic(
         new StaticComponent({

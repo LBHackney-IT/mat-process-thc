@@ -27,6 +27,19 @@ const ReviewPage: NextPage = () => {
 
   const { href, as } = urlsForRouter(urlObjectForSlug(PageSlugs.Submit));
 
+  const button = (
+    <Button
+      disabled={
+        sections.some(section => !section.rows.length) ||
+        !href.pathname ||
+        !as.pathname
+      }
+      data-testid="submit"
+    >
+      Save and finish process
+    </Button>
+  );
+
   return (
     <MainLayout
       title={PageTitles.Review}
@@ -57,14 +70,13 @@ const ReviewPage: NextPage = () => {
         Date of visit: {formatDate(new Date(), "d MMMM yyyy")}
       </Paragraph>
 
-      <NextLink href={href} as={as}>
-        <Button
-          disabled={sections.some(section => !section.rows.length)}
-          data-testid="submit"
-        >
-          Save and finish process
-        </Button>
-      </NextLink>
+      {href.pathname && as.pathname ? (
+        <NextLink href={href} as={as}>
+          {button}
+        </NextLink>
+      ) : (
+        button
+      )}
     </MainLayout>
   );
 };

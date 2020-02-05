@@ -70,10 +70,11 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "id"> = {
   step: {
     slug: PageSlugs.Id,
     nextSlug: PageSlugs.Residency,
-    Submit: makeSubmit({
-      url: urlObjectForSlug(PageSlugs.Residency),
-      value: "Save and continue"
-    }),
+    submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
+      makeSubmit({
+        url: urlObjectForSlug(nextSlug),
+        value: "Save and continue"
+      }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({

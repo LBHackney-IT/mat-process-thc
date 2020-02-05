@@ -160,8 +160,15 @@ const SubmitPage: NextPage = () => {
     );
   }
 
+  const { href, as } = urlsForRouter(urlObjectForSlug(PageSlugs.Confirmed));
+
   const disabled =
-    online.loading || Boolean(online.error) || !online.result || submitting;
+    online.loading ||
+    Boolean(online.error) ||
+    !online.result ||
+    submitting ||
+    !href.pathname ||
+    !as.pathname;
 
   return (
     <MainLayout title={PageTitles.Submit}>
@@ -195,15 +202,14 @@ const SubmitPage: NextPage = () => {
           disabled={disabled}
           preventDoubleClick
           onClick={async (): Promise<void> => {
+            if (!href.pathname || !as.pathname) {
+              return;
+            }
+
             try {
               setSubmitting(true);
 
               await submit(setProgress);
-
-              const { href, as } = urlsForRouter(
-                urlObjectForSlug(PageSlugs.Confirmed)
-              );
-
               await Router.push(href, as);
             } catch (err) {
               console.error(err);

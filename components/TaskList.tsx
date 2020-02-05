@@ -45,10 +45,11 @@ export const TaskList: React.FunctionComponent<Props> = props => {
       <List
         className="task-list"
         items={items.map(({ name, url, status, "data-testid": testId }) => {
-          const href =
-            url.query && Object.keys(url.query).length > 0
+          const href = url.pathname
+            ? url.query && Object.keys(url.query).length > 0
               ? `${url.pathname}?${querystring.stringify(url.query)}`
-              : url.pathname;
+              : url.pathname
+            : "";
 
           return (
             <>

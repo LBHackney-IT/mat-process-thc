@@ -107,8 +107,10 @@ export const stepSlugs = Object.entries(slugs)
   .filter(([, include]) => include)
   .reduce((s, [slug]) => [...s, slug as PageSlugs], [] as PageSlugs[]);
 
-export const urlObjectForSlug = (slug: string): { pathname: string } => ({
-  pathname: `/${slug}`
+export const urlObjectForSlug = (
+  slug: string | undefined
+): { pathname: string } => ({
+  pathname: slug === undefined ? "" : `/${slug}`
 });
 
 export default PageSlugs;

@@ -65,12 +65,13 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
   step: {
     slug: PageSlugs.NextOfKin,
     nextSlug: PageSlugs.Carer,
-    Submit: makeSubmit({
-      url: urlObjectForSlug(PageSlugs.Carer),
-      value: "Save and continue"
-    }),
+    submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
+      makeSubmit({
+        url: urlObjectForSlug(nextSlug),
+        value: "Save and continue"
+      }),
     componentWrappers: [
-      ComponentWrapper.wrapStatic(
+      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "tenant">(
         new StaticComponent({
           key: "next-of-kin-heading",
           Component: Heading,
@@ -79,7 +80,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
             children: questions["next-of-kin-details"]
           }
         })
-      ) as ComponentWrapper<ProcessDatabaseSchema, "tenant">,
+      ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "next-of-kin-full-name",

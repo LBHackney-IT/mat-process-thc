@@ -25,7 +25,12 @@ const Link: React.FunctionComponent<LinkComponentTypeProps> = props => {
   const { href: originalHref } = props;
   const { href, as } = urlsForRouter(originalHref);
 
-  if (!originalHref.startsWith("/") || originalHref.startsWith("//")) {
+  if (
+    !href.pathname ||
+    !as.pathname ||
+    !originalHref.startsWith("/") ||
+    originalHref.startsWith("//")
+  ) {
     return <a {...props} />;
   }
 

@@ -30,6 +30,10 @@ const useRedirectWhenOnline = (
       if (result) {
         const { href, as } = urlsForRouter(urlObjectForSlug(slug));
 
+        if (!href.pathname || !as.pathname) {
+          return false;
+        }
+
         return await router[method](href, as);
       }
 

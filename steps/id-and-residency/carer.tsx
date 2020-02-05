@@ -135,10 +135,11 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
   step: {
     slug: PageSlugs.Carer,
     nextSlug: PageSlugs.Sections,
-    Submit: makeSubmit({
-      url: urlObjectForSlug(PageSlugs.Sections),
-      value: "Save and continue"
-    }),
+    submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
+      makeSubmit({
+        url: urlObjectForSlug(nextSlug),
+        value: "Save and continue"
+      }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
@@ -219,7 +220,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
           })
         })
       ),
-      ComponentWrapper.wrapStatic(
+      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "tenant">(
         new StaticComponent({
           key: "carer-live-in-start-date-heading",
           Component: FieldsetLegend,
@@ -232,7 +233,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
             return stepValues["carer-live-in"] === "yes";
           }
         })
-      ) as ComponentWrapper<ProcessDatabaseSchema, "tenant">,
+      ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "carer-live-in-start-date",
@@ -257,7 +258,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
           })
         })
       ),
-      ComponentWrapper.wrapStatic(
+      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "tenant">(
         new StaticComponent({
           key: "carer-details-heading",
           Component: Heading,
@@ -271,7 +272,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
             return stepValues["carer-needed"] === "yes";
           }
         })
-      ) as ComponentWrapper<ProcessDatabaseSchema, "tenant">,
+      ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "carer-full-name",
