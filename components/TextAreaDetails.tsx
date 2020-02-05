@@ -31,6 +31,7 @@ export const TextAreaDetails: React.FunctionComponent<Props> = props => {
     contentAfterTextArea,
     value,
     onValueChange,
+    required,
     disabled
   } = props;
 
@@ -48,6 +49,7 @@ export const TextAreaDetails: React.FunctionComponent<Props> = props => {
         rows={rows}
         value={value}
         onValueChange={onValueChange}
+        required={required}
         disabled={disabled}
       />
       {contentAfterTextArea}

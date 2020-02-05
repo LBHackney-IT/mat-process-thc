@@ -55,10 +55,11 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
   step: {
     slug: PageSlugs.TenantPhoto,
     nextSlug: PageSlugs.NextOfKin,
-    Submit: makeSubmit({
-      url: urlObjectForSlug(PageSlugs.NextOfKin),
-      value: "Save and continue"
-    }),
+    submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
+      makeSubmit({
+        url: urlObjectForSlug(nextSlug),
+        value: "Save and continue"
+      }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
@@ -115,7 +116,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
           })
         })
       ),
-      ComponentWrapper.wrapStatic(
+      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "tenant">(
         new StaticComponent({
           key: "tenant-photo-heading",
           Component: Heading,
@@ -132,7 +133,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
             return stepValues["tenant-photo-willing"] === "yes";
           }
         })
-      ) as ComponentWrapper<ProcessDatabaseSchema, "tenant">,
+      ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "tenant-photo",

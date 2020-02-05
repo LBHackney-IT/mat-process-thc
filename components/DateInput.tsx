@@ -14,7 +14,7 @@ type Props = DynamicComponentControlledProps<{
 };
 
 export const DateInput: React.FunctionComponent<Props> = props => {
-  const { name, value: date, onValueChange, disabled } = props;
+  const { name, value: date, onValueChange, required, disabled } = props;
 
   const monthLabelId = `${name}-month-label`;
   const monthInputId = `${name}-month-input`;
@@ -34,6 +34,7 @@ export const DateInput: React.FunctionComponent<Props> = props => {
           value={date.month}
           min={1}
           max={12}
+          required={required}
           disabled={disabled}
           onChange={(event): void => {
             onValueChange({ ...date, month: parseInt(event.target.value) });
@@ -53,6 +54,7 @@ export const DateInput: React.FunctionComponent<Props> = props => {
           value={date.year}
           min={1900}
           max={new Date().getFullYear()}
+          required={required}
           disabled={disabled}
           onChange={(event): void => {
             onValueChange({ ...date, year: parseInt(event.target.value) });

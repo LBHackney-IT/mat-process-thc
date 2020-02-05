@@ -408,6 +408,15 @@ export const LoadingPage: NextPage = () => {
 
   const { href, as } = urlsForRouter(urlObjectForSlug(PageSlugs.Outside));
 
+  const button = (
+    <Button
+      disabled={!ready || !href.pathname || !as.pathname}
+      data-testid="submit"
+    >
+      {ready ? "Go" : "Loading..."}
+    </Button>
+  );
+
   return (
     <MainLayout
       title={PageTitles.Loading}
@@ -463,11 +472,13 @@ export const LoadingPage: NextPage = () => {
         }
       />
 
-      <NextLink href={href} as={as}>
-        <Button disabled={!ready} data-testid="submit">
-          {ready ? "Go" : "Loading..."}
-        </Button>
-      </NextLink>
+      {href.pathname && as.pathname ? (
+        <NextLink href={href} as={as}>
+          {button}
+        </NextLink>
+      ) : (
+        button
+      )}
     </MainLayout>
   );
 };

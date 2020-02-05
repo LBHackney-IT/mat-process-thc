@@ -29,10 +29,11 @@ const step = {
   step: {
     slug: PageSlugs.AntisocialBehaviour,
     nextSlug: PageSlugs.OtherComments,
-    Submit: makeSubmit({
-      url: urlObjectForSlug(PageSlugs.OtherComments),
-      value: "Save and continue"
-    }),
+    submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
+      makeSubmit({
+        url: urlObjectForSlug(nextSlug),
+        value: "Save and continue"
+      }),
     componentWrappers: [
       ComponentWrapper.wrapStatic(
         new StaticComponent({

@@ -16,7 +16,7 @@ type Props = DynamicComponentControlledProps<string> & {
 };
 
 export const TextArea: React.FunctionComponent<Props> = props => {
-  const { label, name, rows, value, onValueChange, disabled } = props;
+  const { label, name, rows, value, onValueChange, required, disabled } = props;
 
   const labelId = label.id || `${name}-label`;
   const inputId = `${name}-input`;
@@ -33,6 +33,7 @@ export const TextArea: React.FunctionComponent<Props> = props => {
         name={name}
         rows={rows || 5}
         value={value}
+        required={required}
         disabled={disabled}
         onChange={(event): void => {
           onValueChange(event.target.value);

@@ -22,11 +22,15 @@ export const makeSubmit = (
       .join(",");
 
     useEffect(() => {
-      buttonProps.map(({ url }) => {
+      for (const { url } of buttonProps) {
         const { href } = urlsForRouter(url);
 
+        if (!href.pathname) {
+          continue;
+        }
+
         router.prefetch(href.pathname);
-      });
+      }
     }, [router, buttonUrlsString]);
 
     return (
@@ -42,7 +46,12 @@ export const makeSubmit = (
                   ? "submit-button lbh-button--secondary govuk-button--secondary"
                   : "submit-button"
               }
+              disabled={!href.pathname || !as.pathname}
               onClick={async (): Promise<void> => {
+                if (!href.pathname || !as.pathname) {
+                  return;
+                }
+
                 try {
                   await onSubmit();
                 } catch (error) {

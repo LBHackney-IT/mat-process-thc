@@ -25,6 +25,7 @@ export const RadioButtons: React.FunctionComponent<Props> = props => {
     radios,
     value: currentValue,
     onValueChange,
+    required,
     disabled
   } = props;
 
@@ -43,6 +44,7 @@ export const RadioButtons: React.FunctionComponent<Props> = props => {
                 type="radio"
                 value={radio.value}
                 checked={currentValue === radio.value}
+                required={required}
                 disabled={disabled}
                 onChange={(): void => {
                   onValueChange(radio.value);

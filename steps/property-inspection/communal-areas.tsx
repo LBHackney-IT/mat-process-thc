@@ -23,10 +23,11 @@ const step = {
   step: {
     slug: PageSlugs.CommunalAreas,
     nextSlug: PageSlugs.Pets,
-    Submit: makeSubmit({
-      url: urlObjectForSlug(PageSlugs.Pets),
-      value: "Save and continue"
-    }),
+    submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
+      makeSubmit({
+        url: urlObjectForSlug(nextSlug),
+        value: "Save and continue"
+      }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({

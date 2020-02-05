@@ -25,6 +25,7 @@ export const ImageInput: React.FunctionComponent<Props> = props => {
     maxCount,
     value: images,
     onValueChange,
+    required,
     disabled
   } = props;
 
@@ -67,6 +68,8 @@ export const ImageInput: React.FunctionComponent<Props> = props => {
         type="file"
         // We only want image files to be uploaded.
         accept="image/*"
+        required={required}
+        disabled={disabled || Boolean(maxCount && images.length >= maxCount)}
         onChange={async (event): Promise<void> => {
           if (!event.target.files || event.target.files.length === 0) {
             return;

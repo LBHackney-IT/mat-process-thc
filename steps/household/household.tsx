@@ -28,10 +28,11 @@ const step = {
   step: {
     slug: PageSlugs.Household,
     nextSlug: PageSlugs.Rent,
-    Submit: makeSubmit({
-      url: urlObjectForSlug(PageSlugs.Rent),
-      value: "Save and continue"
-    }),
+    submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
+      makeSubmit({
+        url: urlObjectForSlug(nextSlug),
+        value: "Save and continue"
+      }),
     componentWrappers: [
       ComponentWrapper.wrapStatic(
         new StaticComponent({
