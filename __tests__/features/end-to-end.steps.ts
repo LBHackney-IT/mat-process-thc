@@ -108,6 +108,7 @@ const processData = {
     value: "no",
     notes: "Visit inside notes"
   },
+  tenantsPresent: ["b6e72c28-7957-e811-8126-70106faa6a31"],
   id: {
     type: "valid passport",
     images: [imagePath],
@@ -272,9 +273,28 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       // Sections page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
 
-      await browser!.waitForEnabledElement({ css: '[href^="/id"]' }, 10000);
+      await browser!.waitForEnabledElement(
+        { css: '[href^="/present-for-check"]' },
+        10000
+      );
 
-      await browser!.submit({ css: '[href^="/id"]' });
+      await browser!.submit({ css: '[href^="/present-for-check"]' });
+
+      // Present for check page
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        "/present-for-check"
+      );
+
+      await browser!
+        .waitForEnabledElement({
+          id: `tenants-present-${processData.tenantsPresent[0].replace(
+            /\s/g,
+            "-"
+          )}`
+        })
+        .click();
+
+      await browser!.submit();
 
       // ID page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/id");

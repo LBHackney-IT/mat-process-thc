@@ -1,6 +1,6 @@
 import { NamedSchema, StoreNames } from "remultiform/database";
 
-import { ProcessRef } from "./ProcessDatabaseSchema";
+import { ProcessRef, ResidentRef } from "./ProcessDatabaseSchema";
 
 export const externalDatabaseName = `mat-process-${
   process.env.PROCESS_NAME
@@ -22,8 +22,14 @@ type ExternalDatabaseSchema = NamedSchema<
       key: ProcessRef;
       value: {
         address: string[];
-        tenants: { fullName: string }[];
-        householdMembers: { fullName: string }[];
+        tenants: {
+          id: ResidentRef;
+          fullName: string;
+        }[];
+        householdMembers: {
+          id: ResidentRef;
+          fullName: string;
+        }[];
       };
     };
   }

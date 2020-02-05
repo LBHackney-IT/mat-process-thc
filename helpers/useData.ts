@@ -6,10 +6,10 @@ import {
   StoreNames,
   StoreValue
 } from "remultiform/database";
+import { DatabaseContext } from "remultiform/database-context";
 
-import useDatabase from "./useDatabase";
-import { DatabaseContext } from "remultiform/dist/esm/database-context";
 import getProcessRef from "./getProcessRef";
+import useDatabase from "./useDatabase";
 
 const useData = <
   DBSchema extends NamedSchema<string, number, Schema>,

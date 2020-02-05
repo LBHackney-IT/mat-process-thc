@@ -155,7 +155,7 @@ export const SectionsPage: NextPage = () => {
             items={[
               {
                 name: "ID, residency, and tenant information",
-                url: urlObjectForSlug(PageSlugs.Id),
+                url: urlObjectForSlug(PageSlugs.PresentForCheck),
                 status: idAndResidencyComplete.result
                   ? TaskListStatus.Completed
                   : idAndResidencyStarted.result
