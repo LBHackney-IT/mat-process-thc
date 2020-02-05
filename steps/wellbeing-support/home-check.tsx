@@ -2,6 +2,7 @@ import { FieldsetLegend } from "lbh-frontend-react/components";
 import React from "react";
 import {
   ComponentDatabaseMap,
+  ComponentValue,
   ComponentWrapper,
   DynamicComponent,
   StaticComponent
@@ -11,6 +12,7 @@ import { Paragraph } from "lbh-frontend-react/components/typography/Paragraph";
 import { makeSubmit } from "../../components/makeSubmit";
 
 import { RadioButtons } from "../../components/RadioButtons";
+import yesNoRadios from "../../helpers/yesNoRadios";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
@@ -22,7 +24,13 @@ const step = {
   heading: "Home Check",
   step: {
     slug: PageSlugs.HomeCheck,
-    nextSlug: PageSlugs.Health,
+    nextSlug(stepValues: {
+      "home-check"?: ComponentValue<ProcessDatabaseSchema, "homeCheck">;
+    }): string {
+      return stepValues["home-check"] === "yes"
+        ? PageSlugs.Health
+        : PageSlugs.Sections;
+    },
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         url: urlObjectForSlug(nextSlug),
@@ -50,16 +58,7 @@ const step = {
                 Do you want to include a Home Check?
               </FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios
           },
           defaultValue: "",
           emptyValue: "",
