@@ -7,7 +7,7 @@ import {
   DynamicComponent
 } from "remultiform/component-wrapper";
 
-import { Checkboxes } from "../../components/Checkboxes";
+import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
@@ -119,7 +119,7 @@ const step = {
                 value: "other"
               }
             ]
-          },
+          } as CheckboxesProps,
           renderWhen(stepValues: {
             "has-pets"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
