@@ -19,15 +19,15 @@ const useData = <
   storeName: StoreName
 ): UseAsyncReturn<
   StoreValue<DBSchema["schema"], StoreName> | undefined,
-  [Database<DBSchema> | undefined, boolean, StoreName, string | undefined]
+  [boolean, Database<DBSchema> | undefined, StoreName, string | undefined]
 > => {
   const database = useDatabase(context);
   const processRef: string | undefined = getProcessRef();
 
   return useAsync(
     async (
-      db: Database<DBSchema> | undefined,
       loading: boolean,
+      db: Database<DBSchema> | undefined,
       s: StoreName,
       k: string | undefined
     ) => {
@@ -37,7 +37,7 @@ const useData = <
 
       return db?.get(s, k);
     },
-    [database.result, database.loading, storeName, processRef]
+    [database.loading, database.result, storeName, processRef]
   );
 };
 

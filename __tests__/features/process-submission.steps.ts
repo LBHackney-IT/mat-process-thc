@@ -1,64 +1,28 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { DefineStepFunction, defineFeature, loadFeature } from "jest-cucumber";
+import { defineFeature, loadFeature } from "jest-cucumber";
+import { until } from "selenium-webdriver";
 
 import Given from "../helpers/steps/Given";
-// import When from "../helpers/steps/When";
 import Expect from "../helpers/Expect";
 
-const givenIAmAtTheEndOfTheProcess = (defineStep: DefineStepFunction): void => {
-  defineStep("I am at the end of the process", async () => {
-    await browser!.getRelative("/thc/submit");
-  });
-};
-
-const whenISubmitTheProcess = (defineStep: DefineStepFunction): void => {
-  defineStep("I submit the process", async () => {
-    await browser!.submit();
-  });
-};
-
-const thenIShouldSeeThatTheProcessHasBeenSubmitted = (
-  defineStep: DefineStepFunction
-): void => {
-  defineStep("I should see that the process has been submitted", async () => {
-    await Expect.pageToContain("has been submitted for manager review");
-  });
-};
-
 defineFeature(loadFeature("./process-submission.feature"), test => {
-  test("Submitting while online", ({ defineStep }) => {
-    givenIAmAtTheEndOfTheProcess(defineStep);
+  test("Submitting while online", ({ defineStep, given, then, when }) => {
+    given("I am at the end of the process", async () => {
+      await browser!.getRelative("/submit");
+    });
+
     Given.iAmOnline(defineStep);
 
-    whenISubmitTheProcess(defineStep);
+    when("I submit the process", async () => {
+      await browser!.submit();
+    });
 
-    thenIShouldSeeThatTheProcessHasBeenSubmitted(defineStep);
+    when("I wait for the submission to finish", async () => {
+      await browser!.wait(until.urlMatches(/\/confirmed$/));
+    });
+
+    then("I should see that the process has been submitted", async () => {
+      await Expect.pageToContain("has been submitted for manager review");
+    });
   });
-
-  // test("Waiting for connection", ({ defineStep, then }) => {
-  //   givenIAmAtTheEndOfTheProcess(defineStep);
-  //   Given.iAmOffline(defineStep);
-
-  //   then("I should see that I need to go online to continue", async () => {
-  //     await Expect.pageToContain(
-  //       "You need to be online on this device to continue"
-  //     );
-  //   });
-
-  //   then("I shouldn't be able to continue", async () => {
-  //     await Expect.toBeDisabled({
-  //       css: '[data-testid="submit"]'
-  //     });
-  //   });
-  // });
-
-  // test("Going online to submit", ({ defineStep }) => {
-  //   givenIAmAtTheEndOfTheProcess(defineStep);
-  //   Given.iAmOffline(defineStep);
-
-  //   When.iGoOnline(defineStep);
-  //   whenISubmitTheProcess(defineStep);
-
-  //   thenIShouldSeeThatTheProcessHasBeenSubmitted(defineStep);
-  // });
 });

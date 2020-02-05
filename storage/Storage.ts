@@ -6,7 +6,7 @@ import {
   StoreValue
 } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
-import { DeepPartial } from "utility-types";
+import uuid from "uuid/v5";
 
 import ExternalDatabaseSchema, {
   externalDatabaseName
@@ -17,6 +17,7 @@ import ProcessDatabaseSchema, {
   processDatabaseName,
   processStoreNames
 } from "./ProcessDatabaseSchema";
+import tmpProcessRef from "./processRef";
 
 const migrateProcessData = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -44,6 +45,16 @@ const migrateProcessData = async (
 
   return processData;
 };
+
+interface ImageJson {
+  id: string;
+  image: string;
+}
+
+interface ImageIdentifier {
+  id: string;
+  ext: string;
+}
 
 export default class Storage {
   static ExternalContext:
@@ -123,7 +134,13 @@ export default class Storage {
 
   static async getProcessJson(
     processRef: ProcessRef
-  ): Promise<DeepPartial<ProcessJson> | undefined> {
+  ): Promise<
+    | {
+        processJson: Partial<ProcessJson>;
+        imagesJson: ImageJson[];
+      }
+    | undefined
+  > {
     if (!processRef || !this.ProcessContext) {
       return;
     }
@@ -132,10 +149,13 @@ export default class Storage {
 
     let lastModified: string | undefined;
 
-    const processData = (
+    let processData = (
       await Promise.all(
         processStoreNames.map(async storeName => {
-          const value = await db.get(storeName, processRef);
+          // The steps still use the hardcoded `processRef`, so we need to also
+          // use it, even though we're using the correct value to persist to the
+          // backend.
+          const value = await db.get(storeName, tmpProcessRef);
 
           if (storeName === "lastModified") {
             lastModified = value as StoreValue<
@@ -157,19 +177,73 @@ export default class Storage {
       {}
     ) as ProcessJson["processData"];
 
+    const images = [] as ImageJson[];
+
+    if (processData) {
+      let processDataString = JSON.stringify(processData);
+
+      const imageDataUris = (
+        processDataString.match(/data:image\/[\w.\-+]+.+?(?=")/g) || []
+      ).filter((match, i, matches) => matches.indexOf(match) === i);
+
+      for (const image of imageDataUris) {
+        const [type] = /image\/[\w.\-+]+/.exec(image) || [];
+
+        if (!type) {
+          console.error(`Skipping unexpected data URI of type ${type}`);
+
+          continue;
+        }
+
+        const id = uuid(image, processRef);
+        const ext = type.replace("image/", "");
+
+        processDataString = processDataString
+          .split(image)
+          .join(`image:${id}.${ext}`);
+
+        images.push({ id, image });
+      }
+
+      processData = JSON.parse(processDataString);
+    }
+
     return {
-      dateLastModified: lastModified,
-      // Ideally we'd be exposing the version on the database directly, but
-      // this hack works for now.
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      dataSchemaVersion: (db as any).db.version,
-      processData
+      processJson: {
+        dateLastModified: lastModified,
+        // Ideally we'd be exposing the version on the database directly, but
+        // this hack works for now.
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        dataSchemaVersion: (db as any).db.version,
+        processData
+      },
+      imagesJson: images
     };
+  }
+
+  static getImagesToFetch(
+    processData: ProcessJson["processData"]
+  ): ImageIdentifier[] {
+    const processDataString = JSON.stringify(processData);
+
+    const imageKeys = (
+      processDataString.match(/image:[\w-]+?.+?(?=")/g) || []
+    ).filter((match, i, matches) => matches.indexOf(match) === i);
+
+    const images = [] as ImageIdentifier[];
+
+    for (const image of imageKeys) {
+      const [id, ext] = image.replace("image:", "").split(".", 2);
+
+      images.push({ id, ext });
+    }
+
+    return images;
   }
 
   static async updateProcessData(
     processRef: ProcessRef,
-    data: ProcessJson & { processData: DeepPartial<ProcessJson["processData"]> }
+    data: ProcessJson
   ): Promise<boolean> {
     const {
       dateCreated,
@@ -194,7 +268,7 @@ export default class Storage {
 
     const migratedProcessData = await migrateProcessData(
       processData,
-      dataSchemaVersion,
+      dataSchemaVersion || 0,
       // Ideally we'd be exposing the version on the database directly, but
       // this hack works for now.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -218,8 +292,6 @@ export default class Storage {
           return;
         }
 
-        await stores.lastModified.put(processRef, lastModified.toISOString());
-
         await Promise.all(
           Object.entries(migratedProcessData).map(
             async ([storeName, value]) => {
@@ -237,6 +309,8 @@ export default class Storage {
             }
           )
         );
+
+        await stores.lastModified.put(processRef, lastModified.toISOString());
       },
       TransactionMode.ReadWrite
     );

@@ -25,7 +25,7 @@ const urlsForRouter = (
   };
 
   if (typeof url === "string") {
-    const urlComponents = url.split("?", 1);
+    const urlComponents = url.split("?", 2);
     const pathname = urlComponents[0];
     const query = querystring.parse(urlComponents[1]) as {
       [key: string]: string;
@@ -40,15 +40,6 @@ const urlsForRouter = (
 
   if (isStep(href)) {
     href.pathname = "/[...slug]";
-  }
-
-  if (
-    process.env.BASE_PATH &&
-    as.pathname.startsWith("/") &&
-    !as.pathname.startsWith("//") &&
-    !as.pathname.startsWith(process.env.BASE_PATH)
-  ) {
-    as.pathname = process.env.BASE_PATH + as.pathname;
   }
 
   return { href, as };

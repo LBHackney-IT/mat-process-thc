@@ -151,7 +151,7 @@ const useReviewSectionRows = <
           (names, sectionStoreNames) => [...names, ...sectionStoreNames],
           [] as StoreNames<ProcessDatabaseSchema["schema"]>[]
         )
-        .filter((storeName, i, names) => names[i] === storeName),
+        .filter((storeName, i, names) => names.indexOf(storeName) === i),
     [rows]
   );
 
@@ -240,18 +240,21 @@ const useReviewSectionRows = <
             })
             .filter(Boolean) as React.ReactNode[];
 
-          const images = row.images
+          const images = (row.images
             .map(databaseMap => {
               if (storeValues.loading || storeValues.result === undefined) {
                 return undefined;
               }
 
-              return findValue(
+              return (findValue(
                 storeValues.result[databaseMap.storeName],
                 databaseMap
-              );
+              ) as unknown) as string[] | undefined;
             })
-            .filter(Boolean) as string[];
+            .filter(Boolean) as string[][]).reduce(
+            (i, images) => [...i, ...images],
+            [] as string[]
+          );
 
           if (!values.length && !images.length) {
             return undefined;

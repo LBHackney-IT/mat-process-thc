@@ -10,11 +10,10 @@ export interface ApiEndpoint {
   execute: boolean;
 }
 
-const useApi = (
+const useApi = <R>(
   apiEndpoint: ApiEndpoint
 ): UseAsyncReturn<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  any | undefined,
+  R | undefined,
   [string, string, string | undefined, boolean]
 > => {
   let jwt: string | undefined;
@@ -39,8 +38,7 @@ const useApi = (
       const response = await fetch(`${endpoint}?${queryString}`, { method });
       const responseBody = await response.text();
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      let responseData: any | undefined = undefined;
+      let responseData: R | undefined = undefined;
 
       try {
         responseData = JSON.parse(responseBody);

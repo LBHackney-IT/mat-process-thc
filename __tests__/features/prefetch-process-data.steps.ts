@@ -8,7 +8,7 @@ import Expect from "../helpers/Expect";
 
 const whenIStartTheProcess = (defineStep: DefineStepFunction): void => {
   defineStep("I start the process", async () => {
-    await browser!.getRelative("/thc");
+    await browser!.getRelative("");
   });
 };
 

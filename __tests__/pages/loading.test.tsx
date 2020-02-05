@@ -26,7 +26,33 @@ beforeEach(() => {
 
   Storage.ExternalContext = {
     ...jest.fn()(),
-    database: { ...jest.fn()(), put: jest.fn() }
+    database: {
+      ...jest.fn()(),
+      put: jest.fn()
+    }
+  };
+
+  Storage.ProcessContext = {
+    ...jest.fn()(),
+    database: {
+      ...jest.fn()(),
+      db: { version: 2 },
+      put: jest.fn(),
+      transaction: async (_, tx): Promise<void> => {
+        await tx({
+          ...jest.fn()(),
+          lastModified: {
+            ...jest.fn()(),
+            get: (): undefined => undefined,
+            put: jest.fn()
+          },
+          property: {
+            ...jest.fn()(),
+            put: jest.fn()
+          }
+        });
+      }
+    }
   };
 });
 
@@ -42,23 +68,53 @@ afterEach(() => {
 it("renders correctly when online", async () => {
   fetchMock.mockResponse(
     ({ method, url }): Promise<string> => {
+      const relativeUrl = process.env.BASE_PATH
+        ? url.replace(process.env.BASE_PATH, "")
+        : url;
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let body: any = {};
 
-      if (url.includes("/api/v1/process") && method === "GET") {
+      if (
+        relativeUrl.startsWith("/api/v1/processes") &&
+        relativeUrl.includes("/images/") &&
+        method === "GET"
+      ) {
         body = {
-          dateCreated: new Date(2019, 1),
-          dateLastModified: new Date(2019, 3),
-          processData: {}
+          base64Image: "data:image/jpeg;base64,someimagedata"
         };
-      } else if (url.includes("/api/v1/tenancies") && method === "GET") {
+      } else if (
+        relativeUrl.startsWith("/api/v1/processes") &&
+        method === "GET"
+      ) {
+        body = {
+          processData: {
+            dateCreated: new Date(2019, 1),
+            dateLastModified: new Date(2019, 3),
+            dataSchemaVersion: 0,
+            processData: {
+              property: {
+                outside: {
+                  images: ["image:imageid.jpeg"]
+                }
+              }
+            }
+          }
+        };
+      } else if (
+        relativeUrl.startsWith("/api/v1/tenancies") &&
+        method === "GET"
+      ) {
         body = {
           results: {
             tenuretype: "Secure",
             tenancyStartDate: "2019-01-01"
           }
         };
-      } else if (url.includes("/api/v1/residents") && method === "GET") {
+      } else if (
+        relativeUrl.startsWith("/api/v1/residents") &&
+        method === "GET"
+      ) {
         body = {
           results: [
             {
@@ -268,12 +324,12 @@ it("renders correctly when online", async () => {
           <p
             className="lbh-body"
           >
-            The system will now update the information you need for this process so that you can go offline at any point.
+            The system is updating the information you need for this process so that you can go offline at any point.
           </p>
           <label
             className="govuk-label lbh-label"
           >
-            Ready
+            Ready (updated)
             <div>
               <div
                 style={
@@ -549,17 +605,17 @@ it("renders correctly when offline", async () => {
           <p
             className="lbh-body"
           >
-            The system will now update the information you need for this process so that you can go offline at any point.
+            The system is updating the information you need for this process so that you can go offline at any point.
           </p>
           <label
             className="govuk-label lbh-label"
           >
-            Loading...
+            Error
             <div>
               <div
                 style={
                   Object {
-                    "width": "20%",
+                    "width": "50%",
                   }
                 }
               />

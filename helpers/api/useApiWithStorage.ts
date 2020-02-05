@@ -12,10 +12,10 @@ import useApi, { ApiEndpoint } from "./useApi";
 
 export interface ApiWithStorageEndpoint<
   DBSchema extends NamedSchema<string, number, Schema>,
-  StoreName extends StoreNames<DBSchema["schema"]>
+  StoreName extends StoreNames<DBSchema["schema"]>,
+  R
 > extends ApiEndpoint {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  parse(data: any): StoreValue<DBSchema["schema"], StoreName>;
+  parse(data: R): StoreValue<DBSchema["schema"], StoreName>;
   databaseContext: DatabaseContext<DBSchema> | undefined;
   databaseMap: {
     storeName: StoreName;
@@ -34,45 +34,46 @@ export interface UseApiWithStorageReturn<
 
 const useApiWithStorage = <
   DBSchema extends NamedSchema<string, number, Schema>,
-  StoreName extends StoreNames<DBSchema["schema"]>
+  StoreName extends StoreNames<DBSchema["schema"]>,
+  R
 >(
-  apiEndpoint: ApiWithStorageEndpoint<DBSchema, StoreName>
+  apiEndpoint: ApiWithStorageEndpoint<DBSchema, StoreName, R>
 ): UseApiWithStorageReturn<DBSchema, StoreName> => {
   const { parse, databaseContext, databaseMap } = apiEndpoint;
 
-  const api = useApi(apiEndpoint);
+  const api = useApi<R>(apiEndpoint);
 
-  const storage = useAsync(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async (loading: boolean, _result: string, _error: string | undefined) => {
-      if (api.error) {
-        throw api.error;
-      }
+  const storage = useAsync(async () => {
+    if (api.error) {
+      throw api.error;
+    }
 
-      if (loading) {
-        return;
-      }
+    if (api.loading) {
+      return;
+    }
 
-      if (!process.browser || !databaseContext) {
-        return;
-      }
+    if (!api.result) {
+      return;
+    }
 
-      const { storeName, key } = databaseMap;
+    if (!process.browser || !databaseContext) {
+      return;
+    }
 
-      if (!key) {
-        return;
-      }
+    const { storeName, key } = databaseMap;
 
-      const value = parse(api.result);
+    if (!key) {
+      return;
+    }
 
-      const db = await databaseContext.database;
+    const value = parse(api.result);
 
-      await db.put(storeName, key, value);
+    const db = await databaseContext.database;
 
-      return value;
-    },
-    [api.loading, JSON.stringify(api.result), api.error?.message]
-  );
+    await db.put(storeName, key, value);
+
+    return value;
+  }, [api.loading, JSON.stringify(api.result), api.error?.message]);
 
   return {
     loading: api.loading || storage.loading,

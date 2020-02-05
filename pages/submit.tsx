@@ -9,6 +9,7 @@ import Router from "next/router";
 import React, { useState } from "react";
 import { TransactionMode } from "remultiform/database";
 
+import ProgressBar from "../components/ProgressBar";
 import getProcessApiJwt from "../helpers/getProcessApiJwt";
 import getProcessRef from "../helpers/getProcessRef";
 import urlsForRouter from "../helpers/urlsForRouter";
@@ -18,9 +19,14 @@ import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 import PageTitles from "../steps/PageTitles";
 import { processStoreNames } from "../storage/ProcessDatabaseSchema";
 import Storage from "../storage/Storage";
-import tmpProcessRef from "../storage/processRef";
 
-const submit = async (): Promise<void> => {
+const submit = async (
+  setProgress: (progress: number) => void
+): Promise<void> => {
+  let progress = 0;
+
+  setProgress(progress);
+
   if (Storage.ProcessContext && Storage.ProcessContext.database) {
     const processRef = getProcessRef();
     const processApiJwt = getProcessApiJwt(processRef);
@@ -33,13 +39,38 @@ const submit = async (): Promise<void> => {
       return;
     }
 
-    // The steps still use the hardcoded `processRef`, so we need to also use
-    // it, even though we're using the correct value to persist to the backend.
-    const processJson = await Storage.getProcessJson(tmpProcessRef);
+    const json = await Storage.getProcessJson(processRef);
 
-    if (processJson) {
+    if (json) {
+      const { processJson, imagesJson } = json;
+
+      const progressIncrement = 1 / (imagesJson.length + 2);
+
+      await Promise.all(
+        imagesJson.map(async ({ id, image }) => {
+          const response = await fetch(
+            `${process.env.BASE_PATH}/api/v1/processes/${processRef}/images?jwt=${processApiJwt}`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({ id, image })
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error(`${response.status}: ${response.statusText}`);
+          }
+
+          progress += progressIncrement;
+
+          setProgress(progress);
+        })
+      );
+
       const response = await fetch(
-        `${process.env.BASE_PATH}api/v1/process/${processRef}/processData?jwt=${processApiJwt}`,
+        `${process.env.BASE_PATH}/api/v1/processes/${processRef}/processData?jwt=${processApiJwt}`,
         {
           method: "PATCH",
           headers: {
@@ -50,16 +81,18 @@ const submit = async (): Promise<void> => {
       );
 
       if (!response.ok) {
-        console.error(`${response.status}: ${response.statusText}`);
-
-        return;
+        throw new Error(`${response.status}: ${response.statusText}`);
       }
+
+      progress += progressIncrement;
+
+      setProgress(progress);
 
       const db = await Storage.ProcessContext.database;
 
       // To reduce risk of data loss, we only clear up the data if we sent
       // something to the backend.
-      db.transaction(
+      await db.transaction(
         processStoreNames,
         async stores => {
           await Promise.all(
@@ -68,6 +101,10 @@ const submit = async (): Promise<void> => {
         },
         TransactionMode.ReadWrite
       );
+
+      sessionStorage.clear();
+
+      setProgress(1);
     }
   } else {
     console.warn("No process data to persist");
@@ -76,7 +113,9 @@ const submit = async (): Promise<void> => {
 
 const SubmitPage: NextPage = () => {
   const online = useOnlineWithRetry();
+  const [progress, setProgress] = useState(0);
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState();
 
   const address = "1 Mare Street, London, E8 3AA";
   const tenants = ["Jane Doe", "John Doe"];
@@ -121,47 +160,63 @@ const SubmitPage: NextPage = () => {
     );
   }
 
-  const disabled = online.loading || Boolean(online.error) || !online.result;
+  const disabled =
+    online.loading || Boolean(online.error) || !online.result || submitting;
 
   return (
     <MainLayout title={PageTitles.Submit}>
       {online.error && (
         <ErrorMessage>
-          Something went wrong while checking whether you are online or not.
-          Please reload the page and try again.
+          Something went wrong while checking your online status. Please reload
+          the page and try again. If the problem persists, please try reopening
+          this process from your worktray.
+        </ErrorMessage>
+      )}
+
+      {submitError && (
+        <ErrorMessage>
+          Something went wrong. Please try reopening this process from your
+          worktray and submitting it again.
         </ErrorMessage>
       )}
 
       {content}
 
-      <Button
-        disabled={disabled || submitting}
-        preventDoubleClick
-        onClick={async (): Promise<void> => {
-          try {
-            setSubmitting(true);
+      {submitting && (
+        <ProgressBar
+          progress={progress}
+          incompleteLabel={submitError ? "Error" : "Submitting..."}
+          completeLabel={submitError ? "Error" : "Submitted"}
+        />
+      )}
 
-            await submit();
+      {!submitting && (
+        <Button
+          disabled={disabled}
+          preventDoubleClick
+          onClick={async (): Promise<void> => {
+            try {
+              setSubmitting(true);
 
-            const { href, as } = urlsForRouter(
-              urlObjectForSlug(PageSlugs.Confirmed)
-            );
+              await submit(setProgress);
 
-            await Router.push(href, as);
-          } catch (err) {
-            console.error(err);
+              const { href, as } = urlsForRouter(
+                urlObjectForSlug(PageSlugs.Confirmed)
+              );
 
-            setSubmitting(false);
-          }
-        }}
-        data-testid="submit"
-      >
-        {disabled
-          ? "Waiting for connectivity..."
-          : submitting
-          ? "Submitting..."
-          : "Save and submit to manager"}
-      </Button>
+              await Router.push(href, as);
+            } catch (err) {
+              console.error(err);
+              setSubmitError(err);
+            }
+          }}
+          data-testid="submit"
+        >
+          {disabled
+            ? "Waiting for connectivity..."
+            : "Save and submit to manager"}
+        </Button>
+      )}
     </MainLayout>
   );
 };

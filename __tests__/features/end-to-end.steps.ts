@@ -1,218 +1,210 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { readFileSync } from "fs";
-import { request } from "http";
 import { defineFeature, loadFeature } from "jest-cucumber";
 import { join } from "path";
 import { until } from "selenium-webdriver";
-
-import { ProcessJson } from "../../storage/ProcessDatabaseSchema";
 
 import Given from "../helpers/steps/Given";
 import Expect from "../helpers/Expect";
 
 jest.setTimeout(60 * 1000);
 
+const imagePath = join(__dirname, "..", "__fixtures__", "image.jpg");
+const processData = {
+  property: {
+    outside: {
+      images: [imagePath]
+    },
+    rooms: {
+      canEnterAll: "no",
+      notes: "Room notes"
+    },
+    laminatedFlooring: {
+      hasLaminatedFlooring: "yes",
+      hasPermission: "yes",
+      images: [imagePath],
+      notes: "Laminated flooring notes"
+    },
+    structuralChanges: {
+      hasStructuralChanges: "yes",
+      changesAuthorised: "yes",
+      images: [imagePath],
+      notes: "Structural changes notes"
+    },
+    damage: {
+      hasDamage: "yes",
+      images: [imagePath],
+      notes: "Damage notes"
+    },
+    roof: {
+      hasAccess: "yes",
+      itemsStoredOnRoof: "yes",
+      notes: "Roof notes"
+    },
+    loft: {
+      hasAccess: "yes",
+      itemsStored: "yes",
+      notes: "Loft notes"
+    },
+    garden: {
+      hasGarden: "yes",
+      type: "private",
+      isMaintained: "yes",
+      images: [imagePath],
+      notes: "Garden notes"
+    },
+    storingMaterials: {
+      isStoringMaterials: "yes",
+      furtherActionRequired: "yes",
+      notes: "Storing materials notes"
+    },
+    fireExit: {
+      hasFireExit: "yes",
+      isAccessible: "yes",
+      notes: "Fire exit notes"
+    },
+    smokeAlarm: {
+      hasSmokeAlarm: "yes",
+      isWorking: "yes",
+      notes: "Smoke alarm notes"
+    },
+    metalGates: {
+      hasMetalGates: "yes",
+      combustibleItemsBehind: "yes",
+      furtherActionRequired: "yes",
+      images: [imagePath],
+      notes: "Metal gates notes"
+    },
+    doorMats: {
+      hasPlaced: "yes",
+      furtherActionRequired: "yes",
+      notes: "Door mats notes"
+    },
+    communalAreas: {
+      hasLeftCombustibleItems: "yes",
+      furtherActionRequired: "yes",
+      notes: "Communal areas notes"
+    },
+    pets: {
+      hasPets: "yes",
+      petTypes: ["dog", "cat"],
+      hasPermission: "yes",
+      images: [imagePath],
+      notes: "Pets notes"
+    },
+    antisocialBehaviour: {
+      tenantUnderstands: "yes",
+      notes: "Antisocial behaviour notes"
+    },
+    otherComments: {
+      images: [imagePath],
+      notes: "Other comments notes"
+    }
+  },
+  isUnannouncedVisit: {
+    value: "no",
+    notes: "Unannounced visit notes"
+  },
+  isVisitInside: {
+    value: "no",
+    notes: "Visit inside notes"
+  },
+  id: {
+    type: "valid passport",
+    images: [imagePath],
+    notes: "ID notes"
+  },
+  residency: {
+    type: "bank statement",
+    images: [imagePath],
+    notes: "Residency notes"
+  },
+  tenant: {
+    photo: {
+      isWilling: "yes",
+      images: [imagePath]
+    },
+    nextOfKin: {
+      fullName: "Next of kin name",
+      relationship: "Next of kin relationship",
+      mobileNumber: "0123455789",
+      otherNumber: "9876543210",
+      email: "next@of.kin",
+      address: "1 Next of Kin Road\nKinsville\nNK0 0NK"
+    },
+    carer: {
+      hasCarer: "yes",
+      type: "registered",
+      isLiveIn: "yes",
+      liveInStartDate: { month: 1, year: 2019 },
+      fullName: "Carer name",
+      phoneNumber: "0123455789",
+      relationship: "Carer relationship",
+      notes: "Carer notes"
+    }
+  },
+  household: {
+    documents: {
+      images: [imagePath]
+    },
+    houseMovingSchemes: {
+      notes: "House moving schemes notes"
+    },
+    memberChanges: {
+      notes: "Member changes notes"
+    },
+    rentArrears: {
+      type: "yes has plan",
+      notes: "Rent arrears notes"
+    },
+    housingBenefits: {
+      hasApplied: "yes application declined",
+      notes: "Housing benefits notes"
+    },
+    incomeOfficer: {
+      wantsToContact: "yes",
+      notes: "Income officer notes"
+    },
+    otherProperty: {
+      hasOtherProperty: "yes",
+      notes: "Other property notes"
+    }
+  },
+  homeCheck: {
+    value: "yes"
+  },
+  healthConcerns: {
+    value: "yes",
+    who: ["tenant 1"],
+    moreInfo: ["dementia", "smoking"],
+    notes: "Health concerns notes"
+  },
+  disability: {
+    value: "yes",
+    whoDisability: ["tenant 1"],
+    pipOrDLA: "yes",
+    whoPIP: ["tenant 1"],
+    whoDLA: ["tenant 1"],
+    notes: "Disability notes"
+  },
+  supportNeeds: {
+    residentSustainmentNotes: "Resident sustainment notes",
+    befriendingNotes: "Befriending notes",
+    adultSafeguardingNotes: "Adult safeguarding notes",
+    childrenYoungPeopleSafeguardingNotes:
+      "Children young people safeguarding notes",
+    domesticSexualViolenceNotes: "Domestic sexual violence notes",
+    mentalHealth18To65Notes: "Mental health 18 to 65 notes",
+    mentalHealthOver65Notes: "Mental health over 65 notes"
+  }
+};
+
 defineFeature(loadFeature("./end-to-end.feature"), test => {
   test("Performing a check while online", ({ defineStep, when, then }) => {
-    const imagePath = join(__dirname, "..", "__fixtures__", "image.jpg");
-    const base64Image = readFileSync(
-      imagePath.replace(/jpg$/, "base64")
-    ).toString();
-
-    const processData = {
-      property: {
-        outside: {
-          images: [imagePath]
-        },
-        rooms: {
-          canEnterAll: "no",
-          notes: "Room notes"
-        },
-        laminatedFlooring: {
-          hasLaminatedFlooring: "yes",
-          hasPermission: "yes",
-          images: [imagePath],
-          notes: "Laminated flooring notes"
-        },
-        structuralChanges: {
-          hasStructuralChanges: "yes",
-          changesAuthorised: "yes",
-          images: [imagePath],
-          notes: "Structural changes notes"
-        },
-        damage: {
-          hasDamage: "yes",
-          images: [imagePath],
-          notes: "Damage notes"
-        },
-        roof: {
-          hasAccess: "yes",
-          itemsStoredOnRoof: "yes",
-          notes: "Roof notes"
-        },
-        loft: {
-          hasAccess: "yes",
-          itemsStored: "yes",
-          notes: "Loft notes"
-        },
-        garden: {
-          hasGarden: "yes",
-          type: "private",
-          isMaintained: "yes",
-          images: [imagePath],
-          notes: "Garden notes"
-        },
-        storingMaterials: {
-          isStoringMaterials: "yes",
-          furtherActionRequired: "yes",
-          notes: "Storing materials notes"
-        },
-        fireExit: {
-          hasFireExit: "yes",
-          isAccessible: "yes",
-          notes: "Fire exit notes"
-        },
-        smokeAlarm: {
-          hasSmokeAlarm: "yes",
-          isWorking: "yes",
-          notes: "Smoke alarm notes"
-        },
-        metalGates: {
-          hasMetalGates: "yes",
-          combustibleItemsBehind: "yes",
-          furtherActionRequired: "yes",
-          images: [imagePath],
-          notes: "Metal gates notes"
-        },
-        doorMats: {
-          hasPlaced: "yes",
-          furtherActionRequired: "yes",
-          notes: "Door mats notes"
-        },
-        communalAreas: {
-          hasLeftCombustibleItems: "yes",
-          furtherActionRequired: "yes",
-          notes: "Communal areas notes"
-        },
-        pets: {
-          hasPets: "yes",
-          petTypes: ["dog", "cat"],
-          hasPermission: "yes",
-          images: [imagePath],
-          notes: "Pets notes"
-        },
-        antisocialBehaviour: {
-          tenantUnderstands: "yes",
-          notes: "Antisocial behaviour notes"
-        },
-        otherComments: {
-          images: [imagePath],
-          notes: "Other comments notes"
-        }
-      },
-      isUnannouncedVisit: {
-        value: "no",
-        notes: "Unannounced visit notes"
-      },
-      isVisitInside: {
-        value: "no",
-        notes: "Visit inside notes"
-      },
-      id: {
-        type: "valid passport",
-        images: [imagePath],
-        notes: "ID notes"
-      },
-      residency: {
-        type: "bank statement",
-        images: [imagePath],
-        notes: "Residency notes"
-      },
-      tenant: {
-        photo: {
-          isWilling: "yes",
-          images: [imagePath]
-        },
-        nextOfKin: {
-          fullName: "Next of kin name",
-          relationship: "Next of kin relationship",
-          mobileNumber: "0123455789",
-          otherNumber: "9876543210",
-          email: "next@of.kin",
-          address: "1 Next of Kin Road\nKinsville\nNK0 0NK"
-        },
-        carer: {
-          hasCarer: "yes",
-          type: "registered",
-          isLiveIn: "yes",
-          liveInStartDate: { month: 1, year: 2019 },
-          fullName: "Carer name",
-          phoneNumber: "0123455789",
-          relationship: "Carer relationship",
-          notes: "Carer notes"
-        }
-      },
-      household: {
-        documents: {
-          images: [imagePath]
-        },
-        houseMovingSchemes: {
-          notes: "House moving schemes notes"
-        },
-        memberChanges: {
-          notes: "Member changes notes"
-        },
-        rentArrears: {
-          type: "yes has plan",
-          notes: "Rent arrears notes"
-        },
-        housingBenefits: {
-          hasApplied: "yes application declined",
-          notes: "Housing benefits notes"
-        },
-        incomeOfficer: {
-          wantsToContact: "yes",
-          notes: "Income officer notes"
-        },
-        otherProperty: {
-          hasOtherProperty: "yes",
-          notes: "Other property notes"
-        }
-      },
-      homeCheck: {
-        value: "yes"
-      },
-      healthConcerns: {
-        value: "yes",
-        who: ["tenant 1"],
-        moreInfo: ["dementia", "smoking"],
-        notes: "Health concerns notes"
-      },
-      disability: {
-        value: "yes",
-        whoDisability: ["tenant 1"],
-        pipOrDLA: "yes",
-        whoPIP: ["tenant 1"],
-        whoDLA: ["tenant 1"],
-        notes: "Disability notes"
-      },
-      supportNeeds: {
-        residentSustainmentNotes: "Resident sustainment notes",
-        befriendingNotes: "Befriending notes",
-        adultSafeguardingNotes: "Adult safeguarding notes",
-        childrenYoungPeopleSafeguardingNotes:
-          "Children young people safeguarding notes",
-        domesticSexualViolenceNotes: "Domestic sexual violence notes",
-        mentalHealth18To65Notes: "Mental health 18 to 65 notes",
-        mentalHealthOver65Notes: "Mental health over 65 notes"
-      }
-    };
-
     Given.iAmOnline(defineStep);
 
     when("I complete a process", async () => {
       // Index page
-      await browser!.getRelative("/thc");
+      await browser!.getRelative("");
 
       // Wait for redirect.
       await browser!.wait(
@@ -221,7 +213,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       );
 
       // Loading page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/loading");
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/loading");
 
       // Wait for data fetching.
       await browser!.waitForEnabledElement(
@@ -235,7 +227,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Visit attempt page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/outside");
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/outside");
 
       await browser!
         .waitForEnabledElement({
@@ -249,14 +241,12 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Start check page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/start");
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/start");
 
       await browser!.submit();
 
       // About visit page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/about-visit"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/about-visit");
 
       await browser!
         .waitForEnabledElement({
@@ -280,16 +270,14 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Sections page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/sections"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
 
-      await browser!.waitForEnabledElement({ css: '[href^="/thc/id"]' }, 10000);
+      await browser!.waitForEnabledElement({ css: '[href^="/id"]' }, 10000);
 
-      await browser!.submit({ css: '[href^="/thc/id"]' });
+      await browser!.submit({ css: '[href^="/id"]' });
 
       // ID page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/id");
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/id");
 
       await browser!
         .waitForEnabledElement({
@@ -307,9 +295,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Residency page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/residency"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/residency");
 
       await browser!
         .waitForEnabledElement({
@@ -333,7 +319,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Tenant photo page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/tenant-photo"
+        "/tenant-photo"
       );
 
       await browser!
@@ -348,9 +334,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Next of kin page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/next-of-kin"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/next-of-kin");
 
       await browser!
         .waitForEnabledElement({ name: "next-of-kin-full-name" })
@@ -380,7 +364,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Carer page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/carer");
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/carer");
 
       await browser!
         .waitForEnabledElement({
@@ -422,21 +406,17 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Sections page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/sections"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
 
       await browser!.waitForEnabledElement(
-        { css: '[href^="/thc/household"]' },
+        { css: '[href^="/household"]' },
         10000
       );
 
-      await browser!.submit({ css: '[href^="/thc/household"]' });
+      await browser!.submit({ css: '[href^="/household"]' });
 
       // Household page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/household"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/household");
 
       await browser!
         .waitForEnabledElement({
@@ -459,7 +439,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Rent page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/rent");
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/rent");
 
       await browser!
         .waitForEnabledElement({
@@ -508,7 +488,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Other property page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/other-property"
+        "/other-property"
       );
 
       await browser!
@@ -523,19 +503,14 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Sections page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/sections"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
 
-      await browser!.waitForEnabledElement(
-        { css: '[href^="/thc/rooms"]' },
-        10000
-      );
+      await browser!.waitForEnabledElement({ css: '[href^="/rooms"]' }, 10000);
 
-      await browser!.submit({ css: '[href^="/thc/rooms"]' });
+      await browser!.submit({ css: '[href^="/rooms"]' });
 
       // Rooms page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/rooms");
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/rooms");
 
       await browser!
         .waitForEnabledElement({
@@ -550,7 +525,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Laminated flooring page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/laminated-flooring"
+        "/laminated-flooring"
       );
 
       await browser!
@@ -578,7 +553,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Structural changes page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/structural-changes"
+        "/structural-changes"
       );
 
       await browser!
@@ -605,7 +580,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Damage page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/damage");
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/damage");
 
       await browser!
         .waitForEnabledElement({
@@ -622,7 +597,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Roof page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/roof");
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/roof");
 
       await browser!
         .waitForEnabledElement({
@@ -641,7 +616,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Loft page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/loft");
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/loft");
 
       await browser!
         .waitForEnabledElement({
@@ -660,7 +635,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Garden page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/garden");
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/garden");
 
       await browser!
         .waitForEnabledElement({
@@ -688,7 +663,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Storing materials page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/storing-materials"
+        "/storing-materials"
       );
 
       await browser!
@@ -708,9 +683,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Fire exit page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/fire-exit"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/fire-exit");
 
       await browser!
         .waitForEnabledElement({
@@ -729,9 +702,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Smoke alarm page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/smoke-alarm"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/smoke-alarm");
 
       await browser!
         .waitForEnabledElement({
@@ -750,9 +721,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Metal gates page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/metal-gates"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/metal-gates");
 
       await browser!
         .waitForEnabledElement({
@@ -776,9 +745,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Door mats page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/door-mats"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/door-mats");
 
       await browser!
         .waitForEnabledElement({
@@ -798,7 +765,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Communal areas page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/communal-areas"
+        "/communal-areas"
       );
 
       await browser!
@@ -818,7 +785,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Pets page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/pets");
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/pets");
 
       await browser!
         .waitForEnabledElement({
@@ -851,7 +818,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Antisocial behaviour page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/antisocial-behaviour"
+        "/antisocial-behaviour"
       );
 
       await browser!
@@ -869,7 +836,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Other comments page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/other-comments"
+        "/other-comments"
       );
 
       await browser!
@@ -882,21 +849,17 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Sections page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/sections"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
 
       await browser!.waitForEnabledElement(
-        { css: '[href^="/thc/home-check"]' },
+        { css: '[href^="/home-check"]' },
         10000
       );
 
-      await browser!.submit({ css: '[href^="/thc/home-check"]' });
+      await browser!.submit({ css: '[href^="/home-check"]' });
 
       // Home check page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/home-check"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/home-check");
 
       await browser!
         .waitForEnabledElement({
@@ -907,7 +870,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Health concerns page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/health");
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/health");
 
       await browser!
         .waitForEnabledElement({
@@ -939,9 +902,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Disability page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/disability"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/disability");
 
       await browser!
         .waitForEnabledElement({
@@ -979,7 +940,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Support needs page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/support-needs"
+        "/support-needs"
       );
       await browser!
         .waitForEnabledElement({ id: "resident-sustainment-notes-summary" })
@@ -1028,92 +989,51 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Sections page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/sections"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
 
-      await browser!.waitForEnabledElement(
-        { css: '[href^="/thc/review"]' },
-        10000
-      );
+      await browser!.waitForEnabledElement({ css: '[href^="/review"]' }, 10000);
 
-      await browser!.submit({ css: '[href^="/thc/review"]' });
+      await browser!.submit({ css: '[href^="/review"]' });
 
       // Review page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/review");
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/review");
 
       await browser!.submit();
 
       // Submit page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/thc/submit");
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/submit");
 
       await browser!.submit();
 
+      // Wait for the submission to finish.
+      await browser!.wait(until.urlMatches(/\/confirmed$/));
+
       // Confirmed page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/thc/confirmed"
-      );
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/confirmed");
     });
 
     then("I should see that the process has been submitted", async () => {
       await Expect.pageToContain("has been submitted for manager review");
     });
 
-    then("the data in the backend should match", async () => {
-      const responseData = await new Promise<{ processData: ProcessJson }>(
-        (resolve, reject) => {
-          const req = request(
-            {
-              host: "localhost",
-              port: process.env.PORT || 3000,
-              path: `${process.env.BASE_PATH}api/v1/process/${process.env.TEST_PROCESS_REF}/processData?jwt=${process.env.TEST_PROCESS_API_JWT}`,
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-                "X-API-KEY": process.env.PROCESS_API_KEY || ""
-              }
-            },
-            res => {
-              res.setEncoding("utf8");
-
-              let rawData = "";
-
-              res.on("data", chunk => {
-                rawData += chunk;
-              });
-
-              res.on("end", () => {
-                try {
-                  const parsedData = JSON.parse(rawData);
-
-                  resolve(parsedData);
-                } catch (err) {
-                  reject(err);
-                }
-              });
-
-              res.on("error", err => {
-                reject(err);
-              });
-            }
-          );
-
-          req.on("error", err => {
-            reject(err);
-          });
-
-          req.end();
+    then("the data in the backend should match the answers given", async () => {
+      const response = await fetch(
+        `https://${process.env.PROCESS_API_HOST}${process.env.PROCESS_API_BASE_URL}/v1/processData/${process.env.TEST_PROCESS_REF}`,
+        {
+          method: "GET",
+          headers: {
+            "X-API-KEY": process.env.PROCESS_API_KEY || ""
+          }
         }
       );
 
+      expect(response.status).toEqual(200);
+
+      const responseData = await response.json();
+
       const persistedProcessData = JSON.parse(
         JSON.stringify(responseData.processData.processData).replace(
-          new RegExp(
-            base64Image
-              .replace(/\n/g, "")
-              .replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&"),
-            "g"
-          ),
+          /image:[\w-]+?.+?(?=")/g,
           imagePath
         )
       );

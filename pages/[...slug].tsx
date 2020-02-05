@@ -28,7 +28,10 @@ const ProcessPage: NextPage = () => {
   if (typeof slugParam === "string") {
     slug = slugParam;
   } else {
-    slug = slugParam.filter(part => part !== "thc").join("/");
+    slug = slugParam
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      .filter(part => part !== process.env.BASE_PATH!.replace(/^\//, ""))
+      .join("/");
   }
 
   const currentStep = steps.find(step => step.step.slug === slug);
