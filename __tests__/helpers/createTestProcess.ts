@@ -10,7 +10,7 @@ export default async (ref = uuid()): Promise<void> => {
       value: parseInt(process.env.PROCESS_TYPE_VALUE!),
       name: process.env.PROCESS_TYPE_NAME
     },
-    processDataSchemaVersion: 2
+    processDataSchemaVersion: 3
   });
 
   const response = await fetch(

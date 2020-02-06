@@ -12,13 +12,13 @@ interface Box {
   value: string;
 }
 
-type Props = DynamicComponentControlledProps<string[]> & {
+export type CheckboxesProps = DynamicComponentControlledProps<string[]> & {
   name: string;
   legend?: React.ReactNode;
   checkboxes: Box[];
 };
 
-export const Checkboxes: React.FunctionComponent<Props> = props => {
+export const Checkboxes: React.FunctionComponent<CheckboxesProps> = props => {
   const {
     name,
     legend,

@@ -26,7 +26,7 @@ import MainLayout from "../layouts/MainLayout";
 import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 import PageTitles from "../steps/PageTitles";
 import ExternalDatabaseSchema from "../storage/ExternalDatabaseSchema";
-import { ProcessJson } from "../storage/ProcessDatabaseSchema";
+import { ProcessJson, ResidentRef } from "../storage/ProcessDatabaseSchema";
 import Storage from "../storage/Storage";
 import tmpProcessRef from "../storage/processRef";
 
@@ -284,6 +284,7 @@ const useFetchResidentData = (): UseApiWithStorageReturn<
     execute: Boolean(processRef),
     parse(data: {
       results: {
+        contactId: ResidentRef;
         fullName: string;
         responsible: boolean;
         fullAddressDisplay: string;
@@ -309,12 +310,14 @@ const useFetchResidentData = (): UseApiWithStorageReturn<
       const tenants = data.results
         .filter(contact => contact.responsible)
         .map(contact => ({
+          id: contact.contactId,
           fullName: contact.fullName
         }));
 
       const householdMembers = data.results
         .filter(contact => !contact.responsible)
         .map(contact => ({
+          id: contact.contactId,
           fullName: contact.fullName
         }));
 

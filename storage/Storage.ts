@@ -28,12 +28,8 @@ const migrateProcessData = async (
 ): Promise<Required<ProcessJson>["processData"]> => {
   let version = oldVersion;
 
-  if (version === 0) {
-    version = 1;
-  }
-
-  if (version === 1) {
-    version = 2;
+  if (version < 3) {
+    version = 3;
   }
 
   if (version !== newVersion) {
@@ -91,7 +87,7 @@ export default class Storage {
 
     const processDatabasePromise = Database.open<ProcessDatabaseSchema>(
       processDatabaseName,
-      2,
+      3,
       {
         upgrade(upgrade) {
           let version = upgrade.oldVersion;
@@ -116,6 +112,12 @@ export default class Storage {
             upgrade.createStore("household");
 
             version = 2;
+          }
+
+          if (version === 2) {
+            upgrade.createStore("tenantsPresent");
+
+            version = 3;
           }
 
           if (version !== upgrade.newVersion) {

@@ -2,6 +2,7 @@ import { NamedSchema, StoreNames } from "remultiform/database";
 import { DeepPartial } from "utility-types";
 
 export type ProcessRef = string;
+export type ResidentRef = string;
 
 export const processDatabaseName = `mat-process-${
   process.env.PROCESS_NAME
@@ -9,7 +10,7 @@ export const processDatabaseName = `mat-process-${
 
 type ProcessDatabaseSchema = NamedSchema<
   typeof processDatabaseName,
-  2,
+  3,
   {
     lastModified: {
       key: ProcessRef;
@@ -144,6 +145,11 @@ type ProcessDatabaseSchema = NamedSchema<
       };
     };
 
+    tenantsPresent: {
+      key: ProcessRef;
+      value: ResidentRef[];
+    };
+
     tenant: {
       key: ProcessRef;
       value: {
@@ -272,6 +278,7 @@ const storeNames: {
   isVisitInside: true,
   id: true,
   residency: true,
+  tenantsPresent: true,
   tenant: true,
   household: true,
   homeCheck: true,
