@@ -9,9 +9,10 @@ import {
 import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { makeSubmit } from "../../components/makeSubmit";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
-import useDataProperty from "../../helpers/useDataProperty";
+import getProcessRef from "../../helpers/getProcessRef";
+import useDataValue from "../../helpers/useDataValue";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import processRef from "../../storage/processRef";
+import tmpProcessRef from "../../storage/processRef";
 import Storage from "../../storage/Storage";
 
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
@@ -21,10 +22,12 @@ const TenantsSelect: React.FunctionComponent<Omit<
   CheckboxesProps,
   "checkboxes"
 >> = props => {
-  const tenants = useDataProperty(
+  const processRef = getProcessRef();
+  const tenants = useDataValue(
     Storage.ExternalContext,
     "residents",
-    value => value.tenants
+    processRef,
+    values => (processRef ? values[processRef]?.tenants : undefined)
   );
 
   return (
@@ -73,7 +76,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenantsPresent"> = {
             "tenantsPresent"
           >({
             storeName: "tenantsPresent",
-            key: processRef
+            key: tmpProcessRef
           })
         })
       )

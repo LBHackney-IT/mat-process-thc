@@ -2,22 +2,17 @@ import router from "next/router";
 
 import PageSlugs from "../steps/PageSlugs";
 
+import idFromSlug from "./idFromSlug";
+
 const nextSlugWithId = (nextSlug: PageSlugs): (() => string) => {
   return (): string => {
-    if (!router.query.slug || typeof router.query.slug === "string") {
-      throw new Error("No tenant identified");
+    if (!process.browser) {
+      return "";
     }
 
-    const slugParts = router.query.slug.filter(
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      part => process.env.BASE_PATH!.replace(/^\//, "") !== part
-    );
+    const id = idFromSlug(router.query.slug);
 
-    if (slugParts.length < 2) {
-      throw new Error("No tenant identified");
-    }
-
-    return [nextSlug, slugParts[1]].join("/");
+    return [nextSlug, id].join("/");
   };
 };
 

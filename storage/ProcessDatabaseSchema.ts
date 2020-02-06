@@ -1,8 +1,9 @@
 import { NamedSchema, StoreNames } from "remultiform/database";
 import { DeepPartial } from "utility-types";
 
+import ResidentDatabaseSchema, { ResidentRef } from "./ResidentDatabaseSchema";
+
 export type ProcessRef = string;
-export type ResidentRef = string;
 
 export const processDatabaseName = `mat-process-${
   process.env.PROCESS_NAME
@@ -10,7 +11,7 @@ export const processDatabaseName = `mat-process-${
 
 type ProcessDatabaseSchema = NamedSchema<
   typeof processDatabaseName,
-  3,
+  4,
   {
     lastModified: {
       key: ProcessRef;
@@ -127,59 +128,9 @@ type ProcessDatabaseSchema = NamedSchema<
       };
     };
 
-    id: {
-      key: ProcessRef;
-      value: {
-        type: string;
-        images: string[];
-        notes: string;
-      };
-    };
-
-    residency: {
-      key: ProcessRef;
-      value: {
-        type: string;
-        images: string[];
-        notes: string;
-      };
-    };
-
     tenantsPresent: {
       key: ProcessRef;
       value: ResidentRef[];
-    };
-
-    tenant: {
-      key: ProcessRef;
-      value: {
-        photo: {
-          isWilling: string;
-          images: string[];
-          notes: string;
-        };
-
-        nextOfKin: {
-          fullName: string;
-          relationship: string;
-          mobileNumber: string;
-          otherNumber: string;
-          email: string;
-          address: string;
-        };
-
-        carer: {
-          hasCarer: string;
-          type: string;
-          isLiveIn: string;
-          liveInStartDate: { month?: number; year?: number };
-          fullName: string;
-          phoneNumber: string;
-          relationship: string;
-          address: string;
-          notes: string;
-        };
-      };
     };
 
     household: {
@@ -265,6 +216,12 @@ export interface ProcessJson {
   processData?: DeepPartial<
     {
       [StoreName in keyof ProcessDatabaseSchema["schema"]]: ProcessDatabaseSchema["schema"][StoreName]["value"];
+    } & {
+      residents: {
+        [Ref in ResidentRef]: {
+          [StoreName in keyof ResidentDatabaseSchema["schema"]]: ResidentDatabaseSchema["schema"][StoreName]["value"];
+        };
+      };
     }
   >;
 }
@@ -276,10 +233,7 @@ const storeNames: {
   property: true,
   isUnannouncedVisit: true,
   isVisitInside: true,
-  id: true,
-  residency: true,
   tenantsPresent: true,
-  tenant: true,
   household: true,
   homeCheck: true,
   healthConcerns: true,

@@ -8,6 +8,8 @@ import Expect from "../helpers/Expect";
 defineFeature(loadFeature("./process-submission.feature"), test => {
   test("Submitting while online", ({ defineStep, given, then, when }) => {
     given("I am at the end of the process", async () => {
+      await browser!.getRelative("");
+      await browser!.sleep(2000);
       await browser!.getRelative("/submit");
     });
 

@@ -5,7 +5,7 @@ import {
   Paragraph
 } from "lbh-frontend-react";
 import { NextPage } from "next";
-import Router from "next/router";
+import router from "next/router";
 import React, { useState } from "react";
 import { TransactionMode } from "remultiform/database";
 
@@ -210,7 +210,7 @@ const SubmitPage: NextPage = () => {
               setSubmitting(true);
 
               await submit(setProgress);
-              await Router.push(href, as);
+              await router.push(href, as);
             } catch (err) {
               console.error(err);
               setSubmitError(err);

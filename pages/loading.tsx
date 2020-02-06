@@ -26,7 +26,8 @@ import MainLayout from "../layouts/MainLayout";
 import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 import PageTitles from "../steps/PageTitles";
 import ExternalDatabaseSchema from "../storage/ExternalDatabaseSchema";
-import { ProcessJson, ResidentRef } from "../storage/ProcessDatabaseSchema";
+import { ProcessJson } from "../storage/ProcessDatabaseSchema";
+import { ResidentRef } from "../storage/ResidentDatabaseSchema";
 import Storage from "../storage/Storage";
 import tmpProcessRef from "../storage/processRef";
 

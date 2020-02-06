@@ -191,6 +191,14 @@ export default class App extends NextApp<{}, {}, State> {
       );
     }
 
+    if (Storage.ResidentContext) {
+      page = (
+        <DatabaseProvider context={Storage.ResidentContext}>
+          {page}
+        </DatabaseProvider>
+      );
+    }
+
     return page;
   }
 }

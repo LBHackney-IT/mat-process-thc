@@ -1,51 +1,123 @@
 import formatDate from "date-fns/format";
 import {
+  Button,
   Heading,
   HeadingLevels,
   Link,
   Paragraph
 } from "lbh-frontend-react/components";
 import { NextPage } from "next";
+import NextLink from "next/link";
 import React from "react";
 import { Table } from "../components/Table";
 import { TenancySummary } from "../components/TenancySummary";
-import useData from "../helpers/useData";
+import getProcessRef from "../helpers/getProcessRef";
+import urlsForRouter from "../helpers/urlsForRouter";
+import useDataSet from "../helpers/useDataSet";
+import useDataValue from "../helpers/useDataValue";
 import MainLayout from "../layouts/MainLayout";
 import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 import PageTitles from "../steps/PageTitles";
-import ExternalDatabaseSchema from "../storage/ExternalDatabaseSchema";
+import tmpProcessRef from "../storage/processRef";
 import Storage from "../storage/Storage";
 
 export const VerifyPage: NextPage = () => {
-  const tenancyData = useData(Storage.ExternalContext, "tenancy");
-  const residentData = useData(Storage.ExternalContext, "residents");
+  const processRef = getProcessRef();
+  const tenancyData = useDataValue(
+    Storage.ExternalContext,
+    "tenancy",
+    processRef,
+    values => (processRef ? values[processRef] : undefined)
+  );
+  const residentData = useDataValue(
+    Storage.ExternalContext,
+    "residents",
+    processRef,
+    values => (processRef ? values[processRef] : undefined)
+  );
+  const tenantsPresent = useDataValue(
+    Storage.ProcessContext,
+    "tenantsPresent",
+    tmpProcessRef,
+    values => values[tmpProcessRef]
+  );
+  const idData = useDataSet(
+    Storage.ResidentContext,
+    "id",
+    tenantsPresent.result
+  );
+  const residencyData = useDataSet(
+    Storage.ResidentContext,
+    "residency",
+    residentData.result?.tenants.map(tenant => tenant.id)
+  );
 
-  const tableRows = (
-    residentData.result || {
-      tenants: [] as ExternalDatabaseSchema["schema"]["residents"]["value"]["tenants"]
-    }
-  ).tenants
-    .map(tenant => {
+  const tenantData =
+    residentData.result?.tenants.map(tenant => {
+      console.log(idData.result);
+
       return {
         id: tenant.id,
         name: tenant.fullName,
-        dateOfBirth: tenant.dateOfBirth
+        dateOfBirth: tenant.dateOfBirth,
+        verified: {
+          id: tenantsPresent.result?.includes(tenant.id)
+            ? idData.result
+              ? Boolean(idData.result[tenant.id])
+              : false
+            : undefined,
+          residency: residencyData.result
+            ? Boolean(residencyData.result[tenant.id])
+            : false
+        }
       };
-    })
-    .map(tenant => {
-      return [
-        tenant.name,
-        formatDate(tenant.dateOfBirth, "d MMMM yyyy"),
-        "Unverified",
-        "Unverified",
-        <Link
-          key="verify-link"
-          href={urlObjectForSlug(PageSlugs.Id, tenant.id).pathname}
-        >
-          Verify
-        </Link>
-      ];
-    });
+    }) || [];
+
+  const allVerified =
+    !residentData.loading &&
+    tenantData.every(
+      tenant =>
+        tenant.verified.id !== false && tenant.verified.residency !== false
+    );
+
+  const tableRows = tenantData.map(tenant => {
+    return [
+      tenant.name,
+      formatDate(tenant.dateOfBirth, "d MMMM yyyy"),
+      tenantsPresent.loading
+        ? "Loading..."
+        : tenant.verified.id
+        ? "Verified"
+        : tenant.verified.id === false
+        ? "Unverified"
+        : "-",
+      tenantsPresent.loading
+        ? "Loading..."
+        : tenant.verified.residency
+        ? "Verified"
+        : tenant.verified.residency === false
+        ? "Unverified"
+        : "-",
+      <Link
+        key="verify-link"
+        href={urlObjectForSlug(PageSlugs.Id, tenant.id).pathname}
+      >
+        {tenantsPresent.loading
+          ? "Loading..."
+          : tenant.verified.id !== false && tenant.verified.residency !== false
+          ? "Edit"
+          : "Verify"}
+      </Link>
+    ];
+  });
+
+  const { href, as } = urlsForRouter(urlObjectForSlug(PageSlugs.Sections));
+
+  const button = (
+    <Button disabled={!href.pathname || !as.pathname} data-testid="submit">
+      Save and continue
+    </Button>
+  );
 
   return (
     <MainLayout title={PageTitles.Verify} heading="Verify tenant details">
@@ -86,9 +158,18 @@ export const VerifyPage: NextPage = () => {
       <Heading level={HeadingLevels.H2}>Select a tenant to check</Heading>
 
       <Table
-        headings={["Tenant", "Date of birth", "ID", "Residency", "Actions"]}
+        headings={["Tenant", "Date of birth", "ID", "Residency", "Action"]}
         rows={tableRows}
       />
+
+      {allVerified &&
+        (href.pathname && as.pathname ? (
+          <NextLink href={href} as={as}>
+            {button}
+          </NextLink>
+        ) : (
+          button
+        ))}
     </MainLayout>
   );
 };

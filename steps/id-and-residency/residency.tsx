@@ -10,10 +10,11 @@ import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextAreaDetails } from "../../components/TextAreaDetails";
+import keyFromSlug from "../../helpers/keyFromSlug";
 import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
-import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import processRef from "../../storage/processRef";
+import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
+import Storage from "../../storage/Storage";
 
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
@@ -57,9 +58,10 @@ const residencyProofTypeRadios = [
   }
 ];
 
-const step: ProcessStepDefinition<ProcessDatabaseSchema, "residency"> = {
+const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
   title: PageTitles.Residency,
   heading: "Verify proof of residency",
+  context: Storage.ResidentContext,
   review: {
     rows: [
       {
@@ -105,11 +107,11 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "residency"> = {
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
+            ResidentDatabaseSchema,
             "residency"
           >({
             storeName: "residency",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["type"]
           })
         })
@@ -131,11 +133,11 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "residency"> = {
           defaultValue: [],
           emptyValue: [] as string[],
           databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
+            ResidentDatabaseSchema,
             "residency"
           >({
             storeName: "residency",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["images"]
           })
         })
@@ -151,11 +153,11 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "residency"> = {
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
+            ResidentDatabaseSchema,
             "residency"
           >({
             storeName: "residency",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["notes"]
           })
         })

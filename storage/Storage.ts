@@ -17,6 +17,11 @@ import ProcessDatabaseSchema, {
   processDatabaseName,
   processStoreNames
 } from "./ProcessDatabaseSchema";
+import ResidentDatabaseSchema, {
+  ResidentRef,
+  residentDatabaseName,
+  residentStoreNames
+} from "./ResidentDatabaseSchema";
 import tmpProcessRef from "./processRef";
 
 const migrateProcessData = async (
@@ -28,8 +33,12 @@ const migrateProcessData = async (
 ): Promise<Required<ProcessJson>["processData"]> => {
   let version = oldVersion;
 
-  if (version < 3) {
-    version = 3;
+  if (version < 4) {
+    delete processData.id;
+    delete processData.residency;
+    delete processData.tenant;
+
+    version = 4;
   }
 
   if (version !== newVersion) {
@@ -59,6 +68,9 @@ export default class Storage {
   static ProcessContext:
     | DatabaseContext<ProcessDatabaseSchema>
     | undefined = undefined;
+  static ResidentContext:
+    | DatabaseContext<ResidentDatabaseSchema>
+    | undefined = undefined;
 
   static init(): void {
     const externalDatabasePromise = Database.open<ExternalDatabaseSchema>(
@@ -87,7 +99,7 @@ export default class Storage {
 
     const processDatabasePromise = Database.open<ProcessDatabaseSchema>(
       processDatabaseName,
-      3,
+      4,
       {
         upgrade(upgrade) {
           let version = upgrade.oldVersion;
@@ -97,9 +109,6 @@ export default class Storage {
             upgrade.createStore("property");
             upgrade.createStore("isUnannouncedVisit");
             upgrade.createStore("isVisitInside");
-            upgrade.createStore("id");
-            upgrade.createStore("residency");
-            upgrade.createStore("tenant");
             upgrade.createStore("homeCheck");
             upgrade.createStore("healthConcerns");
             upgrade.createStore("disability");
@@ -120,6 +129,40 @@ export default class Storage {
             version = 3;
           }
 
+          if (version === 3) {
+            // We don't remove the `id`, `residency`, or `tenants` stores,
+            // which were removed from the schema with this version, to guard
+            // against data loss.
+            version = 4;
+          }
+
+          if (version !== upgrade.newVersion) {
+            throw new Error(
+              `Unable to upgrade to ${upgrade.newVersion} due to missing ` +
+                `migrations from ${version} onwards`
+            );
+          }
+        }
+      }
+    );
+
+    const residentDatabasePromise = Database.open<ResidentDatabaseSchema>(
+      residentDatabaseName,
+      1,
+      {
+        upgrade(upgrade) {
+          let version = upgrade.oldVersion;
+
+          if (version === 0) {
+            upgrade.createStore("id");
+            upgrade.createStore("residency");
+            upgrade.createStore("photo");
+            upgrade.createStore("nextOfKin");
+            upgrade.createStore("carer");
+
+            version = 1;
+          }
+
           if (version !== upgrade.newVersion) {
             throw new Error(
               `Unable to upgrade to ${upgrade.newVersion} due to missing ` +
@@ -132,6 +175,7 @@ export default class Storage {
 
     this.ExternalContext = new DatabaseContext(externalDatabasePromise);
     this.ProcessContext = new DatabaseContext(processDatabasePromise);
+    this.ResidentContext = new DatabaseContext(residentDatabasePromise);
   }
 
   static async getProcessJson(
@@ -147,7 +191,7 @@ export default class Storage {
       return;
     }
 
-    const db = await this.ProcessContext.database;
+    const processDatabase = await this.ProcessContext.database;
 
     let lastModified: string | undefined;
 
@@ -157,7 +201,7 @@ export default class Storage {
           // The steps still use the hardcoded `processRef`, so we need to also
           // use it, even though we're using the correct value to persist to the
           // backend.
-          const value = await db.get(storeName, tmpProcessRef);
+          const value = await processDatabase.get(storeName, tmpProcessRef);
 
           if (storeName === "lastModified") {
             lastModified = value as StoreValue<
@@ -178,6 +222,44 @@ export default class Storage {
       }),
       {}
     ) as Exclude<ProcessJson["processData"], undefined>;
+
+    const residentRefs = processData.tenantsPresent as
+      | ResidentRef[]
+      | undefined;
+
+    if (residentRefs && residentRefs.length && this.ResidentContext) {
+      const residentDatabase = await this.ResidentContext.database;
+
+      processData.residents = (
+        await Promise.all(
+          residentRefs.map(async ref => {
+            return {
+              [ref]: (
+                await Promise.all(
+                  residentStoreNames.map(async storeName => {
+                    const value = await residentDatabase.get(storeName, ref);
+
+                    return { [storeName]: value };
+                  })
+                )
+              ).reduce(
+                (valuesObj, valueObj) => ({
+                  ...valuesObj,
+                  ...valueObj
+                }),
+                {}
+              )
+            };
+          })
+        )
+      ).reduce(
+        (valuesObj, valueObj) => ({
+          ...valuesObj,
+          ...valueObj
+        }),
+        {}
+      );
+    }
 
     let processDataString = JSON.stringify(processData);
 
@@ -213,7 +295,7 @@ export default class Storage {
         // Ideally we'd be exposing the version on the database directly, but
         // this hack works for now.
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        dataSchemaVersion: (db as any).db.version,
+        dataSchemaVersion: (processDatabase as any).db.version,
         processData
       },
       imagesJson: images
