@@ -55,15 +55,8 @@ RadioButtons.propTypes = {
   legend: PropTypes.node,
   radios: PropTypes.arrayOf(
     PropTypes.shape({
-      // id: PropTypes.string,
       value: PropTypes.string.isRequired,
       label: PropTypes.string.isRequired
-      // label: PropTypes.exact({
-      //   id: PropTypes.string,
-      //   children: PropTypes.node.isRequired
-      // }).isRequired,
-      // checked: PropTypes.bool,
-      // disabled: PropTypes.bool
     }).isRequired
   ).isRequired
 };
