@@ -66,7 +66,7 @@ const slugs: {
   start: true,
   "about-visit": true,
   "present-for-check": true,
-  verify: true,
+  verify: false,
   id: true,
   residency: true,
   "tenant-photo": true,

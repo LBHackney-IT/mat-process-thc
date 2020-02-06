@@ -27,6 +27,7 @@ defineFeature(loadFeature("./accessibility.feature"), test => {
   testAccessibility(test, "Index", "Loading");
   testAccessibility(test, "Loading");
   testAccessibility(test, "Sections");
+  testAccessibility(test, "Verify tenant details");
   testAccessibility(test, "Outside");
   testAccessibility(test, "Start");
   testAccessibility(test, "About visit");

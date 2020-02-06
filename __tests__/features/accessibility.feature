@@ -19,6 +19,11 @@ Feature: Accessibility
     Then the page should be accessible
     And the page should have a descriptive title
 
+  Scenario: Verify tenant details page is accessible
+    When I visit /verify
+    Then the page should be accessible
+    And the page should have a descriptive title
+
   Scenario: Outside page is accessible
     When I visit /outside
     Then the page should be accessible

@@ -61,7 +61,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenantsPresent"> = {
   },
   step: {
     slug: PageSlugs.PresentForCheck,
-    nextSlug: PageSlugs.Id,
+    nextSlug: PageSlugs.Verify,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         url: urlObjectForSlug(nextSlug),

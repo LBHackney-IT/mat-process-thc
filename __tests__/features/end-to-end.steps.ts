@@ -8,6 +8,7 @@ import Expect from "../helpers/Expect";
 
 jest.setTimeout(60 * 1000);
 
+const presentTenantRef = "b6e72c28-7957-e811-8126-70106faa6a31";
 const imagePath = join(__dirname, "..", "__fixtures__", "image.jpg");
 const processData = {
   property: {
@@ -108,7 +109,7 @@ const processData = {
     value: "no",
     notes: "Visit inside notes"
   },
-  tenantsPresent: ["b6e72c28-7957-e811-8126-70106faa6a31"],
+  tenantsPresent: [presentTenantRef],
   id: {
     type: "valid passport",
     images: [imagePath],
@@ -295,6 +296,11 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         .click();
 
       await browser!.submit();
+
+      // Verify tenant details page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/verify");
+
+      await browser!.submit({ css: `[href$="/id/${presentTenantRef}"]` });
 
       // ID page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/id");
