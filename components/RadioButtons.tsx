@@ -1,4 +1,4 @@
-import { Fieldset } from "lbh-frontend-react/components";
+import { Radios, RadioButton } from "lbh-frontend-react/components";
 import React from "react";
 import {
   DynamicComponentControlledProps,
@@ -7,18 +7,13 @@ import {
 
 import PropTypes from "../helpers/PropTypes";
 
-export interface RadioButton {
-  label: string;
-  value: string;
-}
-
-type Props = DynamicComponentControlledProps<string> & {
+export type RadioButtonsProps = DynamicComponentControlledProps<string> & {
   name: string;
   legend?: React.ReactNode;
-  radios: RadioButton[];
+  radios: { value: string; label: string }[];
 };
 
-export const RadioButtons: React.FunctionComponent<Props> = props => {
+export const RadioButtons: React.FunctionComponent<RadioButtonsProps> = props => {
   const {
     name,
     legend,
@@ -29,53 +24,28 @@ export const RadioButtons: React.FunctionComponent<Props> = props => {
     disabled
   } = props;
 
+  const radioButtons = radios.map<RadioButton>(radio => {
+    const { value, label } = radio;
+
+    const id = `${name}-${value.replace(/\s+/g, "-")}`;
+
+    return {
+      id,
+      value,
+      label: { id: id + "-label", children: label },
+      checked: value === currentValue,
+      disabled
+    };
+  });
+
   return (
-    <Fieldset className="radio-buttons" legend={legend}>
-      {radios.map(
-        (radio): JSX.Element => {
-          const labelId = `${name}-${radio.value.replace(/\s+/g, "-")}-label`;
-          const inputId = `${name}-${radio.value.replace(/\s+/g, "-")}`;
-
-          return (
-            <div key={inputId}>
-              <input
-                id={inputId}
-                name={name}
-                type="radio"
-                value={radio.value}
-                checked={currentValue === radio.value}
-                required={required}
-                disabled={disabled}
-                onChange={(): void => {
-                  onValueChange(radio.value);
-                }}
-                aria-labelledby={labelId}
-              />
-              <label id={labelId} htmlFor={inputId}>
-                {radio.label}
-              </label>
-            </div>
-          );
-        }
-      )}
-
-      <style jsx>{`
-        .radio-buttons {
-          display: flex;
-          flex-direction: column;
-          margin-bottom: 20px;
-        }
-
-        label {
-          font-family: "Montserrat";
-        }
-
-        input {
-          margin-right: 10px;
-          margin-top: 10px;
-        }
-      `}</style>
-    </Fieldset>
+    <Radios
+      name={name}
+      fieldset={legend ? { legend } : undefined}
+      items={radioButtons}
+      onChange={onValueChange}
+      required={required}
+    />
   );
 };
 
@@ -84,9 +54,9 @@ RadioButtons.propTypes = {
   name: PropTypes.string.isRequired,
   legend: PropTypes.node,
   radios: PropTypes.arrayOf(
-    PropTypes.exact({
-      label: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired
+    PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired
     }).isRequired
   ).isRequired
 };
