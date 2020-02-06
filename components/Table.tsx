@@ -4,7 +4,7 @@ import PropTypes from "../helpers/PropTypes";
 
 interface Props {
   headings: string[];
-  rows: string[][];
+  rows: React.ReactNode[][];
 }
 
 export const Table: React.FunctionComponent<Props> = props => {
@@ -35,6 +35,6 @@ export const Table: React.FunctionComponent<Props> = props => {
 Table.propTypes = {
   headings: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   rows: PropTypes.arrayOf(
-    PropTypes.arrayOf(PropTypes.string.isRequired).isRequired
+    PropTypes.arrayOf(PropTypes.node.isRequired).isRequired
   ).isRequired
 };
