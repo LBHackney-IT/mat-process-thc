@@ -9,6 +9,7 @@ import {
 import { makeSubmit } from "../../components/makeSubmit";
 import { TextArea } from "../../components/TextArea";
 import { TextInput } from "../../components/TextInput";
+import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
@@ -64,7 +65,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
   },
   step: {
     slug: PageSlugs.NextOfKin,
-    nextSlug: PageSlugs.Carer,
+    nextSlug: nextSlugWithId(PageSlugs.Carer),
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         url: urlObjectForSlug(nextSlug),

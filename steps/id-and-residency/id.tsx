@@ -10,6 +10,7 @@ import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextAreaDetails } from "../../components/TextAreaDetails";
+import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
@@ -69,7 +70,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "id"> = {
   },
   step: {
     slug: PageSlugs.Id,
-    nextSlug: PageSlugs.Residency,
+    nextSlug: nextSlugWithId(PageSlugs.Residency),
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         url: urlObjectForSlug(nextSlug),

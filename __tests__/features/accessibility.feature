@@ -45,27 +45,27 @@ Feature: Accessibility
     And the page should have a descriptive title
 
   Scenario: ID page is accessible
-    When I visit /id
+    When I visit /id/resident-ref
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Residency page is accessible
-    When I visit /residency
+    When I visit /residency/resident-ref
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Tenant photo page is accessible
-    When I visit /tenant-photo
+    When I visit /tenant-photo/resident-ref
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Next of kin page is accessible
-    When I visit /next-of-kin
+    When I visit /next-of-kin/resident-ref
     Then the page should be accessible
     And the page should have a descriptive title
 
   Scenario: Carer page is accessible
-    When I visit /carer
+    When I visit /carer/resident-ref
     Then the page should be accessible
     And the page should have a descriptive title
 

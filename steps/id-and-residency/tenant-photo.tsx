@@ -16,6 +16,7 @@ import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
+import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import yesNoRadios from "../../helpers/yesNoRadios";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
@@ -54,7 +55,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
   },
   step: {
     slug: PageSlugs.TenantPhoto,
-    nextSlug: PageSlugs.NextOfKin,
+    nextSlug: nextSlugWithId(PageSlugs.NextOfKin),
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         url: urlObjectForSlug(nextSlug),
