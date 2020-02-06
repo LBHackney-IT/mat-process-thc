@@ -93,7 +93,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
           props: {
             label: {
               value: "Explain why."
-            } as { id?: string; value?: React.ReactNode },
+            } as { id?: string; value: React.ReactNode },
             name: "tenant-photo-willing-notes"
           },
           renderWhen(stepValues: {

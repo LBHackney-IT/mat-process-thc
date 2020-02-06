@@ -85,6 +85,10 @@ const step = {
           Component: TextAreaDetails,
           props: {
             summary: "Add notes about rent arrears if necessary" as React.ReactNode,
+            label: { value: "Notes" } as {
+              id?: string;
+              value: React.ReactNode;
+            },
             name: "rent-arrears-notes"
           },
           defaultValue: "",
@@ -164,6 +168,10 @@ const step = {
           Component: TextAreaDetails,
           props: {
             summary: "Add details about Housing Benefit if necessary" as React.ReactNode,
+            label: { value: "Notes" } as {
+              id?: string;
+              value: React.ReactNode;
+            },
             name: "housing-benefits-notes"
           },
           renderWhen(stepValues: {
@@ -293,6 +301,10 @@ const step = {
           Component: TextAreaDetails,
           props: {
             summary: "Add details about the Income Officer if necessary" as React.ReactNode,
+            label: { value: "Notes" } as {
+              id?: string;
+              value: React.ReactNode;
+            },
             name: "income-officer-notes"
           },
           renderWhen(stepValues: {

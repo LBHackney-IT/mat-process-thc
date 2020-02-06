@@ -146,7 +146,7 @@ const step = {
           props: {
             label: {
               value: "Add note about laminated flooring if necessary."
-            } as { id?: string; value?: React.ReactNode },
+            } as { id?: string; value: React.ReactNode },
             name: "laminated-flooring-notes"
           },
           renderWhen(stepValues: {

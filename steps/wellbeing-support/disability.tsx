@@ -246,7 +246,7 @@ const step = {
             name: "disability-notes",
             label: {
               value: "Add note about any disability concerns if necessary."
-            } as { id?: string; value?: React.ReactNode },
+            } as { id?: string; value: React.ReactNode },
             rows: 4 as number | undefined
           },
           renderWhen(stepValues: {

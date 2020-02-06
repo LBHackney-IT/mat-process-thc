@@ -188,7 +188,7 @@ const step = {
             label: {
               value:
                 "Add note about metal gates / combustible items if necessary."
-            } as { id?: string; value?: React.ReactNode },
+            } as { id?: string; value: React.ReactNode },
             name: "metal-gates-notes"
           },
           renderWhen(stepValues: {

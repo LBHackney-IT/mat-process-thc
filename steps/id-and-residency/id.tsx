@@ -125,6 +125,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "id"> = {
           Component: TextAreaDetails,
           props: {
             summary: "Add note about ID if necessary" as React.ReactNode,
+            label: { value: "Notes" } as {
+              id?: string;
+              value: React.ReactNode;
+            },
             name: "id-notes"
           },
           defaultValue: "",

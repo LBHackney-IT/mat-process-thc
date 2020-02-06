@@ -145,7 +145,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "residency"> = {
           Component: TextAreaDetails,
           props: {
             summary: "Add note about residency if necessary" as React.ReactNode,
-            name: "residency-notes"
+            name: "residency-notes",
+            label: { value: "Notes" } as { id?: string; value: React.ReactNode }
           },
           defaultValue: "",
           emptyValue: "",

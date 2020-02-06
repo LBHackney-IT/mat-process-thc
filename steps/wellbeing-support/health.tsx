@@ -173,7 +173,7 @@ const step = {
             name: "health-notes",
             label: {
               value: "Add note about any health concerns if necessary."
-            } as { id?: string; value?: React.ReactNode },
+            } as { id?: string; value: React.ReactNode },
             rows: 4 as number | undefined
           },
           renderWhen(stepValues: {

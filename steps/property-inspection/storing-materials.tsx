@@ -111,7 +111,7 @@ const step = {
           props: {
             label: {
               value: "Add note about the stored materials if necessary."
-            } as { id?: string; value?: React.ReactNode },
+            } as { id?: string; value: React.ReactNode },
             name: "stored-materials-notes"
           },
           renderWhen(stepValues: {

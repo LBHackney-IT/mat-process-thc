@@ -179,7 +179,7 @@ const step = {
           props: {
             label: {
               value: "Add note about upkeep of garden if necessary."
-            } as { id?: string; value?: React.ReactNode },
+            } as { id?: string; value: React.ReactNode },
             name: "garden-notes"
           },
           renderWhen(stepValues: {

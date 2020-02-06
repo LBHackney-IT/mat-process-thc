@@ -356,7 +356,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
             name: "carer-address",
             label: {
               value: "Address"
-            } as { id?: string; value?: React.ReactNode },
+            } as { id?: string; value: React.ReactNode },
             rows: 4 as number | undefined
           },
           renderWhen(stepValues: {
@@ -382,6 +382,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
           Component: TextAreaDetails,
           props: {
             summary: "Add note about carer if necessary" as React.ReactNode,
+            label: { value: "Notes" } as {
+              id?: string;
+              value: React.ReactNode;
+            },
             name: "carer-notes"
           },
           renderWhen(stepValues: {

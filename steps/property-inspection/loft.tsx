@@ -112,7 +112,7 @@ const step = {
           props: {
             label: {
               value: "Add note about loft space if necessary."
-            } as { id?: string; value?: React.ReactNode },
+            } as { id?: string; value: React.ReactNode },
             name: "loft-notes"
           },
           renderWhen(stepValues: {
