@@ -314,7 +314,8 @@ const useFetchResidentData = (): UseApiWithStorageReturn<
           id: contact.contactId,
           fullName: contact.fullName,
           dateOfBirth: new Date(contact.dateOfBirth)
-        }));
+        }))
+        .sort((a, b) => (a.id > b.id ? 1 : a.id < b.id ? -1 : 0));
 
       const householdMembers = data.results
         .filter(contact => !contact.responsible)
@@ -322,7 +323,8 @@ const useFetchResidentData = (): UseApiWithStorageReturn<
           id: contact.contactId,
           fullName: contact.fullName,
           dateOfBirth: new Date(contact.dateOfBirth)
-        }));
+        }))
+        .sort((a, b) => (a.id > b.id ? 1 : a.id < b.id ? -1 : 0));
 
       return {
         address,

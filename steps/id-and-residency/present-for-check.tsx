@@ -32,14 +32,10 @@ const TenantsSelect: React.FunctionComponent<Omit<
       {...props}
       checkboxes={
         tenants.result
-          ? tenants.result
-              .sort((a, b) =>
-                a.fullName > b.fullName ? 1 : a.fullName < b.fullName ? -1 : 0
-              )
-              .map(tenant => ({
-                label: tenant.fullName,
-                value: tenant.id
-              }))
+          ? tenants.result.map(tenant => ({
+              label: tenant.fullName,
+              value: tenant.id
+            }))
           : []
       }
     />
