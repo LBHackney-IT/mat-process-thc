@@ -28,6 +28,14 @@ export const Table: React.FunctionComponent<Props> = props => {
           </tr>
         ))}
       </tbody>
+
+      <style jsx>{`
+        table {
+          width: 100%;
+          text-align: left;
+          font-family: "Montserrat";
+        }
+      `}</style>
     </table>
   );
 };
