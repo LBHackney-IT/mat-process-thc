@@ -25,6 +25,7 @@ type ExternalDatabaseSchema = NamedSchema<
         tenants: {
           id: ResidentRef;
           fullName: string;
+          dateOfBirth: Date;
         }[];
         householdMembers: {
           id: ResidentRef;

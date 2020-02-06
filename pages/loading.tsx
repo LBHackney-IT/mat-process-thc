@@ -288,6 +288,7 @@ const useFetchResidentData = (): UseApiWithStorageReturn<
         fullName: string;
         responsible: boolean;
         fullAddressDisplay: string;
+        dateOfBirth: string;
       }[];
     }) {
       const fullAddress = data.results[0].fullAddressDisplay;
@@ -311,14 +312,16 @@ const useFetchResidentData = (): UseApiWithStorageReturn<
         .filter(contact => contact.responsible)
         .map(contact => ({
           id: contact.contactId,
-          fullName: contact.fullName
+          fullName: contact.fullName,
+          dateOfBirth: new Date(contact.dateOfBirth)
         }));
 
       const householdMembers = data.results
         .filter(contact => !contact.responsible)
         .map(contact => ({
           id: contact.contactId,
-          fullName: contact.fullName
+          fullName: contact.fullName,
+          dateOfBirth: new Date(contact.dateOfBirth)
         }));
 
       return {
