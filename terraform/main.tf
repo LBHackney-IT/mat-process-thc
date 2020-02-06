@@ -49,8 +49,12 @@ module "development" {
   task_definition_environment_variables = {
     NODE_ENV = "production"
 
-    BASE_PATH        = "/thc"
     ENVIRONMENT_NAME = "development"
+
+    PROCESS_NAME       = "thc"
+    BASE_PATH          = "/thc"
+    PROCESS_TYPE_VALUE = "100000156"
+    PROCESS_TYPE_NAME  = "Tenancy and household check"
 
     PROCESS_API_HOST     = "4cgb2c6pqe.execute-api.eu-west-2.amazonaws.com"
     PROCESS_API_BASE_URL = "/development/mat-process/api"
