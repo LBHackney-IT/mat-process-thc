@@ -27,17 +27,21 @@ const Link: React.FunctionComponent<LinkComponentTypeProps> = props => {
 
   if (
     !href.pathname ||
-    !as.pathname ||
     !originalHref.startsWith("/") ||
     originalHref.startsWith("//")
   ) {
     return <a {...props} />;
   }
 
-  const url =
-    as.query && Object.keys(as.query).length > 0
+  const url = `${process.env.BASE_PATH || ""}${
+    as.pathname === undefined
+      ? href.query && Object.keys(href.query).length > 0
+        ? `${href.pathname}?${querystring.stringify(href.query)}`
+        : href.pathname
+      : as.query && Object.keys(as.query).length > 0
       ? `${as.pathname}?${querystring.stringify(as.query)}`
-      : as.pathname;
+      : as.pathname
+  }`;
 
   return (
     <NextLink href={href} as={as}>
