@@ -5,33 +5,55 @@ import React from "react";
 import { Orchestrator } from "remultiform/orchestrator";
 
 import { TenancySummary } from "../components/TenancySummary";
+import { isRepeatingStep } from "../helpers/isStep";
 import useData from "../helpers/useData";
 import MainLayout from "../layouts/MainLayout";
 import steps from "../steps";
-import processRef from "../storage/processRef";
+import tmpProcessRef from "../storage/processRef";
 import Storage from "../storage/Storage";
+
+const parseSlug = (
+  slugParam: string | string[] | undefined
+): { slug: string | undefined; slugId?: string } => {
+  const result: { slug?: string; slugId?: string } = {};
+
+  // `router.query` might be empty when first loading a page for some reason.
+  if (slugParam === undefined) {
+    result.slug = undefined;
+  } else if (typeof slugParam === "string") {
+    result.slug = slugParam;
+  } else {
+    const parts = slugParam.filter(
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      part => part !== process.env.BASE_PATH!.replace(/^\/+/, "")
+    );
+
+    if (isRepeatingStep({ pathname: `/${parts.join("/")}` })) {
+      parts.reverse();
+
+      const [tail, ...rest] = parts;
+
+      rest.reverse();
+
+      result.slug = rest.join("/");
+      result.slugId = tail;
+    } else {
+      result.slug = parts.join("/");
+    }
+  }
+
+  return result as { slug: string | undefined; slugId?: string };
+};
 
 const ProcessPage: NextPage = () => {
   const router = useRouter();
   const tenancyData = useData(Storage.ExternalContext, "tenancy");
   const residentData = useData(Storage.ExternalContext, "residents");
 
-  const slugParam = router.query.slug as string | string[] | undefined;
+  const { slug } = parseSlug(router.query.slug);
 
-  // `router.query` might be empty when first loading a page for some reason.
-  if (slugParam === undefined) {
+  if (slug === undefined) {
     return null;
-  }
-
-  let slug: string;
-
-  if (typeof slugParam === "string") {
-    slug = slugParam;
-  } else {
-    slug = slugParam
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      .filter(part => part !== process.env.BASE_PATH!.replace(/^\//, ""))
-      .join("/");
   }
 
   const currentStep = steps.find(step => step.step.slug === slug);
@@ -75,7 +97,7 @@ const ProcessPage: NextPage = () => {
         provideDatabase={false}
         onNextStep={async (): Promise<void> => {
           try {
-            await Storage.updateProcessLastModified(processRef);
+            await Storage.updateProcessLastModified(tmpProcessRef);
           } catch (error) {
             // This is invisible to the user, so we should do something to
             // display it to them.

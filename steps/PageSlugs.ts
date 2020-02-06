@@ -107,10 +107,26 @@ export const stepSlugs = Object.entries(slugs)
   .filter(([, include]) => include)
   .reduce((s, [slug]) => [...s, slug as PageSlugs], [] as PageSlugs[]);
 
+export const repeatingStepSlugs = [
+  PageSlugs.Id,
+  PageSlugs.Residency,
+  PageSlugs.TenantPhoto,
+  PageSlugs.NextOfKin,
+  PageSlugs.Carer,
+  PageSlugs.OtherSupport
+];
+
 export const urlObjectForSlug = (
-  slug: string | undefined
-): { pathname: string } => ({
-  pathname: slug === undefined ? "" : `/${slug}`
-});
+  slug: string | undefined,
+  slugId?: string
+): { pathname: string } => {
+  let pathname = slug === undefined ? "" : `/${slug}`;
+
+  if (pathname && slugId) {
+    pathname += `/${slugId}`;
+  }
+
+  return { pathname };
+};
 
 export default PageSlugs;
