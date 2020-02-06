@@ -2,8 +2,8 @@ import {
   Database,
   Store,
   StoreNames,
-  TransactionMode,
-  StoreValue
+  StoreValue,
+  TransactionMode
 } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
 import uuid from "uuid/v5";
@@ -177,38 +177,35 @@ export default class Storage {
         ...valueObj
       }),
       {}
-    ) as ProcessJson["processData"];
+    ) as Exclude<ProcessJson["processData"], undefined>;
 
+    let processDataString = JSON.stringify(processData);
+
+    const imageDataUris = (
+      processDataString.match(/data:image\/[\w.\-+]+.+?(?=")/g) || []
+    ).filter((match, i, matches) => matches.indexOf(match) === i);
     const images = [] as ImageJson[];
 
-    if (processData) {
-      let processDataString = JSON.stringify(processData);
+    for (const image of imageDataUris) {
+      const [type] = /image\/[\w.\-+]+/.exec(image) || [];
 
-      const imageDataUris = (
-        processDataString.match(/data:image\/[\w.\-+]+.+?(?=")/g) || []
-      ).filter((match, i, matches) => matches.indexOf(match) === i);
+      if (!type) {
+        console.error(`Skipping unexpected data URI of type ${type}`);
 
-      for (const image of imageDataUris) {
-        const [type] = /image\/[\w.\-+]+/.exec(image) || [];
-
-        if (!type) {
-          console.error(`Skipping unexpected data URI of type ${type}`);
-
-          continue;
-        }
-
-        const id = uuid(image, processRef);
-        const ext = type.replace("image/", "");
-
-        processDataString = processDataString
-          .split(image)
-          .join(`image:${id}.${ext}`);
-
-        images.push({ id, image });
+        continue;
       }
 
-      processData = JSON.parse(processDataString);
+      const id = uuid(image, processRef);
+      const ext = type.replace("image/", "");
+
+      processDataString = processDataString
+        .split(image)
+        .join(`image:${id}.${ext}`);
+
+      images.push({ id, image });
     }
+
+    processData = JSON.parse(processDataString);
 
     return {
       processJson: {
