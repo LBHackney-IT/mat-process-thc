@@ -80,22 +80,19 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
           },
           "carer-live-in-start-date": {
             renderValue(startDate: {
-              month?: string;
-              year?: string;
+              month?: number;
+              year?: number;
             }): React.ReactNode {
               return startDate.year
                 ? `Since ${
                     startDate.month
                       ? formatDate(
-                          new Date(
-                            parseInt(startDate.year),
-                            parseInt(startDate.month) - 1
-                          ),
+                          new Date(startDate.year, startDate.month - 1),
                           "MMMM yyyy"
                         )
                       : startDate.year
                   }`
-                : undefined;
+                : null;
             }
           }
         }

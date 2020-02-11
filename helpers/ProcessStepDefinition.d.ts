@@ -16,7 +16,7 @@ interface BaseStepDefinition<
         [s: string]:
           | {
               renderValue(
-                value: ComponentValue<DBSchema["schema"], Names>
+                value: ComponentValue<DBSchema, Names>
               ): React.ReactNode;
             }
           | undefined;
