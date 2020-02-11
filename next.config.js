@@ -10,7 +10,8 @@ const dev = process.env.NODE_ENV !== "production";
 
 const env = {
   BASE_PATH: process.env.BASE_PATH,
-  ENVIRONMENT_NAME: process.env.ENVIRONMENT_NAME
+  ENVIRONMENT_NAME: process.env.ENVIRONMENT_NAME,
+  PROCESS_NAME: process.env.PROCESS_NAME
 };
 
 if (dev) {
