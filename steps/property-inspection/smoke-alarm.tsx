@@ -110,7 +110,7 @@ const step = {
           props: {
             label: {
               value: "Add note about the smoke alarm if necessary."
-            } as { id?: string; value?: React.ReactNode },
+            } as { id?: string; value: React.ReactNode },
             name: "smoke-alarm-notes"
           },
           renderWhen(stepValues: {

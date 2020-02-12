@@ -148,7 +148,7 @@ const step = {
             label: {
               value:
                 "Add note about structural changes including when it was done and location in property."
-            } as { id?: string; value?: React.ReactNode },
+            } as { id?: string; value: React.ReactNode },
             name: "structural-changes-notes"
           },
           renderWhen(stepValues: {

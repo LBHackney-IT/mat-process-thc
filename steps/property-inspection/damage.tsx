@@ -102,7 +102,7 @@ const step = {
             label: {
               value:
                 "Add note about damage including how it was caused and location in property."
-            } as { id?: string; value?: React.ReactNode },
+            } as { id?: string; value: React.ReactNode },
             name: "damage-notes"
           },
           renderWhen(stepValues: {

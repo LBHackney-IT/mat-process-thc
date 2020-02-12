@@ -57,7 +57,7 @@ const step = {
             label: {
               id: "resident-sustainment-notes-label",
               value: "Add note for post visit referral."
-            } as { id?: string; value?: React.ReactNode } | undefined,
+            } as { id?: string; value: React.ReactNode },
             contentAfterTextArea: (
               <Paragraph>
                 Or refer now:{" "}
@@ -102,7 +102,7 @@ const step = {
             label: {
               id: "befriending-notes-label",
               value: "Add note for post visit referral."
-            } as { id?: string; value?: React.ReactNode } | undefined
+            } as { id?: string; value: React.ReactNode }
           },
           defaultValue: "",
           emptyValue: "",
@@ -135,7 +135,7 @@ const step = {
             label: {
               id: "adult-safeguarding-notes-label",
               value: "Add note for post visit referral."
-            } as { id?: string; value?: React.ReactNode } | undefined,
+            } as { id?: string; value: React.ReactNode },
             contentAfterTextArea: (
               <Paragraph>
                 Website:{" "}
@@ -198,7 +198,7 @@ const step = {
             label: {
               id: "childrens-safeguarding-notes-label",
               value: "Add note for post visit referral."
-            } as { id?: string; value?: React.ReactNode } | undefined,
+            } as { id?: string; value: React.ReactNode },
             contentAfterTextArea: (
               <>
                 <Paragraph>Or refer now:</Paragraph>
@@ -258,7 +258,7 @@ const step = {
             label: {
               id: "domestic-violence-notes-label",
               value: "Add note for post visit referral."
-            } as { id?: string; value?: React.ReactNode } | undefined,
+            } as { id?: string; value: React.ReactNode },
             contentAfterTextArea: (
               <>
                 <Paragraph>Or refer now:</Paragraph>
@@ -304,7 +304,7 @@ const step = {
             label: {
               id: "mental-health-18-65-notes-label",
               value: "Add note for post visit referral."
-            } as { id?: string; value?: React.ReactNode } | undefined,
+            } as { id?: string; value: React.ReactNode },
             contentAfterTextArea: (
               <>
                 <Paragraph>Or refer now:</Paragraph>
@@ -352,7 +352,7 @@ const step = {
             label: {
               id: "mental-health-over-65-notes-label",
               value: "Add note for post visit referral."
-            } as { id?: string; value?: React.ReactNode } | undefined,
+            } as { id?: string; value: React.ReactNode },
             contentAfterTextArea: (
               <>
                 <Paragraph>Or refer now:</Paragraph>

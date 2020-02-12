@@ -79,6 +79,9 @@ const step = {
           props: {
             summary: "House moving schemes: downsizing, overcrowding or aged over 60" as React.ReactNode,
             name: "house-moving-schemes-notes",
+            label: {
+              value: "House moving schemes notes"
+            } as { id?: string; value: React.ReactNode },
             contentBeforeTextArea: (
               <>
                 <Paragraph>Schemes cover:</Paragraph>
@@ -136,6 +139,10 @@ const step = {
           Component: TextAreaDetails,
           props: {
             summary: "Add note about any changes in household members" as React.ReactNode,
+            label: { value: "Notes" } as {
+              id?: string;
+              value: React.ReactNode;
+            },
             name: "member-changes-notes"
           },
           defaultValue: "",

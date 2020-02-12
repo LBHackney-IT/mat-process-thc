@@ -189,7 +189,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
             name: "next-of-kin-address",
             label: {
               value: "Address"
-            } as { id?: string; value?: React.ReactNode },
+            } as { id?: string; value: React.ReactNode },
             rows: 4 as number | undefined
           },
           defaultValue: "",

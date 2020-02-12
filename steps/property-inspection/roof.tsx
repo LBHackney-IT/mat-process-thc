@@ -109,7 +109,7 @@ const step = {
           props: {
             label: {
               value: "Add note about roof if necessary."
-            } as { id?: string; value?: React.ReactNode },
+            } as { id?: string; value: React.ReactNode },
             name: "roof-notes"
           },
           renderWhen(stepValues: {

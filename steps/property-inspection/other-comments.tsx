@@ -92,7 +92,7 @@ const step = {
             label: {
               value:
                 "Add notes about any other comments or points to investigate for the property"
-            } as { id?: string; value?: React.ReactNode },
+            } as { id?: string; value: React.ReactNode },
             name: "other-comments-notes"
           },
           defaultValue: "",

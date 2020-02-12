@@ -125,7 +125,7 @@ const step = {
                   <b>against</b> tenant if necessary.
                 </>
               )
-            } as { id?: string; value?: React.ReactNode },
+            } as { id?: string; value: React.ReactNode },
             name: "antisocial-behaviour-notes"
           },
           defaultValue: "",

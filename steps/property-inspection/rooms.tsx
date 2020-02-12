@@ -70,7 +70,7 @@ const step = {
           props: {
             label: {
               value: "Add note about access if necessary."
-            } as { id?: string; value?: React.ReactNode },
+            } as { id?: string; value: React.ReactNode },
             name: "room-entry-notes"
           },
           renderWhen(stepValues: {

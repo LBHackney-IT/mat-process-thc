@@ -110,7 +110,7 @@ const step = {
           props: {
             label: {
               value: "Add note about door mats / potted plants if necessary."
-            } as { id?: string; value?: React.ReactNode },
+            } as { id?: string; value: React.ReactNode },
             name: "communal-areas-notes"
           },
           renderWhen(stepValues: {

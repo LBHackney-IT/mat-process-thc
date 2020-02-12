@@ -70,7 +70,7 @@ const step = {
             label: {
               value:
                 "Provide details: with / without mortgage, address of property"
-            } as { id?: string; value?: React.ReactNode },
+            } as { id?: string; value: React.ReactNode },
             name: "other-property-notes"
           },
           renderWhen(stepValues: {

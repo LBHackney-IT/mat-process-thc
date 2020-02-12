@@ -107,7 +107,7 @@ const step = {
           props: {
             label: {
               value: "Add note about the fire exit if necessary."
-            } as { id?: string; value?: React.ReactNode },
+            } as { id?: string; value: React.ReactNode },
             name: "fire-exit-notes"
           },
           renderWhen(stepValues: {
