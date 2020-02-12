@@ -274,11 +274,11 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
 
       await browser!.waitForEnabledElement(
-        { css: '[href^="/present-for-check"]' },
+        { css: '[href$="/present-for-check"]' },
         10000
       );
 
-      await browser!.submit({ css: '[href^="/present-for-check"]' });
+      await browser!.submit({ css: '[href$="/present-for-check"]' });
 
       // Present for check page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
@@ -429,11 +429,11 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
 
       await browser!.waitForEnabledElement(
-        { css: '[href^="/household"]' },
+        { css: '[href$="/household"]' },
         10000
       );
 
-      await browser!.submit({ css: '[href^="/household"]' });
+      await browser!.submit({ css: '[href$="/household"]' });
 
       // Household page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/household");
@@ -525,9 +525,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       // Sections page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
 
-      await browser!.waitForEnabledElement({ css: '[href^="/rooms"]' }, 10000);
+      await browser!.waitForEnabledElement({ css: '[href$="/rooms"]' }, 10000);
 
-      await browser!.submit({ css: '[href^="/rooms"]' });
+      await browser!.submit({ css: '[href$="/rooms"]' });
 
       // Rooms page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/rooms");
@@ -872,11 +872,11 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
 
       await browser!.waitForEnabledElement(
-        { css: '[href^="/home-check"]' },
+        { css: '[href$="/home-check"]' },
         10000
       );
 
-      await browser!.submit({ css: '[href^="/home-check"]' });
+      await browser!.submit({ css: '[href$="/home-check"]' });
 
       // Home check page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/home-check");
@@ -1011,9 +1011,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       // Sections page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
 
-      await browser!.waitForEnabledElement({ css: '[href^="/review"]' }, 10000);
+      await browser!.waitForEnabledElement({ css: '[href$="/review"]' }, 10000);
 
-      await browser!.submit({ css: '[href^="/review"]' });
+      await browser!.submit({ css: '[href$="/review"]' });
 
       // Review page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/review");
