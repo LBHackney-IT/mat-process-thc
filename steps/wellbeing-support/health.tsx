@@ -10,7 +10,7 @@ import {
 import { makeSubmit } from "../../components/makeSubmit";
 
 import { RadioButtons } from "../../components/RadioButtons";
-import { Checkboxes } from "../../components/Checkboxes";
+import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { TextArea } from "../../components/TextArea";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
@@ -93,7 +93,7 @@ const step = {
                 value: "household member 4"
               }
             ]
-          },
+          } as CheckboxesProps,
           renderWhen(stepValues: {
             "health-concerns"?: ComponentValue<
               ProcessDatabaseSchema,
@@ -144,7 +144,7 @@ const step = {
                 value: "smoking"
               }
             ]
-          },
+          } as CheckboxesProps,
           renderWhen(stepValues: {
             "health-concerns"?: ComponentValue<
               ProcessDatabaseSchema,

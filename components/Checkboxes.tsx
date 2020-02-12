@@ -1,4 +1,7 @@
-import { Fieldset } from "lbh-frontend-react/components";
+import {
+  Checkboxes as LBHCheckboxes,
+  CheckboxItem
+} from "lbh-frontend-react/components";
 import React from "react";
 import {
   DynamicComponentControlledProps,
@@ -7,15 +10,10 @@ import {
 
 import PropTypes from "../helpers/PropTypes";
 
-interface Box {
-  label: string;
-  value: string;
-}
-
 export type CheckboxesProps = DynamicComponentControlledProps<string[]> & {
   name: string;
   legend?: React.ReactNode;
-  checkboxes: Box[];
+  checkboxes: { value: string; label: string }[];
 };
 
 export const Checkboxes: React.FunctionComponent<CheckboxesProps> = props => {
@@ -29,66 +27,28 @@ export const Checkboxes: React.FunctionComponent<CheckboxesProps> = props => {
     disabled
   } = props;
 
+  const checkboxItems = checkboxes.map<CheckboxItem>(checkbox => {
+    const { value, label } = checkbox;
+
+    const id = `${name}-${value.replace(/\s+/g, "-")}`;
+
+    return {
+      id,
+      value,
+      label: { id: `${id}-label`, children: label },
+      checked: currentValues.includes(value),
+      disabled
+    };
+  });
+
   return (
-    <>
-      <Fieldset className="checkboxes" legend={legend}>
-        {checkboxes.map(
-          (checkbox): JSX.Element => {
-            const labelId = `${name}-${checkbox.value.replace(
-              /\s+/g,
-              "-"
-            )}-label`;
-            const inputId = `${name}-${checkbox.value.replace(/\s+/g, "-")}`;
-
-            return (
-              <div key={checkbox.value}>
-                <input
-                  id={inputId}
-                  name={name}
-                  type="checkbox"
-                  value={checkbox.value}
-                  checked={currentValues.includes(checkbox.value)}
-                  required={required}
-                  disabled={disabled}
-                  onChange={(event): void => {
-                    let newValues = [...currentValues];
-
-                    if (event.target.checked) {
-                      if (!currentValues.includes(event.target.value)) {
-                        newValues.push(event.target.value);
-                      }
-                    } else {
-                      newValues = newValues.filter(
-                        v => v !== event.target.value
-                      );
-                    }
-
-                    onValueChange(newValues);
-                  }}
-                />
-                <label id={labelId} htmlFor={inputId}>
-                  {checkbox.label}
-                </label>
-              </div>
-            );
-          }
-        )}
-      </Fieldset>
-      <style jsx>{`
-        .checkboxes {
-          display: flex;
-          flex-direction: column;
-          margin-bottom: 20px;
-        }
-        label {
-          font-family: "Montserrat";
-        }
-        input {
-          margin-right: 10px;
-          margin-top: 10px;
-        }
-      `}</style>
-    </>
+    <LBHCheckboxes
+      name={name}
+      fieldset={{ legend: legend }}
+      items={checkboxItems}
+      onChange={onValueChange}
+      required={required}
+    />
   );
 };
 
@@ -99,7 +59,7 @@ Checkboxes.propTypes = {
   name: PropTypes.string.isRequired,
   legend: PropTypes.node,
   checkboxes: PropTypes.arrayOf(
-    PropTypes.exact({
+    PropTypes.shape({
       label: PropTypes.string.isRequired,
       value: PropTypes.string.isRequired
     }).isRequired
