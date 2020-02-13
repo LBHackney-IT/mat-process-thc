@@ -9,7 +9,7 @@ import {
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
+import { TextArea, TextAreaProps } from "../../components/TextArea";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
@@ -179,16 +179,17 @@ const step = {
           props: {
             label: {
               value: "Add note about garden if necessary."
-            } as { id?: string; value: React.ReactNode },
-            name: "garden-notes"
-          },
+            },
+            name: "garden-notes",
+            includeCheckbox: true
+          } as TextAreaProps,
           renderWhen(stepValues: {
             "has-garden"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
             return stepValues["has-garden"] === "yes";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "property"

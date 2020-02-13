@@ -8,7 +8,7 @@ import {
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
+import { TextArea, TextAreaProps } from "../../components/TextArea";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
@@ -107,9 +107,10 @@ const step = {
           props: {
             label: {
               value: "Add note about door mats / potted plants if necessary."
-            } as { id?: string; value: React.ReactNode },
-            name: "communal-areas-notes"
-          },
+            },
+            name: "communal-areas-notes",
+            includeCheckbox: true
+          } as TextAreaProps,
           renderWhen(stepValues: {
             "has-left-combustible-items"?: ComponentValue<
               ProcessDatabaseSchema,
@@ -118,8 +119,8 @@ const step = {
           }): boolean {
             return stepValues["has-left-combustible-items"] === "yes";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "property"

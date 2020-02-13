@@ -8,7 +8,7 @@ import {
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
+import { TextArea, TextAreaProps } from "../../components/TextArea";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
@@ -67,9 +67,10 @@ const step = {
           props: {
             label: {
               value: "Add note about access if necessary."
-            } as { id?: string; value: React.ReactNode },
-            name: "room-entry-notes"
-          },
+            },
+            name: "room-entry-notes",
+            includeCheckbox: true
+          } as TextAreaProps,
           renderWhen(stepValues: {
             "can-enter-all-rooms"?: ComponentValue<
               ProcessDatabaseSchema,
@@ -78,8 +79,8 @@ const step = {
           }): boolean {
             return stepValues["can-enter-all-rooms"] === "no";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "property"

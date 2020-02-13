@@ -1,15 +1,16 @@
 import React from "react";
 import {
-  DynamicComponentControlledProps,
-  DynamicComponent
+  DynamicComponent,
+  DynamicComponentControlledProps
 } from "remultiform/component-wrapper";
-
 import PropTypes from "../helpers/PropTypes";
-
 import { Details } from "./Details";
 import { TextArea } from "./TextArea";
 
-type Props = DynamicComponentControlledProps<string> & {
+export type TextAreaDetailsProps = DynamicComponentControlledProps<{
+  value: string;
+  isPostVisitAction: boolean;
+}> & {
   summary: React.ReactNode;
   name: string;
   rows?: number;
@@ -19,9 +20,10 @@ type Props = DynamicComponentControlledProps<string> & {
   };
   contentBeforeTextArea?: React.ReactNode;
   contentAfterTextArea?: React.ReactNode;
+  includeCheckbox?: boolean;
 };
 
-export const TextAreaDetails: React.FunctionComponent<Props> = props => {
+export const TextAreaDetails: React.FunctionComponent<TextAreaDetailsProps> = props => {
   const {
     summary,
     name,
@@ -29,6 +31,7 @@ export const TextAreaDetails: React.FunctionComponent<Props> = props => {
     label,
     contentBeforeTextArea,
     contentAfterTextArea,
+    includeCheckbox,
     value,
     onValueChange,
     required,
@@ -51,6 +54,7 @@ export const TextAreaDetails: React.FunctionComponent<Props> = props => {
         onValueChange={onValueChange}
         required={required}
         disabled={disabled}
+        includeCheckbox={includeCheckbox}
       />
       {contentAfterTextArea}
     </Details>
@@ -58,7 +62,12 @@ export const TextAreaDetails: React.FunctionComponent<Props> = props => {
 };
 
 TextAreaDetails.propTypes = {
-  ...DynamicComponent.controlledPropTypes(PropTypes.string.isRequired),
+  ...DynamicComponent.controlledPropTypes(
+    PropTypes.exact({
+      value: PropTypes.string.isRequired,
+      isPostVisitAction: PropTypes.bool.isRequired
+    }).isRequired
+  ),
   summary: PropTypes.node.isRequired,
   name: PropTypes.string.isRequired,
   rows: PropTypes.number,
@@ -67,5 +76,6 @@ TextAreaDetails.propTypes = {
     value: PropTypes.node.isRequired
   }).isRequired,
   contentBeforeTextArea: PropTypes.node,
-  contentAfterTextArea: PropTypes.node
+  contentAfterTextArea: PropTypes.node,
+  includeCheckbox: PropTypes.bool
 };

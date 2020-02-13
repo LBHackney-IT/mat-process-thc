@@ -16,7 +16,10 @@ type ResidentDatabaseSchema = NamedSchema<
       value: {
         type: string;
         images: string[];
-        notes: string;
+        notes: {
+          value: string;
+          isPostVisitAction: boolean;
+        };
       };
     };
 
@@ -25,7 +28,10 @@ type ResidentDatabaseSchema = NamedSchema<
       value: {
         type: string;
         images: string[];
-        notes: string;
+        notes: {
+          value: string;
+          isPostVisitAction: boolean;
+        };
       };
     };
 
@@ -34,7 +40,10 @@ type ResidentDatabaseSchema = NamedSchema<
       value: {
         isWilling: string;
         images: string[];
-        notes: string;
+        notes: {
+          value: string;
+          isPostVisitAction: boolean;
+        };
       };
     };
 
@@ -46,7 +55,10 @@ type ResidentDatabaseSchema = NamedSchema<
         mobileNumber: string;
         otherNumber: string;
         email: string;
-        address: string;
+        address: {
+          value: string;
+          isPostVisitAction: boolean;
+        };
       };
     };
 
@@ -61,7 +73,10 @@ type ResidentDatabaseSchema = NamedSchema<
         phoneNumber: string;
         relationship: string;
         address: string;
-        notes: string;
+        notes: {
+          value: string;
+          isPostVisitAction: boolean;
+        };
       };
     };
 

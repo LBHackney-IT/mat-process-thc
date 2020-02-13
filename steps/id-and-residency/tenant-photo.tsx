@@ -19,6 +19,7 @@ import keyFromSlug from "../../helpers/keyFromSlug";
 import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import yesNoRadios from "../../helpers/yesNoRadios";
+import { Note } from "../../storage/ProcessDatabaseSchema";
 import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
 import Storage from "../../storage/Storage";
 import PageSlugs from "../PageSlugs";
@@ -105,8 +106,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
           }): boolean {
             return stepValues["tenant-photo-willing"] === "no";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ResidentDatabaseSchema,
             "photo"

@@ -26,24 +26,36 @@ type ProcessDatabaseSchema = NamedSchema<
         };
         rooms: {
           canEnterAll: string;
-          notes: string;
+          notes: {
+            value: string;
+            isPostVisitAction?: boolean;
+          };
         };
         laminatedFlooring: {
           hasLaminatedFlooring: string;
           hasPermission: string;
           images: string[];
-          notes: string;
+          notes: {
+            value: string;
+            isPostVisitAction?: boolean;
+          };
         };
         structuralChanges: {
           hasStructuralChanges: string;
           changesAuthorised: string;
           images: string[];
-          notes: string;
+          notes: {
+            value: string;
+            isPostVisitAction?: boolean;
+          };
         };
         damage: {
           hasDamage: string;
           images: string[];
-          notes: string;
+          notes: {
+            value: string;
+            isPostVisitAction?: boolean;
+          };
         };
         repairs: {
           needsRepairs: string;
@@ -53,66 +65,102 @@ type ProcessDatabaseSchema = NamedSchema<
         roof: {
           hasAccess: string;
           itemsStoredOnRoof: string;
-          notes: string;
+          notes: {
+            value: string;
+            isPostVisitAction?: boolean;
+          };
         };
         loft: {
           hasAccess: string;
           itemsStored: string;
-          notes: string;
+          notes: {
+            value: string;
+            isPostVisitAction?: boolean;
+          };
         };
         garden: {
           hasGarden: string;
           type: string;
           isMaintained: string;
           images: string[];
-          notes: string;
+          notes: {
+            value: string;
+            isPostVisitAction?: boolean;
+          };
         };
         storingMaterials: {
           isStoringMaterials: string;
           furtherActionRequired: string;
-          notes: string;
+          notes: {
+            value: string;
+            isPostVisitAction?: boolean;
+          };
         };
         fireExit: {
           hasFireExit: string;
           isAccessible: string;
-          notes: string;
+          notes: {
+            value: string;
+            isPostVisitAction?: boolean;
+          };
         };
         smokeAlarm: {
           hasSmokeAlarm: string;
           isWorking: string;
-          notes: string;
+          notes: {
+            value: string;
+            isPostVisitAction?: boolean;
+          };
         };
         metalGates: {
           hasMetalGates: string;
           combustibleItemsBehind: string;
           furtherActionRequired: string;
           images: string[];
-          notes: string;
+          notes: {
+            value: string;
+            isPostVisitAction?: boolean;
+          };
         };
         doorMats: {
           hasPlaced: string;
           furtherActionRequired: string;
-          notes: string;
+          notes: {
+            value: string;
+            isPostVisitAction?: boolean;
+          };
         };
         communalAreas: {
           hasLeftCombustibleItems: string;
           furtherActionRequired: string;
-          notes: string;
+          notes: {
+            value: string;
+            isPostVisitAction?: boolean;
+          };
         };
         pets: {
           hasPets: string;
           petTypes: string[];
           hasPermission: string;
           images: string[];
-          notes: string;
+          notes: {
+            value: string;
+            isPostVisitAction?: boolean;
+          };
         };
         antisocialBehaviour: {
           tenantUnderstands: string;
-          notes: string;
+          notes: {
+            value: string;
+            isPostVisitAction?: boolean;
+          };
         };
         otherComments: {
           images: string[];
-          notes: string;
+          notes: {
+            value: string;
+            isPostVisitAction?: boolean;
+          };
         };
       };
     };
@@ -121,7 +169,10 @@ type ProcessDatabaseSchema = NamedSchema<
       key: ProcessRef;
       value: {
         value: string;
-        notes: string;
+        notes: {
+          value: string;
+          isPostVisitAction?: boolean;
+        };
       };
     };
 
@@ -129,7 +180,10 @@ type ProcessDatabaseSchema = NamedSchema<
       key: ProcessRef;
       value: {
         value: string;
-        notes: string;
+        notes: {
+          value: string;
+          isPostVisitAction?: boolean;
+        };
       };
     };
 
@@ -145,26 +199,44 @@ type ProcessDatabaseSchema = NamedSchema<
           images: string[];
         };
         houseMovingSchemes: {
-          notes: string;
+          notes: {
+            value: string;
+            isPostVisitAction?: boolean;
+          };
         };
         memberChanges: {
-          notes: string;
+          notes: {
+            value: string;
+            isPostVisitAction?: boolean;
+          };
         };
         rentArrears: {
           type: string;
-          notes: string;
+          notes: {
+            value: string;
+            isPostVisitAction?: boolean;
+          };
         };
         housingBenefits: {
           hasApplied: string;
-          notes: string;
+          notes: {
+            value: string;
+            isPostVisitAction?: boolean;
+          };
         };
         incomeOfficer: {
           wantsToContact: string;
-          notes: string;
+          notes: {
+            value: string;
+            isPostVisitAction?: boolean;
+          };
         };
         otherProperty: {
           hasOtherProperty: string;
-          notes: string;
+          notes: {
+            value: string;
+            isPostVisitAction?: boolean;
+          };
         };
       };
     };
@@ -173,7 +245,10 @@ type ProcessDatabaseSchema = NamedSchema<
       key: ProcessRef;
       value: {
         value: string;
-        notes: string;
+        notes: {
+          value: string;
+          isPostVisitAction?: boolean;
+        };
       };
     };
 
@@ -183,7 +258,10 @@ type ProcessDatabaseSchema = NamedSchema<
         value: string;
         who: string[];
         moreInfo: string[];
-        notes: string;
+        notes: {
+          value: string;
+          isPostVisitAction?: boolean;
+        };
       };
     };
 
@@ -195,20 +273,32 @@ type ProcessDatabaseSchema = NamedSchema<
         pipOrDLA: string;
         whoPIP: string[];
         whoDLA: string[];
-        notes: string;
+        notes: {
+          value: string;
+          isPostVisitAction?: boolean;
+        };
       };
     };
 
     supportNeeds: {
       key: ProcessRef;
       value: {
-        residentSustainmentNotes: string;
-        befriendingNotes: string;
-        adultSafeguardingNotes: string;
-        childrenYoungPeopleSafeguardingNotes: string;
-        domesticSexualViolenceNotes: string;
-        mentalHealth18To65Notes: string;
-        mentalHealthOver65Notes: string;
+        residentSustainmentNotes: {
+          value: string;
+          isPostVisitAction?: boolean;
+        };
+        befriendingNotes: { value: string; isPostVisitAction?: boolean };
+        adultSafeguardingNotes: { value: string; isPostVisitAction?: boolean };
+        childrenYoungPeopleSafeguardingNotes: {
+          value: string;
+          isPostVisitAction?: boolean;
+        };
+        domesticSexualViolenceNotes: {
+          value: string;
+          isPostVisitAction?: boolean;
+        };
+        mentalHealth18To65Notes: { value: string; isPostVisitAction?: boolean };
+        mentalHealthOver65Notes: { value: string; isPostVisitAction?: boolean };
       };
     };
   }
