@@ -45,20 +45,6 @@ const TenantsSelect: React.FunctionComponent<Omit<
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenantsPresent"> = {
   title: PageTitles.PresentForCheck,
   heading: "Tenants present",
-  review: {
-    rows: [
-      {
-        label: "Tenants present",
-        values: {
-          "tenants-present": {
-            renderValue(tenants: string[]): React.ReactNode {
-              return tenants.join(", ");
-            }
-          }
-        }
-      }
-    ]
-  },
   step: {
     slug: PageSlugs.PresentForCheck,
     nextSlug: PageSlugs.Verify,
