@@ -14,7 +14,10 @@ import {
 
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
-import { TextArea } from "../../components/TextArea";
+import {
+  TextAreaWithCheckbox,
+  TextAreaWithCheckboxProps
+} from "../../components/TextAreaWithCheckbox";
 
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
@@ -87,16 +90,17 @@ const step = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "other-comments-notes",
-          Component: TextArea,
+          Component: TextAreaWithCheckbox,
           props: {
             label: {
               value:
                 "Add notes about any other comments or points to investigate for the property"
-            } as { id?: string; value: React.ReactNode },
-            name: "other-comments-notes"
-          },
-          defaultValue: "",
-          emptyValue: "",
+            },
+            name: "other-comments-notes",
+            includeCheckbox: true
+          } as TextAreaWithCheckboxProps,
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "property"

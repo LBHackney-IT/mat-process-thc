@@ -10,7 +10,10 @@ import {
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
+import {
+  TextAreaWithCheckbox,
+  TextAreaWithCheckboxProps
+} from "../../components/TextAreaWithCheckbox";
 
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
@@ -175,20 +178,21 @@ const step = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "garden-notes",
-          Component: TextArea,
+          Component: TextAreaWithCheckbox,
           props: {
             label: {
               value: "Add note about upkeep of garden if necessary."
-            } as { id?: string; value: React.ReactNode },
-            name: "garden-notes"
-          },
+            },
+            name: "garden-notes",
+            includeCheckbox: true
+          } as TextAreaWithCheckboxProps,
           renderWhen(stepValues: {
             "is-maintained"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
             return stepValues["is-maintained"] === "yes";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "property"

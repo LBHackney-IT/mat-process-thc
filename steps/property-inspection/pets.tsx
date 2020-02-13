@@ -11,7 +11,10 @@ import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
+import {
+  TextAreaWithCheckbox,
+  TextAreaWithCheckboxProps
+} from "../../components/TextAreaWithCheckbox";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
@@ -208,20 +211,21 @@ const step = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "pets-notes",
-          Component: TextArea,
+          Component: TextAreaWithCheckbox,
           props: {
             label: {
               value: "Add note about pets if necessary."
-            } as { id?: string; value: React.ReactNode },
-            name: "pets-notes"
-          },
+            },
+            name: "pets-notes",
+            includeCheckbox: true
+          } as TextAreaWithCheckboxProps,
           renderWhen(stepValues: {
             "has-pets"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
             return stepValues["has-pets"] === "yes";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "property"

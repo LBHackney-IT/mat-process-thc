@@ -10,7 +10,10 @@ import {
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
+import {
+  TextAreaWithCheckbox,
+  TextAreaWithCheckboxProps
+} from "../../components/TextAreaWithCheckbox";
 
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
@@ -97,21 +100,22 @@ const step = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "damage-notes",
-          Component: TextArea,
+          Component: TextAreaWithCheckbox,
           props: {
             label: {
               value:
                 "Add note about damage including how it was caused and location in property."
-            } as { id?: string; value: React.ReactNode },
-            name: "damage-notes"
-          },
+            },
+            name: "damage-notes",
+            includeCheckbox: true
+          } as TextAreaWithCheckboxProps,
           renderWhen(stepValues: {
             "has-damage"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
             return stepValues["has-damage"] === "yes";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "property"

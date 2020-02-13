@@ -9,7 +9,10 @@ import {
 
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
+import {
+  TextAreaWithCheckbox,
+  TextAreaWithCheckboxProps
+} from "../../components/TextAreaWithCheckbox";
 
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
@@ -108,13 +111,14 @@ const step = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "loft-notes",
-          Component: TextArea,
+          Component: TextAreaWithCheckbox,
           props: {
             label: {
               value: "Add note about loft space if necessary."
-            } as { id?: string; value: React.ReactNode },
-            name: "loft-notes"
-          },
+            },
+            name: "loft-notes",
+            includeCheckbox: true
+          } as TextAreaWithCheckboxProps,
           renderWhen(stepValues: {
             "has-access-to-loft"?: ComponentValue<
               ProcessDatabaseSchema,
@@ -123,8 +127,8 @@ const step = {
           }): boolean {
             return stepValues["has-access-to-loft"] === "yes";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "property"

@@ -10,7 +10,10 @@ import {
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
+import {
+  TextAreaWithCheckbox,
+  TextAreaWithCheckboxProps
+} from "../../components/TextAreaWithCheckbox";
 
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
@@ -143,14 +146,15 @@ const step = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "structural-changes-notes",
-          Component: TextArea,
+          Component: TextAreaWithCheckbox,
           props: {
             label: {
               value:
                 "Add note about structural changes including when it was done and location in property."
-            } as { id?: string; value: React.ReactNode },
-            name: "structural-changes-notes"
-          },
+            },
+            name: "structural-changes-notes",
+            includeCheckbox: true
+          } as TextAreaWithCheckboxProps,
           renderWhen(stepValues: {
             "has-structural-changes"?: ComponentValue<
               ProcessDatabaseSchema,
@@ -159,8 +163,8 @@ const step = {
           }): boolean {
             return stepValues["has-structural-changes"] === "yes";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "property"

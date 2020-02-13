@@ -7,7 +7,7 @@ import {
 } from "remultiform/component-wrapper";
 
 import { makeSubmit } from "../../components/makeSubmit";
-import { TextArea } from "../../components/TextArea";
+import { TextAreaWithCheckbox } from "../../components/TextAreaWithCheckbox";
 import { TextInput } from "../../components/TextInput";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import nextSlugWithId from "../../helpers/nextSlugWithId";
@@ -187,7 +187,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "next-of-kin-address",
-          Component: TextArea,
+          Component: TextAreaWithCheckbox,
           props: {
             name: "next-of-kin-address",
             label: {
@@ -195,8 +195,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
             } as { id?: string; value: React.ReactNode },
             rows: 4 as number | undefined
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ResidentDatabaseSchema,
             "nextOfKin"

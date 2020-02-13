@@ -10,7 +10,10 @@ import {
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
+import {
+  TextAreaWithCheckbox,
+  TextAreaWithCheckboxProps
+} from "../../components/TextAreaWithCheckbox";
 
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
@@ -142,13 +145,14 @@ const step = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "laminated-flooring-notes",
-          Component: TextArea,
+          Component: TextAreaWithCheckbox,
           props: {
             label: {
               value: "Add note about laminated flooring if necessary."
-            } as { id?: string; value: React.ReactNode },
-            name: "laminated-flooring-notes"
-          },
+            },
+            name: "laminated-flooring-notes",
+            includeCheckbox: true
+          } as TextAreaWithCheckboxProps,
           renderWhen(stepValues: {
             "has-laminated-flooring"?: ComponentValue<
               ProcessDatabaseSchema,
@@ -157,8 +161,8 @@ const step = {
           }): boolean {
             return stepValues["has-laminated-flooring"] === "yes";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "property"

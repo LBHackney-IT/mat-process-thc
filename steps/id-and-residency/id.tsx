@@ -9,7 +9,10 @@ import {
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextAreaDetails } from "../../components/TextAreaDetails";
+import {
+  TextAreaDetails,
+  Props as TextAreaDetailsProps
+} from "../../components/TextAreaDetails";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
@@ -128,14 +131,12 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
           Component: TextAreaDetails,
           props: {
             summary: "Add note about ID if necessary" as React.ReactNode,
-            label: { value: "Notes" } as {
-              id?: string;
-              value: React.ReactNode;
-            },
-            name: "id-notes"
-          },
-          defaultValue: "",
-          emptyValue: "",
+            label: { value: "Notes" },
+            name: "id-notes",
+            includeCheckbox: true
+          } as TextAreaDetailsProps,
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<ResidentDatabaseSchema, "id">({
             storeName: "id",
             key: keyFromSlug(),

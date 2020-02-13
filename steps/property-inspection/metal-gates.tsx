@@ -10,7 +10,10 @@ import {
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
+import {
+  TextAreaWithCheckbox,
+  TextAreaWithCheckboxProps
+} from "../../components/TextAreaWithCheckbox";
 
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
@@ -183,14 +186,15 @@ const step = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "metal-gates-notes",
-          Component: TextArea,
+          Component: TextAreaWithCheckbox,
           props: {
             label: {
               value:
                 "Add note about metal gates / combustible items if necessary."
-            } as { id?: string; value: React.ReactNode },
-            name: "metal-gates-notes"
-          },
+            },
+            name: "metal-gates-notes",
+            includeCheckbox: true
+          } as TextAreaWithCheckboxProps,
           renderWhen(stepValues: {
             "has-metal-gates"?: ComponentValue<
               ProcessDatabaseSchema,
@@ -199,8 +203,8 @@ const step = {
           }): boolean {
             return stepValues["has-metal-gates"] === "yes";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "property"

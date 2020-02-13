@@ -9,7 +9,10 @@ import {
 
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
+import {
+  TextAreaWithCheckbox,
+  TextAreaWithCheckboxProps
+} from "../../components/TextAreaWithCheckbox";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 
@@ -65,14 +68,15 @@ const step = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "other-property-notes",
-          Component: TextArea,
+          Component: TextAreaWithCheckbox,
           props: {
             label: {
               value:
                 "Provide details: with / without mortgage, address of property"
-            } as { id?: string; value: React.ReactNode },
-            name: "other-property-notes"
-          },
+            },
+            name: "other-property-notes",
+            includeCheckbox: true
+          } as TextAreaWithCheckboxProps,
           renderWhen(stepValues: {
             "has-other-property"?: ComponentValue<
               ProcessDatabaseSchema,
@@ -81,8 +85,8 @@ const step = {
           }): boolean {
             return stepValues["has-other-property"] === "yes";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "household"

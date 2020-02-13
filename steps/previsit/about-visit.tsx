@@ -9,7 +9,7 @@ import {
 
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
+import { TextAreaWithCheckbox } from "../../components/TextAreaWithCheckbox";
 
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
@@ -64,7 +64,7 @@ const step = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "unannounced-visit-notes",
-          Component: TextArea,
+          Component: TextAreaWithCheckbox,
           props: {
             label: {
               value: "Explain why this visit was pre-arranged."
@@ -79,8 +79,8 @@ const step = {
           }): boolean {
             return stepValues["unannounced-visit"] === "no";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "isUnannouncedVisit"
@@ -128,7 +128,7 @@ const step = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "inside-property-notes",
-          Component: TextArea,
+          Component: TextAreaWithCheckbox,
           props: {
             label: {
               value:
@@ -144,8 +144,8 @@ const step = {
           }): boolean {
             return stepValues["inside-property"] === "no";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "isVisitInside"

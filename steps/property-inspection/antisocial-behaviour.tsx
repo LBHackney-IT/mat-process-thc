@@ -15,7 +15,10 @@ import {
 
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
+import {
+  TextAreaWithCheckbox,
+  TextAreaWithCheckboxProps
+} from "../../components/TextAreaWithCheckbox";
 
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
@@ -116,7 +119,7 @@ const step = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "antisocial-behaviour-notes",
-          Component: TextArea,
+          Component: TextAreaWithCheckbox,
           props: {
             label: {
               value: (
@@ -125,11 +128,12 @@ const step = {
                   <b>against</b> tenant if necessary.
                 </>
               )
-            } as { id?: string; value: React.ReactNode },
-            name: "antisocial-behaviour-notes"
-          },
-          defaultValue: "",
-          emptyValue: "",
+            },
+            name: "antisocial-behaviour-notes",
+            includeCheckbox: true
+          } as TextAreaWithCheckboxProps,
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "property"

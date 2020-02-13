@@ -7,9 +7,12 @@ import {
 import PropTypes from "../helpers/PropTypes";
 
 import { Details } from "./Details";
-import { TextArea } from "./TextArea";
+import { TextAreaWithCheckbox } from "./TextAreaWithCheckbox";
 
-type Props = DynamicComponentControlledProps<string> & {
+export type Props = DynamicComponentControlledProps<{
+  value: string;
+  isPostVisitAction: boolean;
+}> & {
   summary: React.ReactNode;
   name: string;
   rows?: number;
@@ -19,6 +22,7 @@ type Props = DynamicComponentControlledProps<string> & {
   };
   contentBeforeTextArea?: React.ReactNode;
   contentAfterTextArea?: React.ReactNode;
+  includeCheckbox?: boolean;
 };
 
 export const TextAreaDetails: React.FunctionComponent<Props> = props => {
@@ -29,6 +33,7 @@ export const TextAreaDetails: React.FunctionComponent<Props> = props => {
     label,
     contentBeforeTextArea,
     contentAfterTextArea,
+    includeCheckbox,
     value,
     onValueChange,
     required,
@@ -40,7 +45,7 @@ export const TextAreaDetails: React.FunctionComponent<Props> = props => {
   return (
     <Details summary={{ id: summaryId, value: summary }}>
       {contentBeforeTextArea}
-      <TextArea
+      <TextAreaWithCheckbox
         label={{
           id: label && label.id ? label.id : `${name}-label`,
           value: label && label.value
@@ -51,6 +56,7 @@ export const TextAreaDetails: React.FunctionComponent<Props> = props => {
         onValueChange={onValueChange}
         required={required}
         disabled={disabled}
+        includeCheckbox={includeCheckbox}
       />
       {contentAfterTextArea}
     </Details>
@@ -58,7 +64,12 @@ export const TextAreaDetails: React.FunctionComponent<Props> = props => {
 };
 
 TextAreaDetails.propTypes = {
-  ...DynamicComponent.controlledPropTypes(PropTypes.string.isRequired),
+  ...DynamicComponent.controlledPropTypes(
+    PropTypes.exact({
+      value: PropTypes.string.isRequired,
+      isPostVisitAction: PropTypes.bool.isRequired
+    }).isRequired
+  ),
   summary: PropTypes.node.isRequired,
   name: PropTypes.string.isRequired,
   rows: PropTypes.number,
@@ -67,5 +78,6 @@ TextAreaDetails.propTypes = {
     value: PropTypes.node.isRequired
   }).isRequired,
   contentBeforeTextArea: PropTypes.node,
-  contentAfterTextArea: PropTypes.node
+  contentAfterTextArea: PropTypes.node,
+  includeCheckbox: PropTypes.bool
 };

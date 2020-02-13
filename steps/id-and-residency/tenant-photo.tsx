@@ -15,7 +15,7 @@ import {
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
+import { TextAreaWithCheckbox } from "../../components/TextAreaWithCheckbox";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
@@ -92,7 +92,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "tenant-photo-willing-notes",
-          Component: TextArea,
+          Component: TextAreaWithCheckbox,
           props: {
             label: {
               value: "Explain why."
@@ -107,8 +107,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
           }): boolean {
             return stepValues["tenant-photo-willing"] === "no";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ResidentDatabaseSchema,
             "photo"
