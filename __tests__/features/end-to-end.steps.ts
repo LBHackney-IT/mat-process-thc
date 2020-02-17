@@ -2,8 +2,6 @@
 import { defineFeature, loadFeature } from "jest-cucumber";
 import { join } from "path";
 import { until } from "selenium-webdriver";
-
-import Given from "../helpers/steps/Given";
 import Expect from "../helpers/Expect";
 
 jest.setTimeout(120 * 1000);
@@ -203,9 +201,7 @@ const processData = {
 };
 
 defineFeature(loadFeature("./end-to-end.feature"), test => {
-  test("Performing a check while online", ({ defineStep, when, then }) => {
-    Given.iAmOnline(defineStep);
-
+  test("Performing a check", ({ when, then }) => {
     when("I complete a process", async () => {
       // Index page
       await browser!.getRelative("");
