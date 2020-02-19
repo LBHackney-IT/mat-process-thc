@@ -8,20 +8,59 @@ import {
 } from "lbh-frontend-react";
 import { NextPage } from "next";
 import NextLink from "next/link";
-import React from "react";
+import React, { useState } from "react";
 
+import getProcessRef from "../helpers/getProcessRef";
 import urlsForRouter from "../helpers/urlsForRouter";
+import useDataValue from "../helpers/useDataValue";
 import useReviewSectionRows from "../helpers/useReviewSectionRows";
 import MainLayout from "../layouts/MainLayout";
 import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 import PageTitles from "../steps/PageTitles";
-import idAndResidencySteps from "../steps/id-and-residency";
+import {
+  idAndResidencyProcessSteps,
+  idAndResidencyResidentSteps
+} from "../steps/id-and-residency";
+import Storage from "../storage/Storage";
+import { ResidentRef } from "../storage/ResidentDatabaseSchema";
 
 const ReviewPage: NextPage = () => {
+  const processRef = getProcessRef();
+  const tenants = useDataValue(
+    Storage.ExternalContext,
+    "residents",
+    processRef,
+    values => (processRef ? values[processRef]?.tenants : undefined)
+  );
+
+  const tenantIds = tenants.result
+    ? tenants.result.map(tenant => tenant.id)
+    : [];
+
+  const [selectedTenantId, setSelectedTenantId] = useState<
+    ResidentRef | undefined
+  >();
+
+  // Long term we want an interface that allows the user to select which tenant
+  // to use, but for now we stick to the first tenant in the list.
+  if (selectedTenantId !== tenantIds[0]) {
+    setSelectedTenantId(tenantIds[0]);
+  }
+
   const sections = [
     {
       heading: "ID, residency, and tenant information",
-      rows: useReviewSectionRows(idAndResidencySteps)
+      rows: [
+        ...useReviewSectionRows(
+          Storage.ProcessContext,
+          idAndResidencyProcessSteps
+        ),
+        ...useReviewSectionRows(
+          Storage.ResidentContext,
+          idAndResidencyResidentSteps,
+          selectedTenantId
+        )
+      ]
     }
   ];
 

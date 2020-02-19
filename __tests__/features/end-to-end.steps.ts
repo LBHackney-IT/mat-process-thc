@@ -2,12 +2,11 @@
 import { defineFeature, loadFeature } from "jest-cucumber";
 import { join } from "path";
 import { until } from "selenium-webdriver";
-
-import Given from "../helpers/steps/Given";
 import Expect from "../helpers/Expect";
 
-jest.setTimeout(60 * 1000);
+jest.setTimeout(120 * 1000);
 
+const presentTenantRef = "b6e72c28-7957-e811-8126-70106faa6a31";
 const imagePath = join(__dirname, "..", "__fixtures__", "image.jpg");
 const processData = {
   property: {
@@ -108,41 +107,7 @@ const processData = {
     value: "no",
     notes: "Visit inside notes"
   },
-  tenantsPresent: ["b6e72c28-7957-e811-8126-70106faa6a31"],
-  id: {
-    type: "valid passport",
-    images: [imagePath],
-    notes: "ID notes"
-  },
-  residency: {
-    type: "bank statement",
-    images: [imagePath],
-    notes: "Residency notes"
-  },
-  tenant: {
-    photo: {
-      isWilling: "yes",
-      images: [imagePath]
-    },
-    nextOfKin: {
-      fullName: "Next of kin name",
-      relationship: "Next of kin relationship",
-      mobileNumber: "0123455789",
-      otherNumber: "9876543210",
-      email: "next@of.kin",
-      address: "1 Next of Kin Road\nKinsville\nNK0 0NK"
-    },
-    carer: {
-      hasCarer: "yes",
-      type: "registered",
-      isLiveIn: "yes",
-      liveInStartDate: { month: 1, year: 2019 },
-      fullName: "Carer name",
-      phoneNumber: "0123455789",
-      relationship: "Carer relationship",
-      notes: "Carer notes"
-    }
-  },
+  tenantsPresent: [presentTenantRef],
   household: {
     documents: {
       images: [imagePath]
@@ -196,13 +161,47 @@ const processData = {
     domesticSexualViolenceNotes: "Domestic sexual violence notes",
     mentalHealth18To65Notes: "Mental health 18 to 65 notes",
     mentalHealthOver65Notes: "Mental health over 65 notes"
+  },
+  residents: {
+    [presentTenantRef]: {
+      id: {
+        type: "valid passport",
+        images: [imagePath],
+        notes: "ID notes"
+      },
+      residency: {
+        type: "bank statement",
+        images: [imagePath],
+        notes: "Residency notes"
+      },
+      photo: {
+        isWilling: "yes",
+        images: [imagePath]
+      },
+      nextOfKin: {
+        fullName: "Next of kin name",
+        relationship: "Next of kin relationship",
+        mobileNumber: "0123455789",
+        otherNumber: "9876543210",
+        email: "next@of.kin",
+        address: "1 Next of Kin Road\nKinsville\nNK0 0NK"
+      },
+      carer: {
+        hasCarer: "yes",
+        type: "registered",
+        isLiveIn: "yes",
+        liveInStartDate: { month: 1, year: 2019 },
+        fullName: "Carer name",
+        phoneNumber: "0123455789",
+        relationship: "Carer relationship",
+        notes: "Carer notes"
+      }
+    }
   }
 };
 
 defineFeature(loadFeature("./end-to-end.feature"), test => {
-  test("Performing a check while online", ({ defineStep, when, then }) => {
-    Given.iAmOnline(defineStep);
-
+  test("Performing a check", ({ when, then }) => {
     when("I complete a process", async () => {
       // Index page
       await browser!.getRelative("");
@@ -274,11 +273,11 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
 
       await browser!.waitForEnabledElement(
-        { css: '[href^="/present-for-check"]' },
+        { css: '[href$="/present-for-check"]' },
         10000
       );
 
-      await browser!.submit({ css: '[href^="/present-for-check"]' });
+      await browser!.submit({ css: '[href$="/present-for-check"]' });
 
       // Present for check page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
@@ -296,104 +295,124 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
+      // Verify tenant details page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/verify");
+
+      await browser!.submit({ css: `[href$="/id/${presentTenantRef}"]` });
+
       // ID page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/id");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `/id/${presentTenantRef}`
+      );
 
       await browser!
         .waitForEnabledElement({
-          id: `id-type-${processData.id.type.replace(/\s/g, "-")}`
+          id: `id-type-${processData.residents[
+            presentTenantRef
+          ].id.type.replace(/\s/g, "-")}`
         })
         .click();
       await browser!
         .waitForEnabledElement({ name: "id-images" })
-        .sendKeys(processData.id.images[0]);
+        .sendKeys(processData.residents[presentTenantRef].id.images[0]);
       await browser!.waitForEnabledElement({ id: "id-notes-summary" }).click();
       await browser!
         .waitForEnabledElement({ name: "id-notes" })
-        .sendKeys(processData.id.notes);
+        .sendKeys(processData.residents[presentTenantRef].id.notes);
 
       await browser!.submit();
 
       // Residency page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/residency");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `/residency/${presentTenantRef}`
+      );
 
       await browser!
         .waitForEnabledElement({
-          id: `residency-proof-type-${processData.residency.type.replace(
-            /\s/g,
-            "-"
-          )}`
+          id: `residency-proof-type-${processData.residents[
+            presentTenantRef
+          ].residency.type.replace(/\s/g, "-")}`
         })
         .click();
       await browser!
         .waitForEnabledElement({ name: "residency-proof-images" })
-        .sendKeys(processData.residency.images[0]);
+        .sendKeys(processData.residents[presentTenantRef].residency.images[0]);
       await browser!
         .waitForEnabledElement({ id: "residency-notes-summary" })
         .click();
       await browser!
         .waitForEnabledElement({ name: "residency-notes" })
-        .sendKeys(processData.residency.notes);
+        .sendKeys(processData.residents[presentTenantRef].residency.notes);
 
       await browser!.submit();
 
       // Tenant photo page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/tenant-photo"
+        `/tenant-photo/${presentTenantRef}`
       );
 
       await browser!
         .waitForEnabledElement({
-          id: `tenant-photo-willing-${processData.tenant.photo.isWilling}`
+          id: `tenant-photo-willing-${processData.residents[presentTenantRef].photo.isWilling}`
         })
         .click();
       await browser!
         .waitForEnabledElement({ name: "tenant-photo" })
-        .sendKeys(processData.tenant.photo.images[0]);
+        .sendKeys(processData.residents[presentTenantRef].photo.images[0]);
 
       await browser!.submit();
 
       // Next of kin page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/next-of-kin");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `/next-of-kin/${presentTenantRef}`
+      );
 
       await browser!
         .waitForEnabledElement({ name: "next-of-kin-full-name" })
-        .sendKeys(processData.tenant.nextOfKin.fullName);
+        .sendKeys(processData.residents[presentTenantRef].nextOfKin.fullName);
       await browser!
         .waitForEnabledElement({
           name: "next-of-kin-relationship"
         })
-        .sendKeys(processData.tenant.nextOfKin.relationship);
+        .sendKeys(
+          processData.residents[presentTenantRef].nextOfKin.relationship
+        );
       await browser!
         .waitForEnabledElement({
           name: "next-of-kin-mobile-number"
         })
-        .sendKeys(processData.tenant.nextOfKin.mobileNumber);
+        .sendKeys(
+          processData.residents[presentTenantRef].nextOfKin.mobileNumber
+        );
       await browser!
         .waitForEnabledElement({
           name: "next-of-kin-other-number"
         })
-        .sendKeys(processData.tenant.nextOfKin.otherNumber);
+        .sendKeys(
+          processData.residents[presentTenantRef].nextOfKin.otherNumber
+        );
       await browser!
         .waitForEnabledElement({ name: "next-of-kin-email" })
-        .sendKeys(processData.tenant.nextOfKin.email);
+        .sendKeys(processData.residents[presentTenantRef].nextOfKin.email);
       await browser!
         .waitForEnabledElement({ name: "next-of-kin-address" })
-        .sendKeys(processData.tenant.nextOfKin.address);
+        .sendKeys(processData.residents[presentTenantRef].nextOfKin.address);
 
       await browser!.submit();
 
       // Carer page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/carer");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `/carer/${presentTenantRef}`
+      );
 
       await browser!
         .waitForEnabledElement({
-          id: `carer-needed-${processData.tenant.carer.hasCarer}`
+          id: `carer-needed-${processData.residents[presentTenantRef].carer.hasCarer}`
         })
         .click();
       await browser!
         .waitForEnabledElement({
-          id: `carer-type-${processData.tenant.carer.type}`
+          id: `carer-type-${processData.residents[presentTenantRef].carer.type}`
         })
         .click();
       await browser!.waitForEnabledElement({ id: "carer-live-in-yes" }).click();
@@ -401,27 +420,40 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         .waitForEnabledElement({
           name: "carer-live-in-start-date-month"
         })
-        .sendKeys(processData.tenant.carer.liveInStartDate.month.toString());
+        .sendKeys(
+          processData.residents[
+            presentTenantRef
+          ].carer.liveInStartDate.month.toString()
+        );
       await browser!
         .waitForEnabledElement({
           name: "carer-live-in-start-date-year"
         })
-        .sendKeys(processData.tenant.carer.liveInStartDate.year.toString());
+        .sendKeys(
+          processData.residents[
+            presentTenantRef
+          ].carer.liveInStartDate.year.toString()
+        );
       await browser!
         .waitForEnabledElement({ name: "carer-full-name" })
-        .sendKeys(processData.tenant.carer.fullName);
+        .sendKeys(processData.residents[presentTenantRef].carer.fullName);
       await browser!
         .waitForEnabledElement({ name: "carer-relationship" })
-        .sendKeys(processData.tenant.carer.relationship);
+        .sendKeys(processData.residents[presentTenantRef].carer.relationship);
       await browser!
         .waitForEnabledElement({ name: "carer-phone-number" })
-        .sendKeys(processData.tenant.carer.phoneNumber);
+        .sendKeys(processData.residents[presentTenantRef].carer.phoneNumber);
       await browser!
         .waitForEnabledElement({ id: "carer-notes-summary" })
         .click();
       await browser!
         .waitForEnabledElement({ name: "carer-notes" })
-        .sendKeys(processData.tenant.carer.notes);
+        .sendKeys(processData.residents[presentTenantRef].carer.notes);
+
+      await browser!.submit();
+
+      // Verify tenant details page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/verify");
 
       await browser!.submit();
 
@@ -429,11 +461,11 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
 
       await browser!.waitForEnabledElement(
-        { css: '[href^="/household"]' },
+        { css: '[href$="/household"]' },
         10000
       );
 
-      await browser!.submit({ css: '[href^="/household"]' });
+      await browser!.submit({ css: '[href$="/household"]' });
 
       // Household page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/household");
@@ -525,9 +557,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       // Sections page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
 
-      await browser!.waitForEnabledElement({ css: '[href^="/rooms"]' }, 10000);
+      await browser!.waitForEnabledElement({ css: '[href$="/rooms"]' }, 10000);
 
-      await browser!.submit({ css: '[href^="/rooms"]' });
+      await browser!.submit({ css: '[href$="/rooms"]' });
 
       // Rooms page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/rooms");
@@ -872,11 +904,11 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
 
       await browser!.waitForEnabledElement(
-        { css: '[href^="/home-check"]' },
+        { css: '[href$="/home-check"]' },
         10000
       );
 
-      await browser!.submit({ css: '[href^="/home-check"]' });
+      await browser!.submit({ css: '[href$="/home-check"]' });
 
       // Home check page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/home-check");
@@ -1011,9 +1043,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       // Sections page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
 
-      await browser!.waitForEnabledElement({ css: '[href^="/review"]' }, 10000);
+      await browser!.waitForEnabledElement({ css: '[href$="/review"]' }, 10000);
 
-      await browser!.submit({ css: '[href^="/review"]' });
+      await browser!.submit({ css: '[href$="/review"]' });
 
       // Review page
       await expect(browser!.getCurrentUrl()).resolves.toContain("/review");

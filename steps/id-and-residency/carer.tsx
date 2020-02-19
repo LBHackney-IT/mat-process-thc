@@ -19,10 +19,11 @@ import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
 import { TextAreaDetails } from "../../components/TextAreaDetails";
 import { TextInput } from "../../components/TextInput";
+import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import yesNoRadios from "../../helpers/yesNoRadios";
-import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import processRef from "../../storage/processRef";
+import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
+import Storage from "../../storage/Storage";
 
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
@@ -45,9 +46,10 @@ const carerTypeRadios = [
   }
 ];
 
-const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
+const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
   title: PageTitles.Carer,
   heading: "Carer",
+  context: Storage.ResidentContext,
   review: {
     rows: [
       {
@@ -80,22 +82,19 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
           },
           "carer-live-in-start-date": {
             renderValue(startDate: {
-              month?: string;
-              year?: string;
+              month?: number;
+              year?: number;
             }): React.ReactNode {
               return startDate.year
                 ? `Since ${
                     startDate.month
                       ? formatDate(
-                          new Date(
-                            parseInt(startDate.year),
-                            parseInt(startDate.month) - 1
-                          ),
+                          new Date(startDate.year, startDate.month - 1),
                           "MMMM yyyy"
                         )
                       : startDate.year
                   }`
-                : undefined;
+                : null;
             }
           }
         }
@@ -134,7 +133,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
   },
   step: {
     slug: PageSlugs.Carer,
-    nextSlug: PageSlugs.Sections,
+    nextSlug: PageSlugs.Verify,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         url: urlObjectForSlug(nextSlug),
@@ -155,12 +154,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "tenant"
+            ResidentDatabaseSchema,
+            "carer"
           >({
-            storeName: "tenant",
-            key: processRef,
-            property: ["carer", "hasCarer"]
+            storeName: "carer",
+            key: keyFromSlug(),
+            property: ["hasCarer"]
           })
         })
       ),
@@ -176,19 +175,19 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
             radios: carerTypeRadios
           },
           renderWhen(stepValues: {
-            "carer-needed"?: ComponentValue<ProcessDatabaseSchema, "tenant">;
+            "carer-needed"?: ComponentValue<ResidentDatabaseSchema, "carer">;
           }): boolean {
             return stepValues["carer-needed"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "tenant"
+            ResidentDatabaseSchema,
+            "carer"
           >({
-            storeName: "tenant",
-            key: processRef,
-            property: ["carer", "type"]
+            storeName: "carer",
+            key: keyFromSlug(),
+            property: ["type"]
           })
         })
       ),
@@ -204,23 +203,23 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
             radios: yesNoRadios
           },
           renderWhen(stepValues: {
-            "carer-needed"?: ComponentValue<ProcessDatabaseSchema, "tenant">;
+            "carer-needed"?: ComponentValue<ResidentDatabaseSchema, "carer">;
           }): boolean {
             return stepValues["carer-needed"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "tenant"
+            ResidentDatabaseSchema,
+            "carer"
           >({
-            storeName: "tenant",
-            key: processRef,
-            property: ["carer", "isLiveIn"]
+            storeName: "carer",
+            key: keyFromSlug(),
+            property: ["isLiveIn"]
           })
         })
       ),
-      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "tenant">(
+      ComponentWrapper.wrapStatic<ResidentDatabaseSchema, "carer">(
         new StaticComponent({
           key: "carer-live-in-start-date-heading",
           Component: FieldsetLegend,
@@ -228,7 +227,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
             children: "When did the carer start living in the property?"
           },
           renderWhen(stepValues: {
-            "carer-live-in"?: ComponentValue<ProcessDatabaseSchema, "tenant">;
+            "carer-live-in"?: ComponentValue<ResidentDatabaseSchema, "carer">;
           }): boolean {
             return stepValues["carer-live-in"] === "yes";
           }
@@ -242,23 +241,23 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
             name: "carer-live-in-start-date"
           },
           renderWhen(stepValues: {
-            "carer-live-in"?: ComponentValue<ProcessDatabaseSchema, "tenant">;
+            "carer-live-in"?: ComponentValue<ResidentDatabaseSchema, "carer">;
           }): boolean {
             return stepValues["carer-live-in"] === "yes";
           },
           defaultValue: {},
           emptyValue: {} as { month?: number; year?: number },
           databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "tenant"
+            ResidentDatabaseSchema,
+            "carer"
           >({
-            storeName: "tenant",
-            key: processRef,
-            property: ["carer", "liveInStartDate"]
+            storeName: "carer",
+            key: keyFromSlug(),
+            property: ["liveInStartDate"]
           })
         })
       ),
-      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "tenant">(
+      ComponentWrapper.wrapStatic<ResidentDatabaseSchema, "carer">(
         new StaticComponent({
           key: "carer-details-heading",
           Component: Heading,
@@ -267,7 +266,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
             children: questions["carer-details"]
           },
           renderWhen(stepValues: {
-            "carer-needed"?: ComponentValue<ProcessDatabaseSchema, "tenant">;
+            "carer-needed"?: ComponentValue<ResidentDatabaseSchema, "carer">;
           }): boolean {
             return stepValues["carer-needed"] === "yes";
           }
@@ -282,19 +281,19 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
             label: "Full name"
           },
           renderWhen(stepValues: {
-            "carer-needed"?: ComponentValue<ProcessDatabaseSchema, "tenant">;
+            "carer-needed"?: ComponentValue<ResidentDatabaseSchema, "carer">;
           }): boolean {
             return stepValues["carer-needed"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "tenant"
+            ResidentDatabaseSchema,
+            "carer"
           >({
-            storeName: "tenant",
-            key: processRef,
-            property: ["carer", "fullName"]
+            storeName: "carer",
+            key: keyFromSlug(),
+            property: ["fullName"]
           })
         })
       ),
@@ -307,19 +306,19 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
             label: "Relationship to tenant or 'Not related'"
           },
           renderWhen(stepValues: {
-            "carer-needed"?: ComponentValue<ProcessDatabaseSchema, "tenant">;
+            "carer-needed"?: ComponentValue<ResidentDatabaseSchema, "carer">;
           }): boolean {
             return stepValues["carer-needed"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "tenant"
+            ResidentDatabaseSchema,
+            "carer"
           >({
-            storeName: "tenant",
-            key: processRef,
-            property: ["carer", "relationship"]
+            storeName: "carer",
+            key: keyFromSlug(),
+            property: ["relationship"]
           })
         })
       ),
@@ -332,19 +331,19 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
             label: "Phone number"
           },
           renderWhen(stepValues: {
-            "carer-needed"?: ComponentValue<ProcessDatabaseSchema, "tenant">;
+            "carer-needed"?: ComponentValue<ResidentDatabaseSchema, "carer">;
           }): boolean {
             return stepValues["carer-needed"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "tenant"
+            ResidentDatabaseSchema,
+            "carer"
           >({
-            storeName: "tenant",
-            key: processRef,
-            property: ["carer", "phoneNumber"]
+            storeName: "carer",
+            key: keyFromSlug(),
+            property: ["phoneNumber"]
           })
         })
       ),
@@ -360,19 +359,19 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
             rows: 4 as number | undefined
           },
           renderWhen(stepValues: {
-            "carer-live-in"?: ComponentValue<ProcessDatabaseSchema, "tenant">;
+            "carer-live-in"?: ComponentValue<ResidentDatabaseSchema, "carer">;
           }): boolean {
             return stepValues["carer-live-in"] === "no";
           },
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "tenant"
+            ResidentDatabaseSchema,
+            "carer"
           >({
-            storeName: "tenant",
-            key: processRef,
-            property: ["carer", "address"]
+            storeName: "carer",
+            key: keyFromSlug(),
+            property: ["address"]
           })
         })
       ),
@@ -389,19 +388,19 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
             name: "carer-notes"
           },
           renderWhen(stepValues: {
-            "carer-needed"?: ComponentValue<ProcessDatabaseSchema, "tenant">;
+            "carer-needed"?: ComponentValue<ResidentDatabaseSchema, "carer">;
           }): boolean {
             return stepValues["carer-needed"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "tenant"
+            ResidentDatabaseSchema,
+            "carer"
           >({
-            storeName: "tenant",
-            key: processRef,
-            property: ["carer", "notes"]
+            storeName: "carer",
+            key: keyFromSlug(),
+            property: ["notes"]
           })
         })
       )

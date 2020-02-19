@@ -11,6 +11,8 @@ const testAccessibility = (
   pageTitle = pageName
 ): void => {
   test(`${pageName} page is accessible`, ({ defineStep, then }) => {
+    When.iStartTheProcess(defineStep);
+    When.iWaitForTheDataToBeFetched(defineStep);
     When.iVisitX(defineStep);
 
     Then.thePageShouldBeAccessible(defineStep);
@@ -24,9 +26,48 @@ const testAccessibility = (
 };
 
 defineFeature(loadFeature("./accessibility.feature"), test => {
-  testAccessibility(test, "Index", "Loading");
-  testAccessibility(test, "Loading");
+  test("Index page is accessible", ({ defineStep, then }) => {
+    When.iVisitX(defineStep);
+
+    Then.thePageShouldBeAccessible(defineStep);
+
+    then("the page should have a descriptive title", async () => {
+      await expect(browser!.getTitle()).resolves.toEqual(
+        "Loading - THC - Manage a tenancy"
+      );
+    });
+  });
+
+  test("Loading page is accessible", ({ defineStep, then }) => {
+    When.iVisitX(defineStep);
+
+    Then.thePageShouldBeAccessible(defineStep);
+
+    then("the page should have a descriptive title", async () => {
+      await expect(browser!.getTitle()).resolves.toEqual(
+        "Loading - THC - Manage a tenancy"
+      );
+    });
+  });
+
+  test("Loading page is accessible when it's finished loading", ({
+    defineStep,
+    then
+  }) => {
+    When.iVisitX(defineStep);
+    When.iWaitForTheDataToBeFetched(defineStep);
+
+    Then.thePageShouldBeAccessible(defineStep);
+
+    then("the page should have a descriptive title", async () => {
+      await expect(browser!.getTitle()).resolves.toEqual(
+        "Loading - THC - Manage a tenancy"
+      );
+    });
+  });
+
   testAccessibility(test, "Sections");
+  testAccessibility(test, "Verify tenant details");
   testAccessibility(test, "Outside");
   testAccessibility(test, "Start");
   testAccessibility(test, "About visit");

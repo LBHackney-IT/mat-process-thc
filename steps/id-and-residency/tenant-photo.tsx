@@ -16,17 +16,20 @@ import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
+import keyFromSlug from "../../helpers/keyFromSlug";
+import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import yesNoRadios from "../../helpers/yesNoRadios";
-import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import processRef from "../../storage/processRef";
+import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
+import Storage from "../../storage/Storage";
 
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
+const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
   title: PageTitles.TenantPhoto,
   heading: "Tenant photo",
+  context: Storage.ResidentContext,
   review: {
     rows: [
       {
@@ -54,7 +57,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
   },
   step: {
     slug: PageSlugs.TenantPhoto,
-    nextSlug: PageSlugs.NextOfKin,
+    nextSlug: nextSlugWithId(PageSlugs.NextOfKin),
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         url: urlObjectForSlug(nextSlug),
@@ -77,12 +80,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "tenant"
+            ResidentDatabaseSchema,
+            "photo"
           >({
-            storeName: "tenant",
-            key: processRef,
-            property: ["photo", "isWilling"]
+            storeName: "photo",
+            key: keyFromSlug(),
+            property: ["isWilling"]
           })
         })
       ),
@@ -98,8 +101,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
           },
           renderWhen(stepValues: {
             "tenant-photo-willing"?: ComponentValue<
-              ProcessDatabaseSchema,
-              "tenant"
+              ResidentDatabaseSchema,
+              "photo"
             >;
           }): boolean {
             return stepValues["tenant-photo-willing"] === "no";
@@ -107,16 +110,16 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "tenant"
+            ResidentDatabaseSchema,
+            "photo"
           >({
-            storeName: "tenant",
-            key: processRef,
-            property: ["photo", "notes"]
+            storeName: "photo",
+            key: keyFromSlug(),
+            property: ["notes"]
           })
         })
       ),
-      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "tenant">(
+      ComponentWrapper.wrapStatic<ResidentDatabaseSchema, "photo">(
         new StaticComponent({
           key: "tenant-photo-heading",
           Component: Heading,
@@ -126,8 +129,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
           },
           renderWhen(stepValues: {
             "tenant-photo-willing"?: ComponentValue<
-              ProcessDatabaseSchema,
-              "tenant"
+              ResidentDatabaseSchema,
+              "photo"
             >;
           }): boolean {
             return stepValues["tenant-photo-willing"] === "yes";
@@ -149,8 +152,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
           },
           renderWhen(stepValues: {
             "tenant-photo-willing"?: ComponentValue<
-              ProcessDatabaseSchema,
-              "tenant"
+              ResidentDatabaseSchema,
+              "photo"
             >;
           }): boolean {
             return stepValues["tenant-photo-willing"] === "yes";
@@ -158,12 +161,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
           defaultValue: [],
           emptyValue: [] as string[],
           databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "tenant"
+            ResidentDatabaseSchema,
+            "photo"
           >({
-            storeName: "tenant",
-            key: processRef,
-            property: ["photo", "images"]
+            storeName: "photo",
+            key: keyFromSlug(),
+            property: ["images"]
           })
         })
       )

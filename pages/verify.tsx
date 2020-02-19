@@ -1,0 +1,177 @@
+import formatDate from "date-fns/format";
+import {
+  Button,
+  Heading,
+  HeadingLevels,
+  Link,
+  Paragraph
+} from "lbh-frontend-react/components";
+import { NextPage } from "next";
+import NextLink from "next/link";
+import React from "react";
+import { Table } from "../components/Table";
+import { TenancySummary } from "../components/TenancySummary";
+import getProcessRef from "../helpers/getProcessRef";
+import urlsForRouter from "../helpers/urlsForRouter";
+import useDataSet from "../helpers/useDataSet";
+import useDataValue from "../helpers/useDataValue";
+import MainLayout from "../layouts/MainLayout";
+import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
+import PageTitles from "../steps/PageTitles";
+import tmpProcessRef from "../storage/processRef";
+import Storage from "../storage/Storage";
+
+export const VerifyPage: NextPage = () => {
+  const processRef = getProcessRef();
+  const tenancyData = useDataValue(
+    Storage.ExternalContext,
+    "tenancy",
+    processRef,
+    values => (processRef ? values[processRef] : undefined)
+  );
+  const residentData = useDataValue(
+    Storage.ExternalContext,
+    "residents",
+    processRef,
+    values => (processRef ? values[processRef] : undefined)
+  );
+  const tenantsPresent = useDataValue(
+    Storage.ProcessContext,
+    "tenantsPresent",
+    tmpProcessRef,
+    values => values[tmpProcessRef]
+  );
+  const idData = useDataSet(
+    Storage.ResidentContext,
+    "id",
+    tenantsPresent.result
+  );
+  const residencyData = useDataSet(
+    Storage.ResidentContext,
+    "residency",
+    residentData.result?.tenants.map(tenant => tenant.id)
+  );
+
+  const tenantData =
+    residentData.result?.tenants.map(tenant => {
+      console.log(idData.result);
+
+      return {
+        id: tenant.id,
+        name: tenant.fullName,
+        dateOfBirth: tenant.dateOfBirth,
+        verified: {
+          id: tenantsPresent.result?.includes(tenant.id)
+            ? idData.result
+              ? Boolean(idData.result[tenant.id])
+              : false
+            : undefined,
+          residency: residencyData.result
+            ? Boolean(residencyData.result[tenant.id])
+            : false
+        }
+      };
+    }) || [];
+
+  const allVerified =
+    !residentData.loading &&
+    tenantData.every(
+      tenant =>
+        tenant.verified.id !== false && tenant.verified.residency !== false
+    );
+
+  const tableRows = tenantData.map(tenant => {
+    return [
+      tenant.name,
+      formatDate(tenant.dateOfBirth, "d MMMM yyyy"),
+      tenantsPresent.loading
+        ? "Loading..."
+        : tenant.verified.id
+        ? "Verified"
+        : tenant.verified.id === false
+        ? "Unverified"
+        : "-",
+      tenantsPresent.loading
+        ? "Loading..."
+        : tenant.verified.residency
+        ? "Verified"
+        : tenant.verified.residency === false
+        ? "Unverified"
+        : "-",
+      <Link
+        key="verify-link"
+        href={urlObjectForSlug(PageSlugs.Id, tenant.id).pathname}
+      >
+        {tenantsPresent.loading
+          ? "Loading..."
+          : tenant.verified.id !== false && tenant.verified.residency !== false
+          ? "Edit"
+          : "Verify"}
+      </Link>
+    ];
+  });
+
+  const { href, as } = urlsForRouter(urlObjectForSlug(PageSlugs.Sections));
+
+  const button = (
+    <Button disabled={!href.pathname || !as.pathname} data-testid="submit">
+      Save and continue
+    </Button>
+  );
+
+  return (
+    <MainLayout title={PageTitles.Verify} heading="Verify tenant details">
+      <TenancySummary
+        details={{
+          address: residentData.result
+            ? residentData.result.address
+            : residentData.error
+            ? ["Error"]
+            : undefined,
+          tenants: residentData.result
+            ? residentData.result.tenants.map(tenant => tenant.fullName)
+            : residentData.error
+            ? ["Error"]
+            : undefined,
+          tenureType: tenancyData.result
+            ? tenancyData.result.tenureType
+            : tenancyData.error
+            ? "Error"
+            : undefined,
+          startDate: tenancyData.result
+            ? tenancyData.result.startDate
+            : tenancyData.error
+            ? "Error"
+            : undefined
+        }}
+      />
+
+      <Paragraph>
+        For this section, tenants will need to provide proof of ID and
+        residency.
+      </Paragraph>
+      <Paragraph>
+        If any tenants are not present for this visit, only proof of residency
+        is required for those tenants.
+      </Paragraph>
+
+      <Heading level={HeadingLevels.H2}>Select a tenant to check</Heading>
+
+      <Table
+        headings={["Tenant", "Date of birth", "ID", "Residency", "Action"]}
+        rows={tableRows}
+      />
+
+      {allVerified &&
+        (href.pathname && as.pathname ? (
+          <NextLink href={href} as={as}>
+            {button}
+          </NextLink>
+        ) : (
+          button
+        ))}
+    </MainLayout>
+  );
+};
+
+export default VerifyPage;

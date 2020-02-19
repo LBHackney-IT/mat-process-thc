@@ -1,5 +1,5 @@
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
-import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
+import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
 
 import presentToCheck from "./present-for-check";
 import id from "./id";
@@ -8,34 +8,40 @@ import tenantPhoto from "./tenant-photo";
 import nextOfKin from "./next-of-kin";
 import carer from "./carer";
 
-export type IdAndResidencyStoreNames =
+export type IdAndResidencyProcessStoreNames = "tenantsPresent";
+
+export const idAndResidencyProcessSteps = [presentToCheck];
+
+export type IdAndResidencyResidentStoreNames =
   | "id"
   | "residency"
-  | "tenantsPresent"
-  | "tenant";
+  | "photo"
+  | "nextOfKin"
+  | "carer";
 
-const steps = [
-  presentToCheck as ProcessStepDefinition<
-    ProcessDatabaseSchema,
-    IdAndResidencyStoreNames
+export const idAndResidencyResidentSteps = [
+  id as ProcessStepDefinition<
+    ResidentDatabaseSchema,
+    IdAndResidencyResidentStoreNames
   >,
-  id as ProcessStepDefinition<ProcessDatabaseSchema, IdAndResidencyStoreNames>,
   residency as ProcessStepDefinition<
-    ProcessDatabaseSchema,
-    IdAndResidencyStoreNames
+    ResidentDatabaseSchema,
+    IdAndResidencyResidentStoreNames
   >,
   tenantPhoto as ProcessStepDefinition<
-    ProcessDatabaseSchema,
-    IdAndResidencyStoreNames
+    ResidentDatabaseSchema,
+    IdAndResidencyResidentStoreNames
   >,
   nextOfKin as ProcessStepDefinition<
-    ProcessDatabaseSchema,
-    IdAndResidencyStoreNames
+    ResidentDatabaseSchema,
+    IdAndResidencyResidentStoreNames
   >,
   carer as ProcessStepDefinition<
-    ProcessDatabaseSchema,
-    IdAndResidencyStoreNames
+    ResidentDatabaseSchema,
+    IdAndResidencyResidentStoreNames
   >
 ];
+
+const steps = [...idAndResidencyProcessSteps, ...idAndResidencyResidentSteps];
 
 export default steps;

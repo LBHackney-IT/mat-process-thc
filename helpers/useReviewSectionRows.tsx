@@ -1,30 +1,44 @@
 import React, { useMemo } from "react";
-import { useAsync } from "react-async-hook";
+import { UseAsyncReturn, useAsync } from "react-async-hook";
 import {
   ComponentDatabaseMap,
   ComponentValue
 } from "remultiform/component-wrapper";
-import { StoreMap, StoreNames, StoreValue } from "remultiform/database";
+import {
+  Database,
+  NamedSchema,
+  Schema,
+  StoreKey,
+  StoreMap,
+  StoreNames,
+  StoreValue
+} from "remultiform/database";
+import { DatabaseContext } from "remultiform/database-context";
 
 import Thumbnail from "../components/Thumbnail";
-import ProcessDatabaseSchema from "../storage/ProcessDatabaseSchema";
-import processRef from "../storage/processRef";
-import Storage from "../storage/Storage";
+import ResidentDatabaseSchema, {
+  ResidentRef,
+  residentStoreNames
+} from "../storage/ResidentDatabaseSchema";
 
 import ProcessStepDefinition from "./ProcessStepDefinition";
 import useDatabase from "./useDatabase";
 
-interface Value<Name extends StoreNames<ProcessDatabaseSchema["schema"]>> {
-  databaseMap: ComponentDatabaseMap<ProcessDatabaseSchema, Name>;
-  renderValue(
-    value: ComponentValue<ProcessDatabaseSchema, Name>
-  ): React.ReactNode;
+interface Value<
+  DBSchema extends NamedSchema<string, number, Schema>,
+  Name extends StoreNames<DBSchema["schema"]>
+> {
+  databaseMap: ComponentDatabaseMap<DBSchema, Name>;
+  renderValue(value: ComponentValue<DBSchema, Name>): React.ReactNode;
 }
 
-interface Row<Names extends StoreNames<ProcessDatabaseSchema["schema"]>> {
+interface Row<
+  DBSchema extends NamedSchema<string, number, Schema>,
+  Names extends StoreNames<DBSchema["schema"]>
+> {
   label: string;
-  values: Value<Names>[];
-  images: ComponentDatabaseMap<ProcessDatabaseSchema, Names>[];
+  values: Value<DBSchema, Names>[];
+  images: ComponentDatabaseMap<DBSchema, Names>[];
 }
 
 export interface SectionRow {
@@ -32,14 +46,31 @@ export interface SectionRow {
   value: React.ReactNode;
 }
 
-const findValue = <
-  StoreName extends StoreNames<ProcessDatabaseSchema["schema"]>
+const findKey = <
+  DBSchema extends NamedSchema<string, number, Schema>,
+  Name extends StoreNames<DBSchema["schema"]>
 >(
-  storeValue:
-    | StoreValue<ProcessDatabaseSchema["schema"], StoreName>
-    | undefined,
-  databaseMap: ComponentDatabaseMap<ProcessDatabaseSchema, StoreName>
-): ComponentValue<ProcessDatabaseSchema, StoreName> | undefined => {
+  databaseMap: ComponentDatabaseMap<DBSchema, Name>,
+  tenantId: ResidentRef | undefined
+): StoreKey<DBSchema["schema"], Name> | undefined => {
+  const { storeName, key } = databaseMap;
+
+  return typeof key === "function"
+    ? residentStoreNames.includes(
+        storeName as StoreNames<ResidentDatabaseSchema["schema"]>
+      )
+      ? tenantId
+      : key()
+    : key;
+};
+
+const findValue = <
+  DBSchema extends NamedSchema<string, number, Schema>,
+  Name extends StoreNames<DBSchema["schema"]>
+>(
+  storeValue: StoreValue<DBSchema["schema"], Name> | undefined,
+  databaseMap: ComponentDatabaseMap<DBSchema, Name>
+): ComponentValue<DBSchema, Name> | undefined => {
   if (storeValue === undefined) {
     return undefined;
   }
@@ -54,7 +85,7 @@ const findValue = <
   }
 
   const child = ((storeValue as unknown) as {
-    [s: string]: ComponentValue<ProcessDatabaseSchema, StoreName>;
+    [s: string]: ComponentValue<DBSchema, Name>;
   })[propertyMap[0]];
 
   if (child === undefined) {
@@ -62,15 +93,12 @@ const findValue = <
   }
 
   if (propertyMap.length === 1) {
-    return (child as unknown) as ComponentValue<
-      ProcessDatabaseSchema,
-      StoreName
-    >;
+    return (child as unknown) as ComponentValue<DBSchema, Name>;
   }
 
   const grandChild = ((storeValue as unknown) as {
     [s: string]: {
-      [s: string]: ComponentValue<ProcessDatabaseSchema, StoreName>;
+      [s: string]: ComponentValue<DBSchema, Name>;
     };
   })[propertyMap[0]][propertyMap[1]];
 
@@ -78,26 +106,22 @@ const findValue = <
     return undefined;
   }
 
-  return (grandChild as unknown) as ComponentValue<
-    ProcessDatabaseSchema,
-    StoreName
-  >;
+  return (grandChild as unknown) as ComponentValue<DBSchema, Name>;
 };
 
-const useReviewSectionRows = <
-  Names extends StoreNames<ProcessDatabaseSchema["schema"]>
+const useRows = <
+  DBSchema extends NamedSchema<string, number, Schema>,
+  Names extends StoreNames<DBSchema["schema"]>
 >(
-  steps: ProcessStepDefinition<ProcessDatabaseSchema, Names>[]
-): SectionRow[] => {
-  const database = useDatabase(Storage.ProcessContext);
-
-  const rows = useMemo(
+  steps: ProcessStepDefinition<DBSchema, Names>[]
+): Row<DBSchema, Names>[] => {
+  return useMemo(
     () =>
-      steps.reduce(
+      steps.reduce<Row<DBSchema, Names>[]>(
         (r, { review, step }) => [
           ...r,
           ...(review
-            ? review.rows.reduce(
+            ? review.rows.reduce<Row<DBSchema, Names>[]>(
                 (r, row) => [
                   ...r,
                   {
@@ -122,40 +146,81 @@ const useReviewSectionRows = <
                     ].filter(Boolean)
                   }
                 ],
-                [] as Row<Names>[]
+                []
               )
             : [])
         ],
-        [] as Row<Names>[]
+        []
       ),
     [steps]
   );
+};
 
-  const storeNames = useMemo(
-    () =>
-      rows
-        .map(({ values, images }) => [
-          ...values.map(({ databaseMap }) => databaseMap),
-          ...images
-        ])
-        .map(databaseMaps =>
-          databaseMaps.reduce(
-            (sectionStoreNames, databaseMap) => [
-              ...sectionStoreNames,
-              databaseMap.storeName
-            ],
-            [] as StoreNames<ProcessDatabaseSchema["schema"]>[]
-          )
-        )
-        .reduce(
-          (names, sectionStoreNames) => [...names, ...sectionStoreNames],
-          [] as StoreNames<ProcessDatabaseSchema["schema"]>[]
-        )
-        .filter((storeName, i, names) => names.indexOf(storeName) === i),
-    [rows]
-  );
+const useStoreInfo = <
+  DBSchema extends NamedSchema<string, number, Schema>,
+  Names extends StoreNames<DBSchema["schema"]>
+>(
+  rows: Row<DBSchema, Names>[],
+  tenantId: ResidentRef | undefined
+): { [Name in Names]?: StoreKey<DBSchema["schema"], Names>[] } => {
+  return useMemo(() => {
+    const databaseMaps = rows.reduce<ComponentDatabaseMap<DBSchema, Names>[]>(
+      (maps, { values, images }) => [
+        ...maps,
+        ...values.map(({ databaseMap }) => databaseMap),
+        ...images
+      ],
+      []
+    );
 
-  const storeValues = useAsync(async () => {
+    const storeInfo: {
+      [Name in Names]?: StoreKey<DBSchema["schema"], Names>[];
+    } = {};
+
+    for (const databaseMap of databaseMaps) {
+      const { storeName } = databaseMap;
+
+      const key = findKey(databaseMap, tenantId);
+
+      if (key === undefined || storeInfo[storeName]?.includes(key)) {
+        continue;
+      }
+
+      storeInfo[storeName] = [
+        ...((storeInfo[storeName] || []) as StoreKey<
+          DBSchema["schema"],
+          Names
+        >[]),
+        key
+      ];
+    }
+
+    return storeInfo;
+  }, [rows, tenantId]);
+};
+
+const useStoreValues = <
+  DBSchema extends NamedSchema<string, number, Schema>,
+  Names extends StoreNames<DBSchema["schema"]>
+>(
+  context: DatabaseContext<DBSchema> | undefined,
+  rows: Row<DBSchema, Names>[],
+  tenantId: ResidentRef | undefined
+): UseAsyncReturn<
+  | {
+      [Name in Names]?: {
+        [Key in StoreKey<DBSchema["schema"], Names>]?:
+          | StoreValue<DBSchema["schema"], Name>
+          | undefined;
+      };
+    }
+  | undefined,
+  [boolean, Database<DBSchema> | undefined, string]
+> => {
+  const database = useDatabase(context);
+  const storeInfo = useStoreInfo(rows, tenantId);
+
+  return useAsync(async () => {
     if (database.loading) {
       return;
     }
@@ -167,53 +232,98 @@ const useReviewSectionRows = <
     }
 
     let allValues: {
-      [StoreName in StoreNames<ProcessDatabaseSchema["schema"]>]?: StoreValue<
-        ProcessDatabaseSchema["schema"],
-        StoreName
-      >;
+      [Name in Names]?: {
+        [Key in StoreKey<DBSchema["schema"], Names>]?:
+          | StoreValue<DBSchema["schema"], Name>
+          | undefined;
+      };
     } = {};
 
     await db.transaction(
-      storeNames,
-      async (
-        stores: StoreMap<
-          ProcessDatabaseSchema["schema"],
-          StoreNames<ProcessDatabaseSchema["schema"]>[]
-        >
-      ) => {
+      Object.keys(storeInfo) as Names[],
+      async (stores: StoreMap<DBSchema["schema"], Names[]>) => {
         const values = await Promise.all(
-          storeNames.map(async storeName => {
-            const value = await stores[storeName].get(processRef);
+          (Object.keys(stores) as Names[]).map<
+            Promise<
+              [
+                Names,
+                {
+                  [Key in StoreKey<DBSchema["schema"], Names>]?: StoreValue<
+                    DBSchema["schema"],
+                    Names
+                  >;
+                }
+              ]
+            >
+          >(async storeName => {
+            const storeKeys = storeInfo[storeName];
 
-            return [storeName, value] as [
-              StoreNames<ProcessDatabaseSchema["schema"]>,
-              StoreValue<
-                ProcessDatabaseSchema["schema"],
-                StoreNames<ProcessDatabaseSchema["schema"]>
-              >
-            ];
+            const valueSet = (
+              await Promise.all(
+                ((storeKeys || []) as StoreKey<
+                  DBSchema["schema"],
+                  Names
+                >[]).map(
+                  async key =>
+                    ({
+                      [key]: await stores[storeName].get(key)
+                    } as {
+                      [Key in StoreKey<DBSchema["schema"], Names>]?: StoreValue<
+                        DBSchema["schema"],
+                        Names
+                      >;
+                    })
+                )
+              )
+            ).reduce<
+              {
+                [Key in StoreKey<DBSchema["schema"], Names>]?: StoreValue<
+                  DBSchema["schema"],
+                  Names
+                >;
+              }
+            >((v, value) => ({ ...v, ...value }), {});
+
+            return [storeName, valueSet];
           })
         );
 
         allValues = {
           ...allValues,
-          ...values.reduce(
-            (storeValues, [storeName, value]) => ({
-              ...storeValues,
-              [storeName]: value
-            }),
-            {} as {
-              [StoreName in StoreNames<
-                ProcessDatabaseSchema["schema"]
-              >]?: StoreValue<ProcessDatabaseSchema["schema"], StoreName>;
+          ...values.reduce<
+            {
+              [Name in Names]?: {
+                [Key in StoreKey<DBSchema["schema"], Names>]?: StoreValue<
+                  DBSchema["schema"],
+                  Name
+                >;
+              };
             }
+          >(
+            (storeValues, [storeName, values]) => ({
+              ...storeValues,
+              [storeName]: values
+            }),
+            {}
           )
         };
       }
     );
 
     return allValues;
-  }, [database.loading, database.result, processRef, storeNames.join(",")]);
+  }, [database.loading, database.result, JSON.stringify(storeInfo)]);
+};
+
+const useReviewSectionRows = <
+  DBSchema extends NamedSchema<string, number, Schema>,
+  Names extends StoreNames<DBSchema["schema"]>
+>(
+  context: DatabaseContext<DBSchema> | undefined,
+  steps: ProcessStepDefinition<DBSchema, Names>[],
+  tenantId?: ResidentRef
+): SectionRow[] => {
+  const rows = useRows(steps);
+  const storeValues = useStoreValues(context, rows, tenantId);
 
   return useMemo(
     () =>
@@ -221,18 +331,23 @@ const useReviewSectionRows = <
         .map(row => {
           const values = row.values
             .map(v => {
-              const { databaseMap, renderValue } = v;
-
               if (storeValues.loading || storeValues.result === undefined) {
                 return undefined;
               }
 
-              const value = findValue(
-                storeValues.result[databaseMap.storeName],
-                databaseMap
-              );
+              const { databaseMap, renderValue } = v;
+              const { storeName } = databaseMap;
 
-              if (!value) {
+              const key = findKey(databaseMap, tenantId);
+              const values = storeValues.result[storeName];
+
+              if (key === undefined || values === undefined) {
+                return undefined;
+              }
+
+              const value = findValue(values[key], databaseMap);
+
+              if (value === undefined) {
                 return undefined;
               }
 
@@ -246,14 +361,20 @@ const useReviewSectionRows = <
                 return undefined;
               }
 
-              return (findValue(
-                storeValues.result[databaseMap.storeName],
-                databaseMap
-              ) as unknown) as string[] | undefined;
+              const { storeName } = databaseMap;
+
+              const key = findKey(databaseMap, tenantId);
+              const values = storeValues.result[storeName];
+
+              if (key === undefined || values === undefined) {
+                return undefined;
+              }
+
+              return findValue(values[key], databaseMap);
             })
-            .filter(Boolean) as string[][]).reduce(
+            .filter(Boolean) as string[][]).reduce<string[]>(
             (i, images) => [...i, ...images],
-            [] as string[]
+            []
           );
 
           if (!values.length && !images.length) {
@@ -303,7 +424,7 @@ const useReviewSectionRows = <
           };
         })
         .filter(Boolean) as SectionRow[],
-    [rows, storeValues.loading, storeValues.result]
+    [rows, storeValues.loading, storeValues.result, tenantId]
   );
 };
 

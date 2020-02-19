@@ -36,7 +36,7 @@ beforeEach(() => {
     ...jest.fn()(),
     database: {
       ...jest.fn()(),
-      db: { version: 3 },
+      db: { version: 4 },
       put: jest.fn(),
       transaction: async (_, tx): Promise<void> => {
         await tx({

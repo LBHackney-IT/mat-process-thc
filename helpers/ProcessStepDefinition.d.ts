@@ -1,6 +1,7 @@
 import React from "react";
 import { ComponentValue } from "remultiform/component-wrapper";
 import { NamedSchema, Schema, StoreNames } from "remultiform/database";
+import { DatabaseContext } from "remultiform/database-context";
 import { StepDefinition } from "remultiform/step";
 
 import PageTitles from "../steps/PageTitles";
@@ -9,6 +10,7 @@ interface BaseStepDefinition<
   DBSchema extends NamedSchema<string, number, Schema>,
   Names extends StoreNames<DBSchema["schema"]>
 > {
+  context?: DatabaseContext<DBSchema>;
   review?: {
     rows: {
       label: string;
@@ -16,7 +18,7 @@ interface BaseStepDefinition<
         [s: string]:
           | {
               renderValue(
-                value: ComponentValue<DBSchema["schema"], Names>
+                value: ComponentValue<DBSchema, Names>
               ): React.ReactNode;
             }
           | undefined;

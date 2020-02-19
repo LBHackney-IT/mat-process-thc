@@ -4,111 +4,134 @@ import React from "react";
 
 import { TaskList, TaskListStatus } from "../components/TaskList";
 import { TenancySummary } from "../components/TenancySummary";
-import useData from "../helpers/useData";
-import useProcessSectionComplete from "../helpers/useProcessSectionComplete";
+import getProcessRef from "../helpers/getProcessRef";
+import useDataValue from "../helpers/useDataValue";
+import useValidateData from "../helpers/useValidateData";
 import MainLayout from "../layouts/MainLayout";
 import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 import PageTitles from "../steps/PageTitles";
 import Storage from "../storage/Storage";
-import { StoreValue } from "remultiform/database";
-import ProcessDatabaseSchema from "../storage/ProcessDatabaseSchema";
-
-const idResidencyStartedValidator = (
-  values: (
-    | StoreValue<ProcessDatabaseSchema["schema"], "id" | "residency" | "tenant">
-    | undefined
-  )[]
-): boolean => values.some(v => v !== undefined);
-
-const householdCompleteValidator = (
-  values: (
-    | StoreValue<ProcessDatabaseSchema["schema"], "household">
-    | undefined
-  )[]
-): boolean => {
-  const v = values[0];
-  return v !== undefined && v.otherProperty !== undefined;
-};
-
-const propertyInspectionStartedValidator = (
-  values: (
-    | StoreValue<ProcessDatabaseSchema["schema"], "property">
-    | undefined
-  )[]
-): boolean => {
-  const v = values[0];
-  return v !== undefined && v.rooms !== undefined;
-};
-
-const propertyInspectionCompleteValidator = (
-  values: (
-    | StoreValue<ProcessDatabaseSchema["schema"], "property">
-    | undefined
-  )[]
-): boolean => {
-  const v = values[0];
-  return v !== undefined && v.outside !== undefined && v.rooms !== undefined;
-};
-
-const wellbeingStartedValidator = (
-  values: (
-    | StoreValue<
-        ProcessDatabaseSchema["schema"],
-        "homeCheck" | "healthConcerns" | "disability"
-      >
-    | undefined
-  )[]
-): boolean => values.some(v => v !== undefined);
-
-const wellbeingCompleteValidator = (
-  values: (
-    | StoreValue<
-        ProcessDatabaseSchema["schema"],
-        "homeCheck" | "healthConcerns" | "disability"
-      >
-    | undefined
-  )[]
-): boolean => {
-  const v = values[0] as { value: string } | undefined;
-  if (v && v.value == "no") {
-    return true;
-  } else {
-    return values.every(v => v !== undefined);
-  }
-};
+import tmpProcessRef from "../storage/processRef";
 
 export const SectionsPage: NextPage = () => {
-  const tenancyData = useData(Storage.ExternalContext, "tenancy");
-  const residentData = useData(Storage.ExternalContext, "residents");
-  const idAndResidencyStarted = useProcessSectionComplete(
-    ["id", "residency", "tenant"],
-    idResidencyStartedValidator
+  const processRef = getProcessRef();
+  const tenancyData = useDataValue(
+    Storage.ExternalContext,
+    "tenancy",
+    processRef,
+    values => (processRef ? values[processRef] : undefined)
   );
-  const idAndResidencyComplete = useProcessSectionComplete([
-    "id",
-    "residency",
-    "tenant"
-  ]);
-  const householdStarted = useProcessSectionComplete(["household"]);
-  const householdComplete = useProcessSectionComplete(
+  const residentData = useDataValue(
+    Storage.ExternalContext,
+    "residents",
+    processRef,
+    values => (processRef ? values[processRef] : undefined)
+  );
+  const idAndResidencyStarted = useValidateData(
+    Storage.ProcessContext,
+    ["tenantsPresent"],
+    tmpProcessRef
+  );
+  const idAndResidencyComplete = useValidateData(
+    Storage.ResidentContext,
+    ["id", "residency", "photo", "nextOfKin", "carer"],
+    residentData.result?.tenants.map(tenant => tenant.id)
+  );
+  const householdStarted = useValidateData(
+    Storage.ProcessContext,
     ["household"],
-    householdCompleteValidator
+    tmpProcessRef,
+    valueSets => {
+      const householdSet = valueSets.household;
+
+      if (householdSet === undefined) {
+        return false;
+      }
+
+      const household = householdSet[tmpProcessRef];
+
+      return household !== undefined && household.documents !== undefined;
+    }
   );
-  const propertyInspectionStarted = useProcessSectionComplete(
+  const householdComplete = useValidateData(
+    Storage.ProcessContext,
+    ["household"],
+    tmpProcessRef
+  );
+  const propertyInspectionStarted = useValidateData(
+    Storage.ProcessContext,
     ["property"],
-    propertyInspectionStartedValidator
+    tmpProcessRef,
+    valueSets => {
+      const propertySet = valueSets.property;
+
+      if (propertySet === undefined) {
+        return false;
+      }
+
+      const property = propertySet[tmpProcessRef];
+
+      return property !== undefined && property.rooms !== undefined;
+    }
   );
-  const propertyInspectionComplete = useProcessSectionComplete(
+  const propertyInspectionComplete = useValidateData(
+    Storage.ProcessContext,
     ["property"],
-    propertyInspectionCompleteValidator
+    tmpProcessRef,
+    valueSets => {
+      const propertySet = valueSets.property;
+
+      if (propertySet === undefined) {
+        return false;
+      }
+
+      const property = propertySet[tmpProcessRef];
+
+      return (
+        property !== undefined &&
+        Object.entries(property).every(
+          ([key, value]) => key === "outside" || value !== undefined
+        )
+      );
+    }
   );
-  const wellbeingSupportStarted = useProcessSectionComplete(
-    ["homeCheck", "healthConcerns", "disability"],
-    wellbeingStartedValidator
+  const wellbeingSupportStarted = useValidateData(
+    Storage.ProcessContext,
+    ["homeCheck"],
+    tmpProcessRef,
+    valueSets => {
+      const homeCheckSet = valueSets.homeCheck;
+
+      if (homeCheckSet === undefined) {
+        return false;
+      }
+
+      const homeCheck = homeCheckSet[tmpProcessRef];
+
+      return homeCheck !== undefined;
+    }
   );
-  const wellbeingSupportComplete = useProcessSectionComplete(
+  const wellbeingSupportComplete = useValidateData(
+    Storage.ProcessContext,
     ["homeCheck", "healthConcerns", "disability"],
-    wellbeingCompleteValidator
+    tmpProcessRef,
+    valueSets => {
+      const homeCheckSet = valueSets.homeCheck;
+
+      if (homeCheckSet === undefined) {
+        return false;
+      }
+
+      const homeCheck = homeCheckSet[tmpProcessRef];
+
+      return (
+        homeCheck !== undefined &&
+        (homeCheck.value === "no" ||
+          Object.values(valueSets).every(valueSet =>
+            Object.values(valueSet || {}).every(value => value !== undefined)
+          ))
+      );
+    }
   );
 
   return (

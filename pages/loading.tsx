@@ -26,7 +26,8 @@ import MainLayout from "../layouts/MainLayout";
 import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 import PageTitles from "../steps/PageTitles";
 import ExternalDatabaseSchema from "../storage/ExternalDatabaseSchema";
-import { ProcessJson, ResidentRef } from "../storage/ProcessDatabaseSchema";
+import { ProcessJson } from "../storage/ProcessDatabaseSchema";
+import { ResidentRef } from "../storage/ResidentDatabaseSchema";
 import Storage from "../storage/Storage";
 import tmpProcessRef from "../storage/processRef";
 
@@ -288,6 +289,7 @@ const useFetchResidentData = (): UseApiWithStorageReturn<
         fullName: string;
         responsible: boolean;
         fullAddressDisplay: string;
+        dateOfBirth: string;
       }[];
     }) {
       const fullAddress = data.results[0].fullAddressDisplay;
@@ -311,15 +313,19 @@ const useFetchResidentData = (): UseApiWithStorageReturn<
         .filter(contact => contact.responsible)
         .map(contact => ({
           id: contact.contactId,
-          fullName: contact.fullName
-        }));
+          fullName: contact.fullName,
+          dateOfBirth: new Date(contact.dateOfBirth)
+        }))
+        .sort((a, b) => (a.id > b.id ? 1 : a.id < b.id ? -1 : 0));
 
       const householdMembers = data.results
         .filter(contact => !contact.responsible)
         .map(contact => ({
           id: contact.contactId,
-          fullName: contact.fullName
-        }));
+          fullName: contact.fullName,
+          dateOfBirth: new Date(contact.dateOfBirth)
+        }))
+        .sort((a, b) => (a.id > b.id ? 1 : a.id < b.id ? -1 : 0));
 
       return {
         address,

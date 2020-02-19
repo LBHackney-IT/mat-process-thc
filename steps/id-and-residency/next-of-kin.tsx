@@ -9,9 +9,11 @@ import {
 import { makeSubmit } from "../../components/makeSubmit";
 import { TextArea } from "../../components/TextArea";
 import { TextInput } from "../../components/TextInput";
+import keyFromSlug from "../../helpers/keyFromSlug";
+import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
-import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import processRef from "../../storage/processRef";
+import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
+import Storage from "../../storage/Storage";
 
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
@@ -20,9 +22,10 @@ const questions = {
   "next-of-kin-details": "Next of kin details"
 };
 
-const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
+const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
   title: PageTitles.NextOfKin,
   heading: "Next of kin",
+  context: Storage.ResidentContext,
   review: {
     rows: [
       {
@@ -64,14 +67,14 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
   },
   step: {
     slug: PageSlugs.NextOfKin,
-    nextSlug: PageSlugs.Carer,
+    nextSlug: nextSlugWithId(PageSlugs.Carer),
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         url: urlObjectForSlug(nextSlug),
         value: "Save and continue"
       }),
     componentWrappers: [
-      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "tenant">(
+      ComponentWrapper.wrapStatic<ResidentDatabaseSchema, "nextOfKin">(
         new StaticComponent({
           key: "next-of-kin-heading",
           Component: Heading,
@@ -92,12 +95,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "tenant"
+            ResidentDatabaseSchema,
+            "nextOfKin"
           >({
-            storeName: "tenant",
-            key: processRef,
-            property: ["nextOfKin", "fullName"]
+            storeName: "nextOfKin",
+            key: keyFromSlug(),
+            property: ["fullName"]
           })
         })
       ),
@@ -112,12 +115,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "tenant"
+            ResidentDatabaseSchema,
+            "nextOfKin"
           >({
-            storeName: "tenant",
-            key: processRef,
-            property: ["nextOfKin", "relationship"]
+            storeName: "nextOfKin",
+            key: keyFromSlug(),
+            property: ["relationship"]
           })
         })
       ),
@@ -132,12 +135,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "tenant"
+            ResidentDatabaseSchema,
+            "nextOfKin"
           >({
-            storeName: "tenant",
-            key: processRef,
-            property: ["nextOfKin", "mobileNumber"]
+            storeName: "nextOfKin",
+            key: keyFromSlug(),
+            property: ["mobileNumber"]
           })
         })
       ),
@@ -152,12 +155,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "tenant"
+            ResidentDatabaseSchema,
+            "nextOfKin"
           >({
-            storeName: "tenant",
-            key: processRef,
-            property: ["nextOfKin", "otherNumber"]
+            storeName: "nextOfKin",
+            key: keyFromSlug(),
+            property: ["otherNumber"]
           })
         })
       ),
@@ -172,12 +175,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "tenant"
+            ResidentDatabaseSchema,
+            "nextOfKin"
           >({
-            storeName: "tenant",
-            key: processRef,
-            property: ["nextOfKin", "email"]
+            storeName: "nextOfKin",
+            key: keyFromSlug(),
+            property: ["email"]
           })
         })
       ),
@@ -195,12 +198,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenant"> = {
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "tenant"
+            ResidentDatabaseSchema,
+            "nextOfKin"
           >({
-            storeName: "tenant",
-            key: processRef,
-            property: ["nextOfKin", "address"]
+            storeName: "nextOfKin",
+            key: keyFromSlug(),
+            property: ["address"]
           })
         })
       )
