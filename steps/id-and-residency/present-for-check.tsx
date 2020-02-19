@@ -1,28 +1,30 @@
 import { FieldsetLegend } from "lbh-frontend-react/components";
+import { useRouter } from "next/router";
 import React from "react";
 import {
   ComponentDatabaseMap,
   ComponentWrapper,
   DynamicComponent
 } from "remultiform/component-wrapper";
-
 import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { makeSubmit } from "../../components/makeSubmit";
-import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import getProcessRef from "../../helpers/getProcessRef";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import useDataValue from "../../helpers/useDataValue";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import tmpProcessRef from "../../storage/processRef";
 import Storage from "../../storage/Storage";
-
-import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
+import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const TenantsSelect: React.FunctionComponent<Omit<
   CheckboxesProps,
   "checkboxes"
 >> = props => {
-  const processRef = getProcessRef();
+  const router = useRouter();
+
+  const processRef = getProcessRef(router);
+
   const tenants = useDataValue(
     Storage.ExternalContext,
     "residents",
@@ -53,7 +55,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenantsPresent"> = {
     nextSlug: PageSlugs.Verify,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
-        url: urlObjectForSlug(nextSlug),
+        slug: nextSlug as PageSlugs | undefined,
         value: "Save and continue"
       }),
     componentWrappers: [

@@ -1,8 +1,11 @@
+import { NextRouter } from "next/router";
 import querystring from "querystring";
-
+import getProcessRef from "./getProcessRef";
 import isStep from "./isStep";
+import prefixUrl from "./prefixUrl";
 
 const urlsForRouter = (
+  router: NextRouter,
   url:
     | string
     | {
@@ -36,10 +39,18 @@ const urlsForRouter = (
     href = { ...url };
   }
 
-  const as = { ...href };
+  const as = prefixUrl(router, { ...href });
 
-  if (isStep(href)) {
+  if (isStep(router, href)) {
     href.pathname = "/[...slug]";
+  }
+
+  href = prefixUrl(router, href);
+
+  const processRef = getProcessRef(router);
+
+  if (processRef) {
+    href.pathname = href.pathname.replace(processRef, "[processRef]");
   }
 
   return { href, as };

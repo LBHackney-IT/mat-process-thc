@@ -9,14 +9,11 @@ import {
   DynamicComponent,
   StaticComponent
 } from "remultiform/component-wrapper";
-
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
-
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
-
-import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
+import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const step = {
@@ -28,11 +25,11 @@ const step = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit([
         {
-          url: urlObjectForSlug(nextSlug),
+          slug: nextSlug as PageSlugs | undefined,
           value: "Enter the property"
         },
         {
-          url: urlObjectForSlug(undefined),
+          slug: PageSlugs.Loading,
           value: "Unable to enter property"
         }
       ]),

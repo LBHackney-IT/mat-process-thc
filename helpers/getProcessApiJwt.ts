@@ -1,14 +1,11 @@
 import { nullAsUndefined } from "null-as-undefined";
-import getProcessRef from "./getProcessRef";
 import isServer from "./isServer";
 
-const getProcessApiJwt = (processRef?: string): string | undefined => {
+const getProcessApiJwt = (
+  processRef: string | undefined
+): string | undefined => {
   if (isServer) {
     return;
-  }
-
-  if (!processRef) {
-    processRef = getProcessRef();
   }
 
   if (!processRef) {

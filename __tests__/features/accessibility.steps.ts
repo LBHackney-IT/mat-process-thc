@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { defineFeature, loadFeature } from "jest-cucumber";
 import { DefineScenarioFunctionWithAliases } from "jest-cucumber/dist/src/feature-definition-creation";
-
 import Then from "../helpers/steps/Then";
 import When from "../helpers/steps/When";
 
@@ -13,7 +12,7 @@ const testAccessibility = (
   test(`${pageName} page is accessible`, ({ defineStep, then }) => {
     When.iStartTheProcess(defineStep);
     When.iWaitForTheDataToBeFetched(defineStep);
-    When.iVisitX(defineStep);
+    When.iVisitXForProcess(defineStep);
 
     Then.thePageShouldBeAccessible(defineStep);
 
@@ -26,8 +25,10 @@ const testAccessibility = (
 };
 
 defineFeature(loadFeature("./accessibility.feature"), test => {
-  test("Index page is accessible", ({ defineStep, then }) => {
-    When.iVisitX(defineStep);
+  test("Index page is accessible", ({ defineStep, when, then }) => {
+    when(/^I visit the index page$/, async () => {
+      await browser!.getRelative("", true);
+    });
 
     Then.thePageShouldBeAccessible(defineStep);
 
@@ -39,22 +40,7 @@ defineFeature(loadFeature("./accessibility.feature"), test => {
   });
 
   test("Loading page is accessible", ({ defineStep, then }) => {
-    When.iVisitX(defineStep);
-
-    Then.thePageShouldBeAccessible(defineStep);
-
-    then("the page should have a descriptive title", async () => {
-      await expect(browser!.getTitle()).resolves.toEqual(
-        "Loading - THC - Manage a tenancy"
-      );
-    });
-  });
-
-  test("Loading page is accessible when it's finished loading", ({
-    defineStep,
-    then
-  }) => {
-    When.iVisitX(defineStep);
+    When.iStartTheProcess(defineStep);
     When.iWaitForTheDataToBeFetched(defineStep);
 
     Then.thePageShouldBeAccessible(defineStep);

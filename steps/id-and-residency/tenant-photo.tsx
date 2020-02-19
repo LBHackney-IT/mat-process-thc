@@ -6,12 +6,11 @@ import {
 import React from "react";
 import {
   ComponentDatabaseMap,
-  ComponentWrapper,
   ComponentValue,
+  ComponentWrapper,
   DynamicComponent,
   StaticComponent
 } from "remultiform/component-wrapper";
-
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
@@ -22,8 +21,7 @@ import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import yesNoRadios from "../../helpers/yesNoRadios";
 import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
 import Storage from "../../storage/Storage";
-
-import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
+import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
@@ -60,7 +58,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
     nextSlug: nextSlugWithId(PageSlugs.NextOfKin),
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
-        url: urlObjectForSlug(nextSlug),
+        slug: nextSlug as PageSlugs | undefined,
         value: "Save and continue"
       }),
     componentWrappers: [

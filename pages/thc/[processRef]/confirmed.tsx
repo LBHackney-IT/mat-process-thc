@@ -7,9 +7,8 @@ import {
 import { Paragraph } from "lbh-frontend-react/components/typography/Paragraph";
 import { NextPage } from "next";
 import React from "react";
-
-import MainLayout from "../layouts/MainLayout";
-import PageTitles from "../steps/PageTitles";
+import MainLayout from "../../../layouts/MainLayout";
+import PageTitles from "../../../steps/PageTitles";
 
 const ConfirmedPage: NextPage = () => {
   const address = "1 Mare Street, London, E8 3AA";

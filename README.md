@@ -54,7 +54,7 @@ We use:
    npm run dev
    ```
 
-1. Navigate to [`http://localhost:3000`](http://localhost:3000).
+1. Navigate to [`http://localhost:3000/thc`](http://localhost:3000/thc).
 
 1. Make a change, and see the page hot reload.
 

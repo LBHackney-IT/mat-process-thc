@@ -1,18 +1,16 @@
+import { List, ListProps, ListTypes } from "lbh-frontend-react/components/List";
 import {
   Heading,
   HeadingLevels
 } from "lbh-frontend-react/components/typography/Heading";
-import { List, ListTypes, ListProps } from "lbh-frontend-react/components/List";
 import { Paragraph } from "lbh-frontend-react/components/typography/Paragraph";
+import React from "react";
 import {
   ComponentWrapper,
   StaticComponent
 } from "remultiform/component-wrapper";
-import React from "react";
-
 import { makeSubmit } from "../../components/makeSubmit";
-
-import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
+import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const step = {
@@ -24,11 +22,11 @@ const step = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit([
         {
-          url: urlObjectForSlug(nextSlug),
+          slug: nextSlug as PageSlugs | undefined,
           value: "Start visit with tenant"
         },
         {
-          url: urlObjectForSlug(undefined),
+          slug: PageSlugs.Loading,
           value: "Unable to enter property"
         }
       ]),

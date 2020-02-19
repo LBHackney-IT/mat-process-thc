@@ -1,4 +1,6 @@
 import { Heading, HeadingLevels } from "lbh-frontend-react";
+import { Link } from "lbh-frontend-react/components/Link";
+import { Paragraph } from "lbh-frontend-react/components/typography/Paragraph";
 import React from "react";
 import {
   ComponentDatabaseMap,
@@ -8,12 +10,9 @@ import {
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import { TextAreaDetails } from "../../components/TextAreaDetails";
-import { Paragraph } from "lbh-frontend-react/components/typography/Paragraph";
-import { Link } from "lbh-frontend-react/components/Link";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
-
-import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
+import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const step = {
@@ -24,7 +23,7 @@ const step = {
     nextSlug: PageSlugs.Sections,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
-        url: urlObjectForSlug(nextSlug),
+        slug: nextSlug as PageSlugs | undefined,
         value: "Save and continue"
       }),
     componentWrappers: [

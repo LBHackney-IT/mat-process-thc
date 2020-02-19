@@ -1,10 +1,55 @@
+import isOnline from "is-online";
+import * as router from "next/router";
 import React from "react";
-import { create } from "react-test-renderer";
+import { act, create, ReactTestRenderer } from "react-test-renderer";
+import IndexPage from "../../../pages/thc/index";
+import { promiseToWaitForNextTick } from "../../helpers/promise";
 
-import ConfirmedPage from "../../pages/confirmed";
+jest.mock("is-online");
 
-it("renders correctly", () => {
-  const component = create(<ConfirmedPage />);
+const isOnlineMock = (isOnline as unknown) as jest.MockInstance<
+  Promise<boolean>,
+  [isOnline.Options?]
+>;
+
+let routerReplaceMock: jest.SpyInstance<router.NextRouter, []>;
+
+beforeEach(() => {
+  routerReplaceMock = jest.fn();
+
+  jest.spyOn(router, "useRouter").mockImplementation(() => ({
+    ...jest.fn()(),
+    query: { processRef: "test-process-ref" },
+    replace: routerReplaceMock
+  }));
+});
+
+it("redirects to the loading page when online", async () => {
+  isOnlineMock.mockResolvedValue(true);
+
+  await act(async () => {
+    create(<IndexPage />);
+
+    await promiseToWaitForNextTick();
+  });
+
+  expect(routerReplaceMock).toHaveBeenCalledTimes(1);
+  expect(routerReplaceMock).toHaveBeenCalledWith(
+    { pathname: "/thc/[processRef]/loading" },
+    { pathname: "/thc/test-process-ref/loading" }
+  );
+});
+
+it("renders correctly when offline", async () => {
+  isOnlineMock.mockResolvedValue(false);
+
+  let component: ReactTestRenderer | undefined = undefined;
+
+  await act(async () => {
+    component = create(<IndexPage />);
+
+    await promiseToWaitForNextTick();
+  });
 
   expect(component).toMatchInlineSnapshot(`
     Array [
@@ -86,52 +131,15 @@ it("renders correctly", () => {
         <div
           className="govuk-container lbh-container"
         >
-          <section
-            className="lbh-page-announcement"
+          <h1
+            className="lbh-heading-h1"
           >
-            <h3
-              className="lbh-page-announcement__title"
-            >
-              Process submission confirmed
-            </h3>
-            <div
-              className="lbh-page-announcement__content"
-            >
-              <p
-                className="lbh-body"
-              >
-                The Tenancy and Household Check for the tenancy at 
-                1 Mare Street, London, E8 3AA
-                , occupied by 
-                Jane Doe, John Doe
-                 has been submitted for manager review.
-              </p>
-            </div>
-          </section>
-          <h3
-            className="lbh-heading-h3"
-          >
-            What to do next?
-          </h3>
+            Tenancy and Household Check
+          </h1>
           <p
             className="lbh-body"
           >
-            <button
-              className="govuk-button lbh-button"
-              onClick={[Function]}
-            >
-              Go to diversity monitoring form
-            </button>
-          </p>
-          <p
-            className="lbh-body"
-          >
-            <button
-              className="govuk-button lbh-button"
-              onClick={[Function]}
-            >
-              Return to my work tray
-            </button>
+            You are offline. Please go online to continue.
           </p>
         </div>
       </main>,

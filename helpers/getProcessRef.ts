@@ -1,11 +1,19 @@
-import { nullAsUndefined } from "null-as-undefined";
-import isClient from "./isClient";
+import { NextRouter } from "next/router";
+import isServer from "./isServer";
 
-const getProcessRef = (): string | undefined => {
+const getProcessRef = (router: NextRouter): string | undefined => {
+  if (isServer) {
+    return;
+  }
+
+  // `router.query` might be an empty object when first loading a page for
+  // some reason.
+  const ref = router.query.processRef;
+
   let processRef: string | undefined = undefined;
 
-  if (isClient) {
-    processRef = nullAsUndefined(sessionStorage.getItem("currentProcessRef"));
+  if (ref) {
+    processRef = typeof ref === "string" ? ref : ref.join("/");
   }
 
   if (process.env.NODE_ENV !== "production") {

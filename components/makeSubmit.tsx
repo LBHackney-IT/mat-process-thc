@@ -2,11 +2,11 @@ import { Button } from "lbh-frontend-react/components";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { SubmitProps, submitPropTypes } from "remultiform/step";
-
 import urlsForRouter from "../helpers/urlsForRouter";
+import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 
 export interface MakeSubmitProps {
-  url: { pathname: string; query?: { [s: string]: string } };
+  slug: PageSlugs | undefined;
   value: string;
 }
 
@@ -17,13 +17,13 @@ export const makeSubmit = (
 
   const Submit: React.FunctionComponent<SubmitProps> = ({ onSubmit }) => {
     const router = useRouter();
-    const buttonUrlsString = buttonProps
-      .map(({ url }) => url.pathname)
-      .join(",");
+    const urls = buttonProps.map(
+      ({ slug }) => urlObjectForSlug(router, slug).pathname
+    );
 
     useEffect(() => {
-      for (const { url } of buttonProps) {
-        const { href } = urlsForRouter(url);
+      for (const url of urls) {
+        const { href } = urlsForRouter(router, url);
 
         if (!href.pathname) {
           continue;
@@ -31,12 +31,15 @@ export const makeSubmit = (
 
         router.prefetch(href.pathname);
       }
-    }, [router, buttonUrlsString]);
+    }, [router, urls]);
 
     return (
       <>
-        {buttonProps.map(({ url, value }, i) => {
-          const { href, as } = urlsForRouter(url);
+        {buttonProps.map(({ slug, value }, i) => {
+          const { href, as } = urlsForRouter(
+            router,
+            urlObjectForSlug(router, slug)
+          );
 
           return (
             <Button

@@ -1,3 +1,6 @@
+import { NextRouter } from "next/router";
+import prefixUrl from "../helpers/prefixUrl";
+
 enum PageSlugs {
   // General
   Index = "",
@@ -117,16 +120,10 @@ export const repeatingStepSlugs = [
 ];
 
 export const urlObjectForSlug = (
-  slug: string | undefined,
-  slugId?: string
+  router: NextRouter,
+  slug: string | undefined
 ): { pathname: string } => {
-  let pathname = slug === undefined ? "" : `/${slug}`;
-
-  if (pathname && slugId) {
-    pathname += `/${slugId}`;
-  }
-
-  return { pathname };
+  return prefixUrl(router, { pathname: slug === undefined ? "" : `/${slug}` });
 };
 
 export default PageSlugs;

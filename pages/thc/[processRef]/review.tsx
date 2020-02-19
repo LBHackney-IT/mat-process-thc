@@ -8,24 +8,27 @@ import {
 } from "lbh-frontend-react";
 import { NextPage } from "next";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
-
-import getProcessRef from "../helpers/getProcessRef";
-import urlsForRouter from "../helpers/urlsForRouter";
-import useDataValue from "../helpers/useDataValue";
-import useReviewSectionRows from "../helpers/useReviewSectionRows";
-import MainLayout from "../layouts/MainLayout";
-import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
-import PageTitles from "../steps/PageTitles";
+import getProcessRef from "../../../helpers/getProcessRef";
+import urlsForRouter from "../../../helpers/urlsForRouter";
+import useDataValue from "../../../helpers/useDataValue";
+import useReviewSectionRows from "../../../helpers/useReviewSectionRows";
+import MainLayout from "../../../layouts/MainLayout";
 import {
   idAndResidencyProcessSteps,
   idAndResidencyResidentSteps
-} from "../steps/id-and-residency";
-import Storage from "../storage/Storage";
-import { ResidentRef } from "../storage/ResidentDatabaseSchema";
+} from "../../../steps/id-and-residency";
+import PageSlugs, { urlObjectForSlug } from "../../../steps/PageSlugs";
+import PageTitles from "../../../steps/PageTitles";
+import { ResidentRef } from "../../../storage/ResidentDatabaseSchema";
+import Storage from "../../../storage/Storage";
 
 const ReviewPage: NextPage = () => {
-  const processRef = getProcessRef();
+  const router = useRouter();
+
+  const processRef = getProcessRef(router);
+
   const tenants = useDataValue(
     Storage.ExternalContext,
     "residents",
@@ -64,7 +67,10 @@ const ReviewPage: NextPage = () => {
     }
   ];
 
-  const { href, as } = urlsForRouter(urlObjectForSlug(PageSlugs.Submit));
+  const { href, as } = urlsForRouter(
+    router,
+    urlObjectForSlug(router, PageSlugs.Submit)
+  );
 
   const button = (
     <Button

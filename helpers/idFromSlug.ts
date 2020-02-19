@@ -1,22 +1,25 @@
-const idFromSlug = (slug: string | string[] | undefined): string => {
+import { NextRouter } from "next/router";
+import unprefixUrl from "./unprefixUrl";
+
+const idFromSlug = (
+  router: NextRouter,
+  slug: string | string[] | undefined
+): string => {
   if (!slug || typeof slug === "string") {
     throw new Error("No ID in slug");
   }
 
-  const slugParts = slug.filter(
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    part => process.env.BASE_PATH!.replace(/^\//, "") !== part
-  );
+  const slugParts = unprefixUrl(router, {
+    pathname: `/${slug.join("/")}`
+  })
+    .pathname.split("/")
+    .slice(1);
 
   if (slugParts.length < 2) {
     throw new Error("No ID in slug");
   }
 
-  slugParts.reverse();
-
-  const [id] = slugParts;
-
-  return id;
+  return slugParts[slugParts.length - 1];
 };
 
 export default idFromSlug;

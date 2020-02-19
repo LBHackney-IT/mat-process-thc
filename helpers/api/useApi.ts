@@ -1,6 +1,7 @@
 import { nullAsUndefined } from "null-as-undefined";
 import querystring from "querystring";
 import { useAsync, UseAsyncReturn } from "react-async-hook";
+import basePath from "../basePath";
 import isClient from "../isClient";
 
 export interface ApiEndpoint {
@@ -35,7 +36,12 @@ const useApi = <R>(
         return;
       }
 
-      const response = await fetch(`${endpoint}?${queryString}`, { method });
+      const response = await fetch(
+        `${basePath}/api${endpoint}?${queryString}`,
+        {
+          method
+        }
+      );
       const responseBody = await response.text();
 
       let responseData: R | undefined = undefined;

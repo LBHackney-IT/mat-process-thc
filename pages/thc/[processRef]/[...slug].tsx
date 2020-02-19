@@ -6,60 +6,49 @@ import { StoreNames } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
 import { Orchestrator } from "remultiform/orchestrator";
 import { StepDefinition } from "remultiform/step";
-import { TenancySummary } from "../components/TenancySummary";
-import getProcessRef from "../helpers/getProcessRef";
-import { isRepeatingStep } from "../helpers/isStep";
-import useDataValue from "../helpers/useDataValue";
-import MainLayout from "../layouts/MainLayout";
-import steps from "../steps";
-import ProcessDatabaseSchema from "../storage/ProcessDatabaseSchema";
-import tmpProcessRef from "../storage/processRef";
-import ResidentDatabaseSchema from "../storage/ResidentDatabaseSchema";
-import Storage from "../storage/Storage";
+import { TenancySummary } from "../../../components/TenancySummary";
+import getProcessRef from "../../../helpers/getProcessRef";
+import { isRepeatingStep } from "../../../helpers/isStep";
+import useDataValue from "../../../helpers/useDataValue";
+import MainLayout from "../../../layouts/MainLayout";
+import steps from "../../../steps";
+import ProcessDatabaseSchema from "../../../storage/ProcessDatabaseSchema";
+import tmpProcessRef from "../../../storage/processRef";
+import ResidentDatabaseSchema from "../../../storage/ResidentDatabaseSchema";
+import Storage from "../../../storage/Storage";
 
 const innerSteps = steps.map(step => step.step) as StepDefinition<
   ProcessDatabaseSchema | ResidentDatabaseSchema,
   StoreNames<ProcessDatabaseSchema["schema"] | ResidentDatabaseSchema["schema"]>
 >[];
 
-const parseSlug = (
+const parseSlugFromQuery = (
   router: NextRouter
-): { slug: string | undefined; slugId?: string } => {
-  // `router.query` might be empty when first loading a page for some reason.
+): { slug: string | undefined } => {
+  // `router.query` might be an empty object when first loading a page for
+  // some reason.
   const slugParam = router.query.slug;
 
-  const result: { slug?: string; slugId?: string } = {};
+  const result: { slug?: string } = {};
 
   if (slugParam === undefined) {
     result.slug = undefined;
   } else if (typeof slugParam === "string") {
     result.slug = slugParam;
+  } else if (isRepeatingStep(router, { pathname: `/${slugParam.join("/")}` })) {
+    result.slug = slugParam.slice(0, -1).join("/");
   } else {
-    const parts = slugParam.filter(
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      part => part !== process.env.BASE_PATH!.replace(/^\/+/, "")
-    );
-
-    if (isRepeatingStep({ pathname: `/${parts.join("/")}` })) {
-      parts.reverse();
-
-      const [tail, ...rest] = parts;
-
-      rest.reverse();
-
-      result.slug = rest.join("/");
-      result.slugId = tail;
-    } else {
-      result.slug = parts.join("/");
-    }
+    result.slug = slugParam.join("/");
   }
 
-  return result as { slug: string | undefined; slugId?: string };
+  return result as { slug: string | undefined };
 };
 
 const ProcessPage: NextPage = () => {
-  const processRef = getProcessRef();
   const router = useRouter();
+
+  const processRef = getProcessRef(router);
+
   const tenancyData = useDataValue(
     Storage.ExternalContext,
     "tenancy",
@@ -73,7 +62,7 @@ const ProcessPage: NextPage = () => {
     values => (processRef ? values[processRef] : undefined)
   );
 
-  const { slug } = parseSlug(router);
+  const { slug } = parseSlugFromQuery(router);
 
   if (slug === undefined) {
     return null;

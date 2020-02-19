@@ -6,16 +6,13 @@ import {
   ComponentWrapper,
   DynamicComponent
 } from "remultiform/component-wrapper";
-
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
-
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
-
-import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
+import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const step = {
@@ -26,7 +23,7 @@ const step = {
     nextSlug: PageSlugs.Roof,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
-        url: urlObjectForSlug(nextSlug),
+        slug: nextSlug as PageSlugs | undefined,
         value: "Save and continue"
       }),
     componentWrappers: [

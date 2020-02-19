@@ -5,7 +5,6 @@ import {
   DynamicComponent,
   StaticComponent
 } from "remultiform/component-wrapper";
-
 import { makeSubmit } from "../../components/makeSubmit";
 import { TextArea } from "../../components/TextArea";
 import { TextInput } from "../../components/TextInput";
@@ -14,8 +13,7 @@ import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
 import Storage from "../../storage/Storage";
-
-import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
+import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const questions = {
@@ -70,7 +68,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
     nextSlug: nextSlugWithId(PageSlugs.Carer),
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
-        url: urlObjectForSlug(nextSlug),
+        slug: nextSlug as PageSlugs | undefined,
         value: "Save and continue"
       }),
     componentWrappers: [

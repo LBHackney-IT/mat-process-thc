@@ -5,7 +5,6 @@ import {
   ComponentWrapper,
   DynamicComponent
 } from "remultiform/component-wrapper";
-
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
@@ -15,8 +14,7 @@ import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
 import Storage from "../../storage/Storage";
-
-import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
+import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const idTypeRadios = [
@@ -75,7 +73,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
     nextSlug: nextSlugWithId(PageSlugs.Residency),
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
-        url: urlObjectForSlug(nextSlug),
+        slug: nextSlug as PageSlugs | undefined,
         value: "Save and continue"
       }),
     componentWrappers: [

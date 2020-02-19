@@ -204,7 +204,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
   test("Performing a check", ({ when, then }) => {
     when("I complete a process", async () => {
       // Index page
-      await browser!.getRelative("");
+      await browser!.getRelative("", true);
 
       // Wait for redirect.
       await browser!.wait(
