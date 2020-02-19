@@ -12,6 +12,7 @@ const api = require("./api");
 
 const dev = process.env.NODE_ENV !== "production";
 const port = parseInt(process.env.PORT || "3000");
+const basePath = process.env.BASE_PATH || "";
 
 const server = express();
 const app = nextjs({ dev, conf: nextConfig });
@@ -26,12 +27,9 @@ app
   .prepare()
   .then(() => {
     server
-      .use(process.env.BASE_PATH + "/api", api)
-      .get(process.env.BASE_PATH + "/service-worker.js", (req, res) => {
-        const { pathname } = parse(
-          req.url.replace(process.env.BASE_PATH, "") || "/",
-          true
-        );
+      .use(basePath + "/api", api)
+      .get(basePath + "/service-worker.js", (req, res) => {
+        const { pathname } = parse(req.url.replace(basePath, "") || "/", true);
         const filePath = join(__dirname, "..", nextConfig.distDir, pathname);
 
         app.serveStatic(req, res, filePath);
