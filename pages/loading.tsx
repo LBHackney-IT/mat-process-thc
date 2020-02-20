@@ -290,6 +290,7 @@ const useFetchResidentData = (): UseApiWithStorageReturn<
         responsible: boolean;
         fullAddressDisplay: string;
         dateOfBirth: string;
+        larn: string;
       }[];
     }) {
       const fullAddress = data.results[0].fullAddressDisplay;
@@ -310,7 +311,7 @@ const useFetchResidentData = (): UseApiWithStorageReturn<
       address.push(...cityAndPostcode);
 
       const tenants = data.results
-        .filter(contact => contact.responsible)
+        .filter(contact => contact.responsible && contact.larn)
         .map(contact => ({
           id: contact.contactId,
           fullName: contact.fullName,

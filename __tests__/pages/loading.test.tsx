@@ -121,25 +121,29 @@ it("renders correctly when online", async () => {
               fullAddressDisplay:
                 "FLAT 1\r\n1 TEST STREET\r\nTEST TOWN TT1 1TT",
               responsible: true,
-              fullName: "TestTenant1"
+              fullName: "TestTenant1",
+              larn: "LARN94105032"
             },
             {
               fullAddressDisplay:
                 "FLAT 1\r\n1 TEST STREET\r\nTEST TOWN TT1 1TT",
               responsible: true,
-              fullName: "TestTenant2"
+              fullName: "TestTenant2",
+              larn: null
             },
             {
               fullAddressDisplay:
                 "FLAT 1\r\n1 TEST STREET\r\nTEST TOWN TT1 1TT",
               responsible: false,
-              fullName: "TestHouseholdMember1"
+              fullName: "TestHouseholdMember1",
+              larn: null
             },
             {
               fullAddressDisplay:
                 "FLAT 1\r\n1 TEST STREET\r\nTEST TOWN TT1 1TT",
               responsible: false,
-              fullName: "TestHouseholdMember2"
+              fullName: "TestHouseholdMember2",
+              larn: null
             }
           ]
         };
@@ -270,7 +274,7 @@ it("renders correctly when online", async () => {
               <dd
                 className="govuk-summary-list__value lbh-summary-list__value"
               >
-                TestTenant1, TestTenant2
+                TestTenant1
               </dd>
             </div>
             <div
