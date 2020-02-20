@@ -2,9 +2,9 @@ import {
   Browser,
   Builder,
   Locator,
+  until,
   WebDriver,
-  WebElementPromise,
-  until
+  WebElement
 } from "selenium-webdriver";
 import chrome from "selenium-webdriver/chrome";
 import firefox from "selenium-webdriver/firefox";
@@ -144,31 +144,40 @@ class WebDriverWrapper implements WebDriver {
     return this.get(url);
   }
 
-  waitForEnabledElement(
+  async waitForEnabledElement(
     locator: Locator,
     locateTimeout = 1000,
     enabledTimeout = 1000
-  ): WebElementPromise {
-    const element = this.wait(
+  ): Promise<WebElement> {
+    const url = await this.getCurrentUrl();
+
+    const element = await this.wait(
       until.elementLocated(locator),
       locateTimeout,
-      `Unable to find ${JSON.stringify(locator)}`
+      `Unable to find ${JSON.stringify(locator)} on ${url}`
     );
 
     return this.wait(
       until.elementIsEnabled(element),
       enabledTimeout,
-      `${JSON.stringify(locator)} never became enabled`
+      `${JSON.stringify(locator)} on ${url} never became enabled`
     );
   }
 
   async submit(
-    locator: Locator = { css: '[data-testid="submit"]' }
+    locator: Locator = { css: '[data-testid="submit"]' },
+    submitTimeout = 10000
   ): Promise<void> {
-    const submitButton = await this.findElement(locator);
+    const url = await this.getCurrentUrl();
+
+    const submitButton = await this.waitForEnabledElement(locator);
 
     await submitButton.click();
-    await this.wait(until.stalenessOf(submitButton));
+    await this.wait(
+      until.stalenessOf(submitButton),
+      submitTimeout,
+      `${url} never became stale`
+    );
   }
 }
 
