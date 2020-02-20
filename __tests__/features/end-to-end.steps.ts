@@ -203,6 +203,8 @@ const processData = {
 defineFeature(loadFeature("./end-to-end.feature"), test => {
   test("Performing a check", ({ when, then }) => {
     when("I complete a process", async () => {
+      const processRef = process.env.TEST_PROCESS_REF;
+
       // Index page
       await browser!.getRelative("", true);
 
@@ -213,7 +215,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       );
 
       // Loading page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/loading");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/loading`
+      );
 
       // Wait for data fetching.
       await browser!.waitForEnabledElement(
@@ -225,7 +229,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Visit attempt page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/outside");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/outside`
+      );
 
       (
         await browser!.waitForEnabledElement({
@@ -241,12 +247,16 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Start check page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/start");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/start`
+      );
 
       await browser!.submit();
 
       // About visit page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/about-visit");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/about-visit`
+      );
 
       (
         await browser!.waitForEnabledElement({
@@ -272,7 +282,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Sections page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/sections`
+      );
 
       await browser!.waitForEnabledElement(
         { css: '[href$="/present-for-check"]' },
@@ -283,7 +295,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Present for check page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/present-for-check"
+        `${processRef}/present-for-check`
       );
 
       (
@@ -298,7 +310,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Verify tenant details page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/verify");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/verify`
+      );
 
       await browser!.submit({ css: `[href$="/id/${presentTenantRef}"]` });
 
@@ -489,12 +503,16 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Verify tenant details page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/verify");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/verify`
+      );
 
       await browser!.submit();
 
       // Sections page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/sections`
+      );
 
       await browser!.waitForEnabledElement(
         { css: '[href$="/household"]' },
@@ -504,7 +522,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit({ css: '[href$="/household"]' });
 
       // Household page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/household");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/household`
+      );
 
       (
         await browser!.waitForEnabledElement({
@@ -535,7 +555,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Rent page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/rent");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/rent`
+      );
 
       (
         await browser!.waitForEnabledElement({
@@ -596,7 +618,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Other property page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/other-property"
+        `${processRef}/other-property`
       );
 
       (
@@ -613,14 +635,18 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Sections page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/sections`
+      );
 
       await browser!.waitForEnabledElement({ css: '[href$="/rooms"]' }, 10000);
 
       await browser!.submit({ css: '[href$="/rooms"]' });
 
       // Rooms page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/rooms");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/rooms`
+      );
 
       (
         await browser!.waitForEnabledElement({
@@ -637,7 +663,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Laminated flooring page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/laminated-flooring"
+        `${processRef}/laminated-flooring`
       );
 
       (
@@ -665,7 +691,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Structural changes page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/structural-changes"
+        `${processRef}/structural-changes`
       );
 
       (
@@ -692,7 +718,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Damage page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/damage");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/damage`
+      );
 
       (
         await browser!.waitForEnabledElement({
@@ -713,7 +741,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Roof page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/roof");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/roof`
+      );
 
       (
         await browser!.waitForEnabledElement({
@@ -734,7 +764,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Loft page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/loft");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/loft`
+      );
 
       (
         await browser!.waitForEnabledElement({
@@ -755,7 +787,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Garden page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/garden");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/garden`
+      );
 
       (
         await browser!.waitForEnabledElement({
@@ -787,7 +821,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Storing materials page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/storing-materials"
+        `${processRef}/storing-materials`
       );
 
       (
@@ -809,7 +843,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Fire exit page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/fire-exit");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/fire-exit`
+      );
 
       (
         await browser!.waitForEnabledElement({
@@ -830,7 +866,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Smoke alarm page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/smoke-alarm");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/smoke-alarm`
+      );
 
       (
         await browser!.waitForEnabledElement({
@@ -851,7 +889,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Metal gates page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/metal-gates");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/metal-gates`
+      );
 
       (
         await browser!.waitForEnabledElement({
@@ -877,7 +917,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Door mats page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/door-mats");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/door-mats`
+      );
 
       (
         await browser!.waitForEnabledElement({
@@ -899,7 +941,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Communal areas page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/communal-areas"
+        `${processRef}/communal-areas`
       );
 
       (
@@ -921,7 +963,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Pets page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/pets");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/pets`
+      );
 
       (
         await browser!.waitForEnabledElement({
@@ -958,7 +1002,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Antisocial behaviour page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/antisocial-behaviour"
+        `${processRef}/antisocial-behaviour`
       );
 
       (
@@ -976,7 +1020,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Other comments page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/other-comments"
+        `${processRef}/other-comments`
       );
 
       (
@@ -993,7 +1037,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Sections page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/sections`
+      );
 
       await browser!.waitForEnabledElement(
         { css: '[href$="/home-check"]' },
@@ -1003,7 +1049,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit({ css: '[href$="/home-check"]' });
 
       // Home check page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/home-check");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/home-check`
+      );
 
       (
         await browser!.waitForEnabledElement({
@@ -1014,7 +1062,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Health concerns page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/health");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/health`
+      );
 
       (
         await browser!.waitForEnabledElement({
@@ -1048,7 +1098,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Disability page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/disability");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/disability`
+      );
 
       (
         await browser!.waitForEnabledElement({
@@ -1088,7 +1140,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       // Support needs page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        "/support-needs"
+        `${processRef}/support-needs`
       );
       (
         await browser!.waitForEnabledElement({
@@ -1163,19 +1215,25 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.submit();
 
       // Sections page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/sections");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/sections`
+      );
 
       await browser!.waitForEnabledElement({ css: '[href$="/review"]' }, 10000);
 
       await browser!.submit({ css: '[href$="/review"]' });
 
       // Review page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/review");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/review`
+      );
 
       await browser!.submit();
 
       // Submit page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/submit");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/submit`
+      );
 
       await browser!.submit();
 
@@ -1183,7 +1241,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await browser!.wait(until.urlMatches(/\/confirmed$/));
 
       // Confirmed page
-      await expect(browser!.getCurrentUrl()).resolves.toContain("/confirmed");
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/confirmed`
+      );
     });
 
     then("I should see that the process has been submitted", async () => {
