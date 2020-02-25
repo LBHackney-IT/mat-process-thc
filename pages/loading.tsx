@@ -8,10 +8,8 @@ import {
 import { NextPage } from "next";
 import NextLink from "next/link";
 import { nullAsUndefined } from "null-as-undefined";
-
-import React, { useState, useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useAsync } from "react-async-hook";
-
 import ProgressBar from "../components/ProgressBar";
 import { TenancySummary } from "../components/TenancySummary";
 import useApi from "../helpers/api/useApi";
@@ -19,17 +17,19 @@ import useApiWithStorage, {
   UseApiWithStorageReturn
 } from "../helpers/api/useApiWithStorage";
 import getProcessRef from "../helpers/getProcessRef";
-import usePrecacheAll from "../helpers/usePrecacheAll";
+import isClient from "../helpers/isClient";
+import isServer from "../helpers/isServer";
 import titleCase from "../helpers/titleCase";
 import urlsForRouter from "../helpers/urlsForRouter";
+import usePrecacheAll from "../helpers/usePrecacheAll";
 import MainLayout from "../layouts/MainLayout";
 import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 import PageTitles from "../steps/PageTitles";
 import ExternalDatabaseSchema from "../storage/ExternalDatabaseSchema";
 import { ProcessJson } from "../storage/ProcessDatabaseSchema";
+import tmpProcessRef from "../storage/processRef";
 import { ResidentRef } from "../storage/ResidentDatabaseSchema";
 import Storage from "../storage/Storage";
-import tmpProcessRef from "../storage/processRef";
 
 const useFetchProcessJson = (): {
   loading: boolean;
@@ -40,7 +40,10 @@ const useFetchProcessJson = (): {
 
   const processData = useApi<{ processData: ProcessJson }>({
     endpoint: `${process.env.BASE_PATH}/api/v1/processes/${processRef}/processData`,
-    jwt: { sessionStorageKey: `${processRef}:processApiJwt` },
+    jwt: {
+      sessionStorageKey:
+        isClient && processRef ? `${processRef}:processApiJwt` : undefined
+    },
     execute: Boolean(processRef)
   });
 
@@ -62,13 +65,10 @@ const useFetchImages = (
 } => {
   const processRef = getProcessRef();
 
-  let jwt: string | undefined = undefined;
-
-  if (process.browser) {
-    jwt = nullAsUndefined(
-      sessionStorage.getItem(`${processRef}:processApiJwt`)
-    );
-  }
+  const jwt =
+    isClient && processRef
+      ? nullAsUndefined(sessionStorage.getItem(`${processRef}:processApiJwt`))
+      : undefined;
 
   let images:
     | ReturnType<typeof Storage.getImagesToFetch>
@@ -81,7 +81,7 @@ const useFetchImages = (
   const [fetchedImageCount, setFetchedImageCount] = useState(0);
 
   const imageResults = useAsync(async () => {
-    if (!process.browser) {
+    if (isServer) {
       return;
     }
 
@@ -135,7 +135,7 @@ const useFetchImages = (
   }, [processRef, jwt, JSON.stringify(images)]);
 
   return {
-    loading: !process.browser || imageResults.loading || !images,
+    loading: isServer || imageResults.loading || !images,
     result: images ? imageResults.result : undefined,
     error: imageResults.error,
     fetchedImageCount,
@@ -272,16 +272,18 @@ const useFetchResidentData = (): UseApiWithStorageReturn<
 > => {
   const processRef = getProcessRef();
 
-  let data: string | undefined;
-
-  if (process.browser) {
-    data = nullAsUndefined(sessionStorage.getItem(`${processRef}:matApiData`));
-  }
+  const data =
+    isClient && processRef
+      ? nullAsUndefined(sessionStorage.getItem(`${processRef}:matApiData`))
+      : undefined;
 
   return useApiWithStorage({
     endpoint: `${process.env.BASE_PATH}/api/v1/residents`,
     query: { data },
-    jwt: { sessionStorageKey: `${processRef}:matApiJwt` },
+    jwt: {
+      sessionStorageKey:
+        isClient && processRef ? `${processRef}:matApiJwt` : undefined
+    },
     execute: Boolean(processRef),
     parse(data: {
       results: {
@@ -347,16 +349,18 @@ const useFetchTenancyData = (): UseApiWithStorageReturn<
 > => {
   const processRef = getProcessRef();
 
-  let data: string | undefined;
-
-  if (process.browser) {
-    data = nullAsUndefined(sessionStorage.getItem(`${processRef}:matApiData`));
-  }
+  const data =
+    isClient && processRef
+      ? nullAsUndefined(sessionStorage.getItem(`${processRef}:matApiData`))
+      : undefined;
 
   return useApiWithStorage({
     endpoint: `${process.env.BASE_PATH}/api/v1/tenancies`,
     query: { data },
-    jwt: { sessionStorageKey: `${processRef}:matApiJwt` },
+    jwt: {
+      sessionStorageKey:
+        isClient && processRef ? `${processRef}:matApiJwt` : undefined
+    },
     execute: Boolean(processRef),
     parse(data: {
       results: {

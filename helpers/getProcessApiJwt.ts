@@ -1,8 +1,12 @@
 import { nullAsUndefined } from "null-as-undefined";
-
 import getProcessRef from "./getProcessRef";
+import isServer from "./isServer";
 
 const getProcessApiJwt = (processRef?: string): string | undefined => {
+  if (isServer) {
+    return;
+  }
+
   if (!processRef) {
     processRef = getProcessRef();
   }
@@ -11,15 +15,7 @@ const getProcessApiJwt = (processRef?: string): string | undefined => {
     return;
   }
 
-  let processApiJwt: string | undefined = undefined;
-
-  if (process.browser) {
-    processApiJwt = nullAsUndefined(
-      sessionStorage.getItem(`${processRef}:processApiJwt`)
-    );
-  }
-
-  return processApiJwt;
+  return nullAsUndefined(sessionStorage.getItem(`${processRef}:processApiJwt`));
 };
 
 export default getProcessApiJwt;

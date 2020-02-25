@@ -1,25 +1,24 @@
 import "cross-fetch/polyfill";
-
 import {
   ComponentRegister,
   LinkComponentTypeProps
 } from "lbh-frontend-react/helpers";
+import NextApp from "next/app";
+import ErrorPage from "next/error";
+import NextLink from "next/link";
+import { Router } from "next/router";
+import "normalize.css";
+import { nullAsUndefined } from "null-as-undefined";
 import querystring from "querystring";
 import React from "react";
 import isEqual from "react-fast-compare";
-import NextApp from "next/app";
-import NextLink from "next/link";
-import { Router } from "next/router";
-import ErrorPage from "next/error";
 import { DatabaseProvider } from "remultiform/database-context";
-
-import "normalize.css";
-
+import isClient from "../helpers/isClient";
+import isServer from "../helpers/isServer";
 import PropTypes from "../helpers/PropTypes";
 import urlsForRouter from "../helpers/urlsForRouter";
 import { precacheAll } from "../helpers/usePrecacheAll";
 import Storage from "../storage/Storage";
-import { nullAsUndefined } from "null-as-undefined";
 
 const Link: React.FunctionComponent<LinkComponentTypeProps> = props => {
   const { href: originalHref } = props;
@@ -64,8 +63,8 @@ ComponentRegister.init({
 });
 
 // The user's data does not exist on the server, so there's no need to attempt
-// to access it if we're not on the client.
-if (process.browser) {
+// to access it if unless we're on the client.
+if (isClient) {
   Storage.init();
 }
 
@@ -85,40 +84,43 @@ export default class App extends NextApp<{}, {}, State> {
   }
 
   private static cacheQueryParameters(router: Router): void {
-    if (process.browser) {
-      let processRef = (router.query.processRef ||
-        process.env.TEST_PROCESS_REF) as string | undefined;
+    if (isServer) {
+      return;
+    }
 
-      if (processRef) {
-        sessionStorage.setItem("currentProcessRef", processRef);
-      } else {
-        processRef = nullAsUndefined(
-          sessionStorage.getItem("currentProcessRef")
-        );
-      }
+    let processRef = (router.query.processRef ||
+      process.env.TEST_PROCESS_REF) as string | undefined;
 
-      if (processRef) {
-        const processApiJwt = (router.query.processApiJwt ||
-          process.env.TEST_PROCESS_API_JWT) as string | undefined;
+    if (processRef) {
+      sessionStorage.setItem("currentProcessRef", processRef);
+    } else {
+      processRef = nullAsUndefined(sessionStorage.getItem("currentProcessRef"));
+    }
 
-        if (processApiJwt) {
-          sessionStorage.setItem(`${processRef}:processApiJwt`, processApiJwt);
-        }
+    if (!processRef) {
+      return;
+    }
 
-        const matApiJwt = (router.query.matApiJwt ||
-          process.env.TEST_MAT_API_JWT) as string | undefined;
+    const processApiJwt = (router.query.processApiJwt ||
+      process.env.TEST_PROCESS_API_JWT) as string | undefined;
 
-        if (matApiJwt) {
-          sessionStorage.setItem(`${processRef}:matApiJwt`, matApiJwt);
-        }
+    if (processApiJwt) {
+      sessionStorage.setItem(`${processRef}:processApiJwt`, processApiJwt);
+    }
 
-        const matApiData = (router.query.data ||
-          process.env.TEST_MAT_API_DATA) as string | undefined;
+    const matApiJwt = (router.query.matApiJwt ||
+      process.env.TEST_MAT_API_JWT) as string | undefined;
 
-        if (matApiData) {
-          sessionStorage.setItem(`${processRef}:matApiData`, matApiData);
-        }
-      }
+    if (matApiJwt) {
+      sessionStorage.setItem(`${processRef}:matApiJwt`, matApiJwt);
+    }
+
+    const matApiData = (router.query.data || process.env.TEST_MAT_API_DATA) as
+      | string
+      | undefined;
+
+    if (matApiData) {
+      sessionStorage.setItem(`${processRef}:matApiData`, matApiData);
     }
   }
 

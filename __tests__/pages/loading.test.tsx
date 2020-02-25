@@ -7,15 +7,9 @@ import { spyOnConsoleError } from "../helpers/spies";
 import LoadingPage from "../../pages/loading";
 import Storage from "../../storage/Storage";
 
-const originalBrowser = Object.prototype.hasOwnProperty.call(process, "browser")
-  ? process.browser
-  : undefined;
 const originalExternalContext = Storage.ExternalContext;
 
 beforeEach(() => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (process as any).browser = true;
-
   sessionStorage.setItem("currentProcessRef", "test-process-ref");
   sessionStorage.setItem(
     "test-process-ref:processApiJwt",
@@ -57,9 +51,6 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (process as any).browser = originalBrowser;
-
   sessionStorage.clear();
 
   Storage.ExternalContext = originalExternalContext;

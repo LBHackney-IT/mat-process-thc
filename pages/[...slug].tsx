@@ -1,22 +1,21 @@
 import { NextPage } from "next";
 import ErrorPage from "next/error";
-import { useRouter } from "next/router";
+import { NextRouter, useRouter } from "next/router";
 import React from "react";
 import { StoreNames } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
 import { Orchestrator } from "remultiform/orchestrator";
 import { StepDefinition } from "remultiform/step";
-
 import { TenancySummary } from "../components/TenancySummary";
-import { isRepeatingStep } from "../helpers/isStep";
 import getProcessRef from "../helpers/getProcessRef";
+import { isRepeatingStep } from "../helpers/isStep";
 import useDataValue from "../helpers/useDataValue";
 import MainLayout from "../layouts/MainLayout";
 import steps from "../steps";
 import ProcessDatabaseSchema from "../storage/ProcessDatabaseSchema";
+import tmpProcessRef from "../storage/processRef";
 import ResidentDatabaseSchema from "../storage/ResidentDatabaseSchema";
 import Storage from "../storage/Storage";
-import tmpProcessRef from "../storage/processRef";
 
 const innerSteps = steps.map(step => step.step) as StepDefinition<
   ProcessDatabaseSchema | ResidentDatabaseSchema,
@@ -24,11 +23,13 @@ const innerSteps = steps.map(step => step.step) as StepDefinition<
 >[];
 
 const parseSlug = (
-  slugParam: string | string[] | undefined
+  router: NextRouter
 ): { slug: string | undefined; slugId?: string } => {
+  // `router.query` might be empty when first loading a page for some reason.
+  const slugParam = router.query.slug;
+
   const result: { slug?: string; slugId?: string } = {};
 
-  // `router.query` might be empty when first loading a page for some reason.
   if (slugParam === undefined) {
     result.slug = undefined;
   } else if (typeof slugParam === "string") {
@@ -72,7 +73,7 @@ const ProcessPage: NextPage = () => {
     values => (processRef ? values[processRef] : undefined)
   );
 
-  const { slug } = parseSlug(router.query.slug);
+  const { slug } = parseSlug(router);
 
   if (slug === undefined) {
     return null;

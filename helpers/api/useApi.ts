@@ -1,12 +1,13 @@
-import querystring from "querystring";
 import { nullAsUndefined } from "null-as-undefined";
+import querystring from "querystring";
 import { useAsync, UseAsyncReturn } from "react-async-hook";
+import isClient from "../isClient";
 
 export interface ApiEndpoint {
   endpoint: string;
   query?: { [s: string]: string | undefined };
   method?: string;
-  jwt: { sessionStorageKey: string };
+  jwt: { sessionStorageKey: string | undefined };
   execute: boolean;
 }
 
@@ -16,13 +17,12 @@ const useApi = <R>(
   R | undefined,
   [string, string, string | undefined, boolean]
 > => {
-  let jwt: string | undefined;
-
-  if (process.browser) {
-    jwt = nullAsUndefined(
-      sessionStorage.getItem(apiEndpoint.jwt.sessionStorageKey)
-    );
-  }
+  const jwt =
+    isClient && apiEndpoint.jwt.sessionStorageKey
+      ? nullAsUndefined(
+          sessionStorage.getItem(apiEndpoint.jwt.sessionStorageKey)
+        )
+      : undefined;
 
   return useAsync(
     async (
