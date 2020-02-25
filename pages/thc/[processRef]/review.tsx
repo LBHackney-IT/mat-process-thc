@@ -15,6 +15,7 @@ import useDatabase from "../../../helpers/useDatabase";
 import useDataValue from "../../../helpers/useDataValue";
 import useReviewSectionRows from "../../../helpers/useReviewSectionRows";
 import MainLayout from "../../../layouts/MainLayout";
+import householdSteps from "../../../steps/household";
 import {
   idAndResidencyProcessSteps,
   idAndResidencyResidentSteps
@@ -73,6 +74,10 @@ const ReviewPage: NextPage = () => {
           selectedTenantId
         )
       ]
+    },
+    {
+      heading: "Household",
+      rows: [...useReviewSectionRows(Storage.ProcessContext, householdSteps)]
     }
   ];
 

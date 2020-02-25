@@ -19,13 +19,40 @@ import {
   TextAreaDetailsProps
 } from "../../components/TextAreaDetails";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import { Note } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step = {
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
   title: PageTitles.Household,
   heading: "Review household members",
+  review: {
+    rows: [
+      {
+        label: "Change in household members",
+        values: {
+          "member-changes": {
+            renderValue(memberChanges: Note): React.ReactNode {
+              return memberChanges.value;
+            }
+          }
+        },
+        images: "household-document-images"
+      },
+      {
+        label: "Housing move schemes",
+        values: {
+          "house-moving-schemes": {
+            renderValue(houseMovingSchemes: Note): React.ReactNode {
+              return houseMovingSchemes.value;
+            }
+          }
+        }
+      }
+    ]
+  },
   step: {
     slug: PageSlugs.Household,
     nextSlug: PageSlugs.Rent,
@@ -35,7 +62,7 @@ const step = {
         value: "Save and continue"
       }),
     componentWrappers: [
-      ComponentWrapper.wrapStatic(
+      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "household">(
         new StaticComponent({
           key: "household-members-table",
           Component: Table,

@@ -12,13 +12,32 @@ import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea, TextAreaProps } from "../../components/TextArea";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step = {
+const questions = {
+  "needs-repairs": "Are there any new repairs queries?"
+};
+
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
   title: PageTitles.Repairs,
   heading: "New repairs",
+  review: {
+    rows: [
+      {
+        label: questions["needs-repairs"],
+        values: {
+          "needs-repairs": {
+            renderValue(needed: string): React.ReactNode {
+              return needed;
+            }
+          }
+        }
+      }
+    ]
+  },
   step: {
     slug: PageSlugs.Repairs,
     nextSlug: PageSlugs.StoringMaterials,

@@ -1391,6 +1391,19 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         `${processRef}/review`
       );
 
+      // Review page Household section
+      await Expect.pageToContain("Household");
+      await Expect.pageToContain("Member changes notes");
+      await Expect.pageToContain("House moving schemes notes");
+      await Expect.pageToContain(
+        "Yes, but tenant has an action plan to clear arrears"
+      );
+      await Expect.pageToContain("Yes, but application declined");
+      await Expect.pageToContain("Housing benefits notes");
+      await Expect.pageToContain("Rent arrears notes");
+      await Expect.pageToContain("Income officer notes");
+      await Expect.pageToContain("Other property notes");
+
       await browser!.submit();
 
       // Submit page
