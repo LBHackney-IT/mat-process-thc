@@ -87,19 +87,21 @@ const ReviewPage: NextPage = () => {
       heading="Review Tenancy and Household Check"
       pausable
     >
-      {sections.map(({ heading, rows }) => (
-        <React.Fragment key={heading}>
-          <Heading level={HeadingLevels.H2}>{heading}</Heading>
+      {sections
+        .filter(section => section.rows.length)
+        .map(({ heading, rows }) => (
+          <React.Fragment key={heading}>
+            <Heading level={HeadingLevels.H2}>{heading}</Heading>
 
-          {rows.length ? (
-            <SummaryList
-              rows={(rows as unknown) as { key: string; value: string }[]}
-            />
-          ) : (
-            <Paragraph>Loading...</Paragraph>
-          )}
-        </React.Fragment>
-      ))}
+            {rows.length ? (
+              <SummaryList
+                rows={(rows as unknown) as { key: string; value: string }[]}
+              />
+            ) : (
+              <Paragraph>Loading...</Paragraph>
+            )}
+          </React.Fragment>
+        ))}
 
       <Heading level={HeadingLevels.H2}>Declaration</Heading>
       <Paragraph>
