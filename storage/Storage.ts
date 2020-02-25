@@ -41,6 +41,18 @@ const migrateProcessData = async (
     version = 4;
   }
 
+  if (version == 4) {
+    let propertiesWithNotes = Object.keys(processData.property.value).filter(
+      propertyName => processData.property.value[propertyName].notes
+    );
+    propertiesWithNotes.forEach(propertyWithNotes => {
+      processData.property.value[propertyWithNotes].notes = {
+        value: processData.property.value[propertyWithNotes].notes
+      };
+    });
+    version = 5;
+  }
+
   if (version !== newVersion) {
     throw new Error(
       `Unable to upgrade to ${newVersion} due to missing ` +
@@ -99,7 +111,7 @@ export default class Storage {
 
     const processDatabasePromise = Database.open<ProcessDatabaseSchema>(
       processDatabaseName,
-      4,
+      5,
       {
         upgrade(upgrade) {
           let version = upgrade.oldVersion;

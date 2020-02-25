@@ -103,7 +103,7 @@ TextAreaWithCheckbox.propTypes = {
   ),
   label: PropTypes.exact({
     id: PropTypes.string,
-    value: PropTypes.node.isRequired
+    value: PropTypes.string.isRequired
   }).isRequired,
   name: PropTypes.string.isRequired,
   rows: PropTypes.number,

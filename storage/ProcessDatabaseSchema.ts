@@ -4,6 +4,9 @@ import { DeepPartial } from "utility-types";
 import ResidentDatabaseSchema, { ResidentRef } from "./ResidentDatabaseSchema";
 
 export type ProcessRef = string;
+export interface NoteValue {
+  value: string;
+}
 
 export const processDatabaseName = `mat-process-${
   process.env.PROCESS_NAME
@@ -11,7 +14,7 @@ export const processDatabaseName = `mat-process-${
 
 type ProcessDatabaseSchema = NamedSchema<
   typeof processDatabaseName,
-  4,
+  5,
   {
     lastModified: {
       key: ProcessRef;
@@ -26,8 +29,7 @@ type ProcessDatabaseSchema = NamedSchema<
         };
         rooms: {
           canEnterAll: string;
-          notes: {
-            value: string;
+          notes: NoteValue & {
             isPostVisitAction?: boolean;
           };
         };
@@ -35,8 +37,8 @@ type ProcessDatabaseSchema = NamedSchema<
           hasLaminatedFlooring: string;
           hasPermission: string;
           images: string[];
-          notes: {
-            value: string;
+          // does this solve the problem?
+          notes: NoteValue & {
             isPostVisitAction?: boolean;
           };
         };
@@ -44,32 +46,28 @@ type ProcessDatabaseSchema = NamedSchema<
           hasStructuralChanges: string;
           changesAuthorised: string;
           images: string[];
-          notes: {
-            value: string;
+          notes: NoteValue & {
             isPostVisitAction?: boolean;
           };
         };
         damage: {
           hasDamage: string;
           images: string[];
-          notes: {
-            value: string;
+          notes: NoteValue & {
             isPostVisitAction?: boolean;
           };
         };
         roof: {
           hasAccess: string;
           itemsStoredOnRoof: string;
-          notes: {
-            value: string;
+          notes: NoteValue & {
             isPostVisitAction?: boolean;
           };
         };
         loft: {
           hasAccess: string;
           itemsStored: string;
-          notes: {
-            value: string;
+          notes: NoteValue & {
             isPostVisitAction?: boolean;
           };
         };
@@ -78,32 +76,28 @@ type ProcessDatabaseSchema = NamedSchema<
           type: string;
           isMaintained: string;
           images: string[];
-          notes: {
-            value: string;
+          notes: NoteValue & {
             isPostVisitAction?: boolean;
           };
         };
         storingMaterials: {
           isStoringMaterials: string;
           furtherActionRequired: string;
-          notes: {
-            value: string;
+          notes: NoteValue & {
             isPostVisitAction?: boolean;
           };
         };
         fireExit: {
           hasFireExit: string;
           isAccessible: string;
-          notes: {
-            value: string;
+          notes: NoteValue & {
             isPostVisitAction?: boolean;
           };
         };
         smokeAlarm: {
           hasSmokeAlarm: string;
           isWorking: string;
-          notes: {
-            value: string;
+          notes: NoteValue & {
             isPostVisitAction?: boolean;
           };
         };
@@ -112,24 +106,21 @@ type ProcessDatabaseSchema = NamedSchema<
           combustibleItemsBehind: string;
           furtherActionRequired: string;
           images: string[];
-          notes: {
-            value: string;
+          notes: NoteValue & {
             isPostVisitAction?: boolean;
           };
         };
         doorMats: {
           hasPlaced: string;
           furtherActionRequired: string;
-          notes: {
-            value: string;
+          notes: NoteValue & {
             isPostVisitAction?: boolean;
           };
         };
         communalAreas: {
           hasLeftCombustibleItems: string;
           furtherActionRequired: string;
-          notes: {
-            value: string;
+          notes: NoteValue & {
             isPostVisitAction?: boolean;
           };
         };
@@ -138,22 +129,19 @@ type ProcessDatabaseSchema = NamedSchema<
           petTypes: string[];
           hasPermission: string;
           images: string[];
-          notes: {
-            value: string;
+          notes: NoteValue & {
             isPostVisitAction?: boolean;
           };
         };
         antisocialBehaviour: {
           tenantUnderstands: string;
-          notes: {
-            value: string;
+          notes: NoteValue & {
             isPostVisitAction?: boolean;
           };
         };
         otherComments: {
           images: string[];
-          notes: {
-            value: string;
+          notes: NoteValue & {
             isPostVisitAction?: boolean;
           };
         };
@@ -194,42 +182,36 @@ type ProcessDatabaseSchema = NamedSchema<
           images: string[];
         };
         houseMovingSchemes: {
-          notes: {
-            value: string;
+          notes: NoteValue & {
             isPostVisitAction?: boolean;
           };
         };
         memberChanges: {
-          notes: {
-            value: string;
+          notes: NoteValue & {
             isPostVisitAction?: boolean;
           };
         };
         rentArrears: {
           type: string;
-          notes: {
-            value: string;
+          notes: NoteValue & {
             isPostVisitAction?: boolean;
           };
         };
         housingBenefits: {
           hasApplied: string;
-          notes: {
-            value: string;
+          notes: NoteValue & {
             isPostVisitAction?: boolean;
           };
         };
         incomeOfficer: {
           wantsToContact: string;
-          notes: {
-            value: string;
+          notes: NoteValue & {
             isPostVisitAction?: boolean;
           };
         };
         otherProperty: {
           hasOtherProperty: string;
-          notes: {
-            value: string;
+          notes: NoteValue & {
             isPostVisitAction?: boolean;
           };
         };
