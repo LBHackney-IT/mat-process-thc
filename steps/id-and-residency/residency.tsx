@@ -15,6 +15,7 @@ import {
 import keyFromSlug from "../../helpers/keyFromSlug";
 import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import { Note } from "../../storage/DatabaseSchema";
 import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
 import Storage from "../../storage/Storage";
 import PageSlugs from "../PageSlugs";
@@ -76,8 +77,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
             }
           },
           "residency-notes": {
-            renderValue(notes: string): React.ReactNode {
-              return notes;
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
             }
           }
         },

@@ -125,8 +125,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             }
           },
           "carer-notes": {
-            renderValue(notes: string): React.ReactNode {
-              return notes;
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
             }
           }
         }

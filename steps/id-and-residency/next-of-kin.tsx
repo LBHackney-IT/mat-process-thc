@@ -207,8 +207,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
             } as LabelProps,
             rows: 4 as number | undefined
           },
-          defaultValue: { value: "", isPostVisitAction: false },
-          emptyValue: { value: "", isPostVisitAction: false },
+          defaultValue: "",
+          emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
             ResidentDatabaseSchema,
             "nextOfKin"
