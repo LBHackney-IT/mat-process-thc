@@ -23,6 +23,7 @@ import {
   TextAreaDetailsProps
 } from "../../components/TextAreaDetails";
 import { TextInput } from "../../components/TextInput";
+import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
@@ -62,7 +63,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
         values: {
           "carer-needed": {
             renderValue(needed: string): React.ReactNode {
-              return yesNoRadios.find(({ value }) => value === needed)?.label;
+              return getRadioLabelFromValue(yesNoRadios, needed);
             }
           }
         }
@@ -72,7 +73,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
         values: {
           "carer-type": {
             renderValue(type: string): React.ReactNode {
-              return carerTypeRadios.find(({ value }) => value === type)?.label;
+              return getRadioLabelFromValue(carerTypeRadios, type);
             }
           }
         }
@@ -82,7 +83,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
         values: {
           "carer-live-in": {
             renderValue(liveIn: string): React.ReactNode {
-              return yesNoRadios.find(({ value }) => value === liveIn)?.label;
+              return getRadioLabelFromValue(yesNoRadios, liveIn);
             }
           },
           "carer-live-in-start-date": {
