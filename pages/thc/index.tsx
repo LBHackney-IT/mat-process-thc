@@ -36,14 +36,20 @@ const useCacheQueryParameters = (): void => {
 
   if (processApiJwt) {
     sessionStorage.setItem(`${processRef}:processApiJwt`, processApiJwt);
+  } else {
+    sessionStorage.removeItem(`${processRef}:processApiJwt`);
   }
 
   if (matApiJwt) {
     sessionStorage.setItem(`${processRef}:matApiJwt`, matApiJwt);
+  } else {
+    sessionStorage.removeItem(`${processRef}:matApiJwt`);
   }
 
   if (matApiData) {
     sessionStorage.setItem(`${processRef}:matApiData`, matApiData);
+  } else {
+    sessionStorage.removeItem(`${processRef}:matApiData`);
   }
 };
 
