@@ -72,7 +72,7 @@
     "normalize.css": "^8.0.1",
     "prettier": "^1.19.1",
     "pretty-quick": "^2.0.1",
-    "react-test-renderer": "^16.12.0",
+    "react-test-renderer": "^16.13.0",
     "selenium-webdriver": "^4.0.0-alpha.5",
     "styled-jsx": "^3.2.4",
     "ts-jest": "^25.2.1",
