@@ -128,7 +128,8 @@ const step = {
           renderWhen(stepValues: {
             "garden-type"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
-            return stepValues["garden-type"] === "not sure";
+            return stepValues["garden-type"] === ("private") ||
+            stepValues["garden-type"] === ("not sure");
           },
           defaultValue: "",
           emptyValue: "",
@@ -142,74 +143,7 @@ const step = {
           })
         })
       ),
-      ComponentWrapper.wrapDynamic(
-        new DynamicComponent({
-          key: "is-maintained",
-          Component: RadioButtons,
-          props: {
-            name: "is-maintained",
-            legend: (
-              <FieldsetLegend>Is the garden being maintained?</FieldsetLegend>
-            ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
-          },
-          renderWhen(stepValues: {
-            "garden-type"?: ComponentValue<ProcessDatabaseSchema, "property">;
-          }): boolean {
-            return stepValues["garden-type"] === ("private" || "not sure");
-          },
-          defaultValue: "",
-          emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "property"
-          >({
-            storeName: "property",
-            key: processRef,
-            property: ["garden", "isMaintained"]
-          })
-        })
-      ),
-      ComponentWrapper.wrapDynamic(
-        new DynamicComponent({
-          key: "garden-notes",
-          Component: TextArea,
-          props: {
-            label: {
-              value:
-                "Add note about upkeep of garden if necessary."
-            } as { id?: string; value: React.ReactNode },
-            name: "garden-notes"
-          },
-          renderWhen(stepValues: {
-            "is-maintained"?: ComponentValue<
-              ProcessDatabaseSchema,
-              "property"
-            >;
-          }): boolean {
-            return stepValues["is-maintained"] === "no";
-          },
-          defaultValue: "",
-          emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "property"
-          >({
-            storeName: "property",
-            key: processRef,
-            property: ["garden", "isMaintained"]
-          })
-        })
-      ),
+    
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "garden-images",
@@ -253,7 +187,8 @@ const step = {
           renderWhen(stepValues: {
             "is-maintained"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
-            return stepValues["is-maintained"] === "yes";
+            return stepValues["is-maintained"] === "yes" ||
+            stepValues["is-maintained"] === "no"
           },
           defaultValue: "",
           emptyValue: "",
