@@ -631,7 +631,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       await browser!.submit();
 
-      // Damage page
+      // D
       await expect(browser!.getCurrentUrl()).resolves.toContain("/damage");
 
       await browser!
