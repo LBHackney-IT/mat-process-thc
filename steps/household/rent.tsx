@@ -147,7 +147,8 @@ const step = {
           }): boolean {
             return (
               stepValues["rent-arrears-type"] === "yes has plan" ||
-              stepValues["rent-arrears-type"] === "yes has no plan"
+              stepValues["rent-arrears-type"] === "yes has no plan" ||
+              stepValues["rent-arrears-type"] === "no"
             );
           },
           defaultValue: "",
@@ -182,7 +183,8 @@ const step = {
           }): boolean {
             return (
               stepValues["rent-arrears-type"] === "yes has plan" ||
-              stepValues["rent-arrears-type"] === "yes has no plan"
+              stepValues["rent-arrears-type"] === "yes has no plan" ||
+              stepValues["rent-arrears-type"] === "no"
             );
           },
           defaultValue: "",
