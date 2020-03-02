@@ -1404,6 +1404,25 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await Expect.pageToContain("Income officer notes");
       await Expect.pageToContain("Other property notes");
 
+      // Review page Property inspection section
+      await Expect.pageToContain("Room notes");
+      await Expect.pageToContain("Laminated flooring notes");
+      await Expect.pageToContain("Structural changes notes");
+      await Expect.pageToContain("Damage notes");
+      await Expect.pageToContain("Roof notes");
+      await Expect.pageToContain("Loft notes");
+      await Expect.pageToContain("Garden notes");
+      await Expect.pageToContain("Storing materials notes");
+      await Expect.pageToContain("Fire exit notes");
+      await Expect.pageToContain("Smoke alarm notes");
+      await Expect.pageToContain("Metal gates notes");
+      await Expect.pageToContain("Door mats notes");
+      await Expect.pageToContain("Communal areas notes");
+      await Expect.pageToContain("Cat, Dog");
+      await Expect.pageToContain("Antisocial behaviour notes");
+      await Expect.pageToContain("Other comments notes");
+      await Expect.pageToContain("Repairs notes");
+
       await browser!.submit();
 
       // Submit page

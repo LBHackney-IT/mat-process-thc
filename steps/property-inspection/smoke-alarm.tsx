@@ -9,14 +9,52 @@ import {
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea, TextAreaProps } from "../../components/TextArea";
+import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import yesNoRadios from "../../helpers/yesNoRadios";
+import { Note } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step = {
+const questions = {
+  "has-smoke-alarm": "Is there is a hard wired smoke alarm in the property?",
+  "is-working": "Does it work when tested?"
+};
+
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
   title: PageTitles.SmokeAlarm,
   heading: "Smoke alarm",
+  review: {
+    rows: [
+      {
+        label: questions["has-smoke-alarm"],
+        values: {
+          "has-smoke-alarm": {
+            renderValue(hasSmokeAlarm: string): React.ReactNode {
+              return getRadioLabelFromValue(yesNoRadios, hasSmokeAlarm);
+            }
+          }
+        }
+      },
+      {
+        label: questions["is-working"],
+        values: {
+          "is-working": {
+            renderValue(isWorking: string): React.ReactNode {
+              return getRadioLabelFromValue(yesNoRadios, isWorking);
+            }
+          },
+          "smoke-alarm-notes": {
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
+            }
+          }
+        }
+      }
+    ]
+  },
   step: {
     slug: PageSlugs.SmokeAlarm,
     nextSlug: PageSlugs.MetalGates,
@@ -33,20 +71,9 @@ const step = {
           props: {
             name: "has-smoke-alarm",
             legend: (
-              <FieldsetLegend>
-                Is there is a hard wired smoke alarm in the property?
-              </FieldsetLegend>
+              <FieldsetLegend>{questions["has-smoke-alarm"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios
           },
           defaultValue: "",
           emptyValue: "",
@@ -67,18 +94,9 @@ const step = {
           props: {
             name: "is-working",
             legend: (
-              <FieldsetLegend>Does it work when tested?</FieldsetLegend>
+              <FieldsetLegend>{questions["is-working"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios
           },
           renderWhen(stepValues: {
             "has-smoke-alarm"?: ComponentValue<

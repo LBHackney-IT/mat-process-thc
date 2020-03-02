@@ -1,3 +1,4 @@
+import ProcessStepDefinition from "helpers/ProcessStepDefinition";
 import {
   List,
   ListProps,
@@ -14,13 +15,30 @@ import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { TextArea, TextAreaProps } from "../../components/TextArea";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import { Note } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step = {
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
   title: PageTitles.OtherComments,
   heading: "Other comments",
+  review: {
+    rows: [
+      {
+        label:
+          "Add notes about any other comments or points to investigate for the property",
+        values: {
+          "other-comments-notes": {
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
+            }
+          }
+        },
+        images: "other-comments-images"
+      }
+    ]
+  },
   step: {
     slug: PageSlugs.OtherComments,
     nextSlug: PageSlugs.Sections,
@@ -30,7 +48,7 @@ const step = {
         value: "Save and continue"
       }),
     componentWrappers: [
-      ComponentWrapper.wrapStatic(
+      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "property">(
         new StaticComponent({
           key: "paragraph-1",
           Component: Paragraph,
@@ -40,7 +58,7 @@ const step = {
           }
         })
       ),
-      ComponentWrapper.wrapStatic(
+      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "property">(
         new StaticComponent({
           key: "paragraph-1-list",
           Component: List,

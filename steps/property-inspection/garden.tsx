@@ -10,14 +10,79 @@ import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea, TextAreaProps } from "../../components/TextArea";
+import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import yesNoRadios from "../../helpers/yesNoRadios";
+import { Note } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step = {
+const gardenTypeRadios = [
+  {
+    label: "Private",
+    value: "private"
+  },
+  {
+    label: "Communal",
+    value: "communal"
+  },
+  {
+    label: "Not sure",
+    value: "not sure"
+  }
+];
+
+const questions = {
+  "has-garden": "Does the property have a garden?",
+  "garden-type": "Is the garden private or communal?",
+  "is-maintained": "Is the garden being maintained"
+};
+
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
   title: PageTitles.Garden,
   heading: "Garden",
+  review: {
+    rows: [
+      {
+        label: questions["has-garden"],
+        values: {
+          "has-garden": {
+            renderValue(hasGarden: string): React.ReactNode {
+              return getRadioLabelFromValue(yesNoRadios, hasGarden);
+            }
+          }
+        }
+      },
+      {
+        label: questions["garden-type"],
+        values: {
+          "garden-type": {
+            renderValue(type: string): React.ReactNode {
+              return getRadioLabelFromValue(gardenTypeRadios, type);
+            }
+          }
+        }
+      },
+      {
+        label: questions["is-maintained"],
+        values: {
+          "is-maintained": {
+            renderValue(isMaintained: string): React.ReactNode {
+              return getRadioLabelFromValue(yesNoRadios, isMaintained);
+            }
+          },
+          "garden-notes": {
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
+            }
+          }
+        },
+        images: "garden-images"
+      }
+    ]
+  },
   step: {
     slug: PageSlugs.Garden,
     nextSlug: PageSlugs.Repairs,
@@ -34,18 +99,9 @@ const step = {
           props: {
             name: "has-garden",
             legend: (
-              <FieldsetLegend>Does the property have a garden?</FieldsetLegend>
+              <FieldsetLegend>{questions["has-garden"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios
           },
           defaultValue: "",
           emptyValue: "",
@@ -66,24 +122,9 @@ const step = {
           props: {
             name: "garden-type",
             legend: (
-              <FieldsetLegend>
-                Is the garden private or communal?
-              </FieldsetLegend>
+              <FieldsetLegend>{questions["garden-type"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Private",
-                value: "private"
-              },
-              {
-                label: "Communal",
-                value: "communal"
-              },
-              {
-                label: "Not sure",
-                value: "not sure"
-              }
-            ]
+            radios: gardenTypeRadios
           },
           renderWhen(stepValues: {
             "has-garden"?: ComponentValue<ProcessDatabaseSchema, "property">;
@@ -109,18 +150,9 @@ const step = {
           props: {
             name: "is-maintained",
             legend: (
-              <FieldsetLegend>Is the garden being maintained?</FieldsetLegend>
+              <FieldsetLegend>{questions["is-maintained"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios
           },
           renderWhen(stepValues: {
             "garden-type"?: ComponentValue<ProcessDatabaseSchema, "property">;
