@@ -129,7 +129,7 @@ workflows:
           cluster-name: $AWS_CLUSTER_STAGING
           service-name: $AWS_SERVICE_STAGING
           image-tag: $CIRCLE_SHA1
-      
+
       - permit-production-release:
           type: approval
           requires:
