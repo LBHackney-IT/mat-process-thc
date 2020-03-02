@@ -94,30 +94,30 @@ workflows:
           requires:
             - install-and-test-branch
 
-  check-and-deploy-to-development:
+  check-and-deploy-to-staging:
     jobs:
       - install-and-test:
-          name: install-and-test-master
+          name: install-and-test-test-circleci-staging
           filters:
             branches:
-              only: master
+              only: test-circleci-staging
 
       - aws-ecr/build-and-push-image:
-          name: build-and-push-to-development
+          name: build-and-push-to-staging
           requires:
-            - install-and-test-master
+            - install-and-test-test-circleci-staging
           account-url: AWS_ECR_HOST
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           extra-build-args: --build-arg BASE_PATH=$BASE_PATH
           region: AWS_REGION
-          repo: $AWS_ECR_PATH_DEV
+          repo: $AWS_ECR_PATH_STAGING
           tag: $CIRCLE_SHA1
 
       - deploy:
-          name: deploy-to-development
+          name: deploy-to-staging
           requires:
-            - build-and-push-to-development
-          cluster-name: $AWS_CLUSTER_DEV
-          service-name: $AWS_SERVICE_DEV
+            - build-and-push-to-staging
+          cluster-name: $AWS_CLUSTER_STAGING
+          service-name: $AWS_SERVICE_STAGING
           image-tag: $CIRCLE_SHA1
