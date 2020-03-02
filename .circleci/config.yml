@@ -94,7 +94,7 @@ workflows:
           requires:
             - install-and-test-branch
 
-  check-and-deploy-to-staging:
+  check-and-deploy-to-staging-and-production:
     jobs:
       - install-and-test:
           name: install-and-test-test-circleci-staging
@@ -102,10 +102,18 @@ workflows:
             branches:
               only: test-circleci-staging
 
+      - permit-staging-release:
+          type: approval
+          requires:
+            - install-and-test-test-circleci-staging
+          filters:
+            branches:
+              only: test-circleci-staging
+
       - aws-ecr/build-and-push-image:
           name: build-and-push-to-staging
           requires:
-            - install-and-test-test-circleci-staging
+            - permit-staging-release
           account-url: AWS_ECR_HOST
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
@@ -120,4 +128,32 @@ workflows:
             - build-and-push-to-staging
           cluster-name: $AWS_CLUSTER_STAGING
           service-name: $AWS_SERVICE_STAGING
+          image-tag: $CIRCLE_SHA1
+      
+      - permit-production-release:
+          type: approval
+          requires:
+            - deploy-to-staging
+          filters:
+            branches:
+              only: test-circleci-staging
+
+      - aws-ecr/build-and-push-image:
+          name: build-and-push-to-production
+          requires:
+            - permit-production-release
+          account-url: AWS_ECR_HOST
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          extra-build-args: --build-arg BASE_PATH=$BASE_PATH
+          region: AWS_REGION
+          repo: $AWS_ECR_PATH_PRODUCTION
+          tag: $CIRCLE_SHA1
+
+      - deploy:
+          name: deploy-to-production
+          requires:
+            - build-and-push-to-production
+          cluster-name: $AWS_CLUSTER_PRODUCTION
+          service-name: $AWS_SERVICE_PRODUCTION
           image-tag: $CIRCLE_SHA1
