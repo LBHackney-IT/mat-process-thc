@@ -128,8 +128,10 @@ const step = {
           renderWhen(stepValues: {
             "garden-type"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
-            return stepValues["garden-type"] === ("private") ||
-            stepValues["garden-type"] === ("not sure");
+            return (
+              stepValues["garden-type"] === "private" ||
+              stepValues["garden-type"] === "not sure"
+            );
           },
           defaultValue: "",
           emptyValue: "",
@@ -143,7 +145,7 @@ const step = {
           })
         })
       ),
-    
+
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "garden-images",
@@ -187,8 +189,10 @@ const step = {
           renderWhen(stepValues: {
             "is-maintained"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
-            return stepValues["is-maintained"] === "yes" ||
-            stepValues["is-maintained"] === "no"
+            return (
+              stepValues["is-maintained"] === "yes" ||
+              stepValues["is-maintained"] === "no"
+            );
           },
           defaultValue: "",
           emptyValue: "",
