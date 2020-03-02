@@ -108,13 +108,6 @@ To run the feature tests, updating changed snapshots:
 npm run test:feature:update
 ```
 
-To run the feature tests in watch mode (running against a development server for
-code change watching):
-
-```bash
-npm run test:feature:watch
-```
-
 To run the full test suite:
 
 ```bash
