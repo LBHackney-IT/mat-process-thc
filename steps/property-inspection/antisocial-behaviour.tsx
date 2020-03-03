@@ -78,7 +78,7 @@ const step = {
             name: "tenant-understands",
             legend: (
               <FieldsetLegend>
-                Does the tenant understand about antisocial behaviour?
+                Have you discussed antisocial behaviour with the tenant?
               </FieldsetLegend>
             ) as React.ReactNode,
             radios: [
