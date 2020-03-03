@@ -6,15 +6,12 @@ import {
   ComponentWrapper,
   DynamicComponent
 } from "remultiform/component-wrapper";
-
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
-
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
-
 import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -128,7 +125,10 @@ const step = {
           renderWhen(stepValues: {
             "garden-type"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
-            return stepValues["garden-type"] === ("private" || "not sure");
+            return (
+              stepValues["garden-type"] === "private" ||
+              stepValues["garden-type"] === "not sure"
+            );
           },
           defaultValue: "",
           emptyValue: "",
