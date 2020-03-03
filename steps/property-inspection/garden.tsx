@@ -178,14 +178,14 @@ const step = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about upkeep of garden if necessary."
+              value: "Add note about garden if necessary."
             } as { id?: string; value: React.ReactNode },
             name: "garden-notes"
           },
           renderWhen(stepValues: {
-            "is-maintained"?: ComponentValue<ProcessDatabaseSchema, "property">;
+            "has-garden"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
-            return stepValues["is-maintained"] === "yes";
+            return stepValues["has-garden"] === "yes";
           },
           defaultValue: "",
           emptyValue: "",
