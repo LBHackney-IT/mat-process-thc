@@ -119,7 +119,10 @@ const step = {
               "property"
             >;
           }): boolean {
-            return stepValues["has-smoke-alarm"] === "yes";
+            return (
+              stepValues["has-smoke-alarm"] === "yes" ||
+              stepValues["has-smoke-alarm"] === "no"
+            );
           },
           defaultValue: "",
           emptyValue: "",
