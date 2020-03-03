@@ -1,4 +1,4 @@
-import uuid from "uuid/v1";
+import { v1 as uuid } from "uuid";
 import databaseSchemaVersion from "../../storage/databaseSchemaVersion";
 
 export default async (ref = uuid()): Promise<void> => {
