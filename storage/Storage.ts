@@ -1,10 +1,4 @@
-import {
-  Database,
-  Store,
-  StoreNames,
-  StoreValue,
-  TransactionMode
-} from "remultiform/database";
+import { Database, StoreValue, TransactionMode } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
 import uuid from "uuid/v5";
 import databaseSchemaVersion from "./databaseSchemaVersion";
@@ -352,58 +346,116 @@ export default class Storage {
     }
 
     if (!this.ProcessContext || !this.ProcessContext.database) {
-      throw new Error("No database to update");
+      throw new Error("No process database to update");
     }
 
-    const db = await this.ProcessContext.database;
+    if (!this.ResidentContext || !this.ResidentContext.database) {
+      throw new Error("No resident database to update");
+    }
+
+    const processDatabase = await this.ProcessContext.database;
+    const residentDatabase = await this.ResidentContext.database;
+
+    if (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (processDatabase as any).db.version !==
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (residentDatabase as any).db.version
+    ) {
+      throw new Error("Process and resident database versions must match");
+    }
+
+    // Ideally we'd be exposing the version on the databases directly, but
+    // this hack works for now.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const schemaVersion = (processDatabase as any).db.version;
 
     const migratedProcessData = await migrateProcessData(
       processData,
       dataSchemaVersion || 0,
-      // Ideally we'd be exposing the version on the database directly, but
-      // this hack works for now.
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (db as any).db.version
+      schemaVersion
     );
 
-    let isNewer = false;
+    const lastModified = new Date(dateLastModified || dateCreated);
 
-    await db.transaction(
-      processStoreNames,
-      async stores => {
-        const lastModified = new Date(dateLastModified || dateCreated);
+    const isNewer = await this.isProcessNewerThanStorage(
+      processRef,
+      lastModified
+    );
 
-        isNewer = await this.isProcessNewerThanStorage(
-          stores.lastModified,
-          processRef,
-          lastModified
-        );
+    if (isNewer) {
+      const realProcessStoreNames = processStoreNames.filter(
+        storeName => storeName !== "lastModified"
+      );
 
-        if (!isNewer) {
-          return;
-        }
+      await processDatabase.transaction(
+        realProcessStoreNames,
+        async stores => {
+          await Promise.all([
+            ...realProcessStoreNames.map(async storeName => {
+              const store = stores[storeName];
+              const value = migratedProcessData[storeName];
 
-        await Promise.all(
-          Object.entries(migratedProcessData).map(
-            async ([storeName, value]) => {
-              if (storeName === "lastModified") {
-                return;
+              if (value === undefined) {
+                await store.delete(processRef);
+              } else {
+                await store.put(
+                  processRef,
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  value as any
+                );
               }
+            })
+          ]);
+        },
+        TransactionMode.ReadWrite
+      );
 
-              await stores[
-                storeName as StoreNames<ProcessDatabaseSchema["schema"]>
-              ].put(
-                processRef,
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                value as any
-              );
-            }
-          )
+      const residentRefs = migratedProcessData.tenantsPresent;
+      const migratedResidentData = migratedProcessData.residents;
+
+      if (migratedResidentData && residentRefs && residentRefs.length > 0) {
+        await residentDatabase.transaction(
+          residentStoreNames,
+          async stores => {
+            await Promise.all([
+              ...residentStoreNames.map(async storeName => {
+                const store = stores[storeName];
+
+                await Promise.all(
+                  residentRefs.map(async residentRef => {
+                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                    const ref = residentRef!;
+                    const allValues = migratedResidentData[ref];
+                    const value =
+                      allValues === undefined
+                        ? undefined
+                        : allValues[storeName];
+
+                    if (value === undefined) {
+                      await store.delete(ref);
+                    } else {
+                      await store.put(
+                        ref,
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        value as any
+                      );
+                    }
+                  })
+                );
+              })
+            ]);
+          },
+          TransactionMode.ReadWrite
         );
+      }
+    }
 
-        await stores.lastModified.put(processRef, lastModified.toISOString());
-      },
-      TransactionMode.ReadWrite
+    // Do this last so if anything goes wrong, we can try again.
+    await processDatabase.put(
+      "lastModified",
+      processRef,
+      lastModified.toISOString()
     );
 
     return isNewer;
@@ -424,16 +476,19 @@ export default class Storage {
   }
 
   static async isProcessNewerThanStorage(
-    store: Store<
-      ProcessDatabaseSchema["schema"],
-      StoreNames<ProcessDatabaseSchema["schema"]>[],
-      "lastModified"
-    >,
     processRef: string,
     lastModified: Date
   ): Promise<boolean> {
-    const storedLastModified = await store.get(processRef);
+    if (!this.ProcessContext) {
+      return false;
+    }
 
-    return !storedLastModified || lastModified > new Date(storedLastModified);
+    const db = await this.ProcessContext.database;
+
+    const storedLastModified = await db.get("lastModified", processRef);
+
+    return storedLastModified === undefined
+      ? true
+      : lastModified > new Date(storedLastModified);
   }
 }
