@@ -2,6 +2,7 @@ import * as router from "next/router";
 import React from "react";
 import { act, create, ReactTestRenderer } from "react-test-renderer";
 import LoadingPage from "../../../../pages/thc/[processRef]/loading";
+import databaseSchemaVersion from "../../../../storage/databaseSchemaVersion";
 import Storage from "../../../../storage/Storage";
 import { promiseToWaitForNextTick } from "../../../helpers/promise";
 import { spyOnConsoleError } from "../../../helpers/spies";
@@ -29,7 +30,7 @@ beforeEach(() => {
     ...jest.fn()(),
     database: {
       ...jest.fn()(),
-      db: { version: 4 },
+      db: { version: databaseSchemaVersion },
       put: jest.fn(),
       transaction: async (_, tx): Promise<void> => {
         await tx({

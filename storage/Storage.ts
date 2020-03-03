@@ -7,6 +7,7 @@ import {
 } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
 import uuid from "uuid/v5";
+import databaseSchemaVersion from "./databaseSchemaVersion";
 import ExternalDatabaseSchema, {
   externalDatabaseName
 } from "./ExternalDatabaseSchema";
@@ -98,7 +99,7 @@ export default class Storage {
 
     const processDatabasePromise = Database.open<ProcessDatabaseSchema>(
       processDatabaseName,
-      4,
+      databaseSchemaVersion,
       {
         upgrade(upgrade) {
           let version = upgrade.oldVersion;
@@ -147,7 +148,7 @@ export default class Storage {
 
     const residentDatabasePromise = Database.open<ResidentDatabaseSchema>(
       residentDatabaseName,
-      2,
+      databaseSchemaVersion,
       {
         upgrade(upgrade) {
           let version = upgrade.oldVersion;
@@ -166,6 +167,10 @@ export default class Storage {
             upgrade.createStore("signature");
 
             version = 2;
+          }
+
+          if (version < 4) {
+            version = 4;
           }
 
           if (version !== upgrade.newVersion) {

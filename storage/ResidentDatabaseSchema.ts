@@ -1,4 +1,5 @@
 import { NamedSchema, StoreNames } from "remultiform/database";
+import databaseSchemaVersion from "./databaseSchemaVersion";
 
 export type ResidentRef = string;
 
@@ -8,7 +9,7 @@ export const residentDatabaseName = `mat-process-${
 
 type ResidentDatabaseSchema = NamedSchema<
   typeof residentDatabaseName,
-  2,
+  typeof databaseSchemaVersion,
   {
     id: {
       key: ResidentRef;
