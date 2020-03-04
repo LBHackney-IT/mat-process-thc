@@ -2,21 +2,30 @@
 import { DefineStepFunction } from "jest-cucumber";
 
 class When {
-  static iGoOnline(defineStep: DefineStepFunction): void {
-    defineStep("I go online", () => {
-      // TODO
-    });
-  }
-
   static iVisitX(defineStep: DefineStepFunction): void {
     defineStep(/^I visit (\/.*)$/, async (relativeUrl: string) => {
       await browser!.getRelative(relativeUrl);
     });
   }
 
+  static iVisitXForProcess(defineStep: DefineStepFunction): void {
+    defineStep(
+      /^I visit (\/.*) for (a|the) process$/,
+      async (relativeUrl: string) => {
+        await browser!.getRelative(
+          `${
+            process.env.TEST_PROCESS_REF
+              ? `/${process.env.TEST_PROCESS_REF}`
+              : ""
+          }${relativeUrl}`
+        );
+      }
+    );
+  }
+
   static iStartTheProcess(defineStep: DefineStepFunction): void {
     defineStep("I start the process", async () => {
-      await browser!.getRelative("");
+      await browser!.getRelative("", true);
     });
   }
 

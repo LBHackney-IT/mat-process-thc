@@ -2,13 +2,14 @@ import {
   Browser,
   Builder,
   Locator,
+  until,
   WebDriver,
-  WebElementPromise,
-  until
+  WebElement
 } from "selenium-webdriver";
 import chrome from "selenium-webdriver/chrome";
 import firefox from "selenium-webdriver/firefox";
 import yn from "yn";
+import basePath from "../../../helpers/basePath";
 
 type WebDriverWrapperCreateOptions = {
   browser?: string;
@@ -23,9 +24,7 @@ class WebDriverWrapper implements WebDriver {
     global.browser = await this.create({
       browser: process.env.TEST_BROWSER || Browser.CHROME,
       headless: yn(process.env.TEST_HEADLESS, { default: true }),
-      baseUrl: `http://localhost:${process.env.PORT || 3000}${
-        process.env.BASE_PATH
-      }`
+      baseUrl: `http://localhost:${process.env.PORT || 3000}${basePath}`
     });
   }
 
@@ -126,13 +125,13 @@ class WebDriverWrapper implements WebDriver {
 
   async getRelative(
     relativeUrl: string,
-    excludeParameters = false
+    includeParameters = false
   ): Promise<void> {
     if (!this.baseUrl) {
       throw new Error(`No base URL is set to make ${relativeUrl} relative to.`);
     }
 
-    if (!excludeParameters) {
+    if (includeParameters) {
       relativeUrl +=
         `?processRef=${process.env.TEST_PROCESS_REF}` +
         `&processApiJwt=${process.env.TEST_PROCESS_API_JWT}` +
@@ -140,36 +139,45 @@ class WebDriverWrapper implements WebDriver {
         `&data=${process.env.TEST_MAT_API_DATA}`;
     }
 
-    const url = new URL(relativeUrl, this.baseUrl).href;
+    const url = `${this.baseUrl}${relativeUrl}`;
 
     return this.get(url);
   }
 
-  waitForEnabledElement(
+  async waitForEnabledElement(
     locator: Locator,
     locateTimeout = 1000,
     enabledTimeout = 1000
-  ): WebElementPromise {
-    const element = this.wait(
+  ): Promise<WebElement> {
+    const url = await this.getCurrentUrl();
+
+    const element = await this.wait(
       until.elementLocated(locator),
       locateTimeout,
-      `Unable to find ${JSON.stringify(locator)}`
+      `Unable to find ${JSON.stringify(locator)} on ${url}`
     );
 
     return this.wait(
       until.elementIsEnabled(element),
       enabledTimeout,
-      `${JSON.stringify(locator)} never became enabled`
+      `${JSON.stringify(locator)} on ${url} never became enabled`
     );
   }
 
   async submit(
-    locator: Locator = { css: '[data-testid="submit"]' }
+    locator: Locator = { css: '[data-testid="submit"]' },
+    submitTimeout = 10000
   ): Promise<void> {
-    const submitButton = await this.findElement(locator);
+    const url = await this.getCurrentUrl();
+
+    const submitButton = await this.waitForEnabledElement(locator);
 
     await submitButton.click();
-    await this.wait(until.stalenessOf(submitButton));
+    await this.wait(
+      until.stalenessOf(submitButton),
+      submitTimeout,
+      `${url} never became stale`
+    );
   }
 }
 

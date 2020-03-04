@@ -12,10 +12,7 @@ RUN apk add --no-cache bash
 
 WORKDIR /app
 
-ARG BASE_PATH
-
 ENV NODE_ENV production
-ENV BASE_PATH ${BASE_PATH}
 
 # ------------------------------------------------------------------------------
 # dependencies

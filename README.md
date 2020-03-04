@@ -54,7 +54,7 @@ We use:
    npm run dev
    ```
 
-1. Navigate to [`http://localhost:3000`](http://localhost:3000).
+1. Navigate to [`http://localhost:3000/thc`](http://localhost:3000/thc).
 
 1. Make a change, and see the page hot reload.
 
@@ -106,13 +106,6 @@ To run the feature tests, updating changed snapshots:
 
 ```bash
 npm run test:feature:update
-```
-
-To run the feature tests in watch mode (running against a development server for
-code change watching):
-
-```bash
-npm run test:feature:watch
 ```
 
 To run the full test suite:

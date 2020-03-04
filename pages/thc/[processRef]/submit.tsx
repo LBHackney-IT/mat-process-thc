@@ -5,22 +5,23 @@ import {
   Paragraph
 } from "lbh-frontend-react";
 import { NextPage } from "next";
-import router from "next/router";
+import { NextRouter, useRouter } from "next/router";
 import React, { useState } from "react";
 import { TransactionMode } from "remultiform/database";
-
-import ProgressBar from "../components/ProgressBar";
-import getProcessApiJwt from "../helpers/getProcessApiJwt";
-import getProcessRef from "../helpers/getProcessRef";
-import urlsForRouter from "../helpers/urlsForRouter";
-import useOnlineWithRetry from "../helpers/useOnlineWithRetry";
-import MainLayout from "../layouts/MainLayout";
-import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
-import PageTitles from "../steps/PageTitles";
-import { processStoreNames } from "../storage/ProcessDatabaseSchema";
-import Storage from "../storage/Storage";
+import ProgressBar from "../../../components/ProgressBar";
+import basePath from "../../../helpers/basePath";
+import getProcessApiJwt from "../../../helpers/getProcessApiJwt";
+import getProcessRef from "../../../helpers/getProcessRef";
+import urlsForRouter from "../../../helpers/urlsForRouter";
+import useOnlineWithRetry from "../../../helpers/useOnlineWithRetry";
+import MainLayout from "../../../layouts/MainLayout";
+import PageSlugs, { urlObjectForSlug } from "../../../steps/PageSlugs";
+import PageTitles from "../../../steps/PageTitles";
+import { processStoreNames } from "../../../storage/ProcessDatabaseSchema";
+import Storage from "../../../storage/Storage";
 
 const submit = async (
+  router: NextRouter,
   setProgress: (progress: number) => void
 ): Promise<void> => {
   let progress = 0;
@@ -28,7 +29,7 @@ const submit = async (
   setProgress(progress);
 
   if (Storage.ProcessContext && Storage.ProcessContext.database) {
-    const processRef = getProcessRef();
+    const processRef = getProcessRef(router);
     const processApiJwt = getProcessApiJwt(processRef);
 
     if (!processRef || !processApiJwt) {
@@ -49,7 +50,7 @@ const submit = async (
       await Promise.all(
         imagesJson.map(async ({ id, image }) => {
           const response = await fetch(
-            `${process.env.BASE_PATH}/api/v1/processes/${processRef}/images?jwt=${processApiJwt}`,
+            `${basePath}/api/v1/processes/${processRef}/images?jwt=${processApiJwt}`,
             {
               method: "POST",
               headers: {
@@ -70,7 +71,7 @@ const submit = async (
       );
 
       const response = await fetch(
-        `${process.env.BASE_PATH}/api/v1/processes/${processRef}/processData?jwt=${processApiJwt}`,
+        `${basePath}/api/v1/processes/${processRef}/processData?jwt=${processApiJwt}`,
         {
           method: "PATCH",
           headers: {
@@ -112,6 +113,7 @@ const submit = async (
 };
 
 const SubmitPage: NextPage = () => {
+  const router = useRouter();
   const online = useOnlineWithRetry();
   const [progress, setProgress] = useState(0);
   const [submitting, setSubmitting] = useState(false);
@@ -160,7 +162,10 @@ const SubmitPage: NextPage = () => {
     );
   }
 
-  const { href, as } = urlsForRouter(urlObjectForSlug(PageSlugs.Confirmed));
+  const { href, as } = urlsForRouter(
+    router,
+    urlObjectForSlug(router, PageSlugs.Confirmed)
+  );
 
   const disabled =
     online.loading ||
@@ -209,7 +214,7 @@ const SubmitPage: NextPage = () => {
             try {
               setSubmitting(true);
 
-              await submit(setProgress);
+              await submit(router, setProgress);
               await router.push(href, as);
             } catch (err) {
               console.error(err);

@@ -5,11 +5,11 @@ const withOffline = require("next-offline");
 const { join } = require("path");
 
 const findAllRoutes = require("./build/helpers/findAllRoutes");
+const basePath = require("./server/helpers/basePath");
 
 const dev = process.env.NODE_ENV !== "production";
 
 const env = {
-  BASE_PATH: process.env.BASE_PATH,
   ENVIRONMENT_NAME: process.env.ENVIRONMENT_NAME,
   PROCESS_NAME: process.env.PROCESS_NAME
 };
@@ -24,6 +24,7 @@ if (dev) {
 }
 
 module.exports = withOffline({
+  assetPrefix: basePath,
   distDir: process.env.NEXT_DIST_DIR || ".next",
   publicRuntimeConfig: {
     allRoutes: findAllRoutes(
@@ -33,9 +34,6 @@ module.exports = withOffline({
     )
   },
   env,
-  registerSwPrefix: process.env.BASE_PATH || "",
-  scope: `${process.env.BASE_PATH}/`,
-  experimental: {
-    basePath: process.env.BASE_PATH || ""
-  }
+  registerSwPrefix: basePath,
+  scope: `${basePath}/`
 });

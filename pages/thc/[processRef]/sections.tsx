@@ -1,20 +1,23 @@
 import { Paragraph } from "lbh-frontend-react/components";
 import { NextPage } from "next";
+import { useRouter } from "next/router";
 import React from "react";
-
-import { TaskList, TaskListStatus } from "../components/TaskList";
-import { TenancySummary } from "../components/TenancySummary";
-import getProcessRef from "../helpers/getProcessRef";
-import useDataValue from "../helpers/useDataValue";
-import useValidateData from "../helpers/useValidateData";
-import MainLayout from "../layouts/MainLayout";
-import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
-import PageTitles from "../steps/PageTitles";
-import Storage from "../storage/Storage";
-import tmpProcessRef from "../storage/processRef";
+import { TaskList, TaskListStatus } from "../../../components/TaskList";
+import { TenancySummary } from "../../../components/TenancySummary";
+import getProcessRef from "../../../helpers/getProcessRef";
+import useDataValue from "../../../helpers/useDataValue";
+import useValidateData from "../../../helpers/useValidateData";
+import MainLayout from "../../../layouts/MainLayout";
+import PageSlugs, { urlObjectForSlug } from "../../../steps/PageSlugs";
+import PageTitles from "../../../steps/PageTitles";
+import tmpProcessRef from "../../../storage/processRef";
+import Storage from "../../../storage/Storage";
 
 export const SectionsPage: NextPage = () => {
-  const processRef = getProcessRef();
+  const router = useRouter();
+
+  const processRef = getProcessRef(router);
+
   const tenancyData = useDataValue(
     Storage.ExternalContext,
     "tenancy",
@@ -178,7 +181,7 @@ export const SectionsPage: NextPage = () => {
             items={[
               {
                 name: "ID, residency, and tenant information",
-                url: urlObjectForSlug(PageSlugs.PresentForCheck),
+                url: urlObjectForSlug(router, PageSlugs.PresentForCheck),
                 status: idAndResidencyComplete.result
                   ? TaskListStatus.Completed
                   : idAndResidencyStarted.result
@@ -187,7 +190,7 @@ export const SectionsPage: NextPage = () => {
               },
               {
                 name: "Household",
-                url: urlObjectForSlug(PageSlugs.Household),
+                url: urlObjectForSlug(router, PageSlugs.Household),
                 status: idAndResidencyComplete.result
                   ? householdComplete.result
                     ? TaskListStatus.Completed
@@ -198,7 +201,7 @@ export const SectionsPage: NextPage = () => {
               },
               {
                 name: "Property inspection",
-                url: urlObjectForSlug(PageSlugs.Rooms),
+                url: urlObjectForSlug(router, PageSlugs.Rooms),
                 status: idAndResidencyComplete.result
                   ? propertyInspectionComplete.result
                     ? TaskListStatus.Completed
@@ -209,7 +212,7 @@ export const SectionsPage: NextPage = () => {
               },
               {
                 name: "Wellbeing support",
-                url: urlObjectForSlug(PageSlugs.HomeCheck),
+                url: urlObjectForSlug(router, PageSlugs.HomeCheck),
                 status: idAndResidencyComplete.result
                   ? wellbeingSupportComplete.result
                     ? TaskListStatus.Completed
@@ -220,7 +223,7 @@ export const SectionsPage: NextPage = () => {
               },
               {
                 name: "Review and submit",
-                url: urlObjectForSlug(PageSlugs.Review),
+                url: urlObjectForSlug(router, PageSlugs.Review),
                 status:
                   idAndResidencyComplete.result &&
                   householdComplete.result &&

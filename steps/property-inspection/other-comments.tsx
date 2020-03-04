@@ -1,8 +1,8 @@
 import {
-  Paragraph,
   List,
+  ListProps,
   ListTypes,
-  ListProps
+  Paragraph
 } from "lbh-frontend-react/components";
 import React from "react";
 import {
@@ -11,15 +11,12 @@ import {
   DynamicComponent,
   StaticComponent
 } from "remultiform/component-wrapper";
-
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { TextArea } from "../../components/TextArea";
-
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
-
-import PageSlugs, { urlObjectForSlug } from "../PageSlugs";
+import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const step = {
@@ -30,7 +27,7 @@ const step = {
     nextSlug: PageSlugs.Sections,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
-        url: urlObjectForSlug(nextSlug),
+        slug: nextSlug as PageSlugs | undefined,
         value: "Save and continue"
       }),
     componentWrappers: [

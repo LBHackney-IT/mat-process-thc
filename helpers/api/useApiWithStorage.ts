@@ -2,12 +2,12 @@ import { useAsync } from "react-async-hook";
 import {
   NamedSchema,
   Schema,
-  StoreNames,
   StoreKey,
+  StoreNames,
   StoreValue
 } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
-
+import isServer from "../isServer";
 import useApi, { ApiEndpoint } from "./useApi";
 
 export interface ApiWithStorageEndpoint<
@@ -44,6 +44,10 @@ const useApiWithStorage = <
   const api = useApi<R>(apiEndpoint);
 
   const storage = useAsync(async () => {
+    if (isServer) {
+      return;
+    }
+
     if (api.error) {
       throw api.error;
     }
@@ -56,7 +60,7 @@ const useApiWithStorage = <
       return;
     }
 
-    if (!process.browser || !databaseContext) {
+    if (!databaseContext) {
       return;
     }
 

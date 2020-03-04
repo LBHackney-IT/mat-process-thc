@@ -60,7 +60,7 @@ jobs:
 
       - run:
           name: Build Docker image
-          command: docker build --build-arg BASE_PATH=$BASE_PATH .
+          command: docker build .
 
   deploy:
     parameters:
@@ -109,7 +109,6 @@ workflows:
           account-url: AWS_ECR_HOST
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-          extra-build-args: --build-arg BASE_PATH=$BASE_PATH
           region: AWS_REGION
           repo: $AWS_ECR_PATH_DEV
           tag: $CIRCLE_SHA1

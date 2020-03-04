@@ -7,40 +7,47 @@ import {
 } from "lbh-frontend-react/components";
 import { NextPage } from "next";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
 import { nullAsUndefined } from "null-as-undefined";
-
-import React, { useState, useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useAsync } from "react-async-hook";
-
-import ProgressBar from "../components/ProgressBar";
-import { TenancySummary } from "../components/TenancySummary";
-import useApi from "../helpers/api/useApi";
+import ProgressBar from "../../../components/ProgressBar";
+import { TenancySummary } from "../../../components/TenancySummary";
+import useApi from "../../../helpers/api/useApi";
 import useApiWithStorage, {
   UseApiWithStorageReturn
-} from "../helpers/api/useApiWithStorage";
-import getProcessRef from "../helpers/getProcessRef";
-import usePrecacheAll from "../helpers/usePrecacheAll";
-import titleCase from "../helpers/titleCase";
-import urlsForRouter from "../helpers/urlsForRouter";
-import MainLayout from "../layouts/MainLayout";
-import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
-import PageTitles from "../steps/PageTitles";
-import ExternalDatabaseSchema from "../storage/ExternalDatabaseSchema";
-import { ProcessJson } from "../storage/ProcessDatabaseSchema";
-import { ResidentRef } from "../storage/ResidentDatabaseSchema";
-import Storage from "../storage/Storage";
-import tmpProcessRef from "../storage/processRef";
+} from "../../../helpers/api/useApiWithStorage";
+import basePath from "../../../helpers/basePath";
+import getProcessRef from "../../../helpers/getProcessRef";
+import isClient from "../../../helpers/isClient";
+import isServer from "../../../helpers/isServer";
+import titleCase from "../../../helpers/titleCase";
+import urlsForRouter from "../../../helpers/urlsForRouter";
+import usePrecacheAll from "../../../helpers/usePrecacheAll";
+import MainLayout from "../../../layouts/MainLayout";
+import PageSlugs, { urlObjectForSlug } from "../../../steps/PageSlugs";
+import PageTitles from "../../../steps/PageTitles";
+import ExternalDatabaseSchema from "../../../storage/ExternalDatabaseSchema";
+import { ProcessJson } from "../../../storage/ProcessDatabaseSchema";
+import tmpProcessRef from "../../../storage/processRef";
+import { ResidentRef } from "../../../storage/ResidentDatabaseSchema";
+import Storage from "../../../storage/Storage";
 
 const useFetchProcessJson = (): {
   loading: boolean;
   result?: ProcessJson;
   error?: Error;
 } => {
-  const processRef = getProcessRef();
+  const router = useRouter();
+
+  const processRef = getProcessRef(router);
 
   const processData = useApi<{ processData: ProcessJson }>({
-    endpoint: `${process.env.BASE_PATH}/api/v1/processes/${processRef}/processData`,
-    jwt: { sessionStorageKey: `${processRef}:processApiJwt` },
+    endpoint: `/v1/processes/${processRef}/processData`,
+    jwt: {
+      sessionStorageKey:
+        isClient && processRef ? `${processRef}:processApiJwt` : undefined
+    },
     execute: Boolean(processRef)
   });
 
@@ -60,15 +67,14 @@ const useFetchImages = (
   fetchedImageCount: number;
   expectedImageCount: number;
 } => {
-  const processRef = getProcessRef();
+  const router = useRouter();
 
-  let jwt: string | undefined = undefined;
+  const processRef = getProcessRef(router);
 
-  if (process.browser) {
-    jwt = nullAsUndefined(
-      sessionStorage.getItem(`${processRef}:processApiJwt`)
-    );
-  }
+  const jwt =
+    isClient && processRef
+      ? nullAsUndefined(sessionStorage.getItem(`${processRef}:processApiJwt`))
+      : undefined;
 
   let images:
     | ReturnType<typeof Storage.getImagesToFetch>
@@ -81,7 +87,7 @@ const useFetchImages = (
   const [fetchedImageCount, setFetchedImageCount] = useState(0);
 
   const imageResults = useAsync(async () => {
-    if (!process.browser) {
+    if (isServer) {
       return;
     }
 
@@ -100,7 +106,7 @@ const useFetchImages = (
     return Promise.all(
       images.map(async ({ id, ext }) => {
         const response = await fetch(
-          `${process.env.BASE_PATH}/api/v1/processes/${processRef}/images/${id}/${ext}?jwt=${jwt}`,
+          `${basePath}/api/v1/processes/${processRef}/images/${id}/${ext}?jwt=${jwt}`,
           { method: "GET" }
         );
         const responseBody = await response.text();
@@ -135,7 +141,7 @@ const useFetchImages = (
   }, [processRef, jwt, JSON.stringify(images)]);
 
   return {
-    loading: !process.browser || imageResults.loading || !images,
+    loading: isServer || imageResults.loading || !images,
     result: images ? imageResults.result : undefined,
     error: imageResults.error,
     fetchedImageCount,
@@ -228,7 +234,9 @@ const useFetchAndStoreProcessJson = (): {
   completedStepCount: number;
   expectedStepCount: number;
 } => {
-  const processRef = getProcessRef();
+  const router = useRouter();
+
+  const processRef = getProcessRef(router);
 
   const processJson = useFetchProcessJsonWithImages();
 
@@ -270,18 +278,22 @@ const useFetchResidentData = (): UseApiWithStorageReturn<
   ExternalDatabaseSchema,
   "residents"
 > => {
-  const processRef = getProcessRef();
+  const router = useRouter();
 
-  let data: string | undefined;
+  const processRef = getProcessRef(router);
 
-  if (process.browser) {
-    data = nullAsUndefined(sessionStorage.getItem(`${processRef}:matApiData`));
-  }
+  const data =
+    isClient && processRef
+      ? nullAsUndefined(sessionStorage.getItem(`${processRef}:matApiData`))
+      : undefined;
 
   return useApiWithStorage({
-    endpoint: `${process.env.BASE_PATH}/api/v1/residents`,
+    endpoint: "/v1/residents",
     query: { data },
-    jwt: { sessionStorageKey: `${processRef}:matApiJwt` },
+    jwt: {
+      sessionStorageKey:
+        isClient && processRef ? `${processRef}:matApiJwt` : undefined
+    },
     execute: Boolean(processRef),
     parse(data: {
       results: {
@@ -345,18 +357,22 @@ const useFetchTenancyData = (): UseApiWithStorageReturn<
   ExternalDatabaseSchema,
   "tenancy"
 > => {
-  const processRef = getProcessRef();
+  const router = useRouter();
 
-  let data: string | undefined;
+  const processRef = getProcessRef(router);
 
-  if (process.browser) {
-    data = nullAsUndefined(sessionStorage.getItem(`${processRef}:matApiData`));
-  }
+  const data =
+    isClient && processRef
+      ? nullAsUndefined(sessionStorage.getItem(`${processRef}:matApiData`))
+      : undefined;
 
   return useApiWithStorage({
-    endpoint: `${process.env.BASE_PATH}/api/v1/tenancies`,
+    endpoint: "/v1/tenancies",
     query: { data },
-    jwt: { sessionStorageKey: `${processRef}:matApiJwt` },
+    jwt: {
+      sessionStorageKey:
+        isClient && processRef ? `${processRef}:matApiJwt` : undefined
+    },
     execute: Boolean(processRef),
     parse(data: {
       results: {
@@ -381,6 +397,7 @@ const useFetchTenancyData = (): UseApiWithStorageReturn<
 };
 
 export const LoadingPage: NextPage = () => {
+  const router = useRouter();
   const processDataSyncStatus = useFetchAndStoreProcessJson();
   const residentData = useFetchResidentData();
   const tenancyData = useFetchTenancyData();
@@ -415,7 +432,10 @@ export const LoadingPage: NextPage = () => {
       processDataSyncStatus.completedStepCount) /
     (extraResults.length + processDataSyncStatus.expectedStepCount);
 
-  const { href, as } = urlsForRouter(urlObjectForSlug(PageSlugs.Outside));
+  const { href, as } = urlsForRouter(
+    router,
+    urlObjectForSlug(router, PageSlugs.Outside)
+  );
 
   const button = (
     <Button

@@ -16,7 +16,6 @@
     "test:feature": "NEXT_DIST_DIR=.next-test PORT=3001 concurrently --names 'server,test' 'npm run build && npm start' 'wait-for-localhost ${PORT} && npm run test:feature:noserver' --kill-others --success first",
     "test:feature:noserver": "jest --config jest.config.feature.js --runInBand",
     "test:feature:update": "NEXT_DIST_DIR=.next-test PORT=3001 concurrently --names 'server,test' 'npm run build && npm start' 'wait-for-localhost ${PORT} && npm run test:feature:noserver -- --updateSnapshot' --kill-others --success first",
-    "test:feature:watch": "NEXT_DIST_DIR=.next-test PORT=3001 concurrently --names 'server,test' 'npm start' 'wait-for-localhost ${PORT} && npm run test:feature:noserver -- --watch' --kill-others --success first",
     "lint": "eslint --report-unused-disable-directives --config ./.eslintrc.full.js '**/*.{js,jsx,ts,tsx}'",
     "lint:fix": "npm run lint -- --fix",
     "lint:codeowners": "codeowners-enforcer -i 'package.json' -i 'package-lock.json'",

@@ -1,21 +1,14 @@
+import * as router from "next/router";
 import React from "react";
-import { ReactTestRenderer, act, create } from "react-test-renderer";
+import { act, create, ReactTestRenderer } from "react-test-renderer";
+import LoadingPage from "../../../../pages/thc/[processRef]/loading";
+import Storage from "../../../../storage/Storage";
+import { promiseToWaitForNextTick } from "../../../helpers/promise";
+import { spyOnConsoleError } from "../../../helpers/spies";
 
-import { promiseToWaitForNextTick } from "../helpers/promise";
-import { spyOnConsoleError } from "../helpers/spies";
-
-import LoadingPage from "../../pages/loading";
-import Storage from "../../storage/Storage";
-
-const originalBrowser = Object.prototype.hasOwnProperty.call(process, "browser")
-  ? process.browser
-  : undefined;
 const originalExternalContext = Storage.ExternalContext;
 
 beforeEach(() => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (process as any).browser = true;
-
   sessionStorage.setItem("currentProcessRef", "test-process-ref");
   sessionStorage.setItem(
     "test-process-ref:processApiJwt",
@@ -54,12 +47,14 @@ beforeEach(() => {
       }
     }
   };
+
+  jest.spyOn(router, "useRouter").mockImplementation(() => ({
+    ...jest.fn()(),
+    query: { processRef: "test-process-ref" }
+  }));
 });
 
 afterEach(() => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (process as any).browser = originalBrowser;
-
   sessionStorage.clear();
 
   Storage.ExternalContext = originalExternalContext;
@@ -68,25 +63,18 @@ afterEach(() => {
 it("renders correctly when online", async () => {
   fetchMock.mockResponse(
     ({ method, url }): Promise<string> => {
-      const relativeUrl = process.env.BASE_PATH
-        ? url.replace(process.env.BASE_PATH, "")
-        : url;
-
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let body: any = {};
 
       if (
-        relativeUrl.startsWith("/api/v1/processes") &&
-        relativeUrl.includes("/images/") &&
+        url.includes("/api/v1/processes") &&
+        url.includes("/images/") &&
         method === "GET"
       ) {
         body = {
           base64Image: "data:image/jpeg;base64,someimagedata"
         };
-      } else if (
-        relativeUrl.startsWith("/api/v1/processes") &&
-        method === "GET"
-      ) {
+      } else if (url.includes("/api/v1/processes") && method === "GET") {
         body = {
           processData: {
             dateCreated: new Date(2019, 1),
@@ -101,20 +89,14 @@ it("renders correctly when online", async () => {
             }
           }
         };
-      } else if (
-        relativeUrl.startsWith("/api/v1/tenancies") &&
-        method === "GET"
-      ) {
+      } else if (url.includes("/api/v1/tenancies") && method === "GET") {
         body = {
           results: {
             tenuretype: "Secure",
             tenancyStartDate: "2019-01-01"
           }
         };
-      } else if (
-        relativeUrl.startsWith("/api/v1/residents") &&
-        method === "GET"
-      ) {
+      } else if (url.includes("/api/v1/residents") && method === "GET") {
         body = {
           results: [
             {

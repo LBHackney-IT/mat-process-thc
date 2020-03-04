@@ -1,40 +1,40 @@
+import { NextRouter } from "next/router";
 import {
   repeatingStepSlugs,
   stepSlugs,
   urlObjectForSlug
 } from "../steps/PageSlugs";
+import prefixUrl from "./prefixUrl";
 
-export const isRepeatingStep = (url: { pathname: string }): boolean => {
-  const parts = url.pathname
-    .replace(new RegExp(`^${process.env.BASE_PATH}`), "/")
-    .split("/");
-
-  parts.reverse();
-
-  const [, ...rest] = parts;
-
-  rest.reverse();
-
-  const pathname = rest.join("/");
+export const isRepeatingStep = (
+  router: NextRouter,
+  url: { pathname: string }
+): boolean => {
+  const { pathname } = prefixUrl(router, url);
+  const parts = pathname.split("/");
+  const maybeSlugId = parts[parts.length - 1];
 
   return Boolean(
     repeatingStepSlugs.find(slug => {
-      const slugUrl = urlObjectForSlug(slug);
+      const slugUrl = urlObjectForSlug(router, slug);
 
-      return pathname === slugUrl.pathname;
+      // This will stop working properly if we ever have nested routes.
+      return pathname === `${slugUrl.pathname}/${maybeSlugId}`;
     })
   );
 };
 
-const isStep = (url: { pathname: string }): boolean => {
+const isStep = (router: NextRouter, url: { pathname: string }): boolean => {
+  const { pathname } = prefixUrl(router, url);
+
   return (
     Boolean(
       stepSlugs.find(slug => {
-        const slugUrl = urlObjectForSlug(slug);
+        const slugUrl = urlObjectForSlug(router, slug);
 
-        return url.pathname === slugUrl.pathname;
+        return pathname === slugUrl.pathname;
       })
-    ) || isRepeatingStep(url)
+    ) || isRepeatingStep(router, url)
   );
 };
 

@@ -8,21 +8,26 @@ import {
 } from "lbh-frontend-react/components";
 import { NextPage } from "next";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
-import { Table } from "../components/Table";
-import { TenancySummary } from "../components/TenancySummary";
-import getProcessRef from "../helpers/getProcessRef";
-import urlsForRouter from "../helpers/urlsForRouter";
-import useDataSet from "../helpers/useDataSet";
-import useDataValue from "../helpers/useDataValue";
-import MainLayout from "../layouts/MainLayout";
-import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
-import PageTitles from "../steps/PageTitles";
-import tmpProcessRef from "../storage/processRef";
-import Storage from "../storage/Storage";
+import { Table } from "../../../components/Table";
+import { TenancySummary } from "../../../components/TenancySummary";
+import getProcessRef from "../../../helpers/getProcessRef";
+import nextSlugWithId from "../../../helpers/nextSlugWithId";
+import urlsForRouter from "../../../helpers/urlsForRouter";
+import useDataSet from "../../../helpers/useDataSet";
+import useDataValue from "../../../helpers/useDataValue";
+import MainLayout from "../../../layouts/MainLayout";
+import PageSlugs, { urlObjectForSlug } from "../../../steps/PageSlugs";
+import PageTitles from "../../../steps/PageTitles";
+import tmpProcessRef from "../../../storage/processRef";
+import Storage from "../../../storage/Storage";
 
 export const VerifyPage: NextPage = () => {
-  const processRef = getProcessRef();
+  const router = useRouter();
+
+  const processRef = getProcessRef(router);
+
   const tenancyData = useDataValue(
     Storage.ExternalContext,
     "tenancy",
@@ -54,8 +59,6 @@ export const VerifyPage: NextPage = () => {
 
   const tenantData =
     residentData.result?.tenants.map(tenant => {
-      console.log(idData.result);
-
       return {
         id: tenant.id,
         name: tenant.fullName,
@@ -100,7 +103,10 @@ export const VerifyPage: NextPage = () => {
         : "-",
       <Link
         key="verify-link"
-        href={urlObjectForSlug(PageSlugs.Id, tenant.id).pathname}
+        href={
+          urlObjectForSlug(router, nextSlugWithId(PageSlugs.Id, tenant.id)())
+            .pathname
+        }
       >
         {tenantsPresent.loading
           ? "Loading..."
@@ -111,7 +117,10 @@ export const VerifyPage: NextPage = () => {
     ];
   });
 
-  const { href, as } = urlsForRouter(urlObjectForSlug(PageSlugs.Sections));
+  const { href, as } = urlsForRouter(
+    router,
+    urlObjectForSlug(router, PageSlugs.Sections)
+  );
 
   const button = (
     <Button disabled={!href.pathname || !as.pathname} data-testid="submit">

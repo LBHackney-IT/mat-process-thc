@@ -59,7 +59,6 @@ module "development" {
     ENVIRONMENT_NAME = "development"
 
     PROCESS_NAME       = "thc"
-    BASE_PATH          = "/thc"
     PROCESS_TYPE_VALUE = "100000156"
     PROCESS_TYPE_NAME  = "Tenancy and household check"
 
