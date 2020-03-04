@@ -8,7 +8,7 @@ export const residentDatabaseName = `mat-process-${
 
 type ResidentDatabaseSchema = NamedSchema<
   typeof residentDatabaseName,
-  1,
+  2,
   {
     id: {
       key: ResidentRef;
@@ -63,6 +63,11 @@ type ResidentDatabaseSchema = NamedSchema<
         notes: string;
       };
     };
+
+    signature: {
+      key: ResidentRef;
+      value: string;
+    };
   }
 >;
 
@@ -73,7 +78,8 @@ const storeNames: {
   residency: true,
   photo: true,
   nextOfKin: true,
-  carer: true
+  carer: true,
+  signature: true
 };
 
 export const residentStoreNames = Object.entries(storeNames)
