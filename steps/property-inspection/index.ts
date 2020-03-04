@@ -14,6 +14,7 @@ import communalAreas from "./communal-areas";
 import pets from "./pets";
 import antisocialBehaviour from "./antisocial-behaviour";
 import otherComments from "./other-comments";
+import repairs from "./repairs";
 
 export default [
   rooms,
@@ -31,5 +32,6 @@ export default [
   communalAreas,
   pets,
   antisocialBehaviour,
-  otherComments
+  otherComments,
+  repairs
 ];
