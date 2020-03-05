@@ -75,7 +75,7 @@
     "selenium-webdriver": "^4.0.0-alpha.5",
     "styled-jsx": "^3.2.4",
     "ts-jest": "^25.2.1",
-    "typescript": "^3.7.5",
+    "typescript": "^3.8.3",
     "utility-types": "^3.10.0",
     "uuid": "^3.4.0",
     "wait-for-localhost-cli": "^1.1.0",
