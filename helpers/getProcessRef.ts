@@ -16,6 +16,10 @@ const getProcessRef = (router: NextRouter): string | undefined => {
     processRef = typeof ref === "string" ? ref : ref.join("/");
   }
 
+  if (router.route && router.route.includes("[processRef]")) {
+    processRef = processRef || "placeholder-process-ref";
+  }
+
   if (process.env.NODE_ENV !== "production") {
     processRef = processRef || process.env.TEST_PROCESS_REF;
   }
