@@ -51,6 +51,11 @@ const processData = {
       images: [imagePath],
       notes: "Garden notes"
     },
+    repairs: {
+      needsRepairs: "yes",
+      images: [imagePath],
+      notes: "Repairs notes"
+    },
     storingMaterials: {
       isStoringMaterials: "yes",
       furtherActionRequired: "yes",
@@ -816,6 +821,22 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
           name: "garden-notes"
         })
       ).sendKeys(processData.property.garden.notes);
+
+      await browser!.submit();
+
+      // Repairs page
+      await expect(browser!.getCurrentUrl()).resolves.toContain("/repairs");
+      (
+        await browser!.waitForEnabledElement({
+          id: `needs-repairs-${processData.property.repairs.needsRepairs}`
+        })
+      ).click();
+      (
+        await browser!.waitForEnabledElement({ name: "repairs-images" })
+      ).sendKeys(processData.property.repairs.images[0]);
+      (
+        await browser!.waitForEnabledElement({ name: "repairs-notes" })
+      ).sendKeys(processData.property.repairs.notes);
 
       await browser!.submit();
 

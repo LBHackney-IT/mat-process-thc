@@ -20,7 +20,7 @@ const step = {
   heading: "Garden",
   step: {
     slug: PageSlugs.Garden,
-    nextSlug: PageSlugs.StoringMaterials,
+    nextSlug: PageSlugs.Repairs,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,

@@ -45,6 +45,11 @@ type ProcessDatabaseSchema = NamedSchema<
           images: string[];
           notes: string;
         };
+        repairs: {
+          needsRepairs: string;
+          images: string[];
+          notes: string;
+        };
         roof: {
           hasAccess: string;
           itemsStoredOnRoof: string;
