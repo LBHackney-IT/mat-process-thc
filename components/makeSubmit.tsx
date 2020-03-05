@@ -12,10 +12,12 @@ export interface MakeSubmitProps {
 
 export const makeSubmit = (
   props: MakeSubmitProps | MakeSubmitProps[]
-): React.FunctionComponent<SubmitProps> => {
+): React.FunctionComponent<SubmitProps & { disabled?: boolean }> => {
   const buttonProps = Array.isArray(props) ? props : [props];
 
-  const Submit: React.FunctionComponent<SubmitProps> = ({ onSubmit }) => {
+  const Submit: React.FunctionComponent<SubmitProps & {
+    disabled?: boolean;
+  }> = ({ disabled, onSubmit }) => {
     const router = useRouter();
     const urls = buttonProps.map(
       ({ slug }) => urlObjectForSlug(router, slug).pathname
@@ -49,7 +51,7 @@ export const makeSubmit = (
                   ? "submit-button lbh-button--secondary govuk-button--secondary"
                   : "submit-button"
               }
-              disabled={!href.pathname || !as.pathname}
+              disabled={disabled || !href.pathname || !as.pathname}
               onClick={async (): Promise<void> => {
                 if (!href.pathname || !as.pathname) {
                   return;

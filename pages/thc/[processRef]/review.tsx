@@ -1,17 +1,17 @@
 import formatDate from "date-fns/format";
 import {
-  Button,
   Heading,
   HeadingLevels,
   Paragraph,
   SummaryList
 } from "lbh-frontend-react";
 import { NextPage } from "next";
-import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
+import { makeSubmit } from "../../../components/makeSubmit";
+import Signature from "../../../components/Signature";
 import getProcessRef from "../../../helpers/getProcessRef";
-import urlsForRouter from "../../../helpers/urlsForRouter";
+import useDatabase from "../../../helpers/useDatabase";
 import useDataValue from "../../../helpers/useDataValue";
 import useReviewSectionRows from "../../../helpers/useReviewSectionRows";
 import MainLayout from "../../../layouts/MainLayout";
@@ -19,7 +19,7 @@ import {
   idAndResidencyProcessSteps,
   idAndResidencyResidentSteps
 } from "../../../steps/id-and-residency";
-import PageSlugs, { urlObjectForSlug } from "../../../steps/PageSlugs";
+import PageSlugs from "../../../steps/PageSlugs";
 import PageTitles from "../../../steps/PageTitles";
 import { ResidentRef } from "../../../storage/ResidentDatabaseSchema";
 import Storage from "../../../storage/Storage";
@@ -35,6 +35,15 @@ const ReviewPage: NextPage = () => {
     processRef,
     values => (processRef ? values[processRef]?.tenants : undefined)
   );
+
+  const residentDatabase = useDatabase(Storage.ResidentContext);
+
+  // We intentionally ignore whatever's in the database. We need the tenant to
+  // sign against any changes, and this is the simplest way to ensure that
+  // happens.
+  const [signatures, setSignatures] = useState<
+    { [Ref in ResidentRef]?: string }
+  >({});
 
   const tenantIds = tenants.result
     ? tenants.result.map(tenant => tenant.id)
@@ -67,23 +76,10 @@ const ReviewPage: NextPage = () => {
     }
   ];
 
-  const { href, as } = urlsForRouter(
-    router,
-    urlObjectForSlug(router, PageSlugs.Submit)
-  );
-
-  const button = (
-    <Button
-      disabled={
-        sections.some(section => !section.rows.length) ||
-        !href.pathname ||
-        !as.pathname
-      }
-      data-testid="submit"
-    >
-      Save and finish process
-    </Button>
-  );
+  const SubmitButton = makeSubmit({
+    slug: PageSlugs.Submit,
+    value: "Save and finish process"
+  });
 
   return (
     <MainLayout
@@ -115,13 +111,31 @@ const ReviewPage: NextPage = () => {
         Date of visit: {formatDate(new Date(), "d MMMM yyyy")}
       </Paragraph>
 
-      {href.pathname && as.pathname ? (
-        <NextLink href={href} as={as}>
-          {button}
-        </NextLink>
-      ) : (
-        button
-      )}
+      <Signature
+        value={selectedTenantId && signatures[selectedTenantId]}
+        onChange={(value): void => {
+          if (!selectedTenantId) {
+            return;
+          }
+
+          setSignatures(sigs => ({ ...sigs, [selectedTenantId]: value }));
+        }}
+      />
+
+      <SubmitButton
+        disabled={!residentDatabase.result || !selectedTenantId}
+        onSubmit={async (): Promise<void> => {
+          if (!residentDatabase.result || !selectedTenantId) {
+            return;
+          }
+
+          await residentDatabase.result.put(
+            "signature",
+            selectedTenantId,
+            signatures[selectedTenantId] || ""
+          );
+        }}
+      />
     </MainLayout>
   );
 };

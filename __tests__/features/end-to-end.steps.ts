@@ -200,7 +200,8 @@ const processData = {
         phoneNumber: "0123455789",
         relationship: "Carer relationship",
         notes: "Carer notes"
-      }
+      },
+      signature: ""
     }
   }
 };

@@ -7,22 +7,21 @@ import {
 } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
 import uuid from "uuid/v5";
-
 import ExternalDatabaseSchema, {
   externalDatabaseName
 } from "./ExternalDatabaseSchema";
 import ProcessDatabaseSchema, {
+  processDatabaseName,
   ProcessJson,
   ProcessRef,
-  processDatabaseName,
   processStoreNames
 } from "./ProcessDatabaseSchema";
+import tmpProcessRef from "./processRef";
 import ResidentDatabaseSchema, {
-  ResidentRef,
   residentDatabaseName,
+  ResidentRef,
   residentStoreNames
 } from "./ResidentDatabaseSchema";
-import tmpProcessRef from "./processRef";
 
 const migrateProcessData = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -148,7 +147,7 @@ export default class Storage {
 
     const residentDatabasePromise = Database.open<ResidentDatabaseSchema>(
       residentDatabaseName,
-      1,
+      2,
       {
         upgrade(upgrade) {
           let version = upgrade.oldVersion;
@@ -161,6 +160,12 @@ export default class Storage {
             upgrade.createStore("carer");
 
             version = 1;
+          }
+
+          if (version === 1) {
+            upgrade.createStore("signature");
+
+            version = 2;
           }
 
           if (version !== upgrade.newVersion) {
