@@ -25,7 +25,15 @@ const ConfirmedPage: NextPage = () => {
 
       <Heading level={HeadingLevels.H3}>What to do next?</Heading>
       <Paragraph>
-        <Button>Go to diversity monitoring form</Button>
+        <Button
+          onClick={(): void => {
+            location.assign(
+              "https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform?usp=sf_link"
+            );
+          }}
+        >
+          Go to diversity monitoring form
+        </Button>
       </Paragraph>
       <Paragraph>
         <Button>Return to my work tray</Button>
