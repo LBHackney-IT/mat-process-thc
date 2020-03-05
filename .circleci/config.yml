@@ -120,3 +120,30 @@ workflows:
           cluster-name: $AWS_CLUSTER_DEV
           service-name: $AWS_SERVICE_DEV
           image-tag: $CIRCLE_SHA1
+
+  check-and-deploy-to-production:
+    jobs:
+      - install-and-test:
+          name: install-and-test-master
+          filters:
+            branches:
+              only: master
+
+      - aws-ecr/build-and-push-image:
+          name: build-and-push-to-production
+          requires:
+            - install-and-test-master
+          account-url: AWS_ECR_HOST
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          region: AWS_REGION
+          repo: $AWS_ECR_PATH_PROD
+          tag: $CIRCLE_SHA1
+
+      - deploy:
+          name: deploy-to-production
+          requires:
+            - build-and-push-to-production
+          cluster-name: $AWS_CLUSTER_PROD
+          service-name: $AWS_SERVICE_PROD
+          image-tag: $CIRCLE_SHA1
