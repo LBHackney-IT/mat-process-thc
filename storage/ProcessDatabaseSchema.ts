@@ -1,6 +1,6 @@
 import { NamedSchema, StoreNames } from "remultiform/database";
 import { DeepPartial } from "utility-types";
-
+import databaseSchemaVersion from "./databaseSchemaVersion";
 import ResidentDatabaseSchema, { ResidentRef } from "./ResidentDatabaseSchema";
 
 export type ProcessRef = string;
@@ -11,7 +11,7 @@ export const processDatabaseName = `mat-process-${
 
 type ProcessDatabaseSchema = NamedSchema<
   typeof processDatabaseName,
-  4,
+  typeof databaseSchemaVersion,
   {
     lastModified: {
       key: ProcessRef;

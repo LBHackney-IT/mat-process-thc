@@ -2,11 +2,15 @@ import * as router from "next/router";
 import React from "react";
 import { act, create, ReactTestRenderer } from "react-test-renderer";
 import LoadingPage from "../../../../pages/thc/[processRef]/loading";
+import databaseSchemaVersion from "../../../../storage/databaseSchemaVersion";
+import { processStoreNames } from "../../../../storage/ProcessDatabaseSchema";
 import Storage from "../../../../storage/Storage";
 import { promiseToWaitForNextTick } from "../../../helpers/promise";
 import { spyOnConsoleError } from "../../../helpers/spies";
 
 const originalExternalContext = Storage.ExternalContext;
+const originalProcessContext = Storage.ProcessContext;
+const originalResidentContext = Storage.ResidentContext;
 
 beforeEach(() => {
   sessionStorage.setItem("currentProcessRef", "test-process-ref");
@@ -29,22 +33,28 @@ beforeEach(() => {
     ...jest.fn()(),
     database: {
       ...jest.fn()(),
-      db: { version: 4 },
+      db: { version: databaseSchemaVersion },
+      get: (): undefined => undefined,
       put: jest.fn(),
       transaction: async (_, tx): Promise<void> => {
-        await tx({
-          ...jest.fn()(),
-          lastModified: {
-            ...jest.fn()(),
-            get: (): undefined => undefined,
-            put: jest.fn()
-          },
-          property: {
-            ...jest.fn()(),
-            put: jest.fn()
-          }
-        });
+        await tx(
+          processStoreNames.reduce(
+            (stores, storeName) => ({
+              ...stores,
+              [storeName]: { ...jest.fn()(), put: jest.fn(), delete: jest.fn() }
+            }),
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            {} as any
+          )
+        );
       }
+    }
+  };
+  Storage.ResidentContext = {
+    ...jest.fn()(),
+    database: {
+      ...jest.fn()(),
+      db: { version: databaseSchemaVersion }
     }
   };
 
@@ -58,6 +68,8 @@ afterEach(() => {
   sessionStorage.clear();
 
   Storage.ExternalContext = originalExternalContext;
+  Storage.ProcessContext = originalProcessContext;
+  Storage.ResidentContext = originalResidentContext;
 });
 
 it("renders correctly when online", async () => {
