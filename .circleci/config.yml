@@ -97,15 +97,15 @@ workflows:
   check-and-deploy-to-development:
     jobs:
       - install-and-test:
-          name: install-and-test-master
+          name: install-and-test-development
           filters:
             branches:
-              only: master
+              only: development
 
       - aws-ecr/build-and-push-image:
           name: build-and-push-to-development
           requires:
-            - install-and-test-master
+            - install-and-test-development
           account-url: AWS_ECR_HOST
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
