@@ -22,6 +22,7 @@ import {
 } from "../../components/TextAreaDetails";
 import { TextInput } from "../../components/TextInput";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import yesNoRadios from "../../helpers/yesNoRadios";
 import { Note } from "../../storage/DatabaseSchema";
@@ -135,7 +136,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
   },
   step: {
     slug: PageSlugs.Carer,
-    nextSlug: PageSlugs.Verify,
+    nextSlug: nextSlugWithId(PageSlugs.OtherSupport),
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,

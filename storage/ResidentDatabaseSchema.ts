@@ -66,6 +66,15 @@ type ResidentDatabaseSchema = NamedSchema<
       };
     };
 
+    otherSupport: {
+      key: ResidentRef;
+      value: {
+        fullName: string;
+        role: string;
+        phoneNumber: string;
+      };
+    };
+
     signature: {
       key: ResidentRef;
       value: string;
@@ -81,6 +90,7 @@ const storeNames: {
   photo: true,
   nextOfKin: true,
   carer: true,
+  otherSupport: true,
   signature: true
 };
 
