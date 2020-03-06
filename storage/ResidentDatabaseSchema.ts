@@ -63,6 +63,14 @@ type ResidentDatabaseSchema = NamedSchema<
         notes: string;
       };
     };
+    otherSupport: {
+      key: ResidentRef;
+      value: {
+        fullName: string;
+        role: string;
+        phoneNumber: string;
+      };
+    };
   }
 >;
 
@@ -73,7 +81,8 @@ const storeNames: {
   residency: true,
   photo: true,
   nextOfKin: true,
-  carer: true
+  carer: true,
+  otherSupport: true
 };
 
 export const residentStoreNames = Object.entries(storeNames)
