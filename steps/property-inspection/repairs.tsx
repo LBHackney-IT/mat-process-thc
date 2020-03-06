@@ -40,6 +40,7 @@ const step = {
                 <Link
                   key="report-repairs"
                   href="https://hackney.gov.uk/report-a-repair"
+                  target="_blank"
                 >
                   Report repairs
                 </Link>{" "}
