@@ -35,15 +35,16 @@ const step = {
           props: {
             children: (
               <>
-                `Residents can contact the Repairs Contact Centre: 020 8356 3691
+                Residents can contact the Repairs Contact Centre: 020 8356 3691
                 or{" "}
                 <Link
                   key="report-repairs"
                   href="https://hackney.gov.uk/report-a-repair"
+                  target="_blank"
                 >
                   Report repairs
                 </Link>{" "}
-                online (online only, opens in a new tab).`
+                online (online only, opens in a new tab).
               </>
             )
           }
