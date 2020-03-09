@@ -116,7 +116,8 @@ export const repeatingStepSlugs = [
   PageSlugs.TenantPhoto,
   PageSlugs.NextOfKin,
   PageSlugs.Carer,
-  PageSlugs.OtherSupport
+  PageSlugs.OtherSupport,
+  PageSlugs.Verify
 ];
 
 export const urlObjectForSlug = (
