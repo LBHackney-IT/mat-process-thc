@@ -83,7 +83,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
             "photo"
           >({
             storeName: "photo",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["isWilling"]
           })
         })
@@ -113,7 +113,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
             "photo"
           >({
             storeName: "photo",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["notes"]
           })
         })
@@ -164,7 +164,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
             "photo"
           >({
             storeName: "photo",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["images"]
           })
         })
