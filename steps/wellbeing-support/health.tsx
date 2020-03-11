@@ -9,7 +9,7 @@ import {
 import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
+import { TextArea, TextAreaProps } from "../../components/TextArea";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
@@ -170,9 +170,10 @@ const step = {
             name: "health-notes",
             label: {
               value: "Add note about any health concerns if necessary."
-            } as { id?: string; value: React.ReactNode },
-            rows: 4 as number | undefined
-          },
+            },
+            rows: 4,
+            includeCheckbox: true
+          } as TextAreaProps,
           renderWhen(stepValues: {
             "health-concerns"?: ComponentValue<
               ProcessDatabaseSchema,
@@ -181,8 +182,8 @@ const step = {
           }): boolean {
             return stepValues["health-concerns"] === "yes";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "healthConcerns"

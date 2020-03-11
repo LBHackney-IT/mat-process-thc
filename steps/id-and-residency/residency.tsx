@@ -8,10 +8,14 @@ import {
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextAreaDetails } from "../../components/TextAreaDetails";
+import {
+  TextAreaDetails,
+  TextAreaDetailsProps
+} from "../../components/TextAreaDetails";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import { Note } from "../../storage/DatabaseSchema";
 import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
 import Storage from "../../storage/Storage";
 import PageSlugs from "../PageSlugs";
@@ -73,8 +77,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
             }
           },
           "residency-notes": {
-            renderValue(notes: string): React.ReactNode {
-              return notes;
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
             }
           }
         },
@@ -145,12 +149,13 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
           key: "residency-notes",
           Component: TextAreaDetails,
           props: {
-            summary: "Add note about residency if necessary" as React.ReactNode,
+            summary: "Add note about residency if necessary",
             name: "residency-notes",
-            label: { value: "Notes" } as { id?: string; value: React.ReactNode }
-          },
-          defaultValue: "",
-          emptyValue: "",
+            label: { value: "Notes" },
+            includeCheckbox: true
+          } as TextAreaDetailsProps,
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ResidentDatabaseSchema,
             "residency"

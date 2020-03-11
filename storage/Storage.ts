@@ -1,3 +1,4 @@
+import { cloneDeep } from "lodash";
 import { Database, StoreValue, TransactionMode } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
 import uuid from "uuid/v5";
@@ -26,6 +27,7 @@ const migrateProcessData = async (
   // eslint-disable-next-line @typescript-eslint/require-await
 ): Promise<Required<ProcessJson>["processData"]> => {
   let version = oldVersion;
+  processData = cloneDeep(processData);
 
   if (version < 4) {
     delete processData.id;
@@ -33,6 +35,60 @@ const migrateProcessData = async (
     delete processData.tenant;
 
     version = 4;
+  }
+
+  if (version === 4) {
+    const noteKeys = [
+      "notes",
+      "residentSustainmentNotes",
+      "befriendingNotes",
+      "adultSafeguardingNotes",
+      "childrenYoungPeopleSafeguardingNotes",
+      "domesticSexualViolenceNotes",
+      "mentalHealth18To65Notes",
+      "mentalHealthOver65Notes"
+    ];
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const migrateNotes = (storeValues: any): void => {
+      for (const value of Object.values(storeValues)) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const v = value as any;
+
+        for (const noteKey of noteKeys) {
+          const noteValue = v[noteKey];
+
+          if (noteValue === undefined) {
+            continue;
+          }
+
+          v[noteKey] = {
+            value: noteValue,
+            isPostVisitAction: false
+          };
+        }
+      }
+    };
+
+    for (const storeName of processStoreNames) {
+      if (processData[storeName] === undefined) {
+        continue;
+      }
+
+      migrateNotes(processData[storeName]);
+    }
+
+    for (const storeName of residentStoreNames) {
+      if (
+        !processData.residents ||
+        processData.residents[storeName] === undefined
+      ) {
+        continue;
+      }
+      migrateNotes(processData.residents[storeName]);
+    }
+
+    version = 5;
   }
 
   if (version !== newVersion) {
@@ -130,6 +186,10 @@ export default class Storage {
             version = 4;
           }
 
+          if (version === 4) {
+            version = 5;
+          }
+
           if (version !== upgrade.newVersion) {
             throw new Error(
               `Unable to upgrade to ${upgrade.newVersion} due to missing ` +
@@ -163,8 +223,8 @@ export default class Storage {
             version = 2;
           }
 
-          if (version < 4) {
-            version = 4;
+          if (version < 5) {
+            version = 5;
           }
 
           if (version !== upgrade.newVersion) {

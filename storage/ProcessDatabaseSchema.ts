@@ -1,9 +1,12 @@
 import { NamedSchema, StoreNames } from "remultiform/database";
 import { DeepPartial } from "utility-types";
+import { Note } from "./DatabaseSchema";
 import databaseSchemaVersion from "./databaseSchemaVersion";
 import ResidentDatabaseSchema, { ResidentRef } from "./ResidentDatabaseSchema";
 
 export type ProcessRef = string;
+
+export const processDatabaseVersion = 5;
 
 export const processDatabaseName = `mat-process-${
   process.env.PROCESS_NAME
@@ -26,24 +29,24 @@ type ProcessDatabaseSchema = NamedSchema<
         };
         rooms: {
           canEnterAll: string;
-          notes: string;
+          notes: Note;
         };
         laminatedFlooring: {
           hasLaminatedFlooring: string;
           hasPermission: string;
           images: string[];
-          notes: string;
+          notes: Note;
         };
         structuralChanges: {
           hasStructuralChanges: string;
           changesAuthorised: string;
           images: string[];
-          notes: string;
+          notes: Note;
         };
         damage: {
           hasDamage: string;
           images: string[];
-          notes: string;
+          notes: Note;
         };
         repairs: {
           needsRepairs: string;
@@ -53,66 +56,66 @@ type ProcessDatabaseSchema = NamedSchema<
         roof: {
           hasAccess: string;
           itemsStoredOnRoof: string;
-          notes: string;
+          notes: Note;
         };
         loft: {
           hasAccess: string;
           itemsStored: string;
-          notes: string;
+          notes: Note;
         };
         garden: {
           hasGarden: string;
           type: string;
           isMaintained: string;
           images: string[];
-          notes: string;
+          notes: Note;
         };
         storingMaterials: {
           isStoringMaterials: string;
           furtherActionRequired: string;
-          notes: string;
+          notes: Note;
         };
         fireExit: {
           hasFireExit: string;
           isAccessible: string;
-          notes: string;
+          notes: Note;
         };
         smokeAlarm: {
           hasSmokeAlarm: string;
           isWorking: string;
-          notes: string;
+          notes: Note;
         };
         metalGates: {
           hasMetalGates: string;
           combustibleItemsBehind: string;
           furtherActionRequired: string;
           images: string[];
-          notes: string;
+          notes: Note;
         };
         doorMats: {
           hasPlaced: string;
           furtherActionRequired: string;
-          notes: string;
+          notes: Note;
         };
         communalAreas: {
           hasLeftCombustibleItems: string;
           furtherActionRequired: string;
-          notes: string;
+          notes: Note;
         };
         pets: {
           hasPets: string;
           petTypes: string[];
           hasPermission: string;
           images: string[];
-          notes: string;
+          notes: Note;
         };
         antisocialBehaviour: {
           tenantUnderstands: string;
-          notes: string;
+          notes: Note;
         };
         otherComments: {
           images: string[];
-          notes: string;
+          notes: Note;
         };
       };
     };
@@ -121,7 +124,7 @@ type ProcessDatabaseSchema = NamedSchema<
       key: ProcessRef;
       value: {
         value: string;
-        notes: string;
+        notes: Note;
       };
     };
 
@@ -129,7 +132,7 @@ type ProcessDatabaseSchema = NamedSchema<
       key: ProcessRef;
       value: {
         value: string;
-        notes: string;
+        notes: Note;
       };
     };
 
@@ -145,26 +148,26 @@ type ProcessDatabaseSchema = NamedSchema<
           images: string[];
         };
         houseMovingSchemes: {
-          notes: string;
+          notes: Note;
         };
         memberChanges: {
-          notes: string;
+          notes: Note;
         };
         rentArrears: {
           type: string;
-          notes: string;
+          notes: Note;
         };
         housingBenefits: {
           hasApplied: string;
-          notes: string;
+          notes: Note;
         };
         incomeOfficer: {
           wantsToContact: string;
-          notes: string;
+          notes: Note;
         };
         otherProperty: {
           hasOtherProperty: string;
-          notes: string;
+          notes: Note;
         };
       };
     };
@@ -173,7 +176,7 @@ type ProcessDatabaseSchema = NamedSchema<
       key: ProcessRef;
       value: {
         value: string;
-        notes: string;
+        notes: Note;
       };
     };
 
@@ -183,7 +186,7 @@ type ProcessDatabaseSchema = NamedSchema<
         value: string;
         who: string[];
         moreInfo: string[];
-        notes: string;
+        notes: Note;
       };
     };
 
@@ -195,20 +198,20 @@ type ProcessDatabaseSchema = NamedSchema<
         pipOrDLA: string;
         whoPIP: string[];
         whoDLA: string[];
-        notes: string;
+        notes: Note;
       };
     };
 
     supportNeeds: {
       key: ProcessRef;
       value: {
-        residentSustainmentNotes: string;
-        befriendingNotes: string;
-        adultSafeguardingNotes: string;
-        childrenYoungPeopleSafeguardingNotes: string;
-        domesticSexualViolenceNotes: string;
-        mentalHealth18To65Notes: string;
-        mentalHealthOver65Notes: string;
+        residentSustainmentNotes: Note;
+        befriendingNotes: Note;
+        adultSafeguardingNotes: Note;
+        childrenYoungPeopleSafeguardingNotes: Note;
+        domesticSexualViolenceNotes: Note;
+        mentalHealth18To65Notes: Note;
+        mentalHealthOver65Notes: Note;
       };
     };
   }

@@ -10,7 +10,7 @@ import {
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
+import { TextArea, TextAreaProps } from "../../components/TextArea";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
@@ -121,16 +121,16 @@ const step = {
           props: {
             label: {
               value: "Add note about repairs if necessary."
-            } as { id?: string; value: React.ReactNode },
+            },
             name: "repairs-notes"
-          },
+          } as TextAreaProps,
           renderWhen(stepValues: {
             "needs-repairs"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
             return stepValues["needs-repairs"] === "yes";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "property"

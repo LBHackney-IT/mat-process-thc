@@ -1,9 +1,7 @@
 import React from "react";
-import { ComponentValue } from "remultiform/component-wrapper";
 import { NamedSchema, Schema, StoreNames } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
 import { StepDefinition } from "remultiform/step";
-
 import PageTitles from "../steps/PageTitles";
 
 interface BaseStepDefinition<
@@ -18,7 +16,8 @@ interface BaseStepDefinition<
         [s: string]:
           | {
               renderValue(
-                value: ComponentValue<DBSchema, Names>
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                value: any
               ): React.ReactNode;
             }
           | undefined;

@@ -9,7 +9,7 @@ import {
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
+import { TextArea, TextAreaProps } from "../../components/TextArea";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
@@ -185,9 +185,10 @@ const step = {
             label: {
               value:
                 "Add note about metal gates / combustible items if necessary."
-            } as { id?: string; value: React.ReactNode },
-            name: "metal-gates-notes"
-          },
+            },
+            name: "metal-gates-notes",
+            includeCheckbox: true
+          } as TextAreaProps,
           renderWhen(stepValues: {
             "has-metal-gates"?: ComponentValue<
               ProcessDatabaseSchema,
@@ -196,8 +197,8 @@ const step = {
           }): boolean {
             return stepValues["has-metal-gates"] === "yes";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "property"

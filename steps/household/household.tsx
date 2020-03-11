@@ -14,7 +14,10 @@ import {
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { Table } from "../../components/Table";
-import { TextAreaDetails } from "../../components/TextAreaDetails";
+import {
+  TextAreaDetails,
+  TextAreaDetailsProps
+} from "../../components/TextAreaDetails";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
@@ -75,11 +78,12 @@ const step = {
           key: "house-moving-schemes",
           Component: TextAreaDetails,
           props: {
-            summary: "House moving schemes: downsizing, overcrowding or aged over 60" as React.ReactNode,
+            summary:
+              "House moving schemes: downsizing, overcrowding or aged over 60",
             name: "house-moving-schemes-notes",
             label: {
               value: "House moving schemes notes"
-            } as { id?: string; value: React.ReactNode },
+            },
             contentBeforeTextArea: (
               <>
                 <Paragraph>Schemes cover:</Paragraph>
@@ -117,10 +121,11 @@ const step = {
                   ]}
                 />
               </>
-            ) as React.ReactNode
-          },
-          defaultValue: "",
-          emptyValue: "",
+            ),
+            includeCheckbox: true
+          } as TextAreaDetailsProps,
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "household"
@@ -136,15 +141,13 @@ const step = {
           key: "member-changes",
           Component: TextAreaDetails,
           props: {
-            summary: "Add note about any changes in household members" as React.ReactNode,
-            label: { value: "Notes" } as {
-              id?: string;
-              value: React.ReactNode;
-            },
-            name: "member-changes-notes"
-          },
-          defaultValue: "",
-          emptyValue: "",
+            summary: "Add note about any changes in household members",
+            label: { value: "Notes" },
+            name: "member-changes-notes",
+            includeCheckbox: true
+          } as TextAreaDetailsProps,
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "household"

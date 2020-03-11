@@ -76,8 +76,8 @@ const step = {
           }): boolean {
             return stepValues["unannounced-visit"] === "no";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "isUnannouncedVisit"
@@ -141,8 +141,8 @@ const step = {
           }): boolean {
             return stepValues["inside-property"] === "no";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "isVisitInside"

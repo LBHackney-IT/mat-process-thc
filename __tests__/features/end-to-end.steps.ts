@@ -15,102 +15,159 @@ const processData = {
     },
     rooms: {
       canEnterAll: "no",
-      notes: "Room notes"
+      notes: {
+        value: "Room notes",
+        isPostVisitAction: false
+      }
     },
     laminatedFlooring: {
       hasLaminatedFlooring: "yes",
       hasPermission: "yes",
       images: [imagePath],
-      notes: "Laminated flooring notes"
+      notes: {
+        value: "Laminated flooring notes",
+        isPostVisitAction: false
+      }
     },
     structuralChanges: {
       hasStructuralChanges: "yes",
       changesAuthorised: "yes",
       images: [imagePath],
-      notes: "Structural changes notes"
+      notes: {
+        value: "Structural changes notes",
+        isPostVisitAction: false
+      }
     },
     damage: {
       hasDamage: "yes",
       images: [imagePath],
-      notes: "Damage notes"
+      notes: {
+        value: "Damage notes",
+        isPostVisitAction: false
+      }
     },
     roof: {
       hasAccess: "yes",
       itemsStoredOnRoof: "yes",
-      notes: "Roof notes"
+      notes: {
+        value: "Roof notes",
+        isPostVisitAction: false
+      }
     },
     loft: {
       hasAccess: "yes",
       itemsStored: "yes",
-      notes: "Loft notes"
+      notes: {
+        value: "Loft notes",
+        isPostVisitAction: false
+      }
     },
     garden: {
       hasGarden: "yes",
       type: "private",
       isMaintained: "yes",
       images: [imagePath],
-      notes: "Garden notes"
+      notes: {
+        value: "Garden notes",
+        isPostVisitAction: false
+      }
     },
     repairs: {
       needsRepairs: "yes",
       images: [imagePath],
-      notes: "Repairs notes"
+      notes: {
+        value: "Repairs notes",
+        isPostVisitAction: false
+      }
     },
     storingMaterials: {
       isStoringMaterials: "yes",
       furtherActionRequired: "yes",
-      notes: "Storing materials notes"
+      notes: {
+        value: "Storing materials notes",
+        isPostVisitAction: false
+      }
     },
     fireExit: {
       hasFireExit: "yes",
       isAccessible: "yes",
-      notes: "Fire exit notes"
+      notes: {
+        value: "Fire exit notes",
+        isPostVisitAction: false
+      }
     },
     smokeAlarm: {
       hasSmokeAlarm: "yes",
       isWorking: "yes",
-      notes: "Smoke alarm notes"
+      notes: {
+        value: "Smoke alarm notes",
+        isPostVisitAction: false
+      }
     },
     metalGates: {
       hasMetalGates: "yes",
       combustibleItemsBehind: "yes",
       furtherActionRequired: "yes",
       images: [imagePath],
-      notes: "Metal gates notes"
+      notes: {
+        value: "Metal gates notes",
+        isPostVisitAction: false
+      }
     },
     doorMats: {
       hasPlaced: "yes",
       furtherActionRequired: "yes",
-      notes: "Door mats notes"
+      notes: {
+        value: "Door mats notes",
+        isPostVisitAction: false
+      }
     },
     communalAreas: {
       hasLeftCombustibleItems: "yes",
       furtherActionRequired: "yes",
-      notes: "Communal areas notes"
+      notes: {
+        value: "Communal areas notes",
+        isPostVisitAction: false
+      }
     },
     pets: {
       hasPets: "yes",
       petTypes: ["dog", "cat"],
       hasPermission: "yes",
       images: [imagePath],
-      notes: "Pets notes"
+      notes: {
+        value: "Pets notes",
+        isPostVisitAction: false
+      }
     },
     antisocialBehaviour: {
       tenantUnderstands: "yes",
-      notes: "Antisocial behaviour notes"
+      notes: {
+        value: "Antisocial behaviour notes",
+        isPostVisitAction: false
+      }
     },
     otherComments: {
       images: [imagePath],
-      notes: "Other comments notes"
+      notes: {
+        value: "Other comments notes",
+        isPostVisitAction: false
+      }
     }
   },
   isUnannouncedVisit: {
     value: "no",
-    notes: "Unannounced visit notes"
+    notes: {
+      value: "Unannounced visit notes",
+      isPostVisitAction: false
+    }
   },
   isVisitInside: {
     value: "no",
-    notes: "Visit inside notes"
+    notes: {
+      value: "Visit inside notes",
+      isPostVisitAction: false
+    }
   },
   tenantsPresent: [presentTenantRef],
   household: {
@@ -118,26 +175,44 @@ const processData = {
       images: [imagePath]
     },
     houseMovingSchemes: {
-      notes: "House moving schemes notes"
+      notes: {
+        value: "House moving schemes notes",
+        isPostVisitAction: false
+      }
     },
     memberChanges: {
-      notes: "Member changes notes"
+      notes: {
+        value: "Member changes notes",
+        isPostVisitAction: false
+      }
     },
     rentArrears: {
       type: "yes has plan",
-      notes: "Rent arrears notes"
+      notes: {
+        value: "Rent arrears notes",
+        isPostVisitAction: false
+      }
     },
     housingBenefits: {
       hasApplied: "yes application declined",
-      notes: "Housing benefits notes"
+      notes: {
+        value: "Housing benefits notes",
+        isPostVisitAction: false
+      }
     },
     incomeOfficer: {
       wantsToContact: "yes",
-      notes: "Income officer notes"
+      notes: {
+        value: "Income officer notes",
+        isPostVisitAction: false
+      }
     },
     otherProperty: {
       hasOtherProperty: "yes",
-      notes: "Other property notes"
+      notes: {
+        value: "Other property notes",
+        isPostVisitAction: false
+      }
     }
   },
   homeCheck: {
@@ -147,7 +222,10 @@ const processData = {
     value: "yes",
     who: ["tenant 1"],
     moreInfo: ["dementia", "smoking"],
-    notes: "Health concerns notes"
+    notes: {
+      value: "Health concerns notes",
+      isPostVisitAction: false
+    }
   },
   disability: {
     value: "yes",
@@ -155,29 +233,58 @@ const processData = {
     pipOrDLA: "yes",
     whoPIP: ["tenant 1"],
     whoDLA: ["tenant 1"],
-    notes: "Disability notes"
+    notes: {
+      value: "Disability notes",
+      isPostVisitAction: false
+    }
   },
   supportNeeds: {
-    residentSustainmentNotes: "Resident sustainment notes",
-    befriendingNotes: "Befriending notes",
-    adultSafeguardingNotes: "Adult safeguarding notes",
-    childrenYoungPeopleSafeguardingNotes:
-      "Children young people safeguarding notes",
-    domesticSexualViolenceNotes: "Domestic sexual violence notes",
-    mentalHealth18To65Notes: "Mental health 18 to 65 notes",
-    mentalHealthOver65Notes: "Mental health over 65 notes"
+    residentSustainmentNotes: {
+      value: "Resident sustainment notes",
+      isPostVisitAction: false
+    },
+    befriendingNotes: {
+      value: "Befriending notes",
+      isPostVisitAction: false
+    },
+    adultSafeguardingNotes: {
+      value: "Adult safeguarding notes",
+      isPostVisitAction: false
+    },
+    childrenYoungPeopleSafeguardingNotes: {
+      value: "Children young people safeguarding notes",
+      isPostVisitAction: false
+    },
+    domesticSexualViolenceNotes: {
+      value: "Domestic sexual violence notes",
+      isPostVisitAction: false
+    },
+    mentalHealth18To65Notes: {
+      value: "Mental health 18 to 65 notes",
+      isPostVisitAction: false
+    },
+    mentalHealthOver65Notes: {
+      value: "Mental health over 65 notes",
+      isPostVisitAction: false
+    }
   },
   residents: {
     [presentTenantRef]: {
       id: {
         type: "valid passport",
         images: [imagePath],
-        notes: "ID notes"
+        notes: {
+          value: "ID notes",
+          isPostVisitAction: false
+        }
       },
       residency: {
         type: "bank statement",
         images: [imagePath],
-        notes: "Residency notes"
+        notes: {
+          value: "Residency notes",
+          isPostVisitAction: false
+        }
       },
       photo: {
         isWilling: "yes",
@@ -199,7 +306,10 @@ const processData = {
         fullName: "Carer name",
         phoneNumber: "0123455789",
         relationship: "Carer relationship",
-        notes: "Carer notes"
+        notes: {
+          value: "Carer notes",
+          isPostVisitAction: false
+        }
       },
       signature: ""
     }
@@ -273,7 +383,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "unannounced-visit-notes"
         })
-      ).sendKeys(processData.isUnannouncedVisit.notes);
+      ).sendKeys(processData.isUnannouncedVisit.notes.value);
       (
         await browser!.waitForEnabledElement({
           id: `inside-property-${processData.isVisitInside.value}`
@@ -283,7 +393,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "inside-property-notes"
         })
-      ).sendKeys(processData.isVisitInside.notes);
+      ).sendKeys(processData.isVisitInside.notes.value);
 
       await browser!.submit();
 
@@ -348,7 +458,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "id-notes"
         })
-      ).sendKeys(processData.residents[presentTenantRef].id.notes);
+      ).sendKeys(processData.residents[presentTenantRef].id.notes.value);
 
       await browser!.submit();
 
@@ -378,7 +488,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "residency-notes"
         })
-      ).sendKeys(processData.residents[presentTenantRef].residency.notes);
+      ).sendKeys(processData.residents[presentTenantRef].residency.notes.value);
 
       await browser!.submit();
 
@@ -504,7 +614,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "carer-notes"
         })
-      ).sendKeys(processData.residents[presentTenantRef].carer.notes);
+      ).sendKeys(processData.residents[presentTenantRef].carer.notes.value);
 
       await browser!.submit();
 
@@ -546,7 +656,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "house-moving-schemes-notes"
         })
-      ).sendKeys(processData.household.houseMovingSchemes.notes);
+      ).sendKeys(processData.household.houseMovingSchemes.notes.value);
       (
         await browser!.waitForEnabledElement({
           id: "member-changes-notes-summary"
@@ -556,7 +666,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "member-changes-notes"
         })
-      ).sendKeys(processData.household.memberChanges.notes);
+      ).sendKeys(processData.household.memberChanges.notes.value);
 
       await browser!.submit();
 
@@ -582,7 +692,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "rent-arrears-notes"
         })
-      ).sendKeys(processData.household.rentArrears.notes);
+      ).sendKeys(processData.household.rentArrears.notes.value);
       (
         await browser!.waitForEnabledElement({
           id: `has-applied-for-housing-benefit-${processData.household.housingBenefits.hasApplied.replace(
@@ -600,7 +710,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "housing-benefits-notes"
         })
-      ).sendKeys(processData.household.housingBenefits.notes);
+      ).sendKeys(processData.household.housingBenefits.notes.value);
       (
         await browser!.waitForEnabledElement({
           id: `contact-income-officer-${processData.household.incomeOfficer.wantsToContact.replace(
@@ -618,7 +728,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "income-officer-notes"
         })
-      ).sendKeys(processData.household.incomeOfficer.notes);
+      ).sendKeys(processData.household.incomeOfficer.notes.value);
 
       await browser!.submit();
 
@@ -636,7 +746,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "other-property-notes"
         })
-      ).sendKeys(processData.household.otherProperty.notes);
+      ).sendKeys(processData.household.otherProperty.notes.value);
 
       await browser!.submit();
 
@@ -663,7 +773,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "room-entry-notes"
         })
-      ).sendKeys(processData.property.rooms.notes);
+      ).sendKeys(processData.property.rooms.notes.value);
 
       await browser!.submit();
 
@@ -691,7 +801,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "laminated-flooring-notes"
         })
-      ).sendKeys(processData.property.laminatedFlooring.notes);
+      ).sendKeys(processData.property.laminatedFlooring.notes.value);
 
       await browser!.submit();
 
@@ -719,7 +829,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "structural-changes-notes"
         })
-      ).sendKeys(processData.property.structuralChanges.notes);
+      ).sendKeys(processData.property.structuralChanges.notes.value);
 
       await browser!.submit();
 
@@ -742,7 +852,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "damage-notes"
         })
-      ).sendKeys(processData.property.damage.notes);
+      ).sendKeys(processData.property.damage.notes.value);
 
       await browser!.submit();
 
@@ -765,7 +875,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "roof-notes"
         })
-      ).sendKeys(processData.property.roof.notes);
+      ).sendKeys(processData.property.roof.notes.value);
 
       await browser!.submit();
 
@@ -788,7 +898,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "loft-notes"
         })
-      ).sendKeys(processData.property.loft.notes);
+      ).sendKeys(processData.property.loft.notes.value);
 
       await browser!.submit();
 
@@ -821,7 +931,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "garden-notes"
         })
-      ).sendKeys(processData.property.garden.notes);
+      ).sendKeys(processData.property.garden.notes.value);
 
       await browser!.submit();
 
@@ -837,7 +947,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       ).sendKeys(processData.property.repairs.images[0]);
       (
         await browser!.waitForEnabledElement({ name: "repairs-notes" })
-      ).sendKeys(processData.property.repairs.notes);
+      ).sendKeys(processData.property.repairs.notes.value);
 
       await browser!.submit();
 
@@ -860,7 +970,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "stored-materials-notes"
         })
-      ).sendKeys(processData.property.storingMaterials.notes);
+      ).sendKeys(processData.property.storingMaterials.notes.value);
 
       await browser!.submit();
 
@@ -883,7 +993,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "fire-exit-notes"
         })
-      ).sendKeys(processData.property.fireExit.notes);
+      ).sendKeys(processData.property.fireExit.notes.value);
 
       await browser!.submit();
 
@@ -906,7 +1016,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "smoke-alarm-notes"
         })
-      ).sendKeys(processData.property.smokeAlarm.notes);
+      ).sendKeys(processData.property.smokeAlarm.notes.value);
 
       await browser!.submit();
 
@@ -934,7 +1044,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "metal-gates-notes"
         })
-      ).sendKeys(processData.property.metalGates.notes);
+      ).sendKeys(processData.property.metalGates.notes.value);
 
       await browser!.submit();
 
@@ -957,7 +1067,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "door-mats-notes"
         })
-      ).sendKeys(processData.property.doorMats.notes);
+      ).sendKeys(processData.property.doorMats.notes.value);
 
       await browser!.submit();
 
@@ -980,7 +1090,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "communal-areas-notes"
         })
-      ).sendKeys(processData.property.communalAreas.notes);
+      ).sendKeys(processData.property.communalAreas.notes.value);
 
       await browser!.submit();
 
@@ -1018,7 +1128,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "pets-notes"
         })
-      ).sendKeys(processData.property.pets.notes);
+      ).sendKeys(processData.property.pets.notes.value);
 
       await browser!.submit();
 
@@ -1036,7 +1146,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "antisocial-behaviour-notes"
         })
-      ).sendKeys(processData.property.antisocialBehaviour.notes);
+      ).sendKeys(processData.property.antisocialBehaviour.notes.value);
 
       await browser!.submit();
 
@@ -1054,7 +1164,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "other-comments-notes"
         })
-      ).sendKeys(processData.property.otherComments.notes);
+      ).sendKeys(processData.property.otherComments.notes.value);
 
       await browser!.submit();
 
@@ -1115,7 +1225,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "health-notes"
         })
-      ).sendKeys(processData.healthConcerns.notes);
+      ).sendKeys(processData.healthConcerns.notes.value);
 
       await browser!.submit();
 
@@ -1156,7 +1266,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "disability-notes"
         })
-      ).sendKeys(processData.disability.notes);
+      ).sendKeys(processData.disability.notes.value);
 
       await browser!.submit();
 
@@ -1173,7 +1283,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "resident-sustainment-notes"
         })
-      ).sendKeys(processData.supportNeeds.residentSustainmentNotes);
+      ).sendKeys(processData.supportNeeds.residentSustainmentNotes.value);
       (
         await browser!.waitForEnabledElement({
           id: "befriending-notes-summary"
@@ -1183,7 +1293,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "befriending-notes"
         })
-      ).sendKeys(processData.supportNeeds.befriendingNotes);
+      ).sendKeys(processData.supportNeeds.befriendingNotes.value);
       (
         await browser!.waitForEnabledElement({
           id: "adult-safeguarding-notes-summary"
@@ -1193,7 +1303,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "adult-safeguarding-notes"
         })
-      ).sendKeys(processData.supportNeeds.adultSafeguardingNotes);
+      ).sendKeys(processData.supportNeeds.adultSafeguardingNotes.value);
       (
         await browser!.waitForEnabledElement({
           id: "childrens-safeguarding-notes-summary"
@@ -1203,7 +1313,9 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "childrens-safeguarding-notes"
         })
-      ).sendKeys(processData.supportNeeds.childrenYoungPeopleSafeguardingNotes);
+      ).sendKeys(
+        processData.supportNeeds.childrenYoungPeopleSafeguardingNotes.value
+      );
       (
         await browser!.waitForEnabledElement({
           id: "domestic-violence-notes-summary"
@@ -1213,7 +1325,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "domestic-violence-notes"
         })
-      ).sendKeys(processData.supportNeeds.domesticSexualViolenceNotes);
+      ).sendKeys(processData.supportNeeds.domesticSexualViolenceNotes.value);
       (
         await browser!.waitForEnabledElement({
           id: "mental-health-18-65-notes-summary"
@@ -1223,7 +1335,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "mental-health-18-65-notes"
         })
-      ).sendKeys(processData.supportNeeds.mentalHealth18To65Notes);
+      ).sendKeys(processData.supportNeeds.mentalHealth18To65Notes.value);
       (
         await browser!.waitForEnabledElement({
           id: "mental-health-over-65-notes-summary"
@@ -1233,7 +1345,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           name: "mental-health-over-65-notes"
         })
-      ).sendKeys(processData.supportNeeds.mentalHealthOver65Notes);
+      ).sendKeys(processData.supportNeeds.mentalHealthOver65Notes.value);
       await browser!.submit();
 
       // Sections page
