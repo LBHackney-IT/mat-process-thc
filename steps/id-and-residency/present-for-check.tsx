@@ -35,7 +35,7 @@ const TenantsSelect: React.FunctionComponent<Omit<
   return (
     <Checkboxes
       {...props}
-      required={true}
+      required
       checkboxes={
         tenants.result
           ? tenants.result.map(tenant => ({
