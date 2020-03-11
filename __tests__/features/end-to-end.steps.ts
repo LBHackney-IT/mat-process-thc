@@ -311,6 +311,11 @@ const processData = {
           isPostVisitAction: false
         }
       },
+      otherSupport: {
+        fullName: "Other support name",
+        role: "other support role",
+        phoneNumber: "0123455789"
+      },
       signature: ""
     }
   }
@@ -615,6 +620,30 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
           name: "carer-notes"
         })
       ).sendKeys(processData.residents[presentTenantRef].carer.notes.value);
+
+      await browser!.submit();
+      //Other support page
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `/other-support/${presentTenantRef}`
+      );
+
+      (
+        await browser!.waitForEnabledElement({
+          name: "other-support-full-name"
+        })
+      ).sendKeys(processData.residents[presentTenantRef].otherSupport.fullName);
+      (
+        await browser!.waitForEnabledElement({
+          name: "other-support-role"
+        })
+      ).sendKeys(processData.residents[presentTenantRef].otherSupport.role);
+      (
+        await browser!.waitForEnabledElement({
+          name: "other-support-phone-number"
+        })
+      ).sendKeys(
+        processData.residents[presentTenantRef].otherSupport.phoneNumber
+      );
 
       await browser!.submit();
 

@@ -223,6 +223,12 @@ export default class Storage {
             version = 2;
           }
 
+          if (version === 2) {
+            upgrade.createStore("otherSupport");
+
+            version = 3;
+          }
+
           if (version < 5) {
             version = 5;
           }
