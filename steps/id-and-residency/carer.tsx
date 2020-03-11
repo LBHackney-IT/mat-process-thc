@@ -2,7 +2,9 @@ import formatDate from "date-fns/format";
 import {
   FieldsetLegend,
   Heading,
-  HeadingLevels
+  HeadingLevels,
+  LabelProps,
+  Textarea
 } from "lbh-frontend-react/components";
 import React from "react";
 import {
@@ -10,12 +12,12 @@ import {
   ComponentValue,
   ComponentWrapper,
   DynamicComponent,
+  makeDynamic,
   StaticComponent
 } from "remultiform/component-wrapper";
 import { DateInput } from "../../components/DateInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea, TextAreaProps } from "../../components/TextArea";
 import {
   TextAreaDetails,
   TextAreaDetailsProps
@@ -352,21 +354,30 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "carer-address",
-          Component: TextArea,
+          Component: makeDynamic(
+            Textarea,
+            {
+              value: "value",
+              onValueChange: "onChange",
+              required: "required",
+              disabled: "disabled"
+            },
+            value => value
+          ),
           props: {
             name: "carer-address",
             label: {
-              value: "Address"
-            },
+              children: "Address"
+            } as LabelProps,
             rows: 4 as number | undefined
-          } as TextAreaProps,
+          },
           renderWhen(stepValues: {
             "carer-live-in"?: ComponentValue<ResidentDatabaseSchema, "carer">;
           }): boolean {
             return stepValues["carer-live-in"] === "no";
           },
-          defaultValue: { value: "", isPostVisitAction: false },
-          emptyValue: { value: "", isPostVisitAction: false },
+          defaultValue: "",
+          emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
             ResidentDatabaseSchema,
             "carer"
