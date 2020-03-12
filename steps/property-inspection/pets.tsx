@@ -10,9 +10,9 @@ import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
+import { TextArea, TextAreaProps } from "../../components/TextArea";
+import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -57,7 +57,7 @@ const step = {
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["pets", "hasPets"]
           })
         })
@@ -130,7 +130,7 @@ const step = {
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["pets", "petTypes"]
           })
         })
@@ -169,7 +169,7 @@ const step = {
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["pets", "hasPermission"]
           })
         })
@@ -198,7 +198,7 @@ const step = {
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["pets", "images"]
           })
         })
@@ -210,22 +210,23 @@ const step = {
           props: {
             label: {
               value: "Add note about pets if necessary."
-            } as { id?: string; value: React.ReactNode },
-            name: "pets-notes"
-          },
+            },
+            name: "pets-notes",
+            includeCheckbox: true
+          } as TextAreaProps,
           renderWhen(stepValues: {
             "has-pets"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
             return stepValues["has-pets"] === "yes";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["pets", "notes"]
           })
         })

@@ -2,7 +2,9 @@ import formatDate from "date-fns/format";
 import {
   FieldsetLegend,
   Heading,
-  HeadingLevels
+  HeadingLevels,
+  LabelProps,
+  Textarea
 } from "lbh-frontend-react/components";
 import React from "react";
 import {
@@ -10,17 +12,22 @@ import {
   ComponentValue,
   ComponentWrapper,
   DynamicComponent,
+  makeDynamic,
   StaticComponent
 } from "remultiform/component-wrapper";
 import { DateInput } from "../../components/DateInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
-import { TextAreaDetails } from "../../components/TextAreaDetails";
+import {
+  TextAreaDetails,
+  TextAreaDetailsProps
+} from "../../components/TextAreaDetails";
 import { TextInput } from "../../components/TextInput";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import yesNoRadios from "../../helpers/yesNoRadios";
+import { Note } from "../../storage/DatabaseSchema";
 import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
 import Storage from "../../storage/Storage";
 import PageSlugs from "../PageSlugs";
@@ -121,8 +128,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             }
           },
           "carer-notes": {
-            renderValue(notes: string): React.ReactNode {
-              return notes;
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
             }
           }
         }
@@ -131,7 +138,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
   },
   step: {
     slug: PageSlugs.Carer,
-    nextSlug: PageSlugs.Verify,
+    nextSlug: nextSlugWithId(PageSlugs.OtherSupport),
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
@@ -156,7 +163,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             "carer"
           >({
             storeName: "carer",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["hasCarer"]
           })
         })
@@ -184,7 +191,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             "carer"
           >({
             storeName: "carer",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["type"]
           })
         })
@@ -212,7 +219,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             "carer"
           >({
             storeName: "carer",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["isLiveIn"]
           })
         })
@@ -250,7 +257,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             "carer"
           >({
             storeName: "carer",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["liveInStartDate"]
           })
         })
@@ -290,7 +297,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             "carer"
           >({
             storeName: "carer",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["fullName"]
           })
         })
@@ -315,7 +322,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             "carer"
           >({
             storeName: "carer",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["relationship"]
           })
         })
@@ -340,7 +347,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             "carer"
           >({
             storeName: "carer",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["phoneNumber"]
           })
         })
@@ -348,12 +355,21 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "carer-address",
-          Component: TextArea,
+          Component: makeDynamic(
+            Textarea,
+            {
+              value: "value",
+              onValueChange: "onChange",
+              required: "required",
+              disabled: "disabled"
+            },
+            value => value
+          ),
           props: {
             name: "carer-address",
             label: {
-              value: "Address"
-            } as { id?: string; value: React.ReactNode },
+              children: "Address"
+            } as LabelProps,
             rows: 4 as number | undefined
           },
           renderWhen(stepValues: {
@@ -368,7 +384,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             "carer"
           >({
             storeName: "carer",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["address"]
           })
         })
@@ -378,26 +394,24 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
           key: "carer-notes",
           Component: TextAreaDetails,
           props: {
-            summary: "Add note about carer if necessary" as React.ReactNode,
-            label: { value: "Notes" } as {
-              id?: string;
-              value: React.ReactNode;
-            },
-            name: "carer-notes"
-          },
+            summary: "Add note about carer if necessary",
+            label: { value: "Notes" },
+            name: "carer-notes",
+            includeCheckbox: true
+          } as TextAreaDetailsProps,
           renderWhen(stepValues: {
             "carer-needed"?: ComponentValue<ResidentDatabaseSchema, "carer">;
           }): boolean {
             return stepValues["carer-needed"] === "yes";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ResidentDatabaseSchema,
             "carer"
           >({
             storeName: "carer",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["notes"]
           })
         })

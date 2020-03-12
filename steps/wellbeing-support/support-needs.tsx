@@ -9,9 +9,12 @@ import {
   StaticComponent
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
-import { TextAreaDetails } from "../../components/TextAreaDetails";
+import {
+  TextAreaDetails,
+  TextAreaDetailsProps
+} from "../../components/TextAreaDetails";
+import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -51,12 +54,12 @@ const step = {
                   or leasehold enforcement?
                 </span>
               </>
-            ) as React.ReactNode,
+            ),
             name: "resident-sustainment-notes",
             label: {
               id: "resident-sustainment-notes-label",
               value: "Add note for post visit referral."
-            } as { id?: string; value: React.ReactNode },
+            },
             contentAfterTextArea: (
               <Paragraph>
                 Or refer now:{" "}
@@ -68,16 +71,17 @@ const step = {
                 </Link>{" "}
                 (online only, opens in a new tab)
               </Paragraph>
-            ) as React.ReactNode
-          },
-          defaultValue: "",
-          emptyValue: "",
+            ),
+            includeCheckbox: true
+          } as TextAreaDetailsProps,
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "supportNeeds"
           >({
             storeName: "supportNeeds",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["residentSustainmentNotes"]
           })
         })
@@ -96,21 +100,22 @@ const step = {
                   help from another agency or service via the Outward team?
                 </span>
               </>
-            ) as React.ReactNode,
+            ),
             name: "befriending-notes",
             label: {
               id: "befriending-notes-label",
               value: "Add note for post visit referral."
-            } as { id?: string; value: React.ReactNode }
-          },
-          defaultValue: "",
-          emptyValue: "",
+            },
+            includeCheckbox: true
+          } as TextAreaDetailsProps,
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "supportNeeds"
           >({
             storeName: "supportNeeds",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["befriendingNotes"]
           })
         })
@@ -129,12 +134,12 @@ const step = {
                   relating to adult safeguarding or self neglect?
                 </span>
               </>
-            ) as React.ReactNode,
+            ),
             name: "adult-safeguarding-notes",
             label: {
               id: "adult-safeguarding-notes-label",
               value: "Add note for post visit referral."
-            } as { id?: string; value: React.ReactNode },
+            },
             contentAfterTextArea: (
               <Paragraph>
                 Website:{" "}
@@ -164,16 +169,17 @@ const step = {
                 </Link>{" "}
                 (online only, opens in a new tab)
               </Paragraph>
-            ) as React.ReactNode
-          },
-          defaultValue: "",
-          emptyValue: "",
+            ),
+            includeCheckbox: true
+          } as TextAreaDetailsProps,
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "supportNeeds"
           >({
             storeName: "supportNeeds",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["adultSafeguardingNotes"]
           })
         })
@@ -192,12 +198,12 @@ const step = {
                   relating to children and young people’s safeguarding?
                 </span>
               </>
-            ) as React.ReactNode,
+            ),
             name: "childrens-safeguarding-notes",
             label: {
               id: "childrens-safeguarding-notes-label",
               value: "Add note for post visit referral."
-            } as { id?: string; value: React.ReactNode },
+            },
             contentAfterTextArea: (
               <>
                 <Paragraph>Or refer now:</Paragraph>
@@ -224,16 +230,17 @@ const step = {
                   Out of hours: 020 8356 2710
                 </Paragraph>
               </>
-            ) as React.ReactNode
-          },
-          defaultValue: "",
-          emptyValue: "",
+            ),
+            includeCheckbox: true
+          } as TextAreaDetailsProps,
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "supportNeeds"
           >({
             storeName: "supportNeeds",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["childrenYoungPeopleSafeguardingNotes"]
           })
         })
@@ -252,12 +259,12 @@ const step = {
                   relating to domestic or sexual violence?
                 </span>
               </>
-            ) as React.ReactNode,
+            ),
             name: "domestic-violence-notes",
             label: {
               id: "domestic-violence-notes-label",
               value: "Add note for post visit referral."
-            } as { id?: string; value: React.ReactNode },
+            },
             contentAfterTextArea: (
               <>
                 <Paragraph>Or refer now:</Paragraph>
@@ -270,16 +277,17 @@ const step = {
                   Phone: 020 8356 4458 / 4459 or 0800 056 0905
                 </Paragraph>
               </>
-            ) as React.ReactNode
-          },
-          defaultValue: "",
-          emptyValue: "",
+            ),
+            includeCheckbox: true
+          } as TextAreaDetailsProps,
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "supportNeeds"
           >({
             storeName: "supportNeeds",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["domesticSexualViolenceNotes"]
           })
         })
@@ -298,12 +306,12 @@ const step = {
                   expressed concerns relating to their mental health?
                 </span>
               </>
-            ) as React.ReactNode,
+            ),
             name: "mental-health-18-65-notes",
             label: {
               id: "mental-health-18-65-notes-label",
               value: "Add note for post visit referral."
-            } as { id?: string; value: React.ReactNode },
+            },
             contentAfterTextArea: (
               <>
                 <Paragraph>Or refer now:</Paragraph>
@@ -318,16 +326,17 @@ const step = {
                   (online only, opens in a new tab)
                 </Paragraph>
               </>
-            ) as React.ReactNode
-          },
-          defaultValue: "",
-          emptyValue: "",
+            ),
+            includeCheckbox: true
+          } as TextAreaDetailsProps,
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "supportNeeds"
           >({
             storeName: "supportNeeds",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["mentalHealth18To65Notes"]
           })
         })
@@ -346,12 +355,12 @@ const step = {
                   concerns relating to their mental health?
                 </span>
               </>
-            ) as React.ReactNode,
+            ),
             name: "mental-health-over-65-notes",
             label: {
               id: "mental-health-over-65-notes-label",
               value: "Add note for post visit referral."
-            } as { id?: string; value: React.ReactNode },
+            },
             contentAfterTextArea: (
               <>
                 <Paragraph>Or refer now:</Paragraph>
@@ -369,16 +378,17 @@ const step = {
                   (online only, opens in a new tab)
                 </Paragraph>
               </>
-            ) as React.ReactNode
-          },
-          defaultValue: "",
-          emptyValue: "",
+            ),
+            includeCheckbox: true
+          } as TextAreaDetailsProps,
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "supportNeeds"
           >({
             storeName: "supportNeeds",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["mentalHealthOver65Notes"]
           })
         })

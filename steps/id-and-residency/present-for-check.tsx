@@ -9,10 +9,10 @@ import {
 import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { makeSubmit } from "../../components/makeSubmit";
 import getProcessRef from "../../helpers/getProcessRef";
+import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import useDataValue from "../../helpers/useDataValue";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import tmpProcessRef from "../../storage/processRef";
 import Storage from "../../storage/Storage";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
@@ -35,6 +35,7 @@ const TenantsSelect: React.FunctionComponent<Omit<
   return (
     <Checkboxes
       {...props}
+      required
       checkboxes={
         tenants.result
           ? tenants.result.map(tenant => ({
@@ -78,7 +79,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenantsPresent"> = {
             "tenantsPresent"
           >({
             storeName: "tenantsPresent",
-            key: tmpProcessRef
+            key: keyFromSlug()
           })
         })
       )

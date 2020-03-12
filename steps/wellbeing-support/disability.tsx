@@ -9,9 +9,9 @@ import {
 import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
+import { TextArea, TextAreaProps } from "../../components/TextArea";
+import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -56,7 +56,7 @@ const step = {
             "disability"
           >({
             storeName: "disability",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["value"]
           })
         })
@@ -101,7 +101,7 @@ const step = {
             "disability"
           >({
             storeName: "disability",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["whoDisability"]
           })
         })
@@ -141,7 +141,7 @@ const step = {
             "disability"
           >({
             storeName: "disability",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["pipOrDLA"]
           })
         })
@@ -186,7 +186,7 @@ const step = {
             "disability"
           >({
             storeName: "disability",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["whoPIP"]
           })
         })
@@ -231,7 +231,7 @@ const step = {
             "disability"
           >({
             storeName: "disability",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["whoDLA"]
           })
         })
@@ -244,22 +244,23 @@ const step = {
             name: "disability-notes",
             label: {
               value: "Add note about any disability concerns if necessary."
-            } as { id?: string; value: React.ReactNode },
-            rows: 4 as number | undefined
-          },
+            },
+            rows: 4,
+            includeCheckbox: true
+          } as TextAreaProps,
           renderWhen(stepValues: {
             disability?: ComponentValue<ProcessDatabaseSchema, "disability">;
           }): boolean {
             return stepValues["disability"] === "yes";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "disability"
           >({
             storeName: "disability",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["notes"]
           })
         })

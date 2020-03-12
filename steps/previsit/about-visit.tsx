@@ -9,8 +9,8 @@ import {
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea } from "../../components/TextArea";
+import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -53,7 +53,7 @@ const step = {
             "isUnannouncedVisit"
           >({
             storeName: "isUnannouncedVisit",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["value"]
           })
         })
@@ -76,14 +76,14 @@ const step = {
           }): boolean {
             return stepValues["unannounced-visit"] === "no";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "isUnannouncedVisit"
           >({
             storeName: "isUnannouncedVisit",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["notes"]
           })
         })
@@ -117,7 +117,7 @@ const step = {
             "isVisitInside"
           >({
             storeName: "isVisitInside",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["value"]
           })
         })
@@ -141,14 +141,14 @@ const step = {
           }): boolean {
             return stepValues["inside-property"] === "no";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "isVisitInside"
           >({
             storeName: "isVisitInside",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["notes"]
           })
         })

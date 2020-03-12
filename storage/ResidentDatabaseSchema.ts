@@ -1,4 +1,6 @@
 import { NamedSchema, StoreNames } from "remultiform/database";
+import { Note } from "./DatabaseSchema";
+import databaseSchemaVersion from "./databaseSchemaVersion";
 
 export type ResidentRef = string;
 
@@ -8,14 +10,14 @@ export const residentDatabaseName = `mat-process-${
 
 type ResidentDatabaseSchema = NamedSchema<
   typeof residentDatabaseName,
-  1,
+  typeof databaseSchemaVersion,
   {
     id: {
       key: ResidentRef;
       value: {
         type: string;
         images: string[];
-        notes: string;
+        notes: Note;
       };
     };
 
@@ -24,7 +26,7 @@ type ResidentDatabaseSchema = NamedSchema<
       value: {
         type: string;
         images: string[];
-        notes: string;
+        notes: Note;
       };
     };
 
@@ -33,7 +35,7 @@ type ResidentDatabaseSchema = NamedSchema<
       value: {
         isWilling: string;
         images: string[];
-        notes: string;
+        notes: Note;
       };
     };
 
@@ -60,8 +62,22 @@ type ResidentDatabaseSchema = NamedSchema<
         phoneNumber: string;
         relationship: string;
         address: string;
-        notes: string;
+        notes: Note;
       };
+    };
+
+    otherSupport: {
+      key: ResidentRef;
+      value: {
+        fullName: string;
+        role: string;
+        phoneNumber: string;
+      };
+    };
+
+    signature: {
+      key: ResidentRef;
+      value: string;
     };
   }
 >;
@@ -73,7 +89,9 @@ const storeNames: {
   residency: true,
   photo: true,
   nextOfKin: true,
-  carer: true
+  carer: true,
+  otherSupport: true,
+  signature: true
 };
 
 export const residentStoreNames = Object.entries(storeNames)

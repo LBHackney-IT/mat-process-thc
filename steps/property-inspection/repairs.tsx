@@ -1,11 +1,13 @@
-import { FieldsetLegend } from "lbh-frontend-react/components";
+import { FieldsetLegend, Link, Paragraph } from "lbh-frontend-react/components";
 import React from "react";
 import {
   ComponentDatabaseMap,
   ComponentValue,
   ComponentWrapper,
-  DynamicComponent
+  DynamicComponent,
+  StaticComponent
 } from "remultiform/component-wrapper";
+import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea, TextAreaProps } from "../../components/TextArea";
@@ -15,26 +17,48 @@ import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const step = {
-  title: PageTitles.CommunalAreas,
-  heading: "Combustible items in communal areas",
+  title: PageTitles.Repairs,
+  heading: "New repairs",
   step: {
-    slug: PageSlugs.CommunalAreas,
-    nextSlug: PageSlugs.Pets,
+    slug: PageSlugs.Repairs,
+    nextSlug: PageSlugs.StoringMaterials,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
         value: "Save and continue"
       }),
     componentWrappers: [
+      ComponentWrapper.wrapStatic(
+        new StaticComponent({
+          key: "paragraph-1",
+          Component: Paragraph,
+          props: {
+            children: (
+              <>
+                Residents can contact the Repairs Contact Centre: 020 8356 3691
+                or{" "}
+                <Link
+                  key="report-repairs"
+                  href="https://hackney.gov.uk/report-a-repair"
+                  target="_blank"
+                >
+                  Report repairs
+                </Link>{" "}
+                online (online only, opens in a new tab).
+              </>
+            )
+          }
+        })
+      ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "has-left-combustible-items",
+          key: "needs-repairs",
           Component: RadioButtons,
           props: {
-            name: "has-left-combustible-items",
+            name: "needs-repairs",
             legend: (
               <FieldsetLegend>
-                Has the tenant left combustible items in communal areas?
+                Are there any new repairs queries?
               </FieldsetLegend>
             ) as React.ReactNode,
             radios: [
@@ -56,68 +80,54 @@ const step = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["communalAreas", "hasLeftCombustibleItems"]
+            property: ["repairs", "needsRepairs"]
           })
         })
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "further-action-required",
-          Component: RadioButtons,
+          key: "repairs-images",
+          Component: ImageInput,
           props: {
-            name: "further-action-required",
-            legend: (
-              <FieldsetLegend>Is further action required?</FieldsetLegend>
-            ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            label: "Take photos of repairs needed",
+            name: "repairs-images",
+            hintText: "You can take up to 10 different photos" as
+              | string
+              | null
+              | undefined,
+            maxCount: 10 as number | null | undefined
           },
           renderWhen(stepValues: {
-            "has-left-combustible-items"?: ComponentValue<
-              ProcessDatabaseSchema,
-              "property"
-            >;
+            "needs-repairs"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
-            return stepValues["has-left-combustible-items"] === "yes";
+            return stepValues["needs-repairs"] === "yes";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: [],
+          emptyValue: [] as string[],
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "property"
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["communalAreas", "furtherActionRequired"]
+            property: ["repairs", "images"]
           })
         })
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "communal-areas-notes",
+          key: "repairs-notes",
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about door mats / potted plants if necessary."
+              value: "Add note about repairs if necessary."
             },
-            name: "communal-areas-notes",
-            includeCheckbox: true
+            name: "repairs-notes"
           } as TextAreaProps,
           renderWhen(stepValues: {
-            "has-left-combustible-items"?: ComponentValue<
-              ProcessDatabaseSchema,
-              "property"
-            >;
+            "needs-repairs"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
-            return stepValues["has-left-combustible-items"] === "yes";
+            return stepValues["needs-repairs"] === "yes";
           },
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
@@ -127,7 +137,7 @@ const step = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["communalAreas", "notes"]
+            property: ["repairs", "notes"]
           })
         })
       )

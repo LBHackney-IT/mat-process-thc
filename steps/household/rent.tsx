@@ -14,9 +14,12 @@ import {
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextAreaDetails } from "../../components/TextAreaDetails";
+import {
+  TextAreaDetails,
+  TextAreaDetailsProps
+} from "../../components/TextAreaDetails";
+import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -72,7 +75,7 @@ const step = {
             "household"
           >({
             storeName: "household",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["rentArrears", "type"]
           })
         })
@@ -82,21 +85,19 @@ const step = {
           key: "rent-arrears-notes",
           Component: TextAreaDetails,
           props: {
-            summary: "Add notes about rent arrears if necessary" as React.ReactNode,
-            label: { value: "Notes" } as {
-              id?: string;
-              value: React.ReactNode;
-            },
-            name: "rent-arrears-notes"
-          },
-          defaultValue: "",
-          emptyValue: "",
+            summary: "Add notes about rent arrears if necessary",
+            label: { value: "Notes" },
+            name: "rent-arrears-notes",
+            includeCheckbox: true
+          } as TextAreaDetailsProps,
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "household"
           >({
             storeName: "household",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["rentArrears", "notes"]
           })
         })
@@ -156,7 +157,7 @@ const step = {
             "household"
           >({
             storeName: "household",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["housingBenefits", "hasApplied"]
           })
         })
@@ -166,13 +167,11 @@ const step = {
           key: "housing-benefits-notes",
           Component: TextAreaDetails,
           props: {
-            summary: "Add details about Housing Benefit if necessary" as React.ReactNode,
-            label: { value: "Notes" } as {
-              id?: string;
-              value: React.ReactNode;
-            },
-            name: "housing-benefits-notes"
-          },
+            summary: "Add details about Housing Benefit if necessary",
+            label: { value: "Notes" },
+            name: "housing-benefits-notes",
+            includeCheckbox: true
+          } as TextAreaDetailsProps,
           renderWhen(stepValues: {
             "rent-arrears-type"?: ComponentValue<
               ProcessDatabaseSchema,
@@ -185,14 +184,14 @@ const step = {
               stepValues["rent-arrears-type"] === "no"
             );
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "household"
           >({
             storeName: "household",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["housingBenefits", "notes"]
           })
         })
@@ -290,7 +289,7 @@ const step = {
             "household"
           >({
             storeName: "household",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["incomeOfficer", "wantsToContact"]
           })
         })
@@ -300,13 +299,11 @@ const step = {
           key: "income-officer-notes",
           Component: TextAreaDetails,
           props: {
-            summary: "Add details about the Income Officer if necessary" as React.ReactNode,
-            label: { value: "Notes" } as {
-              id?: string;
-              value: React.ReactNode;
-            },
-            name: "income-officer-notes"
-          },
+            summary: "Add details about the Income Officer if necessary",
+            label: { value: "Notes" },
+            name: "income-officer-notes",
+            includeCheckbox: true
+          } as TextAreaDetailsProps,
           renderWhen(stepValues: {
             "rent-arrears-type"?: ComponentValue<
               ProcessDatabaseSchema,
@@ -315,14 +312,14 @@ const step = {
           }): boolean {
             return Boolean(stepValues["rent-arrears-type"]);
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "household"
           >({
             storeName: "household",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["incomeOfficer", "notes"]
           })
         })

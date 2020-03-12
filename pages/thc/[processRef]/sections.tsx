@@ -10,7 +10,6 @@ import useValidateData from "../../../helpers/useValidateData";
 import MainLayout from "../../../layouts/MainLayout";
 import PageSlugs, { urlObjectForSlug } from "../../../steps/PageSlugs";
 import PageTitles from "../../../steps/PageTitles";
-import tmpProcessRef from "../../../storage/processRef";
 import Storage from "../../../storage/Storage";
 
 export const SectionsPage: NextPage = () => {
@@ -33,7 +32,7 @@ export const SectionsPage: NextPage = () => {
   const idAndResidencyStarted = useValidateData(
     Storage.ProcessContext,
     ["tenantsPresent"],
-    tmpProcessRef
+    processRef
   );
   const idAndResidencyComplete = useValidateData(
     Storage.ResidentContext,
@@ -43,15 +42,15 @@ export const SectionsPage: NextPage = () => {
   const householdStarted = useValidateData(
     Storage.ProcessContext,
     ["household"],
-    tmpProcessRef,
+    processRef,
     valueSets => {
       const householdSet = valueSets.household;
 
-      if (householdSet === undefined) {
+      if (householdSet === undefined || processRef === undefined) {
         return false;
       }
 
-      const household = householdSet[tmpProcessRef];
+      const household = householdSet[processRef];
 
       return household !== undefined && household.documents !== undefined;
     }
@@ -59,20 +58,20 @@ export const SectionsPage: NextPage = () => {
   const householdComplete = useValidateData(
     Storage.ProcessContext,
     ["household"],
-    tmpProcessRef
+    processRef
   );
   const propertyInspectionStarted = useValidateData(
     Storage.ProcessContext,
     ["property"],
-    tmpProcessRef,
+    processRef,
     valueSets => {
       const propertySet = valueSets.property;
 
-      if (propertySet === undefined) {
+      if (propertySet === undefined || processRef === undefined) {
         return false;
       }
 
-      const property = propertySet[tmpProcessRef];
+      const property = propertySet[processRef];
 
       return property !== undefined && property.rooms !== undefined;
     }
@@ -80,15 +79,15 @@ export const SectionsPage: NextPage = () => {
   const propertyInspectionComplete = useValidateData(
     Storage.ProcessContext,
     ["property"],
-    tmpProcessRef,
+    processRef,
     valueSets => {
       const propertySet = valueSets.property;
 
-      if (propertySet === undefined) {
+      if (propertySet === undefined || processRef === undefined) {
         return false;
       }
 
-      const property = propertySet[tmpProcessRef];
+      const property = propertySet[processRef];
 
       return (
         property !== undefined &&
@@ -101,15 +100,15 @@ export const SectionsPage: NextPage = () => {
   const wellbeingSupportStarted = useValidateData(
     Storage.ProcessContext,
     ["homeCheck"],
-    tmpProcessRef,
+    processRef,
     valueSets => {
       const homeCheckSet = valueSets.homeCheck;
 
-      if (homeCheckSet === undefined) {
+      if (homeCheckSet === undefined || processRef === undefined) {
         return false;
       }
 
-      const homeCheck = homeCheckSet[tmpProcessRef];
+      const homeCheck = homeCheckSet[processRef];
 
       return homeCheck !== undefined;
     }
@@ -117,15 +116,15 @@ export const SectionsPage: NextPage = () => {
   const wellbeingSupportComplete = useValidateData(
     Storage.ProcessContext,
     ["homeCheck", "healthConcerns", "disability"],
-    tmpProcessRef,
+    processRef,
     valueSets => {
       const homeCheckSet = valueSets.homeCheck;
 
-      if (homeCheckSet === undefined) {
+      if (homeCheckSet === undefined || processRef === undefined) {
         return false;
       }
 
-      const homeCheck = homeCheckSet[tmpProcessRef];
+      const homeCheck = homeCheckSet[processRef];
 
       return (
         homeCheck !== undefined &&

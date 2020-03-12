@@ -13,7 +13,6 @@ import useDataValue from "../../../helpers/useDataValue";
 import MainLayout from "../../../layouts/MainLayout";
 import steps from "../../../steps";
 import ProcessDatabaseSchema from "../../../storage/ProcessDatabaseSchema";
-import tmpProcessRef from "../../../storage/processRef";
 import ResidentDatabaseSchema from "../../../storage/ResidentDatabaseSchema";
 import Storage from "../../../storage/Storage";
 
@@ -118,7 +117,11 @@ const ProcessPage: NextPage = () => {
         provideDatabase={false}
         onNextStep={async (): Promise<void> => {
           try {
-            await Storage.updateProcessLastModified(tmpProcessRef);
+            if (!processRef) {
+              throw new Error("No process to reference");
+            }
+
+            await Storage.updateProcessLastModified(processRef);
           } catch (error) {
             // This is invisible to the user, so we should do something to
             // display it to them.

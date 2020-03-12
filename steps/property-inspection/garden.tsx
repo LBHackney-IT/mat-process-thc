@@ -9,9 +9,9 @@ import {
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
+import { TextArea, TextAreaProps } from "../../components/TextArea";
+import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -20,7 +20,7 @@ const step = {
   heading: "Garden",
   step: {
     slug: PageSlugs.Garden,
-    nextSlug: PageSlugs.StoringMaterials,
+    nextSlug: PageSlugs.Repairs,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
@@ -54,7 +54,7 @@ const step = {
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["garden", "hasGarden"]
           })
         })
@@ -97,7 +97,7 @@ const step = {
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["garden", "type"]
           })
         })
@@ -137,7 +137,7 @@ const step = {
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["garden", "isMaintained"]
           })
         })
@@ -167,7 +167,7 @@ const step = {
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["garden", "images"]
           })
         })
@@ -179,22 +179,23 @@ const step = {
           props: {
             label: {
               value: "Add note about garden if necessary."
-            } as { id?: string; value: React.ReactNode },
-            name: "garden-notes"
-          },
+            },
+            name: "garden-notes",
+            includeCheckbox: true
+          } as TextAreaProps,
           renderWhen(stepValues: {
             "has-garden"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
             return stepValues["has-garden"] === "yes";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["garden", "notes"]
           })
         })

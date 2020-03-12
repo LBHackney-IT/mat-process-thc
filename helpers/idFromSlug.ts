@@ -4,9 +4,9 @@ import unprefixUrl from "./unprefixUrl";
 const idFromSlug = (
   router: NextRouter,
   slug: string | string[] | undefined
-): string => {
+): string | undefined => {
   if (!slug || typeof slug === "string") {
-    throw new Error("No ID in slug");
+    return;
   }
 
   const slugParts = unprefixUrl(router, {
@@ -16,7 +16,7 @@ const idFromSlug = (
     .slice(1);
 
   if (slugParts.length < 2) {
-    throw new Error("No ID in slug");
+    return;
   }
 
   return slugParts[slugParts.length - 1];

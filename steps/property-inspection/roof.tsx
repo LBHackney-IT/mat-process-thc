@@ -8,9 +8,9 @@ import {
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
+import { TextArea, TextAreaProps } from "../../components/TextArea";
+import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -55,7 +55,7 @@ const step = {
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["roof", "hasAccess"]
           })
         })
@@ -94,7 +94,7 @@ const step = {
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["roof", "itemsStoredOnRoof"]
           })
         })
@@ -106,22 +106,23 @@ const step = {
           props: {
             label: {
               value: "Add note about roof if necessary."
-            } as { id?: string; value: React.ReactNode },
-            name: "roof-notes"
-          },
+            },
+            name: "roof-notes",
+            includeCheckbox: true
+          } as TextAreaProps,
           renderWhen(stepValues: {
             "has-access"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
             return stepValues["has-access"] === "yes";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["roof", "notes"]
           })
         })

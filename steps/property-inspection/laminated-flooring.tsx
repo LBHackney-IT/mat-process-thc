@@ -9,9 +9,9 @@ import {
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
+import { TextArea, TextAreaProps } from "../../components/TextArea";
+import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -56,7 +56,7 @@ const step = {
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["laminatedFlooring", "hasLaminatedFlooring"]
           })
         })
@@ -98,7 +98,7 @@ const step = {
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["laminatedFlooring", "hasPermission"]
           })
         })
@@ -131,7 +131,7 @@ const step = {
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["laminatedFlooring", "images"]
           })
         })
@@ -143,9 +143,10 @@ const step = {
           props: {
             label: {
               value: "Add note about laminated flooring if necessary."
-            } as { id?: string; value: React.ReactNode },
-            name: "laminated-flooring-notes"
-          },
+            },
+            name: "laminated-flooring-notes",
+            includeCheckbox: true
+          } as TextAreaProps,
           renderWhen(stepValues: {
             "has-laminated-flooring"?: ComponentValue<
               ProcessDatabaseSchema,
@@ -154,14 +155,14 @@ const step = {
           }): boolean {
             return stepValues["has-laminated-flooring"] === "yes";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["laminatedFlooring", "notes"]
           })
         })

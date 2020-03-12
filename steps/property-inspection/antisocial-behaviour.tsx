@@ -14,9 +14,9 @@ import {
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
+import { TextArea, TextAreaProps } from "../../components/TextArea";
+import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -96,7 +96,7 @@ const step = {
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["antisocialBehaviour", "tenantUnderstands"]
           })
         })
@@ -122,17 +122,18 @@ const step = {
                   <b>against</b> tenant if necessary.
                 </>
               )
-            } as { id?: string; value: React.ReactNode },
-            name: "antisocial-behaviour-notes"
-          },
-          defaultValue: "",
-          emptyValue: "",
+            },
+            name: "antisocial-behaviour-notes",
+            includeCheckbox: true
+          } as TextAreaProps,
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["antisocialBehaviour", "notes"]
           })
         })

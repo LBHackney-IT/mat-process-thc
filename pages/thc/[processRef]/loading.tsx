@@ -29,7 +29,6 @@ import PageSlugs, { urlObjectForSlug } from "../../../steps/PageSlugs";
 import PageTitles from "../../../steps/PageTitles";
 import ExternalDatabaseSchema from "../../../storage/ExternalDatabaseSchema";
 import { ProcessJson } from "../../../storage/ProcessDatabaseSchema";
-import tmpProcessRef from "../../../storage/processRef";
 import { ResidentRef } from "../../../storage/ResidentDatabaseSchema";
 import Storage from "../../../storage/Storage";
 
@@ -253,7 +252,7 @@ const useFetchAndStoreProcessJson = (): {
     // The steps still use the hardcoded `processRef`, so we need to also use
     // it, even though we're using the correct value to fetch from the
     // backend.
-    return Storage.updateProcessData(tmpProcessRef, processJson.result);
+    return Storage.updateProcessData(processRef, processJson.result);
   }, [
     processRef,
     processJson.loading,

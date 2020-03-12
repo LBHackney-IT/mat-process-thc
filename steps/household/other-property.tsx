@@ -8,9 +8,9 @@ import {
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
+import { TextArea, TextAreaProps } from "../../components/TextArea";
+import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -55,7 +55,7 @@ const step = {
             "household"
           >({
             storeName: "household",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["otherProperty", "hasOtherProperty"]
           })
         })
@@ -68,9 +68,10 @@ const step = {
             label: {
               value:
                 "Provide details: with / without mortgage, address of property"
-            } as { id?: string; value: React.ReactNode },
-            name: "other-property-notes"
-          },
+            },
+            name: "other-property-notes",
+            includeCheckbox: true
+          } as TextAreaProps,
           renderWhen(stepValues: {
             "has-other-property"?: ComponentValue<
               ProcessDatabaseSchema,
@@ -79,14 +80,14 @@ const step = {
           }): boolean {
             return stepValues["has-other-property"] === "yes";
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "household"
           >({
             storeName: "household",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["otherProperty", "notes"]
           })
         })

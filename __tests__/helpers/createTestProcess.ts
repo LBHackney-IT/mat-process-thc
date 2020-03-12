@@ -1,4 +1,5 @@
 import uuid from "uuid/v1";
+import databaseSchemaVersion from "../../storage/databaseSchemaVersion";
 
 export default async (ref = uuid()): Promise<void> => {
   process.env.TEST_PROCESS_REF = ref;
@@ -10,7 +11,7 @@ export default async (ref = uuid()): Promise<void> => {
       value: parseInt(process.env.PROCESS_TYPE_VALUE!),
       name: process.env.PROCESS_TYPE_NAME
     },
-    processDataSchemaVersion: 4
+    processDataSchemaVersion: databaseSchemaVersion
   });
 
   const response = await fetch(

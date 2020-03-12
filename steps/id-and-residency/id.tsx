@@ -8,10 +8,14 @@ import {
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextAreaDetails } from "../../components/TextAreaDetails";
+import {
+  TextAreaDetails,
+  TextAreaDetailsProps
+} from "../../components/TextAreaDetails";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import { Note } from "../../storage/DatabaseSchema";
 import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
 import Storage from "../../storage/Storage";
 import PageSlugs from "../PageSlugs";
@@ -59,8 +63,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
             }
           },
           "id-notes": {
-            renderValue(notes: string): React.ReactNode {
-              return notes;
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
             }
           }
         },
@@ -92,7 +96,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<ResidentDatabaseSchema, "id">({
             storeName: "id",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["type"]
           })
         })
@@ -115,7 +119,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
           emptyValue: [] as string[],
           databaseMap: new ComponentDatabaseMap<ResidentDatabaseSchema, "id">({
             storeName: "id",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["images"]
           })
         })
@@ -126,17 +130,15 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
           Component: TextAreaDetails,
           props: {
             summary: "Add note about ID if necessary" as React.ReactNode,
-            label: { value: "Notes" } as {
-              id?: string;
-              value: React.ReactNode;
-            },
-            name: "id-notes"
-          },
-          defaultValue: "",
-          emptyValue: "",
+            label: { value: "Notes" },
+            name: "id-notes",
+            includeCheckbox: true
+          } as TextAreaDetailsProps,
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<ResidentDatabaseSchema, "id">({
             storeName: "id",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["notes"]
           })
         })

@@ -1,12 +1,17 @@
-import { Heading, HeadingLevels } from "lbh-frontend-react";
+import {
+  Heading,
+  HeadingLevels,
+  Textarea,
+  LabelProps
+} from "lbh-frontend-react";
 import {
   ComponentDatabaseMap,
   ComponentWrapper,
   DynamicComponent,
-  StaticComponent
+  StaticComponent,
+  makeDynamic
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
-import { TextArea } from "../../components/TextArea";
 import { TextInput } from "../../components/TextInput";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import nextSlugWithId from "../../helpers/nextSlugWithId";
@@ -97,7 +102,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
             "nextOfKin"
           >({
             storeName: "nextOfKin",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["fullName"]
           })
         })
@@ -117,7 +122,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
             "nextOfKin"
           >({
             storeName: "nextOfKin",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["relationship"]
           })
         })
@@ -137,7 +142,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
             "nextOfKin"
           >({
             storeName: "nextOfKin",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["mobileNumber"]
           })
         })
@@ -157,7 +162,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
             "nextOfKin"
           >({
             storeName: "nextOfKin",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["otherNumber"]
           })
         })
@@ -177,7 +182,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
             "nextOfKin"
           >({
             storeName: "nextOfKin",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["email"]
           })
         })
@@ -185,12 +190,21 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "next-of-kin-address",
-          Component: TextArea,
+          Component: makeDynamic(
+            Textarea,
+            {
+              value: "value",
+              onValueChange: "onChange",
+              required: "required",
+              disabled: "disabled"
+            },
+            value => value
+          ),
           props: {
             name: "next-of-kin-address",
             label: {
-              value: "Address"
-            } as { id?: string; value: React.ReactNode },
+              children: "Address"
+            } as LabelProps,
             rows: 4 as number | undefined
           },
           defaultValue: "",
@@ -200,7 +214,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
             "nextOfKin"
           >({
             storeName: "nextOfKin",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["address"]
           })
         })

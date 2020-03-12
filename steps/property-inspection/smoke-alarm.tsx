@@ -8,9 +8,9 @@ import {
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
+import { TextArea, TextAreaProps } from "../../components/TextArea";
+import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -55,7 +55,7 @@ const step = {
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["smokeAlarm", "hasSmokeAlarm"]
           })
         })
@@ -95,7 +95,7 @@ const step = {
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["smokeAlarm", "isWorking"]
           })
         })
@@ -107,9 +107,10 @@ const step = {
           props: {
             label: {
               value: "Add note about the smoke alarm if necessary."
-            } as { id?: string; value: React.ReactNode },
-            name: "smoke-alarm-notes"
-          },
+            },
+            name: "smoke-alarm-notes",
+            includeCheckbox: true
+          } as TextAreaProps,
           renderWhen(stepValues: {
             "has-smoke-alarm"?: ComponentValue<
               ProcessDatabaseSchema,
@@ -121,14 +122,14 @@ const step = {
               stepValues["has-smoke-alarm"] === "no"
             );
           },
-          defaultValue: "",
-          emptyValue: "",
+          defaultValue: { value: "", isPostVisitAction: false },
+          emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["smokeAlarm", "notes"]
           })
         })
