@@ -22,6 +22,7 @@ const SubmitPage: NextPage = () => {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState();
 
+  // TODO: Replace these with the real values!
   const address = "1 Mare Street, London, E8 3AA";
   const tenants = ["Jane Doe", "John Doe"];
 
@@ -50,10 +51,11 @@ const SubmitPage: NextPage = () => {
           <strong>You need to be online on this device to continue.</strong>
         </Paragraph>
         <Paragraph>
-          If you can&apos;t go online now, when you are next online on this
-          device, please come back to this Tenancy and Household Check from your
-          work tray and click on the &lsquo;Save and submit to manager&rsquo;
-          button below that will become able to be clicked.
+          If you can&apos;t go online now, when you are next online{" "}
+          <strong>on this device</strong>, please come back to this Tenancy and
+          Household Check from your work tray and click on the &lsquo;Save and
+          submit to manager&rsquo; button below that will become able to be
+          clicked.
         </Paragraph>
         {!online.error && online.result && (
           <Paragraph>

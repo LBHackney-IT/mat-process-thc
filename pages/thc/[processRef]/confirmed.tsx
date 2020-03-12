@@ -11,6 +11,7 @@ import MainLayout from "../../../layouts/MainLayout";
 import PageTitles from "../../../steps/PageTitles";
 
 const ConfirmedPage: NextPage = () => {
+  // TODO: Replace these with the real values!
   const address = "1 Mare Street, London, E8 3AA";
   const tenants = ["Jane Doe", "John Doe"];
 
