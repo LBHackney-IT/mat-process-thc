@@ -10,8 +10,8 @@ import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea, TextAreaProps } from "../../components/TextArea";
+import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -56,7 +56,7 @@ const step = {
             "disability"
           >({
             storeName: "disability",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["value"]
           })
         })
@@ -101,7 +101,7 @@ const step = {
             "disability"
           >({
             storeName: "disability",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["whoDisability"]
           })
         })
@@ -141,7 +141,7 @@ const step = {
             "disability"
           >({
             storeName: "disability",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["pipOrDLA"]
           })
         })
@@ -186,7 +186,7 @@ const step = {
             "disability"
           >({
             storeName: "disability",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["whoPIP"]
           })
         })
@@ -231,7 +231,7 @@ const step = {
             "disability"
           >({
             storeName: "disability",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["whoDLA"]
           })
         })
@@ -260,7 +260,7 @@ const step = {
             "disability"
           >({
             storeName: "disability",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["notes"]
           })
         })

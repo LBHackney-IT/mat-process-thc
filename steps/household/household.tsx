@@ -18,8 +18,8 @@ import {
   TextAreaDetails,
   TextAreaDetailsProps
 } from "../../components/TextAreaDetails";
+import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -68,7 +68,7 @@ const step = {
             "household"
           >({
             storeName: "household",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["documents", "images"]
           })
         })
@@ -131,7 +131,7 @@ const step = {
             "household"
           >({
             storeName: "household",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["houseMovingSchemes", "notes"]
           })
         })
@@ -153,7 +153,7 @@ const step = {
             "household"
           >({
             storeName: "household",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["memberChanges", "notes"]
           })
         })

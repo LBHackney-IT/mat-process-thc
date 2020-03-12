@@ -10,8 +10,8 @@ import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea, TextAreaProps } from "../../components/TextArea";
+import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -57,7 +57,7 @@ const step = {
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["metalGates", "hasMetalGates"]
           })
         })
@@ -99,7 +99,7 @@ const step = {
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["metalGates", "combustibleItemsBehind"]
           })
         })
@@ -139,7 +139,7 @@ const step = {
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["metalGates", "furtherActionRequired"]
           })
         })
@@ -172,7 +172,7 @@ const step = {
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["metalGates", "images"]
           })
         })
@@ -204,7 +204,7 @@ const step = {
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["metalGates", "notes"]
           })
         })

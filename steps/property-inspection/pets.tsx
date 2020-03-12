@@ -11,8 +11,8 @@ import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea, TextAreaProps } from "../../components/TextArea";
+import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -57,7 +57,7 @@ const step = {
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["pets", "hasPets"]
           })
         })
@@ -130,7 +130,7 @@ const step = {
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["pets", "petTypes"]
           })
         })
@@ -169,7 +169,7 @@ const step = {
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["pets", "hasPermission"]
           })
         })
@@ -198,7 +198,7 @@ const step = {
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["pets", "images"]
           })
         })
@@ -226,7 +226,7 @@ const step = {
             "property"
           >({
             storeName: "property",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["pets", "notes"]
           })
         })

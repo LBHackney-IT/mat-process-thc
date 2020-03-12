@@ -10,8 +10,8 @@ import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea, TextAreaProps } from "../../components/TextArea";
+import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -56,7 +56,7 @@ const step = {
             "healthConcerns"
           >({
             storeName: "healthConcerns",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["value"]
           })
         })
@@ -106,7 +106,7 @@ const step = {
             "healthConcerns"
           >({
             storeName: "healthConcerns",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["who"]
           })
         })
@@ -157,7 +157,7 @@ const step = {
             "healthConcerns"
           >({
             storeName: "healthConcerns",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["moreInfo"]
           })
         })
@@ -189,7 +189,7 @@ const step = {
             "healthConcerns"
           >({
             storeName: "healthConcerns",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["notes"]
           })
         })

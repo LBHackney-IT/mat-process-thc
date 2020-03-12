@@ -13,8 +13,8 @@ import {
   TextAreaDetails,
   TextAreaDetailsProps
 } from "../../components/TextAreaDetails";
+import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -81,7 +81,7 @@ const step = {
             "supportNeeds"
           >({
             storeName: "supportNeeds",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["residentSustainmentNotes"]
           })
         })
@@ -115,7 +115,7 @@ const step = {
             "supportNeeds"
           >({
             storeName: "supportNeeds",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["befriendingNotes"]
           })
         })
@@ -179,7 +179,7 @@ const step = {
             "supportNeeds"
           >({
             storeName: "supportNeeds",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["adultSafeguardingNotes"]
           })
         })
@@ -240,7 +240,7 @@ const step = {
             "supportNeeds"
           >({
             storeName: "supportNeeds",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["childrenYoungPeopleSafeguardingNotes"]
           })
         })
@@ -287,7 +287,7 @@ const step = {
             "supportNeeds"
           >({
             storeName: "supportNeeds",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["domesticSexualViolenceNotes"]
           })
         })
@@ -336,7 +336,7 @@ const step = {
             "supportNeeds"
           >({
             storeName: "supportNeeds",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["mentalHealth18To65Notes"]
           })
         })
@@ -388,7 +388,7 @@ const step = {
             "supportNeeds"
           >({
             storeName: "supportNeeds",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["mentalHealthOver65Notes"]
           })
         })

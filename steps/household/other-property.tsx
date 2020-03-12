@@ -9,8 +9,8 @@ import {
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea, TextAreaProps } from "../../components/TextArea";
+import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -55,7 +55,7 @@ const step = {
             "household"
           >({
             storeName: "household",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["otherProperty", "hasOtherProperty"]
           })
         })
@@ -87,7 +87,7 @@ const step = {
             "household"
           >({
             storeName: "household",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["otherProperty", "notes"]
           })
         })
