@@ -121,7 +121,7 @@ workflows:
           service-name: $AWS_SERVICE_DEV
           image-tag: $CIRCLE_SHA1
 
-  check-and-deploy-to-staging:
+  check-and-deploy-to-staging-and-production:
     jobs:
       - install-and-test:
           name: install-and-test-master
@@ -146,4 +146,23 @@ workflows:
             - build-and-push-to-staging
           cluster-name: $AWS_CLUSTER_STAGING
           service-name: $AWS_SERVICE_STAGING
+          image-tag: $CIRCLE_SHA1
+
+      - aws-ecr/build-and-push-image:
+          name: build-and-push-to-production
+          requires:
+            - deploy-to-staging
+          account-url: AWS_ECR_HOST
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          region: AWS_REGION
+          repo: $AWS_ECR_PATH_PROD
+          tag: $CIRCLE_SHA1
+
+      - deploy:
+          name: deploy-to-production
+          requires:
+            - build-and-push-to-production
+          cluster-name: $AWS_CLUSTER_PROD
+          service-name: $AWS_SERVICE_PROD
           image-tag: $CIRCLE_SHA1
