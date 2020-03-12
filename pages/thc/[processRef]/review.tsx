@@ -85,6 +85,7 @@ const ReviewPage: NextPage = () => {
     <MainLayout
       title={PageTitles.Review}
       heading="Review Tenancy and Household Check"
+      pausable
     >
       {sections.map(({ heading, rows }) => (
         <React.Fragment key={heading}>

@@ -12,6 +12,7 @@ import { isRepeatingStep } from "../../../helpers/isStep";
 import useDataValue from "../../../helpers/useDataValue";
 import MainLayout from "../../../layouts/MainLayout";
 import steps from "../../../steps";
+import PageSlugs from "../../../steps/PageSlugs";
 import ProcessDatabaseSchema from "../../../storage/ProcessDatabaseSchema";
 import ResidentDatabaseSchema from "../../../storage/ResidentDatabaseSchema";
 import Storage from "../../../storage/Storage";
@@ -132,20 +133,38 @@ const ProcessPage: NextPage = () => {
     </>
   );
 
+  const pausable = ![
+    PageSlugs.Outside,
+    PageSlugs.Start,
+    PageSlugs.AboutVisit
+  ].includes(currentStep.step.slug as PageSlugs);
+
   let page: React.ReactElement;
 
   if (currentStep.heading) {
     page = (
-      <MainLayout title={currentStep.title} heading={currentStep.heading}>
+      <MainLayout
+        title={currentStep.title}
+        heading={currentStep.heading}
+        pausable={pausable}
+      >
         {content}
       </MainLayout>
     );
   } else if (currentStep.title) {
-    page = <MainLayout title={currentStep.title}>{content}</MainLayout>;
+    page = (
+      <MainLayout title={currentStep.title} pausable={pausable}>
+        {content}
+      </MainLayout>
+    );
   } else {
     console.error("At least one of title or heading is required");
 
-    page = <MainLayout title={slug}>{content}</MainLayout>;
+    page = (
+      <MainLayout title={slug} pausable={pausable}>
+        {content}
+      </MainLayout>
+    );
   }
 
   return page;

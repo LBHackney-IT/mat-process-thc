@@ -134,6 +134,17 @@ it("renders correctly", () => {
           </p>
         </div>
       </main>,
+      <style
+        jsx={true}
+      >
+        
+            :global(.pause-button) {
+              float: right;
+              margin-top: 0;
+              margin-left: 2em;
+            }
+          
+      </style>,
     ]
   `);
 });

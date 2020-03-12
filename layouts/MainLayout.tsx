@@ -1,17 +1,23 @@
 import {
+  Button,
   Container,
   Header,
   Heading,
   HeadingLevels,
   Main
 } from "lbh-frontend-react";
-import Head from "next/head";
+import NextHead from "next/head";
+import NextLink from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 import basePath from "../helpers/basePath";
+import urlsForRouter from "../helpers/urlsForRouter";
+import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 
 interface BaseProps {
   title?: string;
   heading?: string;
+  pausable?: boolean;
   children: React.ReactNode;
 }
 
@@ -28,13 +34,31 @@ type Props = TitledProps | HeadedProps;
 const MainLayout = ({
   title,
   heading,
+  pausable,
   children
 }: Props): React.ReactElement => {
+  const router = useRouter();
+
   const fullTitle = `${title || heading} - THC - Manage a tenancy`;
+
+  const { href, as } = urlsForRouter(
+    router,
+    urlObjectForSlug(router, PageSlugs.Pause)
+  );
+
+  const pauseButton = (
+    <Button
+      className="pause-button lbh-button--secondary govuk-button--secondary"
+      disabled={!href.pathname || !as.pathname}
+      data-testid="pause"
+    >
+      Pause process
+    </Button>
+  );
 
   return (
     <>
-      <Head>
+      <NextHead>
         <title>{fullTitle}</title>
         <link
           rel="stylesheet"
@@ -225,14 +249,29 @@ const MainLayout = ({
           media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
           href={`${basePath}/favicons/apple-touch-startup-image-2160x1620.png`}
         />
-      </Head>
+      </NextHead>
       <Header serviceName="Manage a tenancy"></Header>
       <Main>
         <Container>
+          {pausable &&
+            (href.pathname && as.pathname ? (
+              <NextLink href={href} as={as}>
+                {pauseButton}
+              </NextLink>
+            ) : (
+              pauseButton
+            ))}
           {heading && <Heading level={HeadingLevels.H1}>{heading}</Heading>}
           {children}
         </Container>
       </Main>
+      <style jsx>{`
+        :global(.pause-button) {
+          float: right;
+          margin-top: 0;
+          margin-left: 2em;
+        }
+      `}</style>
     </>
   );
 };
