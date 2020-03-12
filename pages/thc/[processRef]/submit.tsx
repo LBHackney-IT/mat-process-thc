@@ -5,112 +5,15 @@ import {
   Paragraph
 } from "lbh-frontend-react";
 import { NextPage } from "next";
-import { NextRouter, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { TransactionMode } from "remultiform/database";
 import ProgressBar from "../../../components/ProgressBar";
-import basePath from "../../../helpers/basePath";
-import getProcessApiJwt from "../../../helpers/getProcessApiJwt";
-import getProcessRef from "../../../helpers/getProcessRef";
+import persistProcessData from "../../../helpers/persistProcessData";
 import urlsForRouter from "../../../helpers/urlsForRouter";
 import useOnlineWithRetry from "../../../helpers/useOnlineWithRetry";
 import MainLayout from "../../../layouts/MainLayout";
 import PageSlugs, { urlObjectForSlug } from "../../../steps/PageSlugs";
 import PageTitles from "../../../steps/PageTitles";
-import { processStoreNames } from "../../../storage/ProcessDatabaseSchema";
-import Storage from "../../../storage/Storage";
-
-const submit = async (
-  router: NextRouter,
-  setProgress: (progress: number) => void
-): Promise<void> => {
-  let progress = 0;
-
-  setProgress(progress);
-
-  if (Storage.ProcessContext && Storage.ProcessContext.database) {
-    const processRef = getProcessRef(router);
-    const processApiJwt = getProcessApiJwt(processRef);
-
-    if (!processRef || !processApiJwt) {
-      console.error(
-        "Unable to persist process data due to missing session data"
-      );
-
-      return;
-    }
-
-    const json = await Storage.getProcessJson(processRef);
-
-    if (json) {
-      const { processJson, imagesJson } = json;
-
-      const progressIncrement = 1 / (imagesJson.length + 2);
-
-      await Promise.all(
-        imagesJson.map(async ({ id, image }) => {
-          const response = await fetch(
-            `${basePath}/api/v1/processes/${processRef}/images?jwt=${processApiJwt}`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify({ id, image })
-            }
-          );
-
-          if (!response.ok) {
-            throw new Error(`${response.status}: ${response.statusText}`);
-          }
-
-          progress += progressIncrement;
-
-          setProgress(progress);
-        })
-      );
-
-      const response = await fetch(
-        `${basePath}/api/v1/processes/${processRef}/processData?jwt=${processApiJwt}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(processJson)
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`${response.status}: ${response.statusText}`);
-      }
-
-      progress += progressIncrement;
-
-      setProgress(progress);
-
-      const db = await Storage.ProcessContext.database;
-
-      // To reduce risk of data loss, we only clear up the data if we sent
-      // something to the backend.
-      await db.transaction(
-        processStoreNames,
-        async stores => {
-          await Promise.all(
-            Object.values(stores).map(store => store.delete(processRef))
-          );
-        },
-        TransactionMode.ReadWrite
-      );
-
-      sessionStorage.clear();
-
-      setProgress(1);
-    }
-  } else {
-    console.warn("No process data to persist");
-  }
-};
 
 const SubmitPage: NextPage = () => {
   const router = useRouter();
@@ -214,7 +117,7 @@ const SubmitPage: NextPage = () => {
             try {
               setSubmitting(true);
 
-              await submit(router, setProgress);
+              await persistProcessData(router, setProgress);
               await router.push(href, as);
             } catch (err) {
               console.error(err);
