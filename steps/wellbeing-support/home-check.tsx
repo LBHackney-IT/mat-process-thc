@@ -10,15 +10,35 @@ import {
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
+import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import yesNoRadios from "../../helpers/yesNoRadios";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step = {
+const questions = {
+  "home-check": "Do you want to include a Home Check?"
+};
+
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "homeCheck"> = {
   title: PageTitles.HomeCheck,
   heading: "Home Check",
+  review: {
+    rows: [
+      {
+        label: questions["home-check"],
+        values: {
+          "home-check": {
+            renderValue(homeCheck: string): React.ReactNode {
+              return getRadioLabelFromValue(yesNoRadios, homeCheck);
+            }
+          }
+        }
+      }
+    ]
+  },
   step: {
     slug: PageSlugs.HomeCheck,
     nextSlug(stepValues: {
@@ -34,7 +54,7 @@ const step = {
         value: "Save and continue"
       }),
     componentWrappers: [
-      ComponentWrapper.wrapStatic(
+      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "homeCheck">(
         new StaticComponent({
           key: "paragraph-1",
           Component: Paragraph,
@@ -51,9 +71,7 @@ const step = {
           props: {
             name: "home-check",
             legend: (
-              <FieldsetLegend>
-                Do you want to include a Home Check?
-              </FieldsetLegend>
+              <FieldsetLegend>{questions["home-check"]}</FieldsetLegend>
             ) as React.ReactNode,
             radios: yesNoRadios
           },
@@ -69,7 +87,7 @@ const step = {
           })
         })
       ),
-      ComponentWrapper.wrapStatic(
+      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "homeCheck">(
         new StaticComponent({
           key: "paragraph-2",
           Component: Paragraph,

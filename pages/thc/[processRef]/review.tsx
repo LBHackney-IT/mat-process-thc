@@ -23,6 +23,7 @@ import {
 import PageSlugs from "../../../steps/PageSlugs";
 import PageTitles from "../../../steps/PageTitles";
 import propertyInspectionSteps from "../../../steps/property-inspection";
+import wellbeingSupportSteps from "../../../steps/wellbeing-support";
 import { ResidentRef } from "../../../storage/ResidentDatabaseSchema";
 import Storage from "../../../storage/Storage";
 
@@ -84,6 +85,12 @@ const ReviewPage: NextPage = () => {
       heading: "Property inspection",
       rows: [
         ...useReviewSectionRows(Storage.ProcessContext, propertyInspectionSteps)
+      ]
+    },
+    {
+      heading: "Wellbeing support",
+      rows: [
+        ...useReviewSectionRows(Storage.ProcessContext, wellbeingSupportSteps)
       ]
     }
   ];

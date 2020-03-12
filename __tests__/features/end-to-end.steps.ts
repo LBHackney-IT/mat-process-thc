@@ -1423,6 +1423,15 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await Expect.pageToContain("Other comments notes");
       await Expect.pageToContain("Repairs notes");
 
+      // Review page Wellbeing support section
+      await Expect.pageToContain("Tenant 1");
+      await Expect.pageToContain("Dementia, Smoking");
+      await Expect.pageToContain("Health concerns notes");
+      await Expect.pageToContain("Disability notes");
+      await Expect.pageToContain("Children young people safeguarding notes");
+      await Expect.pageToContain("Mental health 18 to 65 notes");
+      await Expect.pageToContain("Mental health over 65 notes");
+
       await browser!.submit();
 
       // Submit page
