@@ -18,8 +18,8 @@ import {
   TextAreaDetails,
   TextAreaDetailsProps
 } from "../../components/TextAreaDetails";
+import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -75,7 +75,7 @@ const step = {
             "household"
           >({
             storeName: "household",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["rentArrears", "type"]
           })
         })
@@ -97,7 +97,7 @@ const step = {
             "household"
           >({
             storeName: "household",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["rentArrears", "notes"]
           })
         })
@@ -157,7 +157,7 @@ const step = {
             "household"
           >({
             storeName: "household",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["housingBenefits", "hasApplied"]
           })
         })
@@ -191,7 +191,7 @@ const step = {
             "household"
           >({
             storeName: "household",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["housingBenefits", "notes"]
           })
         })
@@ -289,7 +289,7 @@ const step = {
             "household"
           >({
             storeName: "household",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["incomeOfficer", "wantsToContact"]
           })
         })
@@ -319,7 +319,7 @@ const step = {
             "household"
           >({
             storeName: "household",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["incomeOfficer", "notes"]
           })
         })

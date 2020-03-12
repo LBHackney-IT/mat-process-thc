@@ -102,7 +102,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
             "nextOfKin"
           >({
             storeName: "nextOfKin",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["fullName"]
           })
         })
@@ -122,7 +122,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
             "nextOfKin"
           >({
             storeName: "nextOfKin",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["relationship"]
           })
         })
@@ -142,7 +142,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
             "nextOfKin"
           >({
             storeName: "nextOfKin",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["mobileNumber"]
           })
         })
@@ -162,7 +162,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
             "nextOfKin"
           >({
             storeName: "nextOfKin",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["otherNumber"]
           })
         })
@@ -182,7 +182,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
             "nextOfKin"
           >({
             storeName: "nextOfKin",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["email"]
           })
         })
@@ -214,7 +214,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
             "nextOfKin"
           >({
             storeName: "nextOfKin",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["address"]
           })
         })

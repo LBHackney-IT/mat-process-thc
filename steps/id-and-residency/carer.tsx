@@ -163,7 +163,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             "carer"
           >({
             storeName: "carer",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["hasCarer"]
           })
         })
@@ -191,7 +191,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             "carer"
           >({
             storeName: "carer",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["type"]
           })
         })
@@ -219,7 +219,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             "carer"
           >({
             storeName: "carer",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["isLiveIn"]
           })
         })
@@ -257,7 +257,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             "carer"
           >({
             storeName: "carer",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["liveInStartDate"]
           })
         })
@@ -297,7 +297,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             "carer"
           >({
             storeName: "carer",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["fullName"]
           })
         })
@@ -322,7 +322,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             "carer"
           >({
             storeName: "carer",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["relationship"]
           })
         })
@@ -347,7 +347,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             "carer"
           >({
             storeName: "carer",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["phoneNumber"]
           })
         })
@@ -384,7 +384,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             "carer"
           >({
             storeName: "carer",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["address"]
           })
         })
@@ -411,7 +411,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             "carer"
           >({
             storeName: "carer",
-            key: keyFromSlug(),
+            key: keyFromSlug(true),
             property: ["notes"]
           })
         })

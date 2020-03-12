@@ -20,7 +20,6 @@ import useDataValue from "../../../helpers/useDataValue";
 import MainLayout from "../../../layouts/MainLayout";
 import PageSlugs, { urlObjectForSlug } from "../../../steps/PageSlugs";
 import PageTitles from "../../../steps/PageTitles";
-import tmpProcessRef from "../../../storage/processRef";
 import Storage from "../../../storage/Storage";
 
 export const VerifyPage: NextPage = () => {
@@ -43,8 +42,8 @@ export const VerifyPage: NextPage = () => {
   const tenantsPresent = useDataValue(
     Storage.ProcessContext,
     "tenantsPresent",
-    tmpProcessRef,
-    values => values[tmpProcessRef]
+    processRef,
+    values => (processRef ? values[processRef] : undefined)
   );
   const idData = useDataSet(
     Storage.ResidentContext,

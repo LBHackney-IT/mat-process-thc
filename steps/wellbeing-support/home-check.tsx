@@ -10,9 +10,9 @@ import {
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
+import keyFromSlug from "../../helpers/keyFromSlug";
 import yesNoRadios from "../../helpers/yesNoRadios";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import processRef from "../../storage/processRef";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -64,7 +64,7 @@ const step = {
             "homeCheck"
           >({
             storeName: "homeCheck",
-            key: processRef,
+            key: keyFromSlug(),
             property: ["value"]
           })
         })

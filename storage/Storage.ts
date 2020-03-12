@@ -12,7 +12,6 @@ import ProcessDatabaseSchema, {
   ProcessRef,
   processStoreNames
 } from "./ProcessDatabaseSchema";
-import tmpProcessRef from "./processRef";
 import ResidentDatabaseSchema, {
   residentDatabaseName,
   ResidentRef,
@@ -268,10 +267,7 @@ export default class Storage {
     let processData = (
       await Promise.all(
         processStoreNames.map(async storeName => {
-          // The steps still use the hardcoded `processRef`, so we need to also
-          // use it, even though we're using the correct value to persist to the
-          // backend.
-          const value = await processDatabase.get(storeName, tmpProcessRef);
+          const value = await processDatabase.get(storeName, processRef);
 
           if (storeName === "lastModified") {
             lastModified = value as StoreValue<
