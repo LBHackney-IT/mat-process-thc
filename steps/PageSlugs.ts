@@ -61,6 +61,9 @@ enum PageSlugs {
   // Pause
   Pause = "pause",
   Paused = "paused",
+
+  // Unable to enter
+  FirstFailedAttempt = "first-failed-attempt",
 }
 
 const slugs: {
@@ -110,6 +113,7 @@ const slugs: {
   confirmed: false,
   pause: false,
   paused: false,
+  "first-failed-attempt": true,
 };
 
 export const stepSlugs = Object.entries(slugs)

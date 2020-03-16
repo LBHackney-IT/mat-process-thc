@@ -54,6 +54,9 @@ enum PageTitles {
   Review = "Review",
   Submit = "Submit",
   Confirmed = "Confirmed",
+
+  // Unable to enter
+  FirstFailedAttempt = "First failed attempt",
 }
 
 export default PageTitles;

@@ -29,7 +29,7 @@ const step = {
           value: "Enter the property",
         },
         {
-          slug: PageSlugs.Loading,
+          slug: PageSlugs.FirstFailedAttempt,
           value: "Unable to enter property",
         },
       ]),
