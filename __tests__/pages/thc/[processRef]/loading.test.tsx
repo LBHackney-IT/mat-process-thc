@@ -356,6 +356,17 @@ it("renders correctly when online", async () => {
           </button>
         </div>
       </main>,
+      <style
+        jsx={true}
+      >
+        
+            :global(.pause-button) {
+              float: right;
+              margin-top: 0;
+              margin-left: 2em;
+            }
+          
+      </style>,
     ]
   `);
 });
@@ -632,6 +643,17 @@ Array [
       </button>
     </div>
   </main>,
+  <style
+    jsx={true}
+  >
+    
+        :global(.pause-button) {
+          float: right;
+          margin-top: 0;
+          margin-left: 2em;
+        }
+      
+  </style>,
 ]
 `);
 });

@@ -128,7 +128,11 @@ export const VerifyPage: NextPage = () => {
   );
 
   return (
-    <MainLayout title={PageTitles.Verify} heading="Verify tenant details">
+    <MainLayout
+      title={PageTitles.Verify}
+      heading="Verify tenant details"
+      pausable
+    >
       <TenancySummary
         details={{
           address: residentData.result

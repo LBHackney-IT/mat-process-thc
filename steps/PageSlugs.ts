@@ -56,7 +56,11 @@ enum PageSlugs {
   // Review and submit
   Review = "review",
   Submit = "submit",
-  Confirmed = "confirmed"
+  Confirmed = "confirmed",
+
+  // Pause
+  Pause = "pause",
+  Paused = "paused"
 }
 
 const slugs: {
@@ -103,7 +107,9 @@ const slugs: {
   "support-needs": true,
   review: false,
   submit: false,
-  confirmed: false
+  confirmed: false,
+  pause: false,
+  paused: false
 };
 
 export const stepSlugs = Object.entries(slugs)
