@@ -51,6 +51,11 @@ const TenantsSelect: React.FunctionComponent<Omit<
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenantsPresent"> = {
   title: PageTitles.PresentForCheck,
   heading: "Tenants present",
+  errors: {
+    required: {
+      "tenants-present": "At least one tenant must be present",
+    },
+  },
   step: {
     slug: PageSlugs.PresentForCheck,
     nextSlug: PageSlugs.Verify,
@@ -72,6 +77,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenantsPresent"> = {
               </FieldsetLegend>
             ) as React.ReactNode,
           },
+          required: true,
           defaultValue: [] as string[],
           emptyValue: [] as string[],
           databaseMap: new ComponentDatabaseMap<

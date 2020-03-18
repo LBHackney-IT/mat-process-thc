@@ -1,7 +1,8 @@
+import { ErrorMessage } from "lbh-frontend-react";
 import { NextPage } from "next";
 import ErrorPage from "next/error";
 import { NextRouter, useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import { StoreNames } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
 import { Orchestrator } from "remultiform/orchestrator";
@@ -62,6 +63,8 @@ const ProcessPage: NextPage = () => {
     (values) => (processRef ? values[processRef] : undefined)
   );
 
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
+
   const { slug } = parseSlugFromQuery(router);
 
   if (slug === undefined) {
@@ -105,6 +108,11 @@ const ProcessPage: NextPage = () => {
         }}
       />
 
+      {/* This should really be an ErrorSummary component, once one exists. */}
+      {errorMessages.map((message, i) => (
+        <ErrorMessage key={i}>{message}</ErrorMessage>
+      ))}
+
       <Orchestrator<
         ProcessDatabaseSchema | ResidentDatabaseSchema,
         StoreNames<
@@ -116,7 +124,18 @@ const ProcessPage: NextPage = () => {
         steps={innerSteps}
         manageStepTransitions={false}
         provideDatabase={false}
+        onIncompleteStep={(missingValues?: string[]): void => {
+          setErrorMessages(
+            (missingValues || []).map((key) =>
+              currentStep.errors?.required
+                ? currentStep.errors.required[key]
+                : "A required value is missing"
+            )
+          );
+        }}
         onNextStep={async (): Promise<void> => {
+          setErrorMessages([]);
+
           try {
             if (!processRef) {
               throw new Error("No process to reference");
