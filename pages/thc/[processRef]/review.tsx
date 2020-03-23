@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { makeSubmit } from "../../../components/makeSubmit";
 import Signature from "../../../components/Signature";
+import { TextArea } from "../../../components/TextArea";
 import getProcessRef from "../../../helpers/getProcessRef";
 import useDatabase from "../../../helpers/useDatabase";
 import useDataValue from "../../../helpers/useDataValue";
@@ -40,6 +41,7 @@ const ReviewPage: NextPage = () => {
   );
 
   const residentDatabase = useDatabase(Storage.ResidentContext);
+  const processDatabase = useDatabase(Storage.ProcessContext);
 
   // We intentionally ignore whatever's in the database. We need the tenant to
   // sign against any changes, and this is the simplest way to ensure that
@@ -47,6 +49,11 @@ const ReviewPage: NextPage = () => {
   const [signatures, setSignatures] = useState<
     { [Ref in ResidentRef]?: string }
   >({});
+
+  const [otherNotes, setOtherNotes] = useState({
+    value: "",
+    isPostVisitAction: false
+  });
 
   const tenantIds = tenants.result
     ? tenants.result.map(tenant => tenant.id)
@@ -122,6 +129,16 @@ const ReviewPage: NextPage = () => {
           </React.Fragment>
         ))}
 
+      <TextArea
+        value={otherNotes}
+        onValueChange={(note): void => setOtherNotes(note)}
+        required={false}
+        disabled={false}
+        includeCheckbox
+        label={{ value: "Any other notes to be added?" }}
+        name="other-notes"
+      />
+
       <Heading level={HeadingLevels.H2}>Declaration</Heading>
       <Paragraph>
         I confirm that the information I have given for the purposes of this
@@ -145,9 +162,17 @@ const ReviewPage: NextPage = () => {
       />
 
       <SubmitButton
-        disabled={!residentDatabase.result || !selectedTenantId}
+        disabled={
+          !residentDatabase.result ||
+          !selectedTenantId ||
+          !processDatabase.result
+        }
         onSubmit={async (): Promise<void> => {
-          if (!residentDatabase.result || !selectedTenantId) {
+          if (
+            !residentDatabase.result ||
+            !selectedTenantId ||
+            !processDatabase.result
+          ) {
             return;
           }
 
@@ -156,6 +181,8 @@ const ReviewPage: NextPage = () => {
             selectedTenantId,
             signatures[selectedTenantId] || ""
           );
+
+          await processDatabase.result.put("otherNotes", "notes", otherNotes);
         }}
       />
     </MainLayout>

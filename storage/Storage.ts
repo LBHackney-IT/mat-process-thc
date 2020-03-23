@@ -90,6 +90,10 @@ const migrateProcessData = async (
     version = 5;
   }
 
+  if (version < 6) {
+    version = 6;
+  }
+
   if (version !== newVersion) {
     throw new Error(
       `Unable to upgrade to ${newVersion} due to missing ` +
@@ -189,6 +193,11 @@ export default class Storage {
             version = 5;
           }
 
+          if (version === 5) {
+            upgrade.createStore("otherNotes");
+            version = 6;
+          }
+
           if (version !== upgrade.newVersion) {
             throw new Error(
               `Unable to upgrade to ${upgrade.newVersion} due to missing ` +
@@ -228,8 +237,8 @@ export default class Storage {
             version = 3;
           }
 
-          if (version < 5) {
-            version = 5;
+          if (version < 6) {
+            version = 6;
           }
 
           if (version !== upgrade.newVersion) {
