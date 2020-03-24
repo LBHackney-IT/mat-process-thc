@@ -20,7 +20,7 @@ const questions = {
 
 const step: ProcessStepDefinition<ResidentDatabaseSchema, "otherSupport"> = {
   title: PageTitles.OtherSupport,
-  heading: "Other Support",
+  heading: "Other support",
   context: Storage.ResidentContext,
   review: {
     rows: [
