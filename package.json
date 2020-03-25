@@ -76,7 +76,7 @@
     "prettier": "^1.19.1",
     "pretty-quick": "^2.0.1",
     "react-test-renderer": "^16.13.0",
-    "selenium-webdriver": "^4.0.0-alpha.5",
+    "selenium-webdriver": "^4.0.0-alpha.7",
     "styled-jsx": "^3.2.5",
     "ts-jest": "^25.2.1",
     "typescript": "^3.8.3",
