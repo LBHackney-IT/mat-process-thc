@@ -4,7 +4,7 @@
 # repository.
 
 # The default, matching to all changes, overriden by any later rules.
-*             @LBHackney-IT/mat-developers @LBHELewis
+*             @LBHackney-IT/mat-developers
 
 # We disable these to reduce noise from Dependabot.
 package.json
