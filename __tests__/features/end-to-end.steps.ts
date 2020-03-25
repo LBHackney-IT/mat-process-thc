@@ -1391,6 +1391,47 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         `${processRef}/review`
       );
 
+      // Review page Household section
+      await Expect.pageToContain("Household");
+      await Expect.pageToContain("Member changes notes");
+      await Expect.pageToContain("House moving schemes notes");
+      await Expect.pageToContain(
+        "Yes, but tenant has an action plan to clear arrears"
+      );
+      await Expect.pageToContain("Yes, but application declined");
+      await Expect.pageToContain("Housing benefits notes");
+      await Expect.pageToContain("Rent arrears notes");
+      await Expect.pageToContain("Income officer notes");
+      await Expect.pageToContain("Other property notes");
+
+      // Review page Property inspection section
+      await Expect.pageToContain("Room notes");
+      await Expect.pageToContain("Laminated flooring notes");
+      await Expect.pageToContain("Structural changes notes");
+      await Expect.pageToContain("Damage notes");
+      await Expect.pageToContain("Roof notes");
+      await Expect.pageToContain("Loft notes");
+      await Expect.pageToContain("Garden notes");
+      await Expect.pageToContain("Storing materials notes");
+      await Expect.pageToContain("Fire exit notes");
+      await Expect.pageToContain("Smoke alarm notes");
+      await Expect.pageToContain("Metal gates notes");
+      await Expect.pageToContain("Door mats notes");
+      await Expect.pageToContain("Communal areas notes");
+      await Expect.pageToContain("Cat, Dog");
+      await Expect.pageToContain("Antisocial behaviour notes");
+      await Expect.pageToContain("Other comments notes");
+      await Expect.pageToContain("Repairs notes");
+
+      // Review page Wellbeing support section
+      await Expect.pageToContain("Tenant 1");
+      await Expect.pageToContain("Dementia, Smoking");
+      await Expect.pageToContain("Health concerns notes");
+      await Expect.pageToContain("Disability notes");
+      await Expect.pageToContain("Children young people safeguarding notes");
+      await Expect.pageToContain("Mental health 18 to 65 notes");
+      await Expect.pageToContain("Mental health over 65 notes");
+
       await browser!.submit();
 
       // Submit page

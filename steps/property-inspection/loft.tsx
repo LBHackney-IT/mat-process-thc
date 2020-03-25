@@ -9,14 +9,52 @@ import {
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea, TextAreaProps } from "../../components/TextArea";
+import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import yesNoRadios from "../../helpers/yesNoRadios";
+import { Note } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step = {
+const questions = {
+  "has-access-to-loft": "Does the tenant have access to loft space?",
+  "items-stored-in-loft": "Are items being stored in the loft space?"
+};
+
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
   title: PageTitles.Loft,
   heading: "Loft access",
+  review: {
+    rows: [
+      {
+        label: questions["has-access-to-loft"],
+        values: {
+          "has-access-to-loft": {
+            renderValue(hasAccess: string): React.ReactNode {
+              return getRadioLabelFromValue(yesNoRadios, hasAccess);
+            }
+          }
+        }
+      },
+      {
+        label: questions["items-stored-in-loft"],
+        values: {
+          "items-stored-in-loft": {
+            renderValue(storingItems: string): React.ReactNode {
+              return getRadioLabelFromValue(yesNoRadios, storingItems);
+            }
+          },
+          "loft-notes": {
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
+            }
+          }
+        }
+      }
+    ]
+  },
   step: {
     slug: PageSlugs.Loft,
     nextSlug: PageSlugs.Garden,
@@ -33,20 +71,9 @@ const step = {
           props: {
             name: "has-access-to-loft",
             legend: (
-              <FieldsetLegend>
-                Does the tenant have access to loft space?
-              </FieldsetLegend>
+              <FieldsetLegend>{questions["has-access-to-loft"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios
           },
           defaultValue: "",
           emptyValue: "",
@@ -68,19 +95,10 @@ const step = {
             name: "items-stored-in-loft",
             legend: (
               <FieldsetLegend>
-                Are items being stored in the loft space?
+                {questions["items-stored-in-loft"]}
               </FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios
           },
           renderWhen(stepValues: {
             "has-access-to-loft"?: ComponentValue<

@@ -10,14 +10,42 @@ import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea, TextAreaProps } from "../../components/TextArea";
+import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import yesNoRadios from "../../helpers/yesNoRadios";
+import { Note } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step = {
+const questions = {
+  "has-damage": "Are there any signs of damage caused to the property?"
+};
+
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
   title: PageTitles.Damage,
   heading: "Damage",
+  review: {
+    rows: [
+      {
+        label: questions["has-damage"],
+        values: {
+          "has-damage": {
+            renderValue(hasDamage: string): React.ReactNode {
+              return getRadioLabelFromValue(yesNoRadios, hasDamage);
+            }
+          },
+          "damage-notes": {
+            renderValue(damageNotes: Note): React.ReactNode {
+              return damageNotes.value;
+            }
+          }
+        },
+        images: "damage-images"
+      }
+    ]
+  },
   step: {
     slug: PageSlugs.Damage,
     nextSlug: PageSlugs.Roof,
@@ -34,20 +62,9 @@ const step = {
           props: {
             name: "has-damage",
             legend: (
-              <FieldsetLegend>
-                Are there any signs of damage caused to the property?
-              </FieldsetLegend>
+              <FieldsetLegend>{questions["has-damage"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios
           },
           defaultValue: "",
           emptyValue: "",

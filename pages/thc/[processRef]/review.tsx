@@ -10,17 +10,21 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { makeSubmit } from "../../../components/makeSubmit";
 import Signature from "../../../components/Signature";
+import { TextArea } from "../../../components/TextArea";
 import getProcessRef from "../../../helpers/getProcessRef";
 import useDatabase from "../../../helpers/useDatabase";
 import useDataValue from "../../../helpers/useDataValue";
 import useReviewSectionRows from "../../../helpers/useReviewSectionRows";
 import MainLayout from "../../../layouts/MainLayout";
+import householdSteps from "../../../steps/household";
 import {
   idAndResidencyProcessSteps,
   idAndResidencyResidentSteps
 } from "../../../steps/id-and-residency";
 import PageSlugs from "../../../steps/PageSlugs";
 import PageTitles from "../../../steps/PageTitles";
+import propertyInspectionSteps from "../../../steps/property-inspection";
+import wellbeingSupportSteps from "../../../steps/wellbeing-support";
 import { ResidentRef } from "../../../storage/ResidentDatabaseSchema";
 import Storage from "../../../storage/Storage";
 
@@ -37,6 +41,7 @@ const ReviewPage: NextPage = () => {
   );
 
   const residentDatabase = useDatabase(Storage.ResidentContext);
+  const processDatabase = useDatabase(Storage.ProcessContext);
 
   // We intentionally ignore whatever's in the database. We need the tenant to
   // sign against any changes, and this is the simplest way to ensure that
@@ -44,6 +49,11 @@ const ReviewPage: NextPage = () => {
   const [signatures, setSignatures] = useState<
     { [Ref in ResidentRef]?: string }
   >({});
+
+  const [otherNotes, setOtherNotes] = useState({
+    value: "",
+    isPostVisitAction: false
+  });
 
   const tenantIds = tenants.result
     ? tenants.result.map(tenant => tenant.id)
@@ -73,6 +83,22 @@ const ReviewPage: NextPage = () => {
           selectedTenantId
         )
       ]
+    },
+    {
+      heading: "Household",
+      rows: [...useReviewSectionRows(Storage.ProcessContext, householdSteps)]
+    },
+    {
+      heading: "Property inspection",
+      rows: [
+        ...useReviewSectionRows(Storage.ProcessContext, propertyInspectionSteps)
+      ]
+    },
+    {
+      heading: "Wellbeing support",
+      rows: [
+        ...useReviewSectionRows(Storage.ProcessContext, wellbeingSupportSteps)
+      ]
     }
   ];
 
@@ -87,19 +113,31 @@ const ReviewPage: NextPage = () => {
       heading="Review Tenancy and Household Check"
       pausable
     >
-      {sections.map(({ heading, rows }) => (
-        <React.Fragment key={heading}>
-          <Heading level={HeadingLevels.H2}>{heading}</Heading>
+      {sections
+        .filter(section => section.rows.length)
+        .map(({ heading, rows }) => (
+          <React.Fragment key={heading}>
+            <Heading level={HeadingLevels.H2}>{heading}</Heading>
 
-          {rows.length ? (
-            <SummaryList
-              rows={(rows as unknown) as { key: string; value: string }[]}
-            />
-          ) : (
-            <Paragraph>Loading...</Paragraph>
-          )}
-        </React.Fragment>
-      ))}
+            {rows.length ? (
+              <SummaryList
+                rows={(rows as unknown) as { key: string; value: string }[]}
+              />
+            ) : (
+              <Paragraph>Loading...</Paragraph>
+            )}
+          </React.Fragment>
+        ))}
+
+      <TextArea
+        value={otherNotes}
+        onValueChange={(note): void => setOtherNotes(note)}
+        required={false}
+        disabled={false}
+        includeCheckbox
+        label={{ value: "Any other notes to be added?" }}
+        name="other-notes"
+      />
 
       <Heading level={HeadingLevels.H2}>Declaration</Heading>
       <Paragraph>
@@ -124,9 +162,17 @@ const ReviewPage: NextPage = () => {
       />
 
       <SubmitButton
-        disabled={!residentDatabase.result || !selectedTenantId}
+        disabled={
+          !residentDatabase.result ||
+          !selectedTenantId ||
+          !processDatabase.result
+        }
         onSubmit={async (): Promise<void> => {
-          if (!residentDatabase.result || !selectedTenantId) {
+          if (
+            !residentDatabase.result ||
+            !selectedTenantId ||
+            !processDatabase.result
+          ) {
             return;
           }
 
@@ -135,6 +181,8 @@ const ReviewPage: NextPage = () => {
             selectedTenantId,
             signatures[selectedTenantId] || ""
           );
+
+          await processDatabase.result.put("otherNotes", "notes", otherNotes);
         }}
       />
     </MainLayout>

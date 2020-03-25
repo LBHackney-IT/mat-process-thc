@@ -7,18 +7,45 @@ import {
   DynamicComponent,
   StaticComponent
 } from "remultiform/component-wrapper";
+import { Note } from "storage/DatabaseSchema";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea, TextAreaProps } from "../../components/TextArea";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import yesNoRadios from "../../helpers/yesNoRadios";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step = {
+const questions = {
+  "needs-repairs": "Are there any new repairs queries?"
+};
+
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
   title: PageTitles.Repairs,
   heading: "New repairs",
+  review: {
+    rows: [
+      {
+        label: questions["needs-repairs"],
+        values: {
+          "needs-repairs": {
+            renderValue(needed: string): React.ReactNode {
+              return needed;
+            }
+          },
+          "repairs-notes": {
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
+            }
+          }
+        },
+        images: "repairs-images"
+      }
+    ]
+  },
   step: {
     slug: PageSlugs.Repairs,
     nextSlug: PageSlugs.StoringMaterials,
@@ -28,7 +55,7 @@ const step = {
         value: "Save and continue"
       }),
     componentWrappers: [
-      ComponentWrapper.wrapStatic(
+      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "property">(
         new StaticComponent({
           key: "paragraph-1",
           Component: Paragraph,
@@ -57,20 +84,9 @@ const step = {
           props: {
             name: "needs-repairs",
             legend: (
-              <FieldsetLegend>
-                Are there any new repairs queries?
-              </FieldsetLegend>
+              <FieldsetLegend>{questions["needs-repairs"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios
           },
           defaultValue: "",
           emptyValue: "",
@@ -120,9 +136,10 @@ const step = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about repairs if necessary."
+              value: "Add note about repairs if necessary"
             },
-            name: "repairs-notes"
+            name: "repairs-notes",
+            includeCheckbox: true
           } as TextAreaProps,
           renderWhen(stepValues: {
             "needs-repairs"?: ComponentValue<ProcessDatabaseSchema, "property">;

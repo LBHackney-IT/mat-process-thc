@@ -10,14 +10,72 @@ import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea, TextAreaProps } from "../../components/TextArea";
+import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import yesNoRadios from "../../helpers/yesNoRadios";
+import { Note } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step = {
+const questions = {
+  "has-metal-gates":
+    "Has the tenant had metal gates erected across front entrance doors?",
+  "combustible-items-behind-gates":
+    "Are there combustible items behind the metal gates?",
+  "further-action-required": "Is further action required?"
+};
+
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
   title: PageTitles.MetalGates,
   heading: "Metal gates",
+  review: {
+    rows: [
+      {
+        label: questions["has-metal-gates"],
+        values: {
+          "has-metal-gates": {
+            renderValue(hasMetalGates: string): React.ReactNode {
+              return getRadioLabelFromValue(yesNoRadios, hasMetalGates);
+            }
+          }
+        }
+      },
+      {
+        label: questions["combustible-items-behind-gates"],
+        values: {
+          "combustible-items-behind-gates": {
+            renderValue(combustiblesBehindGates: string): React.ReactNode {
+              return getRadioLabelFromValue(
+                yesNoRadios,
+                combustiblesBehindGates
+              );
+            }
+          }
+        }
+      },
+      {
+        label: questions["further-action-required"],
+        values: {
+          "further-action-required": {
+            renderValue(combustiblesBehindGates: string): React.ReactNode {
+              return getRadioLabelFromValue(
+                yesNoRadios,
+                combustiblesBehindGates
+              );
+            }
+          },
+          "metal-gates-notes": {
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
+            }
+          }
+        },
+        images: "metal-gate-images"
+      }
+    ]
+  },
   step: {
     slug: PageSlugs.MetalGates,
     nextSlug: PageSlugs.DoorMats,
@@ -34,21 +92,9 @@ const step = {
           props: {
             name: "has-metal-gates",
             legend: (
-              <FieldsetLegend>
-                Has the tenant had metal gates erected across front entrance
-                doors?
-              </FieldsetLegend>
+              <FieldsetLegend>{questions["has-metal-gates"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios
           },
           defaultValue: "",
           emptyValue: "",
@@ -70,19 +116,10 @@ const step = {
             name: "combustible-items-behind-gates",
             legend: (
               <FieldsetLegend>
-                Are there combustible items behind the metal gates?
+                {questions["combustible-items-behind-gates"]}
               </FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios
           },
           renderWhen(stepValues: {
             "has-metal-gates"?: ComponentValue<
@@ -111,18 +148,11 @@ const step = {
           props: {
             name: "further-action-required",
             legend: (
-              <FieldsetLegend>Is further action required?</FieldsetLegend>
+              <FieldsetLegend>
+                {questions["further-action-required"]}
+              </FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios
           },
           renderWhen(stepValues: {
             "combustible-items-behind-gates"?: ComponentValue<

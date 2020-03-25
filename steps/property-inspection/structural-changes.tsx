@@ -10,14 +10,54 @@ import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea, TextAreaProps } from "../../components/TextArea";
+import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import yesNoRadios from "../../helpers/yesNoRadios";
+import { Note } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step = {
+const questions = {
+  "has-structural-changes":
+    "Have any structural changes been made within the property since it was originally let?",
+  "changes-authorised": "Have the structural changes been authorised?"
+};
+
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
   title: PageTitles.StructuralChanges,
   heading: "Structural changes",
+  review: {
+    rows: [
+      {
+        label: questions["has-structural-changes"],
+        values: {
+          "has-structural-changes": {
+            renderValue(structuralChanges: string): React.ReactNode {
+              return getRadioLabelFromValue(yesNoRadios, structuralChanges);
+            }
+          },
+          "structural-changes-notes": {
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
+            }
+          }
+        },
+        images: "structural-changes-images"
+      },
+      {
+        label: questions["changes-authorised"],
+        values: {
+          "changes-authorised": {
+            renderValue(changesAuthorised: string): React.ReactNode {
+              return getRadioLabelFromValue(yesNoRadios, changesAuthorised);
+            }
+          }
+        }
+      }
+    ]
+  },
   step: {
     slug: PageSlugs.StructuralChanges,
     nextSlug: PageSlugs.Damage,
@@ -35,20 +75,10 @@ const step = {
             name: "has-structural-changes",
             legend: (
               <FieldsetLegend>
-                Have any structural changes been made within the property since
-                it was originally let?
+                {questions["has-structural-changes"]}
               </FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios
           },
           defaultValue: "",
           emptyValue: "",
@@ -69,20 +99,9 @@ const step = {
           props: {
             name: "changes-authorised",
             legend: (
-              <FieldsetLegend>
-                Have the structural changes been authorised?
-              </FieldsetLegend>
+              <FieldsetLegend>{questions["changes-authorised"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios
           },
           renderWhen(stepValues: {
             "has-structural-changes"?: ComponentValue<

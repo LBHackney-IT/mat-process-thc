@@ -12,6 +12,7 @@ import {
   TextAreaDetails,
   TextAreaDetailsProps
 } from "../../components/TextAreaDetails";
+import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
@@ -59,7 +60,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
         values: {
           "id-type": {
             renderValue(type: string): React.ReactNode {
-              return idTypeRadios.find(({ value }) => value === type)?.label;
+              return getRadioLabelFromValue(idTypeRadios, type);
             }
           },
           "id-notes": {

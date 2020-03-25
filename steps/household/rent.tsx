@@ -18,14 +18,120 @@ import {
   TextAreaDetails,
   TextAreaDetailsProps
 } from "../../components/TextAreaDetails";
+import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import yesNoRadios from "../../helpers/yesNoRadios";
+import { Note } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step = {
+const rentArrearsRadios = [
+  {
+    label: "Yes, but the tenant is waiting for Housing Benefit Payment",
+    value: "yes waiting for payment"
+  },
+  {
+    label: "Yes, but tenant has an action plan to clear arrears",
+    value: "yes has plan"
+  },
+  {
+    label: "Yes, but tenant doesn't have an action plan to clear arrears",
+    value: "yes has no plan"
+  },
+  {
+    label: "No, tenant does not have arrears",
+    value: "no"
+  }
+];
+
+const housingBenefitRadios = [
+  {
+    label: "Yes, and payments received",
+    value: "yes payments received"
+  },
+  {
+    label: "Yes, but payments not yet received",
+    value: "yes payments not received"
+  },
+  {
+    label: "Yes, but application declined",
+    value: "yes application declined"
+  },
+  {
+    label: "No, but would like to apply (phone: 020 8356 3399)",
+    value: "no wants to apply"
+  },
+  {
+    label: "No, and does not want to apply",
+    value: "no does not want to apply"
+  }
+];
+
+const questions = {
+  "rent-arrears-type": "Are there rent arrears on the account?",
+  "has-applied-for-housing-benefit":
+    "Has Housing Benefit / Universal Credit been applied for?",
+  "contact-income-officer":
+    "Would the tenant like to be put in contact with the Income Officer?"
+};
+
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
   title: PageTitles.Rent,
   heading: "Rent, housing benefits, and income officer",
+  review: {
+    rows: [
+      {
+        label: questions["rent-arrears-type"],
+        values: {
+          "rent-arrears-type": {
+            renderValue(type: string): React.ReactNode {
+              return getRadioLabelFromValue(rentArrearsRadios, type);
+            }
+          },
+          "rent-arrears-notes": {
+            renderValue(rentArrearsNotes: Note): React.ReactNode {
+              return rentArrearsNotes.value;
+            }
+          }
+        }
+      },
+      {
+        label: questions["has-applied-for-housing-benefit"],
+        values: {
+          "has-applied-for-housing-benefit": {
+            renderValue(hasAppliedForHousingBenefit: string): React.ReactNode {
+              return getRadioLabelFromValue(
+                housingBenefitRadios,
+                hasAppliedForHousingBenefit
+              );
+            }
+          },
+          "housing-benefits-notes": {
+            renderValue(housingBenefitNotes: Note): React.ReactNode {
+              return housingBenefitNotes.value;
+            }
+          }
+        }
+      },
+      {
+        label: questions["contact-income-officer"],
+        values: {
+          "contact-income-officer": {
+            renderValue(contactIncomeOfficer: string): React.ReactNode {
+              return getRadioLabelFromValue(yesNoRadios, contactIncomeOfficer);
+            }
+          },
+          "income-officer-notes": {
+            renderValue(incomeOfficerNotes: Note): React.ReactNode {
+              return incomeOfficerNotes.value;
+            }
+          }
+        }
+      }
+    ]
+  },
   step: {
     slug: PageSlugs.Rent,
     nextSlug: PageSlugs.OtherProperty,
@@ -44,29 +150,11 @@ const step = {
             legend: (
               <FieldsetLegend>
                 <Heading level={HeadingLevels.H2}>
-                  Are there rent arrears on the account?
+                  {questions["rent-arrears-type"]}
                 </Heading>
               </FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes, but tenant is waiting for Housing Benefit payment",
-                value: "yes waiting for payment"
-              },
-              {
-                label: "Yes, but tenant has an action plan to clear arrears",
-                value: "yes has plan"
-              },
-              {
-                label:
-                  "Yes, but tenant doesn't have an action plan to clear arrears",
-                value: "yes has no plan"
-              },
-              {
-                label: "No, tenant does not have arrears",
-                value: "no"
-              }
-            ]
+            radios: rentArrearsRadios
           },
           defaultValue: "",
           emptyValue: "",
@@ -111,32 +199,11 @@ const step = {
             legend: (
               <FieldsetLegend>
                 <Heading level={HeadingLevels.H2}>
-                  Has Housing Benefit / Universal Credit been applied for?
+                  {questions["has-applied-for-housing-benefit"]}
                 </Heading>
               </FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes, and payments received",
-                value: "yes payments received"
-              },
-              {
-                label: "Yes, but payments not yet received",
-                value: "yes payments not received"
-              },
-              {
-                label: "Yes, but application declined",
-                value: "yes application declined"
-              },
-              {
-                label: "No, but would like to apply (phone: 020 8356 3399)",
-                value: "no wants to apply"
-              },
-              {
-                label: "No, and does not want to apply",
-                value: "no does not want to apply"
-              }
-            ]
+            radios: housingBenefitRadios
           },
           renderWhen(stepValues: {
             "rent-arrears-type"?: ComponentValue<
@@ -196,7 +263,7 @@ const step = {
           })
         })
       ),
-      ComponentWrapper.wrapStatic(
+      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "household">(
         new StaticComponent({
           key: "income-officer-heading",
           Component: Heading,
@@ -214,7 +281,7 @@ const step = {
           }
         })
       ),
-      ComponentWrapper.wrapStatic(
+      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "household">(
         new StaticComponent({
           key: "income-officer-paragraph",
           Component: Paragraph,
@@ -232,7 +299,7 @@ const step = {
           }
         })
       ),
-      ComponentWrapper.wrapStatic(
+      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "household">(
         new StaticComponent({
           key: "income-officer-phone-number",
           Component: Paragraph,
@@ -258,21 +325,11 @@ const step = {
             legend: (
               <FieldsetLegend>
                 <Heading level={HeadingLevels.H3}>
-                  Would the tenant like to be put in contact with the Income
-                  Officer?
+                  {questions["contact-income-officer"]}
                 </Heading>
               </FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios
           },
           renderWhen(stepValues: {
             "rent-arrears-type"?: ComponentValue<

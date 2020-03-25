@@ -9,14 +9,52 @@ import {
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea, TextAreaProps } from "../../components/TextArea";
+import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import yesNoRadios from "../../helpers/yesNoRadios";
+import { Note } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step = {
+const questions = {
+  "has-fire-exit": "Does the property have a secondary fire exit?",
+  "is-accessible": "Is it accessible and easy to use?"
+};
+
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
   title: PageTitles.FireExit,
   heading: "Fire exit",
+  review: {
+    rows: [
+      {
+        label: questions["has-fire-exit"],
+        values: {
+          "has-fire-exit": {
+            renderValue(hasFireExit: string): React.ReactNode {
+              return getRadioLabelFromValue(yesNoRadios, hasFireExit);
+            }
+          }
+        }
+      },
+      {
+        label: questions["is-accessible"],
+        values: {
+          "is-accessible": {
+            renderValue(isAccessible: string): React.ReactNode {
+              return getRadioLabelFromValue(yesNoRadios, isAccessible);
+            }
+          },
+          "fire-exit-notes": {
+            renderValue(fireExitNotes: Note): React.ReactNode {
+              return fireExitNotes.value;
+            }
+          }
+        }
+      }
+    ]
+  },
   step: {
     slug: PageSlugs.FireExit,
     nextSlug: PageSlugs.SmokeAlarm,
@@ -33,20 +71,9 @@ const step = {
           props: {
             name: "has-fire-exit",
             legend: (
-              <FieldsetLegend>
-                Does the property have a secondary fire exit?
-              </FieldsetLegend>
+              <FieldsetLegend>{questions["has-fire-exit"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios
           },
           defaultValue: "",
           emptyValue: "",
@@ -67,18 +94,9 @@ const step = {
           props: {
             name: "is-accessible",
             legend: (
-              <FieldsetLegend>Is it accessible and easy to use?</FieldsetLegend>
+              <FieldsetLegend>{questions["is-accessible"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios
           },
           renderWhen(stepValues: {
             "has-fire-exit"?: ComponentValue<ProcessDatabaseSchema, "property">;

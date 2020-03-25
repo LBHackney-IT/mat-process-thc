@@ -8,19 +8,95 @@ import {
   DynamicComponent,
   StaticComponent
 } from "remultiform/component-wrapper";
+import { Note } from "storage/DatabaseSchema";
 import { makeSubmit } from "../../components/makeSubmit";
 import {
   TextAreaDetails,
   TextAreaDetailsProps
 } from "../../components/TextAreaDetails";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step = {
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
   title: PageTitles.SupportNeeds,
   heading: "Support needs",
+  review: {
+    rows: [
+      {
+        label: "Resident Sustainment",
+        values: {
+          "resident-sustainment": {
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
+            }
+          }
+        }
+      },
+      {
+        label: "Befriending",
+        values: {
+          befriending: {
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
+            }
+          }
+        }
+      },
+      {
+        label: "Adult Safeguarding",
+        values: {
+          "adult-safeguarding": {
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
+            }
+          }
+        }
+      },
+      {
+        label: "Children's Safeguarding",
+        values: {
+          "childrens-safeguarding": {
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
+            }
+          }
+        }
+      },
+      {
+        label: "Domestic Violence & Sexual Abuse",
+        values: {
+          "domestic-violences": {
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
+            }
+          }
+        }
+      },
+      {
+        label: "Mental Health - aged 18-65",
+        values: {
+          "mental-health-18-65": {
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
+            }
+          }
+        }
+      },
+      {
+        label: "Mental Health - Over-65",
+        values: {
+          "mental-health-over-65": {
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
+            }
+          }
+        }
+      }
+    ]
+  },
   step: {
     slug: PageSlugs.SupportNeeds,
     nextSlug: PageSlugs.Sections,
@@ -30,7 +106,7 @@ const step = {
         value: "Save and continue"
       }),
     componentWrappers: [
-      ComponentWrapper.wrapStatic(
+      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "supportNeeds">(
         new StaticComponent({
           key: "support-needs-heading",
           Component: Heading,

@@ -11,14 +11,110 @@ import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea, TextAreaProps } from "../../components/TextArea";
+import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import yesNoRadios from "../../helpers/yesNoRadios";
+import { Note } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step = {
+const petRadios = [
+  {
+    label: "Amphibian (e.g. frog, newt, salamander, toad)",
+    value: "amphibian"
+  },
+  {
+    label: "Bird",
+    value: "bird"
+  },
+  {
+    label: "Cat",
+    value: "cat"
+  },
+  {
+    label: "Chicken",
+    value: "chicken"
+  },
+  {
+    label: "Dog",
+    value: "dog"
+  },
+  {
+    label: "Domestic rodent (e.g. gerbil, hamster, mouse, rat)",
+    value: "domestic rodent"
+  },
+  {
+    label: "Fish",
+    value: "fish"
+  },
+  {
+    label: "Invertebrate (e.g. crab, insect, spider, worm)",
+    value: "invertebrate"
+  },
+  {
+    label: "Rabbit",
+    value: "rabbit"
+  },
+  {
+    label: "Reptile (e.g. lizard, snake, tortoise, turtle)",
+    value: "reptile"
+  },
+  {
+    label: "Other",
+    value: "other"
+  }
+];
+
+const questions = {
+  "has-pets": "Are there any pets in the property?",
+  "pet-type": "What type of pets?",
+  "has-permission": "Has permission been given to keep pets?"
+};
+
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
   title: PageTitles.Pets,
   heading: "Pets",
+  review: {
+    rows: [
+      {
+        label: questions["has-pets"],
+        values: {
+          "has-pets": {
+            renderValue(hasPets: string): React.ReactNode {
+              return getRadioLabelFromValue(yesNoRadios, hasPets);
+            }
+          },
+          "pet-type": {
+            renderValue(types: string): React.ReactNode {
+              return petRadios
+                .filter(({ value }) => types.includes(value))
+                .map(({ label }) => label)
+                .join(", ");
+            }
+          },
+          "pets-notes": {
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
+            }
+          }
+        },
+        images: "other-comments-images"
+      },
+      {
+        label: questions["has-permission"],
+        values: {
+          "has-permission": {
+            renderValue(hasPermission: string): React.ReactNode {
+              return getRadioLabelFromValue(yesNoRadios, hasPermission);
+            }
+          }
+        },
+        images: "pets-permission-images"
+      }
+    ]
+  },
   step: {
     slug: PageSlugs.Pets,
     nextSlug: PageSlugs.AntisocialBehaviour,
@@ -35,20 +131,9 @@ const step = {
           props: {
             name: "has-pets",
             legend: (
-              <FieldsetLegend>
-                Are there any pets in the property?
-              </FieldsetLegend>
+              <FieldsetLegend>{questions["has-pets"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios
           },
           defaultValue: "",
           emptyValue: "",
@@ -69,54 +154,9 @@ const step = {
           props: {
             name: "pet-type",
             legend: (
-              <FieldsetLegend>What type of pets?</FieldsetLegend>
+              <FieldsetLegend>{questions["pet-type"]}</FieldsetLegend>
             ) as React.ReactNode,
-            checkboxes: [
-              {
-                label: "Amphibian (e.g. frog, newt, salamander, toad)",
-                value: "amphibian"
-              },
-              {
-                label: "Bird",
-                value: "bird"
-              },
-              {
-                label: "Cat",
-                value: "cat"
-              },
-              {
-                label: "Chicken",
-                value: "chicken"
-              },
-              {
-                label: "Dog",
-                value: "dog"
-              },
-              {
-                label: "Domestic rodent (e.g. gerbil, hamster, mouse, rat)",
-                value: "domestic rodent"
-              },
-              {
-                label: "Fish",
-                value: "fish"
-              },
-              {
-                label: "Invertebrate (e.g. crab, insect, spider, worm)",
-                value: "invertebrate"
-              },
-              {
-                label: "Rabbit",
-                value: "rabbit"
-              },
-              {
-                label: "Reptile (e.g. lizard, snake, tortoise, turtle)",
-                value: "reptile"
-              },
-              {
-                label: "Other",
-                value: "other"
-              }
-            ]
+            checkboxes: petRadios
           } as CheckboxesProps,
           renderWhen(stepValues: {
             "has-pets"?: ComponentValue<ProcessDatabaseSchema, "property">;
@@ -142,20 +182,9 @@ const step = {
           props: {
             name: "has-permission",
             legend: (
-              <FieldsetLegend>
-                Has permission been given to keep pets?
-              </FieldsetLegend>
+              <FieldsetLegend>{questions["has-permission"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios
           },
           renderWhen(stepValues: {
             "has-pets"?: ComponentValue<ProcessDatabaseSchema, "property">;

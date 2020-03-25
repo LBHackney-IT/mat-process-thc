@@ -10,14 +10,94 @@ import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea, TextAreaProps } from "../../components/TextArea";
+import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
+import householdMemberCheckboxes from "../../helpers/householdMemberCheckboxes";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import yesNoRadios from "../../helpers/yesNoRadios";
+import { Note } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step = {
+const questions = {
+  disability: "Does anyone in the household have a disability?",
+  "who-disability": "Who has a disability?",
+  "pip-or-dla":
+    "Does anyone in the household get Personal Independence Payment (PIP) or Disability Living Allowance (DLA)?",
+  "who-pip": "Who gets PIP?",
+  "who-dla": "Who gets DLA?"
+};
+
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
   title: PageTitles.Disability,
   heading: "Disability",
+  review: {
+    rows: [
+      {
+        label: questions["disability"],
+        values: {
+          disability: {
+            renderValue(anyDisability: string): React.ReactNode {
+              return getRadioLabelFromValue(yesNoRadios, anyDisability);
+            }
+          },
+          "who-disability": {
+            renderValue(whoDisability: string[]): React.ReactNode {
+              return whoDisability
+                .map(who => {
+                  return getRadioLabelFromValue(householdMemberCheckboxes, who);
+                })
+                .join(", ");
+            }
+          },
+          "disability-notes": {
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
+            }
+          }
+        }
+      },
+      {
+        label: questions["pip-or-dla"],
+        values: {
+          "pip-or-dla": {
+            renderValue(pipOrDLA: string): React.ReactNode {
+              return getRadioLabelFromValue(yesNoRadios, pipOrDLA);
+            }
+          }
+        }
+      },
+      {
+        label: "Who gets PIP?",
+        values: {
+          "who-pip": {
+            renderValue(whoPIP: string[]): React.ReactNode {
+              return whoPIP
+                .map(who =>
+                  getRadioLabelFromValue(householdMemberCheckboxes, who)
+                )
+                .join(", ");
+            }
+          }
+        }
+      },
+      {
+        label: "Who gets DLA?",
+        values: {
+          "who-dla": {
+            renderValue(whoDLA: string[]): React.ReactNode {
+              return whoDLA
+                .map(who =>
+                  getRadioLabelFromValue(householdMemberCheckboxes, who)
+                )
+                .join(", ");
+            }
+          }
+        }
+      }
+    ]
+  },
   step: {
     slug: PageSlugs.Disability,
     nextSlug: PageSlugs.SupportNeeds,
@@ -34,20 +114,9 @@ const step = {
           props: {
             name: "disability",
             legend: (
-              <FieldsetLegend>
-                Does anyone in the household have a disability?
-              </FieldsetLegend>
+              <FieldsetLegend>{questions["disability"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios
           },
           defaultValue: "",
           emptyValue: "",
@@ -68,26 +137,9 @@ const step = {
           props: {
             name: "who-disability",
             legend: (
-              <FieldsetLegend>Who has a disability?</FieldsetLegend>
+              <FieldsetLegend>{questions["who-disability"]}</FieldsetLegend>
             ) as React.ReactNode,
-            checkboxes: [
-              {
-                label: "Tenant 1",
-                value: "tenant 1"
-              },
-              {
-                label: "Tenant 2",
-                value: "tenant 2"
-              },
-              {
-                label: "Household member 3",
-                value: "household member 3"
-              },
-              {
-                label: "Household member 4",
-                value: "household member 4"
-              }
-            ]
+            checkboxes: householdMemberCheckboxes
           } as CheckboxesProps,
           renderWhen(stepValues: {
             disability?: ComponentValue<ProcessDatabaseSchema, "disability">;
@@ -113,21 +165,9 @@ const step = {
           props: {
             name: "pip-or-dla",
             legend: (
-              <FieldsetLegend>
-                Does anyone in the household get Personal Independence Payment
-                (PIP) or Disability Living Allowance (DLA)?
-              </FieldsetLegend>
+              <FieldsetLegend>{questions["pip-or-dla"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios
           },
           renderWhen(stepValues: {
             disability?: ComponentValue<ProcessDatabaseSchema, "disability">;
@@ -153,26 +193,9 @@ const step = {
           props: {
             name: "who-pip",
             legend: (
-              <FieldsetLegend>Who gets PIP?</FieldsetLegend>
+              <FieldsetLegend>{questions["who-pip"]}</FieldsetLegend>
             ) as React.ReactNode,
-            checkboxes: [
-              {
-                label: "Tenant 1",
-                value: "tenant 1"
-              },
-              {
-                label: "Tenant 2",
-                value: "tenant 2"
-              },
-              {
-                label: "Household member 3",
-                value: "household member 3"
-              },
-              {
-                label: "Household member 4",
-                value: "household member 4"
-              }
-            ]
+            checkboxes: householdMemberCheckboxes
           } as CheckboxesProps,
           renderWhen(stepValues: {
             "pip-or-dla"?: ComponentValue<ProcessDatabaseSchema, "disability">;
@@ -198,26 +221,9 @@ const step = {
           props: {
             name: "who-dla",
             legend: (
-              <FieldsetLegend>Who gets DLA?</FieldsetLegend>
+              <FieldsetLegend>{questions["who-dla"]}</FieldsetLegend>
             ) as React.ReactNode,
-            checkboxes: [
-              {
-                label: "Tenant 1",
-                value: "tenant 1"
-              },
-              {
-                label: "Tenant 2",
-                value: "tenant 2"
-              },
-              {
-                label: "Household member 3",
-                value: "household member 3"
-              },
-              {
-                label: "Household member 4",
-                value: "household member 4"
-              }
-            ]
+            checkboxes: householdMemberCheckboxes
           } as CheckboxesProps,
           renderWhen(stepValues: {
             "pip-or-dla"?: ComponentValue<ProcessDatabaseSchema, "disability">;
