@@ -1,7 +1,7 @@
 import { cloneDeep } from "lodash";
 import { Database, StoreValue, TransactionMode } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
-import uuid from "uuid/v5";
+import { v5 as uuid } from "uuid";
 import databaseSchemaVersion from "./databaseSchemaVersion";
 import ExternalDatabaseSchema, {
   externalDatabaseName

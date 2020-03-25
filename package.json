@@ -43,7 +43,8 @@
     "react-dom": "^16.13.0",
     "react-fast-compare": "^3.0.1",
     "react-signature-canvas": "^1.0.3",
-    "remultiform": "0.0.7"
+    "remultiform": "0.0.7",
+    "uuid": "^7.0.2"
   },
   "devDependencies": {
     "@types/jest": "^25.1.4",
@@ -53,7 +54,7 @@
     "@types/react-test-renderer": "^16.9.2",
     "@types/selenium-webdriver": "^4.0.8",
     "@types/styled-jsx": "^2.2.8",
-    "@types/uuid": "^3.4.7",
+    "@types/uuid": "^7.0.2",
     "@typescript-eslint/eslint-plugin": "^2.23.0",
     "@typescript-eslint/parser": "^2.23.0",
     "babel-plugin-module-resolver": "^4.0.0",
@@ -81,7 +82,6 @@
     "ts-jest": "^25.2.1",
     "typescript": "^3.8.3",
     "utility-types": "^3.10.0",
-    "uuid": "^3.4.0",
     "wait-for-localhost-cli": "^1.1.0",
     "yn": "^4.0.0"
   },
