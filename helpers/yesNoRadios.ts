@@ -1,10 +1,10 @@
 export default [
   {
     label: "Yes",
-    value: "yes"
+    value: "yes",
   },
   {
     label: "No",
-    value: "no"
-  }
+    value: "no",
+  },
 ];

@@ -4,7 +4,7 @@ import {
   Schema,
   StoreKey,
   StoreNames,
-  StoreValue
+  StoreValue,
 } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
 import isServer from "../isServer";
@@ -82,7 +82,7 @@ const useApiWithStorage = <
   return {
     loading: api.loading || storage.loading,
     result: storage.result,
-    error: storage.error
+    error: storage.error,
   };
 };
 

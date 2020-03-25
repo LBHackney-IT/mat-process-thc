@@ -16,7 +16,7 @@ const steps = [
   )[]),
   ...(household as ProcessStepDefinition<ProcessDatabaseSchema>[]),
   ...(propertyInspection as ProcessStepDefinition<ProcessDatabaseSchema>[]),
-  ...(wellbeingSupport as ProcessStepDefinition<ProcessDatabaseSchema>[])
+  ...(wellbeingSupport as ProcessStepDefinition<ProcessDatabaseSchema>[]),
 ];
 
 export default steps;

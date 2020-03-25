@@ -42,9 +42,9 @@ const persistProcessData = async (
             {
               method: "POST",
               headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
               },
-              body: JSON.stringify({ id, image })
+              body: JSON.stringify({ id, image }),
             }
           );
 
@@ -65,9 +65,9 @@ const persistProcessData = async (
         {
           method: "PATCH",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(processJson)
+          body: JSON.stringify(processJson),
         }
       );
 
@@ -87,9 +87,9 @@ const persistProcessData = async (
       // something to the backend.
       await db.transaction(
         processStoreNames,
-        async stores => {
+        async (stores) => {
           await Promise.all(
-            Object.values(stores).map(store => store.delete(processRef))
+            Object.values(stores).map((store) => store.delete(processRef))
           );
         },
         TransactionMode.ReadWrite

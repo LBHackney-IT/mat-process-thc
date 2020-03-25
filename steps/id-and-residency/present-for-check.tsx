@@ -4,7 +4,7 @@ import React from "react";
 import {
   ComponentDatabaseMap,
   ComponentWrapper,
-  DynamicComponent
+  DynamicComponent,
 } from "remultiform/component-wrapper";
 import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { makeSubmit } from "../../components/makeSubmit";
@@ -20,7 +20,7 @@ import PageTitles from "../PageTitles";
 const TenantsSelect: React.FunctionComponent<Omit<
   CheckboxesProps,
   "checkboxes"
->> = props => {
+>> = (props) => {
   const router = useRouter();
 
   const processRef = getProcessRef(router);
@@ -29,7 +29,7 @@ const TenantsSelect: React.FunctionComponent<Omit<
     Storage.ExternalContext,
     "residents",
     processRef,
-    values => (processRef ? values[processRef]?.tenants : undefined)
+    (values) => (processRef ? values[processRef]?.tenants : undefined)
   );
 
   return (
@@ -38,9 +38,9 @@ const TenantsSelect: React.FunctionComponent<Omit<
       required
       checkboxes={
         tenants.result
-          ? tenants.result.map(tenant => ({
+          ? tenants.result.map((tenant) => ({
               label: tenant.fullName,
-              value: tenant.id
+              value: tenant.id,
             }))
           : []
       }
@@ -57,7 +57,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenantsPresent"> = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
@@ -70,7 +70,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenantsPresent"> = {
               <FieldsetLegend>
                 Which tenants are present for this check?
               </FieldsetLegend>
-            ) as React.ReactNode
+            ) as React.ReactNode,
           },
           defaultValue: [] as string[],
           emptyValue: [] as string[],
@@ -79,12 +79,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenantsPresent"> = {
             "tenantsPresent"
           >({
             storeName: "tenantsPresent",
-            key: keyFromSlug()
-          })
+            key: keyFromSlug(),
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

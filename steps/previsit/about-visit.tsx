@@ -4,7 +4,7 @@ import {
   ComponentDatabaseMap,
   ComponentValue,
   ComponentWrapper,
-  DynamicComponent
+  DynamicComponent,
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
@@ -23,7 +23,7 @@ const step = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
@@ -38,13 +38,13 @@ const step = {
             radios: [
               {
                 label: "Yes",
-                value: "yes"
+                value: "yes",
               },
               {
                 label: "No",
-                value: "no"
-              }
-            ]
+                value: "no",
+              },
+            ],
           },
           defaultValue: "",
           emptyValue: "",
@@ -54,8 +54,8 @@ const step = {
           >({
             storeName: "isUnannouncedVisit",
             key: keyFromSlug(),
-            property: ["value"]
-          })
+            property: ["value"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -64,9 +64,9 @@ const step = {
           Component: TextArea,
           props: {
             label: {
-              value: "Explain why this visit was pre-arranged."
+              value: "Explain why this visit was pre-arranged.",
             } as { id?: string; value: React.ReactNode },
-            name: "unannounced-visit-notes"
+            name: "unannounced-visit-notes",
           },
           renderWhen(stepValues: {
             "unannounced-visit"?: ComponentValue<
@@ -84,8 +84,8 @@ const step = {
           >({
             storeName: "isUnannouncedVisit",
             key: keyFromSlug(),
-            property: ["notes"]
-          })
+            property: ["notes"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -102,13 +102,13 @@ const step = {
             radios: [
               {
                 label: "Yes",
-                value: "yes"
+                value: "yes",
               },
               {
                 label: "No",
-                value: "no"
-              }
-            ]
+                value: "no",
+              },
+            ],
           },
           defaultValue: "",
           emptyValue: "",
@@ -118,8 +118,8 @@ const step = {
           >({
             storeName: "isVisitInside",
             key: keyFromSlug(),
-            property: ["value"]
-          })
+            property: ["value"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -129,9 +129,9 @@ const step = {
           props: {
             label: {
               value:
-                "Explain why this visit is not happening inside a tenant's home."
+                "Explain why this visit is not happening inside a tenant's home.",
             } as { id?: string; value: React.ReactNode },
-            name: "inside-property-notes"
+            name: "inside-property-notes",
           },
           renderWhen(stepValues: {
             "inside-property"?: ComponentValue<
@@ -149,12 +149,12 @@ const step = {
           >({
             storeName: "isVisitInside",
             key: keyFromSlug(),
-            property: ["notes"]
-          })
+            property: ["notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

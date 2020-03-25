@@ -4,7 +4,7 @@ import {
   ComponentDatabaseMap,
   ComponentValue,
   ComponentWrapper,
-  DynamicComponent
+  DynamicComponent,
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
@@ -20,7 +20,7 @@ import PageTitles from "../PageTitles";
 
 const questions = {
   "has-smoke-alarm": "Is there is a hard wired smoke alarm in the property?",
-  "is-working": "Does it work when tested?"
+  "is-working": "Does it work when tested?",
 };
 
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
@@ -34,9 +34,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           "has-smoke-alarm": {
             renderValue(hasSmokeAlarm: string): React.ReactNode {
               return getRadioLabelFromValue(yesNoRadios, hasSmokeAlarm);
-            }
-          }
-        }
+            },
+          },
+        },
       },
       {
         label: questions["is-working"],
@@ -44,16 +44,16 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           "is-working": {
             renderValue(isWorking: string): React.ReactNode {
               return getRadioLabelFromValue(yesNoRadios, isWorking);
-            }
+            },
           },
           "smoke-alarm-notes": {
             renderValue(notes: Note): React.ReactNode {
               return notes.value;
-            }
-          }
-        }
-      }
-    ]
+            },
+          },
+        },
+      },
+    ],
   },
   step: {
     slug: PageSlugs.SmokeAlarm,
@@ -61,7 +61,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
@@ -73,7 +73,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             legend: (
               <FieldsetLegend>{questions["has-smoke-alarm"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           defaultValue: "",
           emptyValue: "",
@@ -83,8 +83,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["smokeAlarm", "hasSmokeAlarm"]
-          })
+            property: ["smokeAlarm", "hasSmokeAlarm"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -96,7 +96,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             legend: (
               <FieldsetLegend>{questions["is-working"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           renderWhen(stepValues: {
             "has-smoke-alarm"?: ComponentValue<
@@ -114,8 +114,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["smokeAlarm", "isWorking"]
-          })
+            property: ["smokeAlarm", "isWorking"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -124,10 +124,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about the smoke alarm if necessary."
+              value: "Add note about the smoke alarm if necessary.",
             },
             name: "smoke-alarm-notes",
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaProps,
           renderWhen(stepValues: {
             "has-smoke-alarm"?: ComponentValue<
@@ -148,12 +148,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["smokeAlarm", "notes"]
-          })
+            property: ["smokeAlarm", "notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

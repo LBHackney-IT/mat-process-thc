@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { UseAsyncReturn, useAsync } from "react-async-hook";
 import {
   ComponentDatabaseMap,
-  ComponentValue
+  ComponentValue,
 } from "remultiform/component-wrapper";
 import {
   Database,
@@ -11,14 +11,14 @@ import {
   StoreKey,
   StoreMap,
   StoreNames,
-  StoreValue
+  StoreValue,
 } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
 
 import Thumbnail from "../components/Thumbnail";
 import ResidentDatabaseSchema, {
   ResidentRef,
-  residentStoreNames
+  residentStoreNames,
 } from "../storage/ResidentDatabaseSchema";
 
 import ProcessStepDefinition from "./ProcessStepDefinition";
@@ -135,20 +135,20 @@ const useRows = <
                           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                           databaseMap: databaseMap!,
                           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/unbound-method
-                          renderValue: row.values[key]!.renderValue
+                          renderValue: row.values[key]!.renderValue,
                         };
                       }),
                     images: [
                       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                       step.componentWrappers.find(({ key, databaseMap }) =>
                         Boolean(databaseMap && row.images === key)
-                      )?.databaseMap!
-                    ].filter(Boolean)
-                  }
+                      )?.databaseMap!,
+                    ].filter(Boolean),
+                  },
                 ],
                 []
               )
-            : [])
+            : []),
         ],
         []
       ),
@@ -168,7 +168,7 @@ const useStoreInfo = <
       (maps, { values, images }) => [
         ...maps,
         ...values.map(({ databaseMap }) => databaseMap),
-        ...images
+        ...images,
       ],
       []
     );
@@ -191,7 +191,7 @@ const useStoreInfo = <
           DBSchema["schema"],
           Names
         >[]),
-        key
+        key,
       ];
     }
 
@@ -255,7 +255,7 @@ const useStoreValues = <
                 }
               ]
             >
-          >(async storeName => {
+          >(async (storeName) => {
             const storeKeys = storeInfo[storeName];
 
             const valueSet = (
@@ -264,9 +264,9 @@ const useStoreValues = <
                   DBSchema["schema"],
                   Names
                 >[]).map(
-                  async key =>
+                  async (key) =>
                     ({
-                      [key]: await stores[storeName].get(key)
+                      [key]: await stores[storeName].get(key),
                     } as {
                       [Key in StoreKey<DBSchema["schema"], Names>]?: StoreValue<
                         DBSchema["schema"],
@@ -302,10 +302,10 @@ const useStoreValues = <
           >(
             (storeValues, [storeName, values]) => ({
               ...storeValues,
-              [storeName]: values
+              [storeName]: values,
             }),
             {}
-          )
+          ),
         };
       }
     );
@@ -328,9 +328,9 @@ const useReviewSectionRows = <
   return useMemo(
     () =>
       rows
-        .map(row => {
+        .map((row) => {
           const values = row.values
-            .map(v => {
+            .map((v) => {
               if (storeValues.loading || storeValues.result === undefined) {
                 return undefined;
               }
@@ -356,7 +356,7 @@ const useReviewSectionRows = <
             .filter(Boolean) as React.ReactNode[];
 
           const images = (row.images
-            .map(databaseMap => {
+            .map((databaseMap) => {
               if (storeValues.loading || storeValues.result === undefined) {
                 return undefined;
               }
@@ -420,7 +420,7 @@ const useReviewSectionRows = <
                   }
                 `}</style>
               </div>
-            )
+            ),
           };
         })
         .filter(Boolean) as SectionRow[],

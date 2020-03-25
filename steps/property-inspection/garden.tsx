@@ -4,7 +4,7 @@ import {
   ComponentDatabaseMap,
   ComponentValue,
   ComponentWrapper,
-  DynamicComponent
+  DynamicComponent,
 } from "remultiform/component-wrapper";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
@@ -22,22 +22,22 @@ import PageTitles from "../PageTitles";
 const gardenTypeRadios = [
   {
     label: "Private",
-    value: "private"
+    value: "private",
   },
   {
     label: "Communal",
-    value: "communal"
+    value: "communal",
   },
   {
     label: "Not sure",
-    value: "not sure"
-  }
+    value: "not sure",
+  },
 ];
 
 const questions = {
   "has-garden": "Does the property have a garden?",
   "garden-type": "Is the garden private or communal?",
-  "is-maintained": "Is the garden being maintained"
+  "is-maintained": "Is the garden being maintained",
 };
 
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
@@ -51,9 +51,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           "has-garden": {
             renderValue(hasGarden: string): React.ReactNode {
               return getRadioLabelFromValue(yesNoRadios, hasGarden);
-            }
-          }
-        }
+            },
+          },
+        },
       },
       {
         label: questions["garden-type"],
@@ -61,9 +61,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           "garden-type": {
             renderValue(type: string): React.ReactNode {
               return getRadioLabelFromValue(gardenTypeRadios, type);
-            }
-          }
-        }
+            },
+          },
+        },
       },
       {
         label: questions["is-maintained"],
@@ -71,17 +71,17 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           "is-maintained": {
             renderValue(isMaintained: string): React.ReactNode {
               return getRadioLabelFromValue(yesNoRadios, isMaintained);
-            }
+            },
           },
           "garden-notes": {
             renderValue(notes: Note): React.ReactNode {
               return notes.value;
-            }
-          }
+            },
+          },
         },
-        images: "garden-images"
-      }
-    ]
+        images: "garden-images",
+      },
+    ],
   },
   step: {
     slug: PageSlugs.Garden,
@@ -89,7 +89,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
@@ -101,7 +101,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             legend: (
               <FieldsetLegend>{questions["has-garden"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           defaultValue: "",
           emptyValue: "",
@@ -111,8 +111,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["garden", "hasGarden"]
-          })
+            property: ["garden", "hasGarden"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -124,7 +124,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             legend: (
               <FieldsetLegend>{questions["garden-type"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: gardenTypeRadios
+            radios: gardenTypeRadios,
           },
           renderWhen(stepValues: {
             "has-garden"?: ComponentValue<ProcessDatabaseSchema, "property">;
@@ -139,8 +139,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["garden", "type"]
-          })
+            property: ["garden", "type"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -152,7 +152,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             legend: (
               <FieldsetLegend>{questions["is-maintained"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           renderWhen(stepValues: {
             "garden-type"?: ComponentValue<ProcessDatabaseSchema, "property">;
@@ -170,8 +170,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["garden", "isMaintained"]
-          })
+            property: ["garden", "isMaintained"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -185,7 +185,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
               | string
               | null
               | undefined,
-            maxCount: 3 as number | null | undefined
+            maxCount: 3 as number | null | undefined,
           },
           renderWhen(stepValues: {
             "has-garden"?: ComponentValue<ProcessDatabaseSchema, "property">;
@@ -200,8 +200,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["garden", "images"]
-          })
+            property: ["garden", "images"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -210,10 +210,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about garden if necessary."
+              value: "Add note about garden if necessary.",
             },
             name: "garden-notes",
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaProps,
           renderWhen(stepValues: {
             "has-garden"?: ComponentValue<ProcessDatabaseSchema, "property">;
@@ -228,12 +228,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["garden", "notes"]
-          })
+            property: ["garden", "notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

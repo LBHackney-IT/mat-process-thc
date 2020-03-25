@@ -6,7 +6,7 @@ import {
   ComponentValue,
   ComponentWrapper,
   DynamicComponent,
-  StaticComponent
+  StaticComponent,
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
@@ -19,7 +19,7 @@ import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const questions = {
-  "home-check": "Do you want to include a Home Check?"
+  "home-check": "Do you want to include a Home Check?",
 };
 
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "homeCheck"> = {
@@ -33,11 +33,11 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "homeCheck"> = {
           "home-check": {
             renderValue(homeCheck: string): React.ReactNode {
               return getRadioLabelFromValue(yesNoRadios, homeCheck);
-            }
-          }
-        }
-      }
-    ]
+            },
+          },
+        },
+      },
+    ],
   },
   step: {
     slug: PageSlugs.HomeCheck,
@@ -51,7 +51,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "homeCheck"> = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "homeCheck">(
@@ -60,8 +60,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "homeCheck"> = {
           Component: Paragraph,
           props: {
             children:
-              "The Wellbeing support section is the Home Check part of the Tenancy and Household Check process. It includes questions about health, disability, antisocial behaviour, and referrals."
-          }
+              "The Wellbeing support section is the Home Check part of the Tenancy and Household Check process. It includes questions about health, disability, antisocial behaviour, and referrals.",
+          },
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -73,7 +73,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "homeCheck"> = {
             legend: (
               <FieldsetLegend>{questions["home-check"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           defaultValue: "",
           emptyValue: "",
@@ -83,8 +83,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "homeCheck"> = {
           >({
             storeName: "homeCheck",
             key: keyFromSlug(),
-            property: ["value"]
-          })
+            property: ["value"],
+          }),
         })
       ),
       ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "homeCheck">(
@@ -93,12 +93,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "homeCheck"> = {
           Component: Paragraph,
           props: {
             children:
-              "Note: If you are not including a Home Check, the Wellbeing support section does not need to be completed."
-          }
+              "Note: If you are not including a Home Check, the Wellbeing support section does not need to be completed.",
+          },
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

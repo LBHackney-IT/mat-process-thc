@@ -21,13 +21,13 @@ export const SectionsPage: NextPage = () => {
     Storage.ExternalContext,
     "tenancy",
     processRef,
-    values => (processRef ? values[processRef] : undefined)
+    (values) => (processRef ? values[processRef] : undefined)
   );
   const residentData = useDataValue(
     Storage.ExternalContext,
     "residents",
     processRef,
-    values => (processRef ? values[processRef] : undefined)
+    (values) => (processRef ? values[processRef] : undefined)
   );
   const idAndResidencyStarted = useValidateData(
     Storage.ProcessContext,
@@ -37,13 +37,13 @@ export const SectionsPage: NextPage = () => {
   const idAndResidencyComplete = useValidateData(
     Storage.ResidentContext,
     ["id", "residency", "photo", "nextOfKin", "carer"],
-    residentData.result?.tenants.map(tenant => tenant.id)
+    residentData.result?.tenants.map((tenant) => tenant.id)
   );
   const householdStarted = useValidateData(
     Storage.ProcessContext,
     ["household"],
     processRef,
-    valueSets => {
+    (valueSets) => {
       const householdSet = valueSets.household;
 
       if (householdSet === undefined || processRef === undefined) {
@@ -64,7 +64,7 @@ export const SectionsPage: NextPage = () => {
     Storage.ProcessContext,
     ["property"],
     processRef,
-    valueSets => {
+    (valueSets) => {
       const propertySet = valueSets.property;
 
       if (propertySet === undefined || processRef === undefined) {
@@ -80,7 +80,7 @@ export const SectionsPage: NextPage = () => {
     Storage.ProcessContext,
     ["property"],
     processRef,
-    valueSets => {
+    (valueSets) => {
       const propertySet = valueSets.property;
 
       if (propertySet === undefined || processRef === undefined) {
@@ -101,7 +101,7 @@ export const SectionsPage: NextPage = () => {
     Storage.ProcessContext,
     ["homeCheck"],
     processRef,
-    valueSets => {
+    (valueSets) => {
       const homeCheckSet = valueSets.homeCheck;
 
       if (homeCheckSet === undefined || processRef === undefined) {
@@ -117,7 +117,7 @@ export const SectionsPage: NextPage = () => {
     Storage.ProcessContext,
     ["homeCheck", "healthConcerns", "disability"],
     processRef,
-    valueSets => {
+    (valueSets) => {
       const homeCheckSet = valueSets.homeCheck;
 
       if (homeCheckSet === undefined || processRef === undefined) {
@@ -129,8 +129,8 @@ export const SectionsPage: NextPage = () => {
       return (
         homeCheck !== undefined &&
         (homeCheck.value === "no" ||
-          Object.values(valueSets).every(valueSet =>
-            Object.values(valueSet || {}).every(value => value !== undefined)
+          Object.values(valueSets).every((valueSet) =>
+            Object.values(valueSet || {}).every((value) => value !== undefined)
           ))
       );
     }
@@ -150,7 +150,7 @@ export const SectionsPage: NextPage = () => {
             ? ["Error"]
             : undefined,
           tenants: residentData.result
-            ? residentData.result.tenants.map(tenant => tenant.fullName)
+            ? residentData.result.tenants.map((tenant) => tenant.fullName)
             : residentData.error
             ? ["Error"]
             : undefined,
@@ -163,7 +163,7 @@ export const SectionsPage: NextPage = () => {
             ? tenancyData.result.startDate
             : tenancyData.error
             ? "Error"
-            : undefined
+            : undefined,
         }}
       />
 
@@ -186,7 +186,7 @@ export const SectionsPage: NextPage = () => {
                   ? TaskListStatus.Completed
                   : idAndResidencyStarted.result
                   ? TaskListStatus.Started
-                  : TaskListStatus.NotStarted
+                  : TaskListStatus.NotStarted,
               },
               {
                 name: "Household",
@@ -197,7 +197,7 @@ export const SectionsPage: NextPage = () => {
                     : householdStarted.result
                     ? TaskListStatus.Started
                     : TaskListStatus.NotStarted
-                  : TaskListStatus.Unavailable
+                  : TaskListStatus.Unavailable,
               },
               {
                 name: "Property inspection",
@@ -208,7 +208,7 @@ export const SectionsPage: NextPage = () => {
                     : propertyInspectionStarted.result
                     ? TaskListStatus.Started
                     : TaskListStatus.NotStarted
-                  : TaskListStatus.Unavailable
+                  : TaskListStatus.Unavailable,
               },
               {
                 name: "Wellbeing support",
@@ -219,7 +219,7 @@ export const SectionsPage: NextPage = () => {
                     : wellbeingSupportStarted.result
                     ? TaskListStatus.Started
                     : TaskListStatus.NotStarted
-                  : TaskListStatus.Unavailable
+                  : TaskListStatus.Unavailable,
               },
               {
                 name: "Review and submit",
@@ -230,8 +230,8 @@ export const SectionsPage: NextPage = () => {
                   propertyInspectionComplete.result &&
                   wellbeingSupportComplete.result
                     ? TaskListStatus.NotStarted
-                    : TaskListStatus.Unavailable
-              }
+                    : TaskListStatus.Unavailable,
+              },
             ]}
           />
         </>

@@ -4,7 +4,7 @@ import {
   ComponentDatabaseMap,
   ComponentValue,
   ComponentWrapper,
-  DynamicComponent
+  DynamicComponent,
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
@@ -19,7 +19,7 @@ import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const questions = {
-  "has-other-property": "Does the tenant(s) own or rent any other property?"
+  "has-other-property": "Does the tenant(s) own or rent any other property?",
 };
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
   title: PageTitles.OtherProperty,
@@ -32,16 +32,16 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
           "has-other-property": {
             renderValue(hasOtherProperty: string): React.ReactNode {
               return getRadioLabelFromValue(yesNoRadios, hasOtherProperty);
-            }
+            },
           },
           "other-property-notes": {
             renderValue(otherPropertyNotes: Note): React.ReactNode {
               return otherPropertyNotes.value;
-            }
-          }
-        }
-      }
-    ]
+            },
+          },
+        },
+      },
+    ],
   },
   step: {
     slug: PageSlugs.OtherProperty,
@@ -49,7 +49,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
@@ -61,7 +61,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
             legend: (
               <FieldsetLegend>{questions["has-other-property"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           defaultValue: "",
           emptyValue: "",
@@ -71,8 +71,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
           >({
             storeName: "household",
             key: keyFromSlug(),
-            property: ["otherProperty", "hasOtherProperty"]
-          })
+            property: ["otherProperty", "hasOtherProperty"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -82,10 +82,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
           props: {
             label: {
               value:
-                "Provide details: with / without mortgage, address of property"
+                "Provide details: with / without mortgage, address of property",
             },
             name: "other-property-notes",
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaProps,
           renderWhen(stepValues: {
             "has-other-property"?: ComponentValue<
@@ -103,12 +103,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
           >({
             storeName: "household",
             key: keyFromSlug(),
-            property: ["otherProperty", "notes"]
-          })
+            property: ["otherProperty", "notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

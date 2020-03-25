@@ -33,5 +33,5 @@ export default [
   pets,
   antisocialBehaviour,
   otherComments,
-  repairs
+  repairs,
 ];

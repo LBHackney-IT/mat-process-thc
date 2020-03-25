@@ -12,7 +12,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-export const Details: React.FunctionComponent<Props> = props => {
+export const Details: React.FunctionComponent<Props> = (props) => {
   const { summary, children } = props;
 
   let summaryId: string | undefined = undefined;
@@ -78,8 +78,8 @@ Details.propTypes = {
     PropTypes.node.isRequired,
     PropTypes.exact({
       id: PropTypes.string.isRequired,
-      value: PropTypes.node.isRequired
-    }).isRequired
+      value: PropTypes.node.isRequired,
+    }).isRequired,
   ]).isRequired,
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
 };

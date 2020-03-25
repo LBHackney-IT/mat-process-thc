@@ -8,7 +8,7 @@ export enum TaskListStatus {
   Unavailable = "unavailable",
   NotStarted = "Not started",
   Started = "Started",
-  Completed = "Completed"
+  Completed = "Completed",
 }
 
 /**
@@ -37,7 +37,7 @@ export interface Props {
   items: TaskListItem[];
 }
 
-export const TaskList: React.FunctionComponent<Props> = props => {
+export const TaskList: React.FunctionComponent<Props> = (props) => {
   const { items } = props;
 
   return (
@@ -95,11 +95,11 @@ TaskList.propTypes = {
       name: PropTypes.string.isRequired,
       url: PropTypes.shape({
         pathname: PropTypes.string.isRequired,
-        query: PropTypes.object
+        query: PropTypes.object,
       }).isRequired,
       status: (PropTypes.string as PropTypesTypes.Requireable<TaskListStatus>)
         .isRequired,
-      "data-testid": PropTypes.string
+      "data-testid": PropTypes.string,
     }).isRequired
-  ).isRequired
+  ).isRequired,
 };

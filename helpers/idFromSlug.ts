@@ -10,7 +10,7 @@ const idFromSlug = (
   }
 
   const slugParts = unprefixUrl(router, {
-    pathname: `/${slug.join("/")}`
+    pathname: `/${slug.join("/")}`,
   })
     .pathname.split("/")
     .slice(1);

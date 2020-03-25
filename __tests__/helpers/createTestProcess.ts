@@ -9,9 +9,9 @@ export default async (ref = uuid()): Promise<void> => {
     processType: {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       value: parseInt(process.env.PROCESS_TYPE_VALUE!),
-      name: process.env.PROCESS_TYPE_NAME
+      name: process.env.PROCESS_TYPE_NAME,
     },
-    processDataSchemaVersion: databaseSchemaVersion
+    processDataSchemaVersion: databaseSchemaVersion,
   });
 
   const response = await fetch(
@@ -20,9 +20,9 @@ export default async (ref = uuid()): Promise<void> => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-API-KEY": process.env.PROCESS_API_KEY || ""
+        "X-API-KEY": process.env.PROCESS_API_KEY || "",
       },
-      body
+      body,
     }
   );
 

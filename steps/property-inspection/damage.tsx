@@ -4,7 +4,7 @@ import {
   ComponentDatabaseMap,
   ComponentValue,
   ComponentWrapper,
-  DynamicComponent
+  DynamicComponent,
 } from "remultiform/component-wrapper";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
@@ -20,7 +20,7 @@ import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const questions = {
-  "has-damage": "Are there any signs of damage caused to the property?"
+  "has-damage": "Are there any signs of damage caused to the property?",
 };
 
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
@@ -34,17 +34,17 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           "has-damage": {
             renderValue(hasDamage: string): React.ReactNode {
               return getRadioLabelFromValue(yesNoRadios, hasDamage);
-            }
+            },
           },
           "damage-notes": {
             renderValue(damageNotes: Note): React.ReactNode {
               return damageNotes.value;
-            }
-          }
+            },
+          },
         },
-        images: "damage-images"
-      }
-    ]
+        images: "damage-images",
+      },
+    ],
   },
   step: {
     slug: PageSlugs.Damage,
@@ -52,7 +52,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
@@ -64,7 +64,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             legend: (
               <FieldsetLegend>{questions["has-damage"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           defaultValue: "",
           emptyValue: "",
@@ -74,8 +74,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["damage", "hasDamage"]
-          })
+            property: ["damage", "hasDamage"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -89,7 +89,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
               | string
               | null
               | undefined,
-            maxCount: 5 as number | null | undefined
+            maxCount: 5 as number | null | undefined,
           },
           renderWhen(stepValues: {
             "has-damage"?: ComponentValue<ProcessDatabaseSchema, "property">;
@@ -104,8 +104,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["damage", "images"]
-          })
+            property: ["damage", "images"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -115,10 +115,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           props: {
             label: {
               value:
-                "Add note about damage including how it was caused and location in property."
+                "Add note about damage including how it was caused and location in property.",
             },
             name: "damage-notes",
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaProps,
           renderWhen(stepValues: {
             "has-damage"?: ComponentValue<ProcessDatabaseSchema, "property">;
@@ -133,12 +133,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["damage", "notes"]
-          })
+            property: ["damage", "notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

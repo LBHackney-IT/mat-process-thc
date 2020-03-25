@@ -2,21 +2,21 @@ import {
   Link,
   List,
   ListTypes,
-  Paragraph
+  Paragraph,
 } from "lbh-frontend-react/components";
 import React from "react";
 import {
   ComponentDatabaseMap,
   ComponentWrapper,
   DynamicComponent,
-  StaticComponent
+  StaticComponent,
 } from "remultiform/component-wrapper";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { Table } from "../../components/Table";
 import {
   TextAreaDetails,
-  TextAreaDetailsProps
+  TextAreaDetailsProps,
 } from "../../components/TextAreaDetails";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
@@ -36,10 +36,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
           "member-changes": {
             renderValue(memberChanges: Note): React.ReactNode {
               return memberChanges.value;
-            }
-          }
+            },
+          },
         },
-        images: "household-document-images"
+        images: "household-document-images",
       },
       {
         label: "Housing move schemes",
@@ -47,11 +47,11 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
           "house-moving-schemes": {
             renderValue(houseMovingSchemes: Note): React.ReactNode {
               return houseMovingSchemes.value;
-            }
-          }
-        }
-      }
-    ]
+            },
+          },
+        },
+      },
+    ],
   },
   step: {
     slug: PageSlugs.Household,
@@ -59,7 +59,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "household">(
@@ -70,9 +70,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
             headings: ["Full name", "Relationship to tenant", "Date of birth"],
             rows: [
               ["Household member 1", "Father", "10/04/1967"],
-              ["Household member 2", "Uncle", "12/03/1978"]
-            ]
-          }
+              ["Household member 2", "Uncle", "12/03/1978"],
+            ],
+          },
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -86,7 +86,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
               | string
               | null
               | undefined,
-            maxCount: 3 as number | null | undefined
+            maxCount: 3 as number | null | undefined,
           },
           defaultValue: [],
           emptyValue: [] as string[],
@@ -96,8 +96,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
           >({
             storeName: "household",
             key: keyFromSlug(),
-            property: ["documents", "images"]
-          })
+            property: ["documents", "images"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -109,7 +109,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
               "House moving schemes: downsizing, overcrowding or aged over 60",
             name: "house-moving-schemes-notes",
             label: {
-              value: "House moving schemes notes"
+              value: "House moving schemes notes",
             },
             contentBeforeTextArea: (
               <>
@@ -144,12 +144,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
                         Seaside and country
                       </Link>{" "}
                       (online only, opens in a new tab) if aged over 60
-                    </>
+                    </>,
                   ]}
                 />
               </>
             ),
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
@@ -159,8 +159,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
           >({
             storeName: "household",
             key: keyFromSlug(),
-            property: ["houseMovingSchemes", "notes"]
-          })
+            property: ["houseMovingSchemes", "notes"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -171,7 +171,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
             summary: "Add note about any changes in household members",
             label: { value: "Notes" },
             name: "member-changes-notes",
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
@@ -181,12 +181,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
           >({
             storeName: "household",
             key: keyFromSlug(),
-            property: ["memberChanges", "notes"]
-          })
+            property: ["memberChanges", "notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

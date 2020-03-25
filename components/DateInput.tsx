@@ -1,7 +1,7 @@
 import React from "react";
 import {
   DynamicComponentControlledProps,
-  DynamicComponent
+  DynamicComponent,
 } from "remultiform/component-wrapper";
 
 import PropTypes from "../helpers/PropTypes";
@@ -13,7 +13,7 @@ type Props = DynamicComponentControlledProps<{
   name: string;
 };
 
-export const DateInput: React.FunctionComponent<Props> = props => {
+export const DateInput: React.FunctionComponent<Props> = (props) => {
   const { name, value: date, onValueChange, required, disabled } = props;
 
   const monthLabelId = `${name}-month-label`;
@@ -79,5 +79,5 @@ export const DateInput: React.FunctionComponent<Props> = props => {
 
 DateInput.propTypes = {
   ...DynamicComponent.controlledPropTypes(PropTypes.object.isRequired),
-  name: PropTypes.string.isRequired
+  name: PropTypes.string.isRequired,
 };

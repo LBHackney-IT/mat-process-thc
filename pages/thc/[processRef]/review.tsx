@@ -3,7 +3,7 @@ import {
   Heading,
   HeadingLevels,
   Paragraph,
-  SummaryList
+  SummaryList,
 } from "lbh-frontend-react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
@@ -19,7 +19,7 @@ import MainLayout from "../../../layouts/MainLayout";
 import householdSteps from "../../../steps/household";
 import {
   idAndResidencyProcessSteps,
-  idAndResidencyResidentSteps
+  idAndResidencyResidentSteps,
 } from "../../../steps/id-and-residency";
 import PageSlugs from "../../../steps/PageSlugs";
 import PageTitles from "../../../steps/PageTitles";
@@ -37,7 +37,7 @@ const ReviewPage: NextPage = () => {
     Storage.ExternalContext,
     "residents",
     processRef,
-    values => (processRef ? values[processRef]?.tenants : undefined)
+    (values) => (processRef ? values[processRef]?.tenants : undefined)
   );
 
   const residentDatabase = useDatabase(Storage.ResidentContext);
@@ -52,11 +52,11 @@ const ReviewPage: NextPage = () => {
 
   const [otherNotes, setOtherNotes] = useState({
     value: "",
-    isPostVisitAction: false
+    isPostVisitAction: false,
   });
 
   const tenantIds = tenants.result
-    ? tenants.result.map(tenant => tenant.id)
+    ? tenants.result.map((tenant) => tenant.id)
     : [];
 
   const [selectedTenantId, setSelectedTenantId] = useState<
@@ -81,30 +81,33 @@ const ReviewPage: NextPage = () => {
           Storage.ResidentContext,
           idAndResidencyResidentSteps,
           selectedTenantId
-        )
-      ]
+        ),
+      ],
     },
     {
       heading: "Household",
-      rows: [...useReviewSectionRows(Storage.ProcessContext, householdSteps)]
+      rows: [...useReviewSectionRows(Storage.ProcessContext, householdSteps)],
     },
     {
       heading: "Property inspection",
       rows: [
-        ...useReviewSectionRows(Storage.ProcessContext, propertyInspectionSteps)
-      ]
+        ...useReviewSectionRows(
+          Storage.ProcessContext,
+          propertyInspectionSteps
+        ),
+      ],
     },
     {
       heading: "Wellbeing support",
       rows: [
-        ...useReviewSectionRows(Storage.ProcessContext, wellbeingSupportSteps)
-      ]
-    }
+        ...useReviewSectionRows(Storage.ProcessContext, wellbeingSupportSteps),
+      ],
+    },
   ];
 
   const SubmitButton = makeSubmit({
     slug: PageSlugs.Submit,
-    value: "Save and finish process"
+    value: "Save and finish process",
   });
 
   return (
@@ -114,7 +117,7 @@ const ReviewPage: NextPage = () => {
       pausable
     >
       {sections
-        .filter(section => section.rows.length)
+        .filter((section) => section.rows.length)
         .map(({ heading, rows }) => (
           <React.Fragment key={heading}>
             <Heading level={HeadingLevels.H2}>{heading}</Heading>
@@ -157,7 +160,7 @@ const ReviewPage: NextPage = () => {
             return;
           }
 
-          setSignatures(sigs => ({ ...sigs, [selectedTenantId]: value }));
+          setSignatures((sigs) => ({ ...sigs, [selectedTenantId]: value }));
         }}
       />
 

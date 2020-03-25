@@ -5,7 +5,7 @@ import {
   ComponentValue,
   ComponentWrapper,
   DynamicComponent,
-  StaticComponent
+  StaticComponent,
 } from "remultiform/component-wrapper";
 import { Note } from "storage/DatabaseSchema";
 import { ImageInput } from "../../components/ImageInput";
@@ -20,7 +20,7 @@ import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const questions = {
-  "needs-repairs": "Are there any new repairs queries?"
+  "needs-repairs": "Are there any new repairs queries?",
 };
 
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
@@ -34,17 +34,17 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           "needs-repairs": {
             renderValue(needed: string): React.ReactNode {
               return needed;
-            }
+            },
           },
           "repairs-notes": {
             renderValue(notes: Note): React.ReactNode {
               return notes.value;
-            }
-          }
+            },
+          },
         },
-        images: "repairs-images"
-      }
-    ]
+        images: "repairs-images",
+      },
+    ],
   },
   step: {
     slug: PageSlugs.Repairs,
@@ -52,7 +52,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "property">(
@@ -73,8 +73,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
                 </Link>{" "}
                 online (online only, opens in a new tab).
               </>
-            )
-          }
+            ),
+          },
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -86,7 +86,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             legend: (
               <FieldsetLegend>{questions["needs-repairs"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           defaultValue: "",
           emptyValue: "",
@@ -96,8 +96,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["repairs", "needsRepairs"]
-          })
+            property: ["repairs", "needsRepairs"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -111,7 +111,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
               | string
               | null
               | undefined,
-            maxCount: 10 as number | null | undefined
+            maxCount: 10 as number | null | undefined,
           },
           renderWhen(stepValues: {
             "needs-repairs"?: ComponentValue<ProcessDatabaseSchema, "property">;
@@ -126,8 +126,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["repairs", "images"]
-          })
+            property: ["repairs", "images"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -136,10 +136,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about repairs if necessary"
+              value: "Add note about repairs if necessary",
             },
             name: "repairs-notes",
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaProps,
           renderWhen(stepValues: {
             "needs-repairs"?: ComponentValue<ProcessDatabaseSchema, "property">;
@@ -154,12 +154,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["repairs", "notes"]
-          })
+            property: ["repairs", "notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

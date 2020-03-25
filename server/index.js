@@ -67,7 +67,7 @@ app
       .use((_req, res) => {
         res.sendStatus(500);
       })
-      .listen(port, err => {
+      .listen(port, (err) => {
         if (err) {
           throw err;
         }
@@ -75,7 +75,7 @@ app
         console.log(`> Ready on port ${port}`);
       });
   })
-  .catch(err => {
+  .catch((err) => {
     console.error("> An error occurred");
     console.error("> Unable to start the server");
     console.error(err);

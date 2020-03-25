@@ -2,7 +2,7 @@ import {
   Button,
   ErrorMessage,
   PageAnnouncement,
-  Paragraph
+  Paragraph,
 } from "lbh-frontend-react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";

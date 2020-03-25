@@ -41,7 +41,7 @@ const storeNames: {
   [Name in StoreNames<ExternalDatabaseSchema["schema"]>]: boolean;
 } = {
   tenancy: true,
-  residents: true
+  residents: true,
 };
 
 export const externalStoreNames = Object.entries(storeNames)
@@ -49,7 +49,7 @@ export const externalStoreNames = Object.entries(storeNames)
   .reduce(
     (names, [name]) => [
       ...names,
-      name as StoreNames<ExternalDatabaseSchema["schema"]>
+      name as StoreNames<ExternalDatabaseSchema["schema"]>,
     ],
     [] as StoreNames<ExternalDatabaseSchema["schema"]>[]
   );

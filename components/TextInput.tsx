@@ -1,7 +1,7 @@
 import React from "react";
 import {
   DynamicComponentControlledProps,
-  DynamicComponent
+  DynamicComponent,
 } from "remultiform/component-wrapper";
 import { Input, InputType } from "lbh-frontend-react/components/Input";
 
@@ -12,7 +12,7 @@ type TextInputProps = DynamicComponentControlledProps<string> & {
   name: string;
 };
 
-export const TextInput: React.FunctionComponent<TextInputProps> = props => {
+export const TextInput: React.FunctionComponent<TextInputProps> = (props) => {
   const { label, name, value, onValueChange, required, disabled } = props;
 
   const labelId = `${name}-label`;
@@ -36,5 +36,5 @@ export const TextInput: React.FunctionComponent<TextInputProps> = props => {
 TextInput.propTypes = {
   ...DynamicComponent.controlledPropTypes(PropTypes.string.isRequired),
   label: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired
+  name: PropTypes.string.isRequired,
 };

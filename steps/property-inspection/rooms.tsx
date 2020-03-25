@@ -4,7 +4,7 @@ import {
   ComponentDatabaseMap,
   ComponentValue,
   ComponentWrapper,
-  DynamicComponent
+  DynamicComponent,
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
@@ -19,7 +19,7 @@ import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const questions = {
-  "can-enter-all-rooms": "Can you enter all rooms within the property?"
+  "can-enter-all-rooms": "Can you enter all rooms within the property?",
 };
 
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
@@ -33,16 +33,16 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           "can-enter-all-rooms": {
             renderValue(ableToEnterAll: string): React.ReactNode {
               return getRadioLabelFromValue(yesNoRadios, ableToEnterAll);
-            }
+            },
           },
           "room-entry-notes": {
             renderValue(whichRooms: Note): React.ReactNode {
               return whichRooms.value;
-            }
-          }
-        }
-      }
-    ]
+            },
+          },
+        },
+      },
+    ],
   },
   step: {
     slug: PageSlugs.Rooms,
@@ -50,7 +50,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
@@ -64,7 +64,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
                 {questions["can-enter-all-rooms"]}
               </FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           defaultValue: "",
           emptyValue: "",
@@ -74,8 +74,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["rooms", "canEnterAll"]
-          })
+            property: ["rooms", "canEnterAll"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -84,10 +84,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about access if necessary."
+              value: "Add note about access if necessary.",
             },
             name: "room-entry-notes",
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaProps,
           renderWhen(stepValues: {
             "can-enter-all-rooms"?: ComponentValue<
@@ -105,12 +105,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["rooms", "notes"]
-          })
+            property: ["rooms", "notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;
