@@ -43,7 +43,7 @@
     "react-dom": "^16.13.0",
     "react-fast-compare": "^3.0.1",
     "react-signature-canvas": "^1.0.3",
-    "remultiform": "0.0.7",
+    "remultiform": "^0.2.0",
     "uuid": "^7.0.2"
   },
   "devDependencies": {

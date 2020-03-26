@@ -170,13 +170,13 @@ const ReviewPage: NextPage = () => {
           !selectedTenantId ||
           !processDatabase.result
         }
-        onSubmit={async (): Promise<void> => {
+        onSubmit={async (): Promise<boolean> => {
           if (
             !residentDatabase.result ||
             !selectedTenantId ||
             !processDatabase.result
           ) {
-            return;
+            return false;
           }
 
           await residentDatabase.result.put(
@@ -186,6 +186,8 @@ const ReviewPage: NextPage = () => {
           );
 
           await processDatabase.result.put("otherNotes", "notes", otherNotes);
+
+          return true;
         }}
       />
     </MainLayout>
