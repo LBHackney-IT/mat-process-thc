@@ -6,13 +6,13 @@ import {
   ComponentDatabaseMap,
   ComponentWrapper,
   DynamicComponent,
-  StaticComponent
+  StaticComponent,
 } from "remultiform/component-wrapper";
 import { Note } from "storage/DatabaseSchema";
 import { makeSubmit } from "../../components/makeSubmit";
 import {
   TextAreaDetails,
-  TextAreaDetailsProps
+  TextAreaDetailsProps,
 } from "../../components/TextAreaDetails";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
@@ -31,9 +31,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
           "resident-sustainment": {
             renderValue(notes: Note): React.ReactNode {
               return notes.value;
-            }
-          }
-        }
+            },
+          },
+        },
       },
       {
         label: "Befriending",
@@ -41,9 +41,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
           befriending: {
             renderValue(notes: Note): React.ReactNode {
               return notes.value;
-            }
-          }
-        }
+            },
+          },
+        },
       },
       {
         label: "Adult Safeguarding",
@@ -51,9 +51,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
           "adult-safeguarding": {
             renderValue(notes: Note): React.ReactNode {
               return notes.value;
-            }
-          }
-        }
+            },
+          },
+        },
       },
       {
         label: "Children's Safeguarding",
@@ -61,9 +61,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
           "childrens-safeguarding": {
             renderValue(notes: Note): React.ReactNode {
               return notes.value;
-            }
-          }
-        }
+            },
+          },
+        },
       },
       {
         label: "Domestic Violence & Sexual Abuse",
@@ -71,9 +71,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
           "domestic-violences": {
             renderValue(notes: Note): React.ReactNode {
               return notes.value;
-            }
-          }
-        }
+            },
+          },
+        },
       },
       {
         label: "Mental Health - aged 18-65",
@@ -81,9 +81,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
           "mental-health-18-65": {
             renderValue(notes: Note): React.ReactNode {
               return notes.value;
-            }
-          }
-        }
+            },
+          },
+        },
       },
       {
         label: "Mental Health - Over-65",
@@ -91,11 +91,11 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
           "mental-health-over-65": {
             renderValue(notes: Note): React.ReactNode {
               return notes.value;
-            }
-          }
-        }
-      }
-    ]
+            },
+          },
+        },
+      },
+    ],
   },
   step: {
     slug: PageSlugs.SupportNeeds,
@@ -103,7 +103,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "supportNeeds">(
@@ -112,8 +112,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
           Component: Heading,
           props: {
             level: HeadingLevels.H2,
-            children: "Does anyone have support needs?"
-          }
+            children: "Does anyone have support needs?",
+          },
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -134,7 +134,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
             name: "resident-sustainment-notes",
             label: {
               id: "resident-sustainment-notes-label",
-              value: "Add note for post visit referral."
+              value: "Add note for post visit referral.",
             },
             contentAfterTextArea: (
               <Paragraph>
@@ -148,7 +148,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
                 (online only, opens in a new tab)
               </Paragraph>
             ),
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
@@ -158,8 +158,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
           >({
             storeName: "supportNeeds",
             key: keyFromSlug(),
-            property: ["residentSustainmentNotes"]
-          })
+            property: ["residentSustainmentNotes"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -180,9 +180,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
             name: "befriending-notes",
             label: {
               id: "befriending-notes-label",
-              value: "Add note for post visit referral."
+              value: "Add note for post visit referral.",
             },
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
@@ -192,8 +192,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
           >({
             storeName: "supportNeeds",
             key: keyFromSlug(),
-            property: ["befriendingNotes"]
-          })
+            property: ["befriendingNotes"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -214,7 +214,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
             name: "adult-safeguarding-notes",
             label: {
               id: "adult-safeguarding-notes-label",
-              value: "Add note for post visit referral."
+              value: "Add note for post visit referral.",
             },
             contentAfterTextArea: (
               <Paragraph>
@@ -246,7 +246,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
                 (online only, opens in a new tab)
               </Paragraph>
             ),
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
@@ -256,8 +256,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
           >({
             storeName: "supportNeeds",
             key: keyFromSlug(),
-            property: ["adultSafeguardingNotes"]
-          })
+            property: ["adultSafeguardingNotes"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -278,7 +278,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
             name: "childrens-safeguarding-notes",
             label: {
               id: "childrens-safeguarding-notes-label",
-              value: "Add note for post visit referral."
+              value: "Add note for post visit referral.",
             },
             contentAfterTextArea: (
               <>
@@ -307,7 +307,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
                 </Paragraph>
               </>
             ),
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
@@ -317,8 +317,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
           >({
             storeName: "supportNeeds",
             key: keyFromSlug(),
-            property: ["childrenYoungPeopleSafeguardingNotes"]
-          })
+            property: ["childrenYoungPeopleSafeguardingNotes"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -339,7 +339,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
             name: "domestic-violence-notes",
             label: {
               id: "domestic-violence-notes-label",
-              value: "Add note for post visit referral."
+              value: "Add note for post visit referral.",
             },
             contentAfterTextArea: (
               <>
@@ -354,7 +354,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
                 </Paragraph>
               </>
             ),
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
@@ -364,8 +364,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
           >({
             storeName: "supportNeeds",
             key: keyFromSlug(),
-            property: ["domesticSexualViolenceNotes"]
-          })
+            property: ["domesticSexualViolenceNotes"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -386,7 +386,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
             name: "mental-health-18-65-notes",
             label: {
               id: "mental-health-18-65-notes-label",
-              value: "Add note for post visit referral."
+              value: "Add note for post visit referral.",
             },
             contentAfterTextArea: (
               <>
@@ -403,7 +403,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
                 </Paragraph>
               </>
             ),
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
@@ -413,8 +413,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
           >({
             storeName: "supportNeeds",
             key: keyFromSlug(),
-            property: ["mentalHealth18To65Notes"]
-          })
+            property: ["mentalHealth18To65Notes"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -435,7 +435,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
             name: "mental-health-over-65-notes",
             label: {
               id: "mental-health-over-65-notes-label",
-              value: "Add note for post visit referral."
+              value: "Add note for post visit referral.",
             },
             contentAfterTextArea: (
               <>
@@ -455,7 +455,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
                 </Paragraph>
               </>
             ),
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
@@ -465,12 +465,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
           >({
             storeName: "supportNeeds",
             key: keyFromSlug(),
-            property: ["mentalHealthOver65Notes"]
-          })
+            property: ["mentalHealthOver65Notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

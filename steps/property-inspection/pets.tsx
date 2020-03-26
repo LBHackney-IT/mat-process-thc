@@ -4,7 +4,7 @@ import {
   ComponentDatabaseMap,
   ComponentValue,
   ComponentWrapper,
-  DynamicComponent
+  DynamicComponent,
 } from "remultiform/component-wrapper";
 import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { ImageInput } from "../../components/ImageInput";
@@ -23,54 +23,54 @@ import PageTitles from "../PageTitles";
 const petRadios = [
   {
     label: "Amphibian (e.g. frog, newt, salamander, toad)",
-    value: "amphibian"
+    value: "amphibian",
   },
   {
     label: "Bird",
-    value: "bird"
+    value: "bird",
   },
   {
     label: "Cat",
-    value: "cat"
+    value: "cat",
   },
   {
     label: "Chicken",
-    value: "chicken"
+    value: "chicken",
   },
   {
     label: "Dog",
-    value: "dog"
+    value: "dog",
   },
   {
     label: "Domestic rodent (e.g. gerbil, hamster, mouse, rat)",
-    value: "domestic rodent"
+    value: "domestic rodent",
   },
   {
     label: "Fish",
-    value: "fish"
+    value: "fish",
   },
   {
     label: "Invertebrate (e.g. crab, insect, spider, worm)",
-    value: "invertebrate"
+    value: "invertebrate",
   },
   {
     label: "Rabbit",
-    value: "rabbit"
+    value: "rabbit",
   },
   {
     label: "Reptile (e.g. lizard, snake, tortoise, turtle)",
-    value: "reptile"
+    value: "reptile",
   },
   {
     label: "Other",
-    value: "other"
-  }
+    value: "other",
+  },
 ];
 
 const questions = {
   "has-pets": "Are there any pets in the property?",
   "pet-type": "What type of pets?",
-  "has-permission": "Has permission been given to keep pets?"
+  "has-permission": "Has permission been given to keep pets?",
 };
 
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
@@ -84,7 +84,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           "has-pets": {
             renderValue(hasPets: string): React.ReactNode {
               return getRadioLabelFromValue(yesNoRadios, hasPets);
-            }
+            },
           },
           "pet-type": {
             renderValue(types: string): React.ReactNode {
@@ -92,15 +92,15 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
                 .filter(({ value }) => types.includes(value))
                 .map(({ label }) => label)
                 .join(", ");
-            }
+            },
           },
           "pets-notes": {
             renderValue(notes: Note): React.ReactNode {
               return notes.value;
-            }
-          }
+            },
+          },
         },
-        images: "other-comments-images"
+        images: "other-comments-images",
       },
       {
         label: questions["has-permission"],
@@ -108,12 +108,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           "has-permission": {
             renderValue(hasPermission: string): React.ReactNode {
               return getRadioLabelFromValue(yesNoRadios, hasPermission);
-            }
-          }
+            },
+          },
         },
-        images: "pets-permission-images"
-      }
-    ]
+        images: "pets-permission-images",
+      },
+    ],
   },
   step: {
     slug: PageSlugs.Pets,
@@ -121,7 +121,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
@@ -133,7 +133,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             legend: (
               <FieldsetLegend>{questions["has-pets"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           defaultValue: "",
           emptyValue: "",
@@ -143,8 +143,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["pets", "hasPets"]
-          })
+            property: ["pets", "hasPets"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -156,7 +156,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             legend: (
               <FieldsetLegend>{questions["pet-type"]}</FieldsetLegend>
             ) as React.ReactNode,
-            checkboxes: petRadios
+            checkboxes: petRadios,
           } as CheckboxesProps,
           renderWhen(stepValues: {
             "has-pets"?: ComponentValue<ProcessDatabaseSchema, "property">;
@@ -171,8 +171,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["pets", "petTypes"]
-          })
+            property: ["pets", "petTypes"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -184,7 +184,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             legend: (
               <FieldsetLegend>{questions["has-permission"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           renderWhen(stepValues: {
             "has-pets"?: ComponentValue<ProcessDatabaseSchema, "property">;
@@ -199,8 +199,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["pets", "hasPermission"]
-          })
+            property: ["pets", "hasPermission"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -210,7 +210,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           props: {
             label: "Take photo of permission document",
             name: "pets-permission-images",
-            maxCount: 1 as number | null | undefined
+            maxCount: 1 as number | null | undefined,
           },
           renderWhen(stepValues: {
             "has-permission"?: ComponentValue<
@@ -228,8 +228,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["pets", "images"]
-          })
+            property: ["pets", "images"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -238,10 +238,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about pets if necessary."
+              value: "Add note about pets if necessary.",
             },
             name: "pets-notes",
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaProps,
           renderWhen(stepValues: {
             "has-pets"?: ComponentValue<ProcessDatabaseSchema, "property">;
@@ -256,12 +256,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["pets", "notes"]
-          })
+            property: ["pets", "notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

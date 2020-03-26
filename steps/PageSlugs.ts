@@ -60,7 +60,7 @@ enum PageSlugs {
 
   // Pause
   Pause = "pause",
-  Paused = "paused"
+  Paused = "paused",
 }
 
 const slugs: {
@@ -109,7 +109,7 @@ const slugs: {
   submit: false,
   confirmed: false,
   pause: false,
-  paused: false
+  paused: false,
 };
 
 export const stepSlugs = Object.entries(slugs)
@@ -122,7 +122,7 @@ export const repeatingStepSlugs = [
   PageSlugs.TenantPhoto,
   PageSlugs.NextOfKin,
   PageSlugs.Carer,
-  PageSlugs.OtherSupport
+  PageSlugs.OtherSupport,
 ];
 
 export const urlObjectForSlug = (

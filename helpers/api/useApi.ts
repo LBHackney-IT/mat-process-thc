@@ -39,7 +39,7 @@ const useApi = <R>(
       const response = await fetch(
         `${basePath}/api${endpoint}?${queryString}`,
         {
-          method
+          method,
         }
       );
       const responseBody = await response.text();
@@ -72,7 +72,7 @@ const useApi = <R>(
       apiEndpoint.endpoint,
       querystring.stringify({ ...apiEndpoint.query, jwt }),
       apiEndpoint.method,
-      apiEndpoint.execute
+      apiEndpoint.execute,
     ]
   );
 };

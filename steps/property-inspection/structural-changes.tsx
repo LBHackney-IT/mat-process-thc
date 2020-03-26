@@ -4,7 +4,7 @@ import {
   ComponentDatabaseMap,
   ComponentValue,
   ComponentWrapper,
-  DynamicComponent
+  DynamicComponent,
 } from "remultiform/component-wrapper";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
@@ -22,7 +22,7 @@ import PageTitles from "../PageTitles";
 const questions = {
   "has-structural-changes":
     "Have any structural changes been made within the property since it was originally let?",
-  "changes-authorised": "Have the structural changes been authorised?"
+  "changes-authorised": "Have the structural changes been authorised?",
 };
 
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
@@ -36,15 +36,15 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           "has-structural-changes": {
             renderValue(structuralChanges: string): React.ReactNode {
               return getRadioLabelFromValue(yesNoRadios, structuralChanges);
-            }
+            },
           },
           "structural-changes-notes": {
             renderValue(notes: Note): React.ReactNode {
               return notes.value;
-            }
-          }
+            },
+          },
         },
-        images: "structural-changes-images"
+        images: "structural-changes-images",
       },
       {
         label: questions["changes-authorised"],
@@ -52,11 +52,11 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           "changes-authorised": {
             renderValue(changesAuthorised: string): React.ReactNode {
               return getRadioLabelFromValue(yesNoRadios, changesAuthorised);
-            }
-          }
-        }
-      }
-    ]
+            },
+          },
+        },
+      },
+    ],
   },
   step: {
     slug: PageSlugs.StructuralChanges,
@@ -64,7 +64,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
@@ -78,7 +78,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
                 {questions["has-structural-changes"]}
               </FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           defaultValue: "",
           emptyValue: "",
@@ -88,8 +88,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["structuralChanges", "hasStructuralChanges"]
-          })
+            property: ["structuralChanges", "hasStructuralChanges"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -101,7 +101,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             legend: (
               <FieldsetLegend>{questions["changes-authorised"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           renderWhen(stepValues: {
             "has-structural-changes"?: ComponentValue<
@@ -119,8 +119,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["structuralChanges", "changesAuthorised"]
-          })
+            property: ["structuralChanges", "changesAuthorised"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -134,7 +134,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
               | string
               | null
               | undefined,
-            maxCount: 5 as number | null | undefined
+            maxCount: 5 as number | null | undefined,
           },
           renderWhen(stepValues: {
             "has-structural-changes"?: ComponentValue<
@@ -152,8 +152,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["structuralChanges", "images"]
-          })
+            property: ["structuralChanges", "images"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -163,10 +163,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           props: {
             label: {
               value:
-                "Add note about structural changes including when it was done and location in property."
+                "Add note about structural changes including when it was done and location in property.",
             },
             name: "structural-changes-notes",
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaProps,
           renderWhen(stepValues: {
             "has-structural-changes"?: ComponentValue<
@@ -184,12 +184,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["structuralChanges", "notes"]
-          })
+            property: ["structuralChanges", "notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

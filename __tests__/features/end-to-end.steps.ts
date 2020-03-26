@@ -11,14 +11,14 @@ const imagePath = join(__dirname, "..", "__fixtures__", "image.jpg");
 const processData = {
   property: {
     outside: {
-      images: [imagePath]
+      images: [imagePath],
     },
     rooms: {
       canEnterAll: "no",
       notes: {
         value: "Room notes",
-        isPostVisitAction: false
-      }
+        isPostVisitAction: false,
+      },
     },
     laminatedFlooring: {
       hasLaminatedFlooring: "yes",
@@ -26,8 +26,8 @@ const processData = {
       images: [imagePath],
       notes: {
         value: "Laminated flooring notes",
-        isPostVisitAction: false
-      }
+        isPostVisitAction: false,
+      },
     },
     structuralChanges: {
       hasStructuralChanges: "yes",
@@ -35,32 +35,32 @@ const processData = {
       images: [imagePath],
       notes: {
         value: "Structural changes notes",
-        isPostVisitAction: false
-      }
+        isPostVisitAction: false,
+      },
     },
     damage: {
       hasDamage: "yes",
       images: [imagePath],
       notes: {
         value: "Damage notes",
-        isPostVisitAction: false
-      }
+        isPostVisitAction: false,
+      },
     },
     roof: {
       hasAccess: "yes",
       itemsStoredOnRoof: "yes",
       notes: {
         value: "Roof notes",
-        isPostVisitAction: false
-      }
+        isPostVisitAction: false,
+      },
     },
     loft: {
       hasAccess: "yes",
       itemsStored: "yes",
       notes: {
         value: "Loft notes",
-        isPostVisitAction: false
-      }
+        isPostVisitAction: false,
+      },
     },
     garden: {
       hasGarden: "yes",
@@ -69,40 +69,40 @@ const processData = {
       images: [imagePath],
       notes: {
         value: "Garden notes",
-        isPostVisitAction: false
-      }
+        isPostVisitAction: false,
+      },
     },
     repairs: {
       needsRepairs: "yes",
       images: [imagePath],
       notes: {
         value: "Repairs notes",
-        isPostVisitAction: false
-      }
+        isPostVisitAction: false,
+      },
     },
     storingMaterials: {
       isStoringMaterials: "yes",
       furtherActionRequired: "yes",
       notes: {
         value: "Storing materials notes",
-        isPostVisitAction: false
-      }
+        isPostVisitAction: false,
+      },
     },
     fireExit: {
       hasFireExit: "yes",
       isAccessible: "yes",
       notes: {
         value: "Fire exit notes",
-        isPostVisitAction: false
-      }
+        isPostVisitAction: false,
+      },
     },
     smokeAlarm: {
       hasSmokeAlarm: "yes",
       isWorking: "yes",
       notes: {
         value: "Smoke alarm notes",
-        isPostVisitAction: false
-      }
+        isPostVisitAction: false,
+      },
     },
     metalGates: {
       hasMetalGates: "yes",
@@ -111,24 +111,24 @@ const processData = {
       images: [imagePath],
       notes: {
         value: "Metal gates notes",
-        isPostVisitAction: false
-      }
+        isPostVisitAction: false,
+      },
     },
     doorMats: {
       hasPlaced: "yes",
       furtherActionRequired: "yes",
       notes: {
         value: "Door mats notes",
-        isPostVisitAction: false
-      }
+        isPostVisitAction: false,
+      },
     },
     communalAreas: {
       hasLeftCombustibleItems: "yes",
       furtherActionRequired: "yes",
       notes: {
         value: "Communal areas notes",
-        isPostVisitAction: false
-      }
+        isPostVisitAction: false,
+      },
     },
     pets: {
       hasPets: "yes",
@@ -137,86 +137,86 @@ const processData = {
       images: [imagePath],
       notes: {
         value: "Pets notes",
-        isPostVisitAction: false
-      }
+        isPostVisitAction: false,
+      },
     },
     antisocialBehaviour: {
       tenantUnderstands: "yes",
       notes: {
         value: "Antisocial behaviour notes",
-        isPostVisitAction: false
-      }
+        isPostVisitAction: false,
+      },
     },
     otherComments: {
       images: [imagePath],
       notes: {
         value: "Other comments notes",
-        isPostVisitAction: false
-      }
-    }
+        isPostVisitAction: false,
+      },
+    },
   },
   isUnannouncedVisit: {
     value: "no",
     notes: {
       value: "Unannounced visit notes",
-      isPostVisitAction: false
-    }
+      isPostVisitAction: false,
+    },
   },
   isVisitInside: {
     value: "no",
     notes: {
       value: "Visit inside notes",
-      isPostVisitAction: false
-    }
+      isPostVisitAction: false,
+    },
   },
   tenantsPresent: [presentTenantRef],
   household: {
     documents: {
-      images: [imagePath]
+      images: [imagePath],
     },
     houseMovingSchemes: {
       notes: {
         value: "House moving schemes notes",
-        isPostVisitAction: false
-      }
+        isPostVisitAction: false,
+      },
     },
     memberChanges: {
       notes: {
         value: "Member changes notes",
-        isPostVisitAction: false
-      }
+        isPostVisitAction: false,
+      },
     },
     rentArrears: {
       type: "yes has plan",
       notes: {
         value: "Rent arrears notes",
-        isPostVisitAction: false
-      }
+        isPostVisitAction: false,
+      },
     },
     housingBenefits: {
       hasApplied: "yes application declined",
       notes: {
         value: "Housing benefits notes",
-        isPostVisitAction: false
-      }
+        isPostVisitAction: false,
+      },
     },
     incomeOfficer: {
       wantsToContact: "yes",
       notes: {
         value: "Income officer notes",
-        isPostVisitAction: false
-      }
+        isPostVisitAction: false,
+      },
     },
     otherProperty: {
       hasOtherProperty: "yes",
       notes: {
         value: "Other property notes",
-        isPostVisitAction: false
-      }
-    }
+        isPostVisitAction: false,
+      },
+    },
   },
   homeCheck: {
-    value: "yes"
+    value: "yes",
   },
   healthConcerns: {
     value: "yes",
@@ -224,8 +224,8 @@ const processData = {
     moreInfo: ["dementia", "smoking"],
     notes: {
       value: "Health concerns notes",
-      isPostVisitAction: false
-    }
+      isPostVisitAction: false,
+    },
   },
   disability: {
     value: "yes",
@@ -235,38 +235,38 @@ const processData = {
     whoDLA: ["tenant 1"],
     notes: {
       value: "Disability notes",
-      isPostVisitAction: false
-    }
+      isPostVisitAction: false,
+    },
   },
   supportNeeds: {
     residentSustainmentNotes: {
       value: "Resident sustainment notes",
-      isPostVisitAction: false
+      isPostVisitAction: false,
     },
     befriendingNotes: {
       value: "Befriending notes",
-      isPostVisitAction: false
+      isPostVisitAction: false,
     },
     adultSafeguardingNotes: {
       value: "Adult safeguarding notes",
-      isPostVisitAction: false
+      isPostVisitAction: false,
     },
     childrenYoungPeopleSafeguardingNotes: {
       value: "Children young people safeguarding notes",
-      isPostVisitAction: false
+      isPostVisitAction: false,
     },
     domesticSexualViolenceNotes: {
       value: "Domestic sexual violence notes",
-      isPostVisitAction: false
+      isPostVisitAction: false,
     },
     mentalHealth18To65Notes: {
       value: "Mental health 18 to 65 notes",
-      isPostVisitAction: false
+      isPostVisitAction: false,
     },
     mentalHealthOver65Notes: {
       value: "Mental health over 65 notes",
-      isPostVisitAction: false
-    }
+      isPostVisitAction: false,
+    },
   },
   residents: {
     [presentTenantRef]: {
@@ -275,20 +275,20 @@ const processData = {
         images: [imagePath],
         notes: {
           value: "ID notes",
-          isPostVisitAction: false
-        }
+          isPostVisitAction: false,
+        },
       },
       residency: {
         type: "bank statement",
         images: [imagePath],
         notes: {
           value: "Residency notes",
-          isPostVisitAction: false
-        }
+          isPostVisitAction: false,
+        },
       },
       photo: {
         isWilling: "yes",
-        images: [imagePath]
+        images: [imagePath],
       },
       nextOfKin: {
         fullName: "Next of kin name",
@@ -296,7 +296,7 @@ const processData = {
         mobileNumber: "0123455789",
         otherNumber: "9876543210",
         email: "next@of.kin",
-        address: "1 Next of Kin Road\nKinsville\nNK0 0NK"
+        address: "1 Next of Kin Road\nKinsville\nNK0 0NK",
       },
       carer: {
         hasCarer: "yes",
@@ -308,20 +308,20 @@ const processData = {
         relationship: "Carer relationship",
         notes: {
           value: "Carer notes",
-          isPostVisitAction: false
-        }
+          isPostVisitAction: false,
+        },
       },
       otherSupport: {
         fullName: "Other support name",
         role: "other support role",
-        phoneNumber: "0123455789"
+        phoneNumber: "0123455789",
       },
-      signature: ""
-    }
-  }
+      signature: "",
+    },
+  },
 };
 
-defineFeature(loadFeature("./end-to-end.feature"), test => {
+defineFeature(loadFeature("./end-to-end.feature"), (test) => {
   test("Performing a check", ({ when, then }) => {
     when("I complete a process", async () => {
       const processRef = process.env.TEST_PROCESS_REF;
@@ -356,12 +356,12 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          name: "outside-property-images"
+          name: "outside-property-images",
         })
       ).sendKeys(processData.property.outside.images[0]);
       (
         await browser!.waitForEnabledElement({
-          name: "metal-gate-images"
+          name: "metal-gate-images",
         })
       ).sendKeys(processData.property.metalGates.images[0]);
 
@@ -381,22 +381,22 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          id: `unannounced-visit-${processData.isUnannouncedVisit.value}`
+          id: `unannounced-visit-${processData.isUnannouncedVisit.value}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "unannounced-visit-notes"
+          name: "unannounced-visit-notes",
         })
       ).sendKeys(processData.isUnannouncedVisit.notes.value);
       (
         await browser!.waitForEnabledElement({
-          id: `inside-property-${processData.isVisitInside.value}`
+          id: `inside-property-${processData.isVisitInside.value}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "inside-property-notes"
+          name: "inside-property-notes",
         })
       ).sendKeys(processData.isVisitInside.notes.value);
 
@@ -424,7 +424,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
           id: `tenants-present-${processData.tenantsPresent[0].replace(
             /\s/g,
             "-"
-          )}`
+          )}`,
         })
       ).click();
 
@@ -446,22 +446,22 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           id: `id-type-${processData.residents[
             presentTenantRef
-          ].id.type.replace(/\s/g, "-")}`
+          ].id.type.replace(/\s/g, "-")}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "id-images"
+          name: "id-images",
         })
       ).sendKeys(processData.residents[presentTenantRef].id.images[0]);
       (
         await browser!.waitForEnabledElement({
-          id: "id-notes-summary"
+          id: "id-notes-summary",
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "id-notes"
+          name: "id-notes",
         })
       ).sendKeys(processData.residents[presentTenantRef].id.notes.value);
 
@@ -476,22 +476,22 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         await browser!.waitForEnabledElement({
           id: `residency-proof-type-${processData.residents[
             presentTenantRef
-          ].residency.type.replace(/\s/g, "-")}`
+          ].residency.type.replace(/\s/g, "-")}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "residency-proof-images"
+          name: "residency-proof-images",
         })
       ).sendKeys(processData.residents[presentTenantRef].residency.images[0]);
       (
         await browser!.waitForEnabledElement({
-          id: "residency-notes-summary"
+          id: "residency-notes-summary",
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "residency-notes"
+          name: "residency-notes",
         })
       ).sendKeys(processData.residents[presentTenantRef].residency.notes.value);
 
@@ -504,12 +504,12 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          id: `tenant-photo-willing-${processData.residents[presentTenantRef].photo.isWilling}`
+          id: `tenant-photo-willing-${processData.residents[presentTenantRef].photo.isWilling}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "tenant-photo"
+          name: "tenant-photo",
         })
       ).sendKeys(processData.residents[presentTenantRef].photo.images[0]);
 
@@ -522,36 +522,36 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          name: "next-of-kin-full-name"
+          name: "next-of-kin-full-name",
         })
       ).sendKeys(processData.residents[presentTenantRef].nextOfKin.fullName);
       (
         await browser!.waitForEnabledElement({
-          name: "next-of-kin-relationship"
+          name: "next-of-kin-relationship",
         })
       ).sendKeys(
         processData.residents[presentTenantRef].nextOfKin.relationship
       );
       (
         await browser!.waitForEnabledElement({
-          name: "next-of-kin-mobile-number"
+          name: "next-of-kin-mobile-number",
         })
       ).sendKeys(
         processData.residents[presentTenantRef].nextOfKin.mobileNumber
       );
       (
         await browser!.waitForEnabledElement({
-          name: "next-of-kin-other-number"
+          name: "next-of-kin-other-number",
         })
       ).sendKeys(processData.residents[presentTenantRef].nextOfKin.otherNumber);
       (
         await browser!.waitForEnabledElement({
-          name: "next-of-kin-email"
+          name: "next-of-kin-email",
         })
       ).sendKeys(processData.residents[presentTenantRef].nextOfKin.email);
       (
         await browser!.waitForEnabledElement({
-          name: "next-of-kin-address"
+          name: "next-of-kin-address",
         })
       ).sendKeys(processData.residents[presentTenantRef].nextOfKin.address);
 
@@ -564,22 +564,22 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          id: `carer-needed-${processData.residents[presentTenantRef].carer.hasCarer}`
+          id: `carer-needed-${processData.residents[presentTenantRef].carer.hasCarer}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: `carer-type-${processData.residents[presentTenantRef].carer.type}`
+          id: `carer-type-${processData.residents[presentTenantRef].carer.type}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: "carer-live-in-yes"
+          id: "carer-live-in-yes",
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "carer-live-in-start-date-month"
+          name: "carer-live-in-start-date-month",
         })
       ).sendKeys(
         processData.residents[
@@ -588,7 +588,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       );
       (
         await browser!.waitForEnabledElement({
-          name: "carer-live-in-start-date-year"
+          name: "carer-live-in-start-date-year",
         })
       ).sendKeys(
         processData.residents[
@@ -597,27 +597,27 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       );
       (
         await browser!.waitForEnabledElement({
-          name: "carer-full-name"
+          name: "carer-full-name",
         })
       ).sendKeys(processData.residents[presentTenantRef].carer.fullName);
       (
         await browser!.waitForEnabledElement({
-          name: "carer-relationship"
+          name: "carer-relationship",
         })
       ).sendKeys(processData.residents[presentTenantRef].carer.relationship);
       (
         await browser!.waitForEnabledElement({
-          name: "carer-phone-number"
+          name: "carer-phone-number",
         })
       ).sendKeys(processData.residents[presentTenantRef].carer.phoneNumber);
       (
         await browser!.waitForEnabledElement({
-          id: "carer-notes-summary"
+          id: "carer-notes-summary",
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "carer-notes"
+          name: "carer-notes",
         })
       ).sendKeys(processData.residents[presentTenantRef].carer.notes.value);
 
@@ -629,17 +629,17 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          name: "other-support-full-name"
+          name: "other-support-full-name",
         })
       ).sendKeys(processData.residents[presentTenantRef].otherSupport.fullName);
       (
         await browser!.waitForEnabledElement({
-          name: "other-support-role"
+          name: "other-support-role",
         })
       ).sendKeys(processData.residents[presentTenantRef].otherSupport.role);
       (
         await browser!.waitForEnabledElement({
-          name: "other-support-phone-number"
+          name: "other-support-phone-number",
         })
       ).sendKeys(
         processData.residents[presentTenantRef].otherSupport.phoneNumber
@@ -673,27 +673,27 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          name: "household-document-images"
+          name: "household-document-images",
         })
       ).sendKeys(processData.household.documents.images[0]);
       (
         await browser!.waitForEnabledElement({
-          id: "house-moving-schemes-notes-summary"
+          id: "house-moving-schemes-notes-summary",
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "house-moving-schemes-notes"
+          name: "house-moving-schemes-notes",
         })
       ).sendKeys(processData.household.houseMovingSchemes.notes.value);
       (
         await browser!.waitForEnabledElement({
-          id: "member-changes-notes-summary"
+          id: "member-changes-notes-summary",
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "member-changes-notes"
+          name: "member-changes-notes",
         })
       ).sendKeys(processData.household.memberChanges.notes.value);
 
@@ -709,17 +709,17 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
           id: `rent-arrears-type-${processData.household.rentArrears.type.replace(
             /\s/g,
             "-"
-          )}`
+          )}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: "rent-arrears-notes-summary"
+          id: "rent-arrears-notes-summary",
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "rent-arrears-notes"
+          name: "rent-arrears-notes",
         })
       ).sendKeys(processData.household.rentArrears.notes.value);
       (
@@ -727,17 +727,17 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
           id: `has-applied-for-housing-benefit-${processData.household.housingBenefits.hasApplied.replace(
             /\s/g,
             "-"
-          )}`
+          )}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: "housing-benefits-notes-summary"
+          id: "housing-benefits-notes-summary",
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "housing-benefits-notes"
+          name: "housing-benefits-notes",
         })
       ).sendKeys(processData.household.housingBenefits.notes.value);
       (
@@ -745,17 +745,17 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
           id: `contact-income-officer-${processData.household.incomeOfficer.wantsToContact.replace(
             /\s/g,
             "-"
-          )}`
+          )}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: "income-officer-notes-summary"
+          id: "income-officer-notes-summary",
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "income-officer-notes"
+          name: "income-officer-notes",
         })
       ).sendKeys(processData.household.incomeOfficer.notes.value);
 
@@ -768,12 +768,12 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          id: `has-other-property-${processData.household.otherProperty.hasOtherProperty}`
+          id: `has-other-property-${processData.household.otherProperty.hasOtherProperty}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "other-property-notes"
+          name: "other-property-notes",
         })
       ).sendKeys(processData.household.otherProperty.notes.value);
 
@@ -795,12 +795,12 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          id: `can-enter-all-rooms-${processData.property.rooms.canEnterAll}`
+          id: `can-enter-all-rooms-${processData.property.rooms.canEnterAll}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "room-entry-notes"
+          name: "room-entry-notes",
         })
       ).sendKeys(processData.property.rooms.notes.value);
 
@@ -813,22 +813,22 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          id: `has-laminated-flooring-${processData.property.laminatedFlooring.hasLaminatedFlooring}`
+          id: `has-laminated-flooring-${processData.property.laminatedFlooring.hasLaminatedFlooring}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: `has-permission-${processData.property.laminatedFlooring.hasPermission}`
+          id: `has-permission-${processData.property.laminatedFlooring.hasPermission}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "laminated-flooring-images"
+          name: "laminated-flooring-images",
         })
       ).sendKeys(processData.property.laminatedFlooring.images[0]);
       (
         await browser!.waitForEnabledElement({
-          name: "laminated-flooring-notes"
+          name: "laminated-flooring-notes",
         })
       ).sendKeys(processData.property.laminatedFlooring.notes.value);
 
@@ -841,22 +841,22 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          id: `has-structural-changes-${processData.property.structuralChanges.hasStructuralChanges}`
+          id: `has-structural-changes-${processData.property.structuralChanges.hasStructuralChanges}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: `changes-authorised-${processData.property.structuralChanges.changesAuthorised}`
+          id: `changes-authorised-${processData.property.structuralChanges.changesAuthorised}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "structural-changes-images"
+          name: "structural-changes-images",
         })
       ).sendKeys(processData.property.structuralChanges.images[0]);
       (
         await browser!.waitForEnabledElement({
-          name: "structural-changes-notes"
+          name: "structural-changes-notes",
         })
       ).sendKeys(processData.property.structuralChanges.notes.value);
 
@@ -869,17 +869,17 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          id: `has-damage-${processData.property.damage.hasDamage}`
+          id: `has-damage-${processData.property.damage.hasDamage}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "damage-images"
+          name: "damage-images",
         })
       ).sendKeys(processData.property.damage.images[0]);
       (
         await browser!.waitForEnabledElement({
-          name: "damage-notes"
+          name: "damage-notes",
         })
       ).sendKeys(processData.property.damage.notes.value);
 
@@ -892,17 +892,17 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          id: `has-access-${processData.property.roof.hasAccess}`
+          id: `has-access-${processData.property.roof.hasAccess}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: `items-stored-on-roof-${processData.property.roof.itemsStoredOnRoof}`
+          id: `items-stored-on-roof-${processData.property.roof.itemsStoredOnRoof}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "roof-notes"
+          name: "roof-notes",
         })
       ).sendKeys(processData.property.roof.notes.value);
 
@@ -915,17 +915,17 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          id: `has-access-to-loft-${processData.property.loft.hasAccess}`
+          id: `has-access-to-loft-${processData.property.loft.hasAccess}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: `items-stored-in-loft-${processData.property.loft.itemsStored}`
+          id: `items-stored-in-loft-${processData.property.loft.itemsStored}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "loft-notes"
+          name: "loft-notes",
         })
       ).sendKeys(processData.property.loft.notes.value);
 
@@ -938,27 +938,27 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          id: `has-garden-${processData.property.garden.hasGarden}`
+          id: `has-garden-${processData.property.garden.hasGarden}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: `garden-type-${processData.property.garden.type}`
+          id: `garden-type-${processData.property.garden.type}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: `is-maintained-${processData.property.garden.isMaintained}`
+          id: `is-maintained-${processData.property.garden.isMaintained}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "garden-images"
+          name: "garden-images",
         })
       ).sendKeys(processData.property.garden.images[0]);
       (
         await browser!.waitForEnabledElement({
-          name: "garden-notes"
+          name: "garden-notes",
         })
       ).sendKeys(processData.property.garden.notes.value);
 
@@ -968,7 +968,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       await expect(browser!.getCurrentUrl()).resolves.toContain("/repairs");
       (
         await browser!.waitForEnabledElement({
-          id: `needs-repairs-${processData.property.repairs.needsRepairs}`
+          id: `needs-repairs-${processData.property.repairs.needsRepairs}`,
         })
       ).click();
       (
@@ -987,17 +987,17 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          id: `is-storing-materials-${processData.property.storingMaterials.isStoringMaterials}`
+          id: `is-storing-materials-${processData.property.storingMaterials.isStoringMaterials}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: `further-action-required-${processData.property.storingMaterials.furtherActionRequired}`
+          id: `further-action-required-${processData.property.storingMaterials.furtherActionRequired}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "stored-materials-notes"
+          name: "stored-materials-notes",
         })
       ).sendKeys(processData.property.storingMaterials.notes.value);
 
@@ -1010,17 +1010,17 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          id: `has-fire-exit-${processData.property.fireExit.hasFireExit}`
+          id: `has-fire-exit-${processData.property.fireExit.hasFireExit}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: `is-accessible-${processData.property.fireExit.isAccessible}`
+          id: `is-accessible-${processData.property.fireExit.isAccessible}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "fire-exit-notes"
+          name: "fire-exit-notes",
         })
       ).sendKeys(processData.property.fireExit.notes.value);
 
@@ -1033,17 +1033,17 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          id: `has-smoke-alarm-${processData.property.smokeAlarm.hasSmokeAlarm}`
+          id: `has-smoke-alarm-${processData.property.smokeAlarm.hasSmokeAlarm}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: `is-working-${processData.property.smokeAlarm.isWorking}`
+          id: `is-working-${processData.property.smokeAlarm.isWorking}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "smoke-alarm-notes"
+          name: "smoke-alarm-notes",
         })
       ).sendKeys(processData.property.smokeAlarm.notes.value);
 
@@ -1056,22 +1056,22 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          id: `has-metal-gates-${processData.property.metalGates.hasMetalGates}`
+          id: `has-metal-gates-${processData.property.metalGates.hasMetalGates}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: `combustible-items-behind-gates-${processData.property.metalGates.combustibleItemsBehind}`
+          id: `combustible-items-behind-gates-${processData.property.metalGates.combustibleItemsBehind}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: `further-action-required-${processData.property.metalGates.furtherActionRequired}`
+          id: `further-action-required-${processData.property.metalGates.furtherActionRequired}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "metal-gates-notes"
+          name: "metal-gates-notes",
         })
       ).sendKeys(processData.property.metalGates.notes.value);
 
@@ -1084,17 +1084,17 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          id: `has-placed-${processData.property.doorMats.hasPlaced}`
+          id: `has-placed-${processData.property.doorMats.hasPlaced}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: `further-action-required-${processData.property.doorMats.furtherActionRequired}`
+          id: `further-action-required-${processData.property.doorMats.furtherActionRequired}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "door-mats-notes"
+          name: "door-mats-notes",
         })
       ).sendKeys(processData.property.doorMats.notes.value);
 
@@ -1107,17 +1107,17 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          id: `has-left-combustible-items-${processData.property.communalAreas.hasLeftCombustibleItems}`
+          id: `has-left-combustible-items-${processData.property.communalAreas.hasLeftCombustibleItems}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: `further-action-required-${processData.property.communalAreas.furtherActionRequired}`
+          id: `further-action-required-${processData.property.communalAreas.furtherActionRequired}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "communal-areas-notes"
+          name: "communal-areas-notes",
         })
       ).sendKeys(processData.property.communalAreas.notes.value);
 
@@ -1130,32 +1130,32 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          id: `has-pets-${processData.property.pets.hasPets}`
+          id: `has-pets-${processData.property.pets.hasPets}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: `pet-type-${processData.property.pets.petTypes[0]}`
+          id: `pet-type-${processData.property.pets.petTypes[0]}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: `pet-type-${processData.property.pets.petTypes[1]}`
+          id: `pet-type-${processData.property.pets.petTypes[1]}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: `has-permission-${processData.property.pets.hasPermission}`
+          id: `has-permission-${processData.property.pets.hasPermission}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "pets-permission-images"
+          name: "pets-permission-images",
         })
       ).sendKeys(processData.property.pets.images[0]);
       (
         await browser!.waitForEnabledElement({
-          name: "pets-notes"
+          name: "pets-notes",
         })
       ).sendKeys(processData.property.pets.notes.value);
 
@@ -1168,12 +1168,12 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          id: `tenant-understands-${processData.property.antisocialBehaviour.tenantUnderstands}`
+          id: `tenant-understands-${processData.property.antisocialBehaviour.tenantUnderstands}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "antisocial-behaviour-notes"
+          name: "antisocial-behaviour-notes",
         })
       ).sendKeys(processData.property.antisocialBehaviour.notes.value);
 
@@ -1186,12 +1186,12 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          name: "other-comments-images"
+          name: "other-comments-images",
         })
       ).sendKeys(processData.property.otherComments.images[0]);
       (
         await browser!.waitForEnabledElement({
-          name: "other-comments-notes"
+          name: "other-comments-notes",
         })
       ).sendKeys(processData.property.otherComments.notes.value);
 
@@ -1216,7 +1216,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          id: `home-check-${processData.homeCheck.value}`
+          id: `home-check-${processData.homeCheck.value}`,
         })
       ).click();
 
@@ -1229,7 +1229,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          id: `health-concerns-${processData.healthConcerns.value}`
+          id: `health-concerns-${processData.healthConcerns.value}`,
         })
       ).click();
       (
@@ -1237,22 +1237,22 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
           id: `health-concerns-who-${processData.healthConcerns.who[0].replace(
             /\s/g,
             "-"
-          )}`
+          )}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: `health-concerns-more-info-${processData.healthConcerns.moreInfo[0]}`
+          id: `health-concerns-more-info-${processData.healthConcerns.moreInfo[0]}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: `health-concerns-more-info-${processData.healthConcerns.moreInfo[1]}`
+          id: `health-concerns-more-info-${processData.healthConcerns.moreInfo[1]}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "health-notes"
+          name: "health-notes",
         })
       ).sendKeys(processData.healthConcerns.notes.value);
 
@@ -1265,7 +1265,7 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
 
       (
         await browser!.waitForEnabledElement({
-          id: `disability-${processData.disability.value}`
+          id: `disability-${processData.disability.value}`,
         })
       ).click();
       (
@@ -1273,27 +1273,27 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
           id: `who-disability-${processData.disability.whoDisability[0].replace(
             /\s/g,
             "-"
-          )}`
+          )}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: `pip-or-dla-${processData.disability.pipOrDLA}`
+          id: `pip-or-dla-${processData.disability.pipOrDLA}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: `who-pip-${processData.disability.whoPIP[0].replace(/\s/g, "-")}`
+          id: `who-pip-${processData.disability.whoPIP[0].replace(/\s/g, "-")}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: `who-dla-${processData.disability.whoDLA[0].replace(/\s/g, "-")}`
+          id: `who-dla-${processData.disability.whoDLA[0].replace(/\s/g, "-")}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "disability-notes"
+          name: "disability-notes",
         })
       ).sendKeys(processData.disability.notes.value);
 
@@ -1305,74 +1305,74 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
       );
       (
         await browser!.waitForEnabledElement({
-          id: "resident-sustainment-notes-summary"
+          id: "resident-sustainment-notes-summary",
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "resident-sustainment-notes"
+          name: "resident-sustainment-notes",
         })
       ).sendKeys(processData.supportNeeds.residentSustainmentNotes.value);
       (
         await browser!.waitForEnabledElement({
-          id: "befriending-notes-summary"
+          id: "befriending-notes-summary",
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "befriending-notes"
+          name: "befriending-notes",
         })
       ).sendKeys(processData.supportNeeds.befriendingNotes.value);
       (
         await browser!.waitForEnabledElement({
-          id: "adult-safeguarding-notes-summary"
+          id: "adult-safeguarding-notes-summary",
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "adult-safeguarding-notes"
+          name: "adult-safeguarding-notes",
         })
       ).sendKeys(processData.supportNeeds.adultSafeguardingNotes.value);
       (
         await browser!.waitForEnabledElement({
-          id: "childrens-safeguarding-notes-summary"
+          id: "childrens-safeguarding-notes-summary",
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "childrens-safeguarding-notes"
+          name: "childrens-safeguarding-notes",
         })
       ).sendKeys(
         processData.supportNeeds.childrenYoungPeopleSafeguardingNotes.value
       );
       (
         await browser!.waitForEnabledElement({
-          id: "domestic-violence-notes-summary"
+          id: "domestic-violence-notes-summary",
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "domestic-violence-notes"
+          name: "domestic-violence-notes",
         })
       ).sendKeys(processData.supportNeeds.domesticSexualViolenceNotes.value);
       (
         await browser!.waitForEnabledElement({
-          id: "mental-health-18-65-notes-summary"
+          id: "mental-health-18-65-notes-summary",
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "mental-health-18-65-notes"
+          name: "mental-health-18-65-notes",
         })
       ).sendKeys(processData.supportNeeds.mentalHealth18To65Notes.value);
       (
         await browser!.waitForEnabledElement({
-          id: "mental-health-over-65-notes-summary"
+          id: "mental-health-over-65-notes-summary",
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "mental-health-over-65-notes"
+          name: "mental-health-over-65-notes",
         })
       ).sendKeys(processData.supportNeeds.mentalHealthOver65Notes.value);
       await browser!.submit();
@@ -1460,8 +1460,8 @@ defineFeature(loadFeature("./end-to-end.feature"), test => {
         {
           method: "GET",
           headers: {
-            "X-API-KEY": process.env.PROCESS_API_KEY || ""
-          }
+            "X-API-KEY": process.env.PROCESS_API_KEY || "",
+          },
         }
       );
 

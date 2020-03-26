@@ -7,7 +7,7 @@ interface Props {
   alt: string;
 }
 
-const Thumbnail: React.FunctionComponent<Props> = props => {
+const Thumbnail: React.FunctionComponent<Props> = (props) => {
   const { src, alt } = props;
 
   return (
@@ -25,7 +25,7 @@ const Thumbnail: React.FunctionComponent<Props> = props => {
 
 Thumbnail.propTypes = {
   src: PropTypes.string.isRequired,
-  alt: PropTypes.string.isRequired
+  alt: PropTypes.string.isRequired,
 };
 
 export default Thumbnail;

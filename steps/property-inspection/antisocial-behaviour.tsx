@@ -3,14 +3,14 @@ import {
   List,
   ListProps,
   ListTypes,
-  Paragraph
+  Paragraph,
 } from "lbh-frontend-react/components";
 import React from "react";
 import {
   ComponentDatabaseMap,
   ComponentWrapper,
   DynamicComponent,
-  StaticComponent
+  StaticComponent,
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
@@ -35,16 +35,16 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           "tenant-understands": {
             renderValue(tenantUnderstands: string): React.ReactNode {
               return getRadioLabelFromValue(yesNoRadios, tenantUnderstands);
-            }
+            },
           },
           "antisocial-behaviour-notes": {
             renderValue(antisocialBehaviourNotes: Note): React.ReactNode {
               return antisocialBehaviourNotes.value;
-            }
-          }
-        }
-      }
-    ]
+            },
+          },
+        },
+      },
+    ],
   },
   step: {
     slug: PageSlugs.AntisocialBehaviour,
@@ -52,7 +52,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "property">(
@@ -63,8 +63,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             children: `Antisocial behaviour is defined as "behaviour by a 
             person which causes, or is likely to cause, harassment, alarm or 
             distress to one or more persons not of the same household as the 
-            person".`
-          }
+            person".`,
+          },
         })
       ),
       ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "property">(
@@ -72,8 +72,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           key: "paragraph-2",
           Component: Paragraph,
           props: {
-            children: `Examples include:`
-          }
+            children: `Examples include:`,
+          },
         })
       ),
       ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "property">(
@@ -84,10 +84,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             items: [
               "noise such as: persistent loud music, banging, shouting",
               "ongoing leaks",
-              "neighbour disputes"
+              "neighbour disputes",
             ],
-            type: ListTypes.Bullet
-          } as ListProps
+            type: ListTypes.Bullet,
+          } as ListProps,
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -101,7 +101,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
                 Have you discussed antisocial behaviour with the tenant?
               </FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           defaultValue: "",
           emptyValue: "",
@@ -111,8 +111,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["antisocialBehaviour", "tenantUnderstands"]
-          })
+            property: ["antisocialBehaviour", "tenantUnderstands"],
+          }),
         })
       ),
       ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "property">(
@@ -120,8 +120,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           key: "paragraph-3",
           Component: Paragraph,
           props: {
-            children: `Explain about antisocial behaviour and give examples.`
-          }
+            children: `Explain about antisocial behaviour and give examples.`,
+          },
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -135,10 +135,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
                   Add note about antisocial behaviour <b>by</b> or{" "}
                   <b>against</b> tenant if necessary.
                 </>
-              )
+              ),
             },
             name: "antisocial-behaviour-notes",
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
@@ -148,12 +148,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["antisocialBehaviour", "notes"]
-          })
+            property: ["antisocialBehaviour", "notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

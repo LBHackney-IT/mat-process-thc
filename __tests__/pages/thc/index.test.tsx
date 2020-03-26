@@ -20,7 +20,7 @@ beforeEach(() => {
   jest.spyOn(router, "useRouter").mockImplementation(() => ({
     ...jest.fn()(),
     query: { processRef: "test-process-ref" },
-    replace: routerReplaceMock
+    replace: routerReplaceMock,
   }));
 });
 

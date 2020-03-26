@@ -1,7 +1,7 @@
 import React from "react";
 import {
   DynamicComponent,
-  DynamicComponentControlledProps
+  DynamicComponentControlledProps,
 } from "remultiform/component-wrapper";
 import PropTypes from "../helpers/PropTypes";
 import { Details } from "./Details";
@@ -23,7 +23,9 @@ export type TextAreaDetailsProps = DynamicComponentControlledProps<{
   includeCheckbox?: boolean;
 };
 
-export const TextAreaDetails: React.FunctionComponent<TextAreaDetailsProps> = props => {
+export const TextAreaDetails: React.FunctionComponent<TextAreaDetailsProps> = (
+  props
+) => {
   const {
     summary,
     name,
@@ -35,7 +37,7 @@ export const TextAreaDetails: React.FunctionComponent<TextAreaDetailsProps> = pr
     value,
     onValueChange,
     required,
-    disabled
+    disabled,
   } = props;
 
   const summaryId = `${name}-summary`;
@@ -46,7 +48,7 @@ export const TextAreaDetails: React.FunctionComponent<TextAreaDetailsProps> = pr
       <TextArea
         label={{
           id: label && label.id ? label.id : `${name}-label`,
-          value: label && label.value
+          value: label && label.value,
         }}
         name={name}
         rows={rows}
@@ -65,7 +67,7 @@ TextAreaDetails.propTypes = {
   ...DynamicComponent.controlledPropTypes(
     PropTypes.exact({
       value: PropTypes.string.isRequired,
-      isPostVisitAction: PropTypes.bool.isRequired
+      isPostVisitAction: PropTypes.bool.isRequired,
     }).isRequired
   ),
   summary: PropTypes.node.isRequired,
@@ -73,9 +75,9 @@ TextAreaDetails.propTypes = {
   rows: PropTypes.number,
   label: PropTypes.shape({
     id: PropTypes.string,
-    value: PropTypes.node.isRequired
+    value: PropTypes.node.isRequired,
   }).isRequired,
   contentBeforeTextArea: PropTypes.node,
   contentAfterTextArea: PropTypes.node,
-  includeCheckbox: PropTypes.bool
+  includeCheckbox: PropTypes.bool,
 };

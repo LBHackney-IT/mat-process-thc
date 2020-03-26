@@ -4,7 +4,7 @@ import {
   ComponentDatabaseMap,
   ComponentValue,
   ComponentWrapper,
-  DynamicComponent
+  DynamicComponent,
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
@@ -20,7 +20,7 @@ import PageTitles from "../PageTitles";
 
 const questions = {
   "has-fire-exit": "Does the property have a secondary fire exit?",
-  "is-accessible": "Is it accessible and easy to use?"
+  "is-accessible": "Is it accessible and easy to use?",
 };
 
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
@@ -34,9 +34,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           "has-fire-exit": {
             renderValue(hasFireExit: string): React.ReactNode {
               return getRadioLabelFromValue(yesNoRadios, hasFireExit);
-            }
-          }
-        }
+            },
+          },
+        },
       },
       {
         label: questions["is-accessible"],
@@ -44,16 +44,16 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           "is-accessible": {
             renderValue(isAccessible: string): React.ReactNode {
               return getRadioLabelFromValue(yesNoRadios, isAccessible);
-            }
+            },
           },
           "fire-exit-notes": {
             renderValue(fireExitNotes: Note): React.ReactNode {
               return fireExitNotes.value;
-            }
-          }
-        }
-      }
-    ]
+            },
+          },
+        },
+      },
+    ],
   },
   step: {
     slug: PageSlugs.FireExit,
@@ -61,7 +61,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
@@ -73,7 +73,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             legend: (
               <FieldsetLegend>{questions["has-fire-exit"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           defaultValue: "",
           emptyValue: "",
@@ -83,8 +83,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["fireExit", "hasFireExit"]
-          })
+            property: ["fireExit", "hasFireExit"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -96,7 +96,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             legend: (
               <FieldsetLegend>{questions["is-accessible"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           renderWhen(stepValues: {
             "has-fire-exit"?: ComponentValue<ProcessDatabaseSchema, "property">;
@@ -111,8 +111,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["fireExit", "isAccessible"]
-          })
+            property: ["fireExit", "isAccessible"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -121,10 +121,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about the fire exit if necessary."
+              value: "Add note about the fire exit if necessary.",
             },
             name: "fire-exit-notes",
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaProps,
           renderWhen(stepValues: {
             "has-fire-exit"?: ComponentValue<ProcessDatabaseSchema, "property">;
@@ -139,12 +139,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["fireExit", "notes"]
-          })
+            property: ["fireExit", "notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

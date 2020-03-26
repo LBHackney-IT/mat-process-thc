@@ -44,7 +44,7 @@ export const idAndResidencyResidentSteps = [
   otherSupport as ProcessStepDefinition<
     ResidentDatabaseSchema,
     IdAndResidencyResidentStoreNames
-  >
+  >,
 ];
 
 const steps = [...idAndResidencyProcessSteps, ...idAndResidencyResidentSteps];

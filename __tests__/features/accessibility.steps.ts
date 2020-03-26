@@ -24,7 +24,7 @@ const testAccessibility = (
   });
 };
 
-defineFeature(loadFeature("./accessibility.feature"), test => {
+defineFeature(loadFeature("./accessibility.feature"), (test) => {
   test("Index page is accessible", ({ defineStep, when, then }) => {
     when(/^I visit the index page$/, async () => {
       await browser!.getRelative("", true);

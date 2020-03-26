@@ -2,7 +2,7 @@ import {
   FieldsetLegend,
   Heading,
   HeadingLevels,
-  Paragraph
+  Paragraph,
 } from "lbh-frontend-react/components";
 import React from "react";
 import {
@@ -10,13 +10,13 @@ import {
   ComponentValue,
   ComponentWrapper,
   DynamicComponent,
-  StaticComponent
+  StaticComponent,
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import {
   TextAreaDetails,
-  TextAreaDetailsProps
+  TextAreaDetailsProps,
 } from "../../components/TextAreaDetails";
 import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
@@ -30,43 +30,43 @@ import PageTitles from "../PageTitles";
 const rentArrearsRadios = [
   {
     label: "Yes, but the tenant is waiting for Housing Benefit Payment",
-    value: "yes waiting for payment"
+    value: "yes waiting for payment",
   },
   {
     label: "Yes, but tenant has an action plan to clear arrears",
-    value: "yes has plan"
+    value: "yes has plan",
   },
   {
     label: "Yes, but tenant doesn't have an action plan to clear arrears",
-    value: "yes has no plan"
+    value: "yes has no plan",
   },
   {
     label: "No, tenant does not have arrears",
-    value: "no"
-  }
+    value: "no",
+  },
 ];
 
 const housingBenefitRadios = [
   {
     label: "Yes, and payments received",
-    value: "yes payments received"
+    value: "yes payments received",
   },
   {
     label: "Yes, but payments not yet received",
-    value: "yes payments not received"
+    value: "yes payments not received",
   },
   {
     label: "Yes, but application declined",
-    value: "yes application declined"
+    value: "yes application declined",
   },
   {
     label: "No, but would like to apply (phone: 020 8356 3399)",
-    value: "no wants to apply"
+    value: "no wants to apply",
   },
   {
     label: "No, and does not want to apply",
-    value: "no does not want to apply"
-  }
+    value: "no does not want to apply",
+  },
 ];
 
 const questions = {
@@ -74,7 +74,7 @@ const questions = {
   "has-applied-for-housing-benefit":
     "Has Housing Benefit / Universal Credit been applied for?",
   "contact-income-officer":
-    "Would the tenant like to be put in contact with the Income Officer?"
+    "Would the tenant like to be put in contact with the Income Officer?",
 };
 
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
@@ -88,14 +88,14 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
           "rent-arrears-type": {
             renderValue(type: string): React.ReactNode {
               return getRadioLabelFromValue(rentArrearsRadios, type);
-            }
+            },
           },
           "rent-arrears-notes": {
             renderValue(rentArrearsNotes: Note): React.ReactNode {
               return rentArrearsNotes.value;
-            }
-          }
-        }
+            },
+          },
+        },
       },
       {
         label: questions["has-applied-for-housing-benefit"],
@@ -106,14 +106,14 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
                 housingBenefitRadios,
                 hasAppliedForHousingBenefit
               );
-            }
+            },
           },
           "housing-benefits-notes": {
             renderValue(housingBenefitNotes: Note): React.ReactNode {
               return housingBenefitNotes.value;
-            }
-          }
-        }
+            },
+          },
+        },
       },
       {
         label: questions["contact-income-officer"],
@@ -121,16 +121,16 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
           "contact-income-officer": {
             renderValue(contactIncomeOfficer: string): React.ReactNode {
               return getRadioLabelFromValue(yesNoRadios, contactIncomeOfficer);
-            }
+            },
           },
           "income-officer-notes": {
             renderValue(incomeOfficerNotes: Note): React.ReactNode {
               return incomeOfficerNotes.value;
-            }
-          }
-        }
-      }
-    ]
+            },
+          },
+        },
+      },
+    ],
   },
   step: {
     slug: PageSlugs.Rent,
@@ -138,7 +138,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
@@ -154,7 +154,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
                 </Heading>
               </FieldsetLegend>
             ) as React.ReactNode,
-            radios: rentArrearsRadios
+            radios: rentArrearsRadios,
           },
           defaultValue: "",
           emptyValue: "",
@@ -164,8 +164,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
           >({
             storeName: "household",
             key: keyFromSlug(),
-            property: ["rentArrears", "type"]
-          })
+            property: ["rentArrears", "type"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -176,7 +176,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
             summary: "Add notes about rent arrears if necessary",
             label: { value: "Notes" },
             name: "rent-arrears-notes",
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
@@ -186,8 +186,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
           >({
             storeName: "household",
             key: keyFromSlug(),
-            property: ["rentArrears", "notes"]
-          })
+            property: ["rentArrears", "notes"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -203,7 +203,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
                 </Heading>
               </FieldsetLegend>
             ) as React.ReactNode,
-            radios: housingBenefitRadios
+            radios: housingBenefitRadios,
           },
           renderWhen(stepValues: {
             "rent-arrears-type"?: ComponentValue<
@@ -225,8 +225,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
           >({
             storeName: "household",
             key: keyFromSlug(),
-            property: ["housingBenefits", "hasApplied"]
-          })
+            property: ["housingBenefits", "hasApplied"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -237,7 +237,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
             summary: "Add details about Housing Benefit if necessary",
             label: { value: "Notes" },
             name: "housing-benefits-notes",
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaDetailsProps,
           renderWhen(stepValues: {
             "rent-arrears-type"?: ComponentValue<
@@ -259,8 +259,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
           >({
             storeName: "household",
             key: keyFromSlug(),
-            property: ["housingBenefits", "notes"]
-          })
+            property: ["housingBenefits", "notes"],
+          }),
         })
       ),
       ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "household">(
@@ -269,7 +269,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
           Component: Heading,
           props: {
             level: HeadingLevels.H2,
-            children: "Does the tenant know about the Income Officer role?"
+            children: "Does the tenant know about the Income Officer role?",
           },
           renderWhen(stepValues: {
             "rent-arrears-type"?: ComponentValue<
@@ -278,7 +278,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
             >;
           }): boolean {
             return Boolean(stepValues["rent-arrears-type"]);
-          }
+          },
         })
       ),
       ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "household">(
@@ -287,7 +287,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
           Component: Paragraph,
           props: {
             children:
-              "The Income Officer can provide advice and assistance on debt management, housing benefit, and other welfare benefits."
+              "The Income Officer can provide advice and assistance on debt management, housing benefit, and other welfare benefits.",
           },
           renderWhen(stepValues: {
             "rent-arrears-type"?: ComponentValue<
@@ -296,7 +296,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
             >;
           }): boolean {
             return Boolean(stepValues["rent-arrears-type"]);
-          }
+          },
         })
       ),
       ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "household">(
@@ -304,7 +304,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
           key: "income-officer-phone-number",
           Component: Paragraph,
           props: {
-            children: "Income Services: 020 8356 3100"
+            children: "Income Services: 020 8356 3100",
           },
           renderWhen(stepValues: {
             "rent-arrears-type"?: ComponentValue<
@@ -313,7 +313,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
             >;
           }): boolean {
             return Boolean(stepValues["rent-arrears-type"]);
-          }
+          },
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -329,7 +329,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
                 </Heading>
               </FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           renderWhen(stepValues: {
             "rent-arrears-type"?: ComponentValue<
@@ -347,8 +347,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
           >({
             storeName: "household",
             key: keyFromSlug(),
-            property: ["incomeOfficer", "wantsToContact"]
-          })
+            property: ["incomeOfficer", "wantsToContact"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -359,7 +359,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
             summary: "Add details about the Income Officer if necessary",
             label: { value: "Notes" },
             name: "income-officer-notes",
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaDetailsProps,
           renderWhen(stepValues: {
             "rent-arrears-type"?: ComponentValue<
@@ -377,12 +377,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
           >({
             storeName: "household",
             key: keyFromSlug(),
-            property: ["incomeOfficer", "notes"]
-          })
+            property: ["incomeOfficer", "notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

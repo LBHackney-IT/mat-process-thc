@@ -4,7 +4,7 @@ import {
   Header,
   Heading,
   HeadingLevels,
-  Main
+  Main,
 } from "lbh-frontend-react";
 import NextHead from "next/head";
 import NextLink from "next/link";
@@ -35,7 +35,7 @@ const MainLayout = ({
   title,
   heading,
   pausable,
-  children
+  children,
 }: Props): React.ReactElement => {
   const router = useRouter();
 

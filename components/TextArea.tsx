@@ -1,12 +1,12 @@
 import {
   Checkboxes as LBHCheckboxes,
-  CheckboxItem
+  CheckboxItem,
 } from "lbh-frontend-react/components";
 import { Textarea } from "lbh-frontend-react/components/Textarea";
 import React from "react";
 import {
   DynamicComponent,
-  DynamicComponentControlledProps
+  DynamicComponentControlledProps,
 } from "remultiform/component-wrapper";
 import PropTypes from "../helpers/PropTypes";
 
@@ -23,7 +23,7 @@ export type TextAreaProps = DynamicComponentControlledProps<{
   includeCheckbox?: boolean;
 };
 
-export const TextArea: React.FunctionComponent<TextAreaProps> = props => {
+export const TextArea: React.FunctionComponent<TextAreaProps> = (props) => {
   const {
     label,
     name,
@@ -32,7 +32,7 @@ export const TextArea: React.FunctionComponent<TextAreaProps> = props => {
     value,
     onValueChange,
     required,
-    disabled
+    disabled,
   } = props;
 
   const labelId = label.id || `${name}-label`;
@@ -42,7 +42,7 @@ export const TextArea: React.FunctionComponent<TextAreaProps> = props => {
   if (includeCheckbox) {
     const checkbox = {
       label: "Create a post-visit action",
-      value: true
+      value: true,
     };
 
     const id = `${inputId}-post-visit-action`;
@@ -53,8 +53,8 @@ export const TextArea: React.FunctionComponent<TextAreaProps> = props => {
         value: `${checkbox.value}`,
         label: { id: `${id}-label`, children: checkbox.label },
         checked: value.isPostVisitAction === checkbox.value,
-        disabled
-      }
+        disabled,
+      },
     ];
 
     postVisitActionCheckbox = (
@@ -64,7 +64,7 @@ export const TextArea: React.FunctionComponent<TextAreaProps> = props => {
         onChange={(checkboxValue: string[]): void => {
           return onValueChange({
             value: value.value,
-            isPostVisitAction: checkboxValue[0] === "true"
+            isPostVisitAction: checkboxValue[0] === "true",
           });
         }}
         required={required}
@@ -81,7 +81,7 @@ export const TextArea: React.FunctionComponent<TextAreaProps> = props => {
         onChange={(textValue: string): void =>
           onValueChange({
             value: textValue,
-            isPostVisitAction: value.isPostVisitAction
+            isPostVisitAction: value.isPostVisitAction,
           })
         }
         required={required}
@@ -98,14 +98,14 @@ TextArea.propTypes = {
   ...DynamicComponent.controlledPropTypes(
     PropTypes.exact({
       value: PropTypes.string.isRequired,
-      isPostVisitAction: PropTypes.bool.isRequired
+      isPostVisitAction: PropTypes.bool.isRequired,
     }).isRequired
   ),
   label: PropTypes.exact({
     id: PropTypes.string,
-    value: PropTypes.node.isRequired
+    value: PropTypes.node.isRequired,
   }).isRequired,
   name: PropTypes.string.isRequired,
   rows: PropTypes.number,
-  includeCheckbox: PropTypes.bool
+  includeCheckbox: PropTypes.bool,
 };

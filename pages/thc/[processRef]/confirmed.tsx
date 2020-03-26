@@ -2,7 +2,7 @@ import { Button } from "lbh-frontend-react/components/Button";
 import { PageAnnouncement } from "lbh-frontend-react/components/PageAnnouncement";
 import {
   Heading,
-  HeadingLevels
+  HeadingLevels,
 } from "lbh-frontend-react/components/typography/Heading";
 import { Paragraph } from "lbh-frontend-react/components/typography/Paragraph";
 import { NextPage } from "next";

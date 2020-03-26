@@ -4,7 +4,7 @@ import {
   ComponentDatabaseMap,
   ComponentValue,
   ComponentWrapper,
-  DynamicComponent
+  DynamicComponent,
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
@@ -20,7 +20,7 @@ import PageTitles from "../PageTitles";
 
 const questions = {
   "has-access-to-loft": "Does the tenant have access to loft space?",
-  "items-stored-in-loft": "Are items being stored in the loft space?"
+  "items-stored-in-loft": "Are items being stored in the loft space?",
 };
 
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
@@ -34,9 +34,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           "has-access-to-loft": {
             renderValue(hasAccess: string): React.ReactNode {
               return getRadioLabelFromValue(yesNoRadios, hasAccess);
-            }
-          }
-        }
+            },
+          },
+        },
       },
       {
         label: questions["items-stored-in-loft"],
@@ -44,16 +44,16 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           "items-stored-in-loft": {
             renderValue(storingItems: string): React.ReactNode {
               return getRadioLabelFromValue(yesNoRadios, storingItems);
-            }
+            },
           },
           "loft-notes": {
             renderValue(notes: Note): React.ReactNode {
               return notes.value;
-            }
-          }
-        }
-      }
-    ]
+            },
+          },
+        },
+      },
+    ],
   },
   step: {
     slug: PageSlugs.Loft,
@@ -61,7 +61,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
@@ -73,7 +73,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             legend: (
               <FieldsetLegend>{questions["has-access-to-loft"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           defaultValue: "",
           emptyValue: "",
@@ -83,8 +83,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["loft", "hasAccess"]
-          })
+            property: ["loft", "hasAccess"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -98,7 +98,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
                 {questions["items-stored-in-loft"]}
               </FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           renderWhen(stepValues: {
             "has-access-to-loft"?: ComponentValue<
@@ -116,8 +116,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["loft", "itemsStored"]
-          })
+            property: ["loft", "itemsStored"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -126,10 +126,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about loft space if necessary."
+              value: "Add note about loft space if necessary.",
             },
             name: "loft-notes",
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaProps,
           renderWhen(stepValues: {
             "has-access-to-loft"?: ComponentValue<
@@ -147,12 +147,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["loft", "notes"]
-          })
+            property: ["loft", "notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

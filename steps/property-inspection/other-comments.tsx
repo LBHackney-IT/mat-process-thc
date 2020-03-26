@@ -3,13 +3,13 @@ import {
   List,
   ListProps,
   ListTypes,
-  Paragraph
+  Paragraph,
 } from "lbh-frontend-react/components";
 import {
   ComponentDatabaseMap,
   ComponentWrapper,
   DynamicComponent,
-  StaticComponent
+  StaticComponent,
 } from "remultiform/component-wrapper";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
@@ -32,12 +32,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           "other-comments-notes": {
             renderValue(notes: Note): React.ReactNode {
               return notes.value;
-            }
-          }
+            },
+          },
         },
-        images: "other-comments-images"
-      }
-    ]
+        images: "other-comments-images",
+      },
+    ],
   },
   step: {
     slug: PageSlugs.OtherComments,
@@ -45,7 +45,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "property">(
@@ -54,8 +54,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           Component: Paragraph,
           props: {
             children:
-              "Include notes to record other subjects discussed with tenant or issues not included in the form:"
-          }
+              "Include notes to record other subjects discussed with tenant or issues not included in the form:",
+          },
         })
       ),
       ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "property">(
@@ -67,10 +67,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
               "hoarding",
               "signs of sub-letting (only record what you observe eg locks on bedroom doors)",
               "any further questions from the tenant about their home, estate or facilities",
-              "Tenant and Resident Association"
+              "Tenant and Resident Association",
             ],
-            type: ListTypes.Bullet
-          } as ListProps
+            type: ListTypes.Bullet,
+          } as ListProps,
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -84,7 +84,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
               | string
               | null
               | undefined,
-            maxCount: 5 as number | null | undefined
+            maxCount: 5 as number | null | undefined,
           },
           defaultValue: [],
           emptyValue: [] as string[],
@@ -94,8 +94,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["otherComments", "images"]
-          })
+            property: ["otherComments", "images"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -105,10 +105,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           props: {
             label: {
               value:
-                "Add notes about any other comments or points to investigate for the property"
+                "Add notes about any other comments or points to investigate for the property",
             },
             name: "other-comments-notes",
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
@@ -118,12 +118,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["otherComments", "notes"]
-          })
+            property: ["otherComments", "notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

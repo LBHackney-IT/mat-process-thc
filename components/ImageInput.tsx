@@ -2,7 +2,7 @@ import { Button, Paragraph } from "lbh-frontend-react/components";
 import React, { useRef } from "react";
 import {
   DynamicComponentControlledProps,
-  DynamicComponent
+  DynamicComponent,
 } from "remultiform/component-wrapper";
 
 import PropTypes from "../helpers/PropTypes";
@@ -17,7 +17,7 @@ type Props = DynamicComponentControlledProps<string[]> & {
   maxCount?: number | null;
 };
 
-export const ImageInput: React.FunctionComponent<Props> = props => {
+export const ImageInput: React.FunctionComponent<Props> = (props) => {
   const {
     label,
     name,
@@ -26,7 +26,7 @@ export const ImageInput: React.FunctionComponent<Props> = props => {
     value: images,
     onValueChange,
     required,
-    disabled
+    disabled,
   } = props;
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -46,7 +46,7 @@ export const ImageInput: React.FunctionComponent<Props> = props => {
               <Button
                 className="govuk-button--warning lbh-button--warning remove-button"
                 onClick={(): void => {
-                  const newImages = images.filter(i => i !== image);
+                  const newImages = images.filter((i) => i !== image);
 
                   onValueChange(newImages);
                 }}
@@ -170,5 +170,5 @@ ImageInput.propTypes = {
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   hintText: PropTypes.string,
-  maxCount: PropTypes.number
+  maxCount: PropTypes.number,
 };

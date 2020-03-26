@@ -4,7 +4,7 @@ import {
   Locator,
   until,
   WebDriver,
-  WebElement
+  WebElement,
 } from "selenium-webdriver";
 import chrome from "selenium-webdriver/chrome";
 import firefox from "selenium-webdriver/firefox";
@@ -24,7 +24,7 @@ class WebDriverWrapper implements WebDriver {
     global.browser = await this.create({
       browser: process.env.TEST_BROWSER || Browser.CHROME,
       headless: yn(process.env.TEST_HEADLESS, { default: true }),
-      baseUrl: `http://localhost:${process.env.PORT || 3000}${basePath}`
+      baseUrl: `http://localhost:${process.env.PORT || 3000}${basePath}`,
     });
   }
 
@@ -39,7 +39,7 @@ class WebDriverWrapper implements WebDriver {
   static async create({
     browser = Browser.CHROME,
     headless = true,
-    baseUrl
+    baseUrl,
   }: WebDriverWrapperCreateOptions = {}): Promise<WebDriverWrapper> {
     const windowSize = { width: 1280, height: 720 };
 

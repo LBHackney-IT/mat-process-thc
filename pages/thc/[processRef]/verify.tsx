@@ -4,7 +4,7 @@ import {
   Heading,
   HeadingLevels,
   Link,
-  Paragraph
+  Paragraph,
 } from "lbh-frontend-react/components";
 import { NextPage } from "next";
 import NextLink from "next/link";
@@ -31,19 +31,19 @@ export const VerifyPage: NextPage = () => {
     Storage.ExternalContext,
     "tenancy",
     processRef,
-    values => (processRef ? values[processRef] : undefined)
+    (values) => (processRef ? values[processRef] : undefined)
   );
   const residentData = useDataValue(
     Storage.ExternalContext,
     "residents",
     processRef,
-    values => (processRef ? values[processRef] : undefined)
+    (values) => (processRef ? values[processRef] : undefined)
   );
   const tenantsPresent = useDataValue(
     Storage.ProcessContext,
     "tenantsPresent",
     processRef,
-    values => (processRef ? values[processRef] : undefined)
+    (values) => (processRef ? values[processRef] : undefined)
   );
   const idData = useDataSet(
     Storage.ResidentContext,
@@ -53,11 +53,11 @@ export const VerifyPage: NextPage = () => {
   const residencyData = useDataSet(
     Storage.ResidentContext,
     "residency",
-    residentData.result?.tenants.map(tenant => tenant.id)
+    residentData.result?.tenants.map((tenant) => tenant.id)
   );
 
   const tenantData =
-    residentData.result?.tenants.map(tenant => {
+    residentData.result?.tenants.map((tenant) => {
       return {
         id: tenant.id,
         name: tenant.fullName,
@@ -70,19 +70,19 @@ export const VerifyPage: NextPage = () => {
             : undefined,
           residency: residencyData.result
             ? Boolean(residencyData.result[tenant.id])
-            : false
-        }
+            : false,
+        },
       };
     }) || [];
 
   const allVerified =
     !residentData.loading &&
     tenantData.every(
-      tenant =>
+      (tenant) =>
         tenant.verified.id !== false && tenant.verified.residency !== false
     );
 
-  const tableRows = tenantData.map(tenant => {
+  const tableRows = tenantData.map((tenant) => {
     return [
       tenant.name,
       formatDate(tenant.dateOfBirth, "d MMMM yyyy"),
@@ -112,7 +112,7 @@ export const VerifyPage: NextPage = () => {
           : tenant.verified.id !== false && tenant.verified.residency !== false
           ? "Edit"
           : "Verify"}
-      </Link>
+      </Link>,
     ];
   });
 
@@ -141,7 +141,7 @@ export const VerifyPage: NextPage = () => {
             ? ["Error"]
             : undefined,
           tenants: residentData.result
-            ? residentData.result.tenants.map(tenant => tenant.fullName)
+            ? residentData.result.tenants.map((tenant) => tenant.fullName)
             : residentData.error
             ? ["Error"]
             : undefined,
@@ -154,7 +154,7 @@ export const VerifyPage: NextPage = () => {
             ? tenancyData.result.startDate
             : tenancyData.error
             ? "Error"
-            : undefined
+            : undefined,
         }}
       />
 

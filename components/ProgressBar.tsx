@@ -11,7 +11,7 @@ interface Props {
   completeLabel: string;
 }
 
-const ProgressBar: React.FunctionComponent<Props> = props => {
+const ProgressBar: React.FunctionComponent<Props> = (props) => {
   const { progress, incompleteLabel, completeLabel } = props;
 
   return (
@@ -41,7 +41,7 @@ const ProgressBar: React.FunctionComponent<Props> = props => {
 ProgressBar.propTypes = {
   progress: PropTypes.number.isRequired,
   incompleteLabel: PropTypes.string.isRequired,
-  completeLabel: PropTypes.string.isRequired
+  completeLabel: PropTypes.string.isRequired,
 };
 
 export default ProgressBar;

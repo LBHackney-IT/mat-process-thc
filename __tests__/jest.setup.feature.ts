@@ -20,10 +20,7 @@ beforeEach(async () => {
 
 afterEach(async () => {
   const log =
-    (await global.browser
-      ?.manage()
-      .logs()
-      .get(logging.Type.BROWSER)) || [];
+    (await global.browser?.manage().logs().get(logging.Type.BROWSER)) || [];
 
   for (const line of log) {
     switch (line.level) {

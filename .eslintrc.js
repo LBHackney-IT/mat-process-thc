@@ -4,7 +4,7 @@ const sharedExtends = ["eslint:recommended", "plugin:react/recommended"];
 const sharedPrettierExtends = ["prettier", "prettier/react"];
 const sharedRules = {
   "react-hooks/rules-of-hooks": "error",
-  "react-hooks/exhaustive-deps": "warn"
+  "react-hooks/exhaustive-deps": "warn",
 };
 
 module.exports = {
@@ -14,8 +14,8 @@ module.exports = {
   rules: { ...sharedRules },
   settings: {
     react: {
-      version: "detect"
-    }
+      version: "detect",
+    },
   },
   overrides: [
     {
@@ -26,9 +26,9 @@ module.exports = {
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended",
         ...sharedPrettierExtends,
-        "prettier/@typescript-eslint"
+        "prettier/@typescript-eslint",
       ],
-      rules: { ...sharedRules }
-    }
-  ]
+      rules: { ...sharedRules },
+    },
+  ],
 };

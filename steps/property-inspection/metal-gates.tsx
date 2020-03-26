@@ -4,7 +4,7 @@ import {
   ComponentDatabaseMap,
   ComponentValue,
   ComponentWrapper,
-  DynamicComponent
+  DynamicComponent,
 } from "remultiform/component-wrapper";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
@@ -24,7 +24,7 @@ const questions = {
     "Has the tenant had metal gates erected across front entrance doors?",
   "combustible-items-behind-gates":
     "Are there combustible items behind the metal gates?",
-  "further-action-required": "Is further action required?"
+  "further-action-required": "Is further action required?",
 };
 
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
@@ -38,9 +38,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           "has-metal-gates": {
             renderValue(hasMetalGates: string): React.ReactNode {
               return getRadioLabelFromValue(yesNoRadios, hasMetalGates);
-            }
-          }
-        }
+            },
+          },
+        },
       },
       {
         label: questions["combustible-items-behind-gates"],
@@ -51,9 +51,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
                 yesNoRadios,
                 combustiblesBehindGates
               );
-            }
-          }
-        }
+            },
+          },
+        },
       },
       {
         label: questions["further-action-required"],
@@ -64,17 +64,17 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
                 yesNoRadios,
                 combustiblesBehindGates
               );
-            }
+            },
           },
           "metal-gates-notes": {
             renderValue(notes: Note): React.ReactNode {
               return notes.value;
-            }
-          }
+            },
+          },
         },
-        images: "metal-gate-images"
-      }
-    ]
+        images: "metal-gate-images",
+      },
+    ],
   },
   step: {
     slug: PageSlugs.MetalGates,
@@ -82,7 +82,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
@@ -94,7 +94,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             legend: (
               <FieldsetLegend>{questions["has-metal-gates"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           defaultValue: "",
           emptyValue: "",
@@ -104,8 +104,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["metalGates", "hasMetalGates"]
-          })
+            property: ["metalGates", "hasMetalGates"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -119,7 +119,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
                 {questions["combustible-items-behind-gates"]}
               </FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           renderWhen(stepValues: {
             "has-metal-gates"?: ComponentValue<
@@ -137,8 +137,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["metalGates", "combustibleItemsBehind"]
-          })
+            property: ["metalGates", "combustibleItemsBehind"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -152,7 +152,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
                 {questions["further-action-required"]}
               </FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           renderWhen(stepValues: {
             "combustible-items-behind-gates"?: ComponentValue<
@@ -170,8 +170,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["metalGates", "furtherActionRequired"]
-          })
+            property: ["metalGates", "furtherActionRequired"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -185,7 +185,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
               | string
               | null
               | undefined,
-            maxCount: 3 as number | null | undefined
+            maxCount: 3 as number | null | undefined,
           },
           renderWhen(stepValues: {
             "has-metal-gates"?: ComponentValue<
@@ -203,8 +203,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["metalGates", "images"]
-          })
+            property: ["metalGates", "images"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -214,10 +214,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           props: {
             label: {
               value:
-                "Add note about metal gates / combustible items if necessary."
+                "Add note about metal gates / combustible items if necessary.",
             },
             name: "metal-gates-notes",
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaProps,
           renderWhen(stepValues: {
             "has-metal-gates"?: ComponentValue<
@@ -235,12 +235,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["metalGates", "notes"]
-          })
+            property: ["metalGates", "notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

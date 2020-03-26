@@ -4,7 +4,7 @@ import {
   ComponentDatabaseMap,
   ComponentValue,
   ComponentWrapper,
-  DynamicComponent
+  DynamicComponent,
 } from "remultiform/component-wrapper";
 import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { makeSubmit } from "../../components/makeSubmit";
@@ -26,7 +26,7 @@ const questions = {
   "pip-or-dla":
     "Does anyone in the household get Personal Independence Payment (PIP) or Disability Living Allowance (DLA)?",
   "who-pip": "Who gets PIP?",
-  "who-dla": "Who gets DLA?"
+  "who-dla": "Who gets DLA?",
 };
 
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
@@ -40,23 +40,23 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
           disability: {
             renderValue(anyDisability: string): React.ReactNode {
               return getRadioLabelFromValue(yesNoRadios, anyDisability);
-            }
+            },
           },
           "who-disability": {
             renderValue(whoDisability: string[]): React.ReactNode {
               return whoDisability
-                .map(who => {
+                .map((who) => {
                   return getRadioLabelFromValue(householdMemberCheckboxes, who);
                 })
                 .join(", ");
-            }
+            },
           },
           "disability-notes": {
             renderValue(notes: Note): React.ReactNode {
               return notes.value;
-            }
-          }
-        }
+            },
+          },
+        },
       },
       {
         label: questions["pip-or-dla"],
@@ -64,9 +64,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
           "pip-or-dla": {
             renderValue(pipOrDLA: string): React.ReactNode {
               return getRadioLabelFromValue(yesNoRadios, pipOrDLA);
-            }
-          }
-        }
+            },
+          },
+        },
       },
       {
         label: "Who gets PIP?",
@@ -74,13 +74,13 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
           "who-pip": {
             renderValue(whoPIP: string[]): React.ReactNode {
               return whoPIP
-                .map(who =>
+                .map((who) =>
                   getRadioLabelFromValue(householdMemberCheckboxes, who)
                 )
                 .join(", ");
-            }
-          }
-        }
+            },
+          },
+        },
       },
       {
         label: "Who gets DLA?",
@@ -88,15 +88,15 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
           "who-dla": {
             renderValue(whoDLA: string[]): React.ReactNode {
               return whoDLA
-                .map(who =>
+                .map((who) =>
                   getRadioLabelFromValue(householdMemberCheckboxes, who)
                 )
                 .join(", ");
-            }
-          }
-        }
-      }
-    ]
+            },
+          },
+        },
+      },
+    ],
   },
   step: {
     slug: PageSlugs.Disability,
@@ -104,7 +104,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
@@ -116,7 +116,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
             legend: (
               <FieldsetLegend>{questions["disability"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           defaultValue: "",
           emptyValue: "",
@@ -126,8 +126,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
           >({
             storeName: "disability",
             key: keyFromSlug(),
-            property: ["value"]
-          })
+            property: ["value"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -139,7 +139,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
             legend: (
               <FieldsetLegend>{questions["who-disability"]}</FieldsetLegend>
             ) as React.ReactNode,
-            checkboxes: householdMemberCheckboxes
+            checkboxes: householdMemberCheckboxes,
           } as CheckboxesProps,
           renderWhen(stepValues: {
             disability?: ComponentValue<ProcessDatabaseSchema, "disability">;
@@ -154,8 +154,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
           >({
             storeName: "disability",
             key: keyFromSlug(),
-            property: ["whoDisability"]
-          })
+            property: ["whoDisability"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -167,7 +167,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
             legend: (
               <FieldsetLegend>{questions["pip-or-dla"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           renderWhen(stepValues: {
             disability?: ComponentValue<ProcessDatabaseSchema, "disability">;
@@ -182,8 +182,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
           >({
             storeName: "disability",
             key: keyFromSlug(),
-            property: ["pipOrDLA"]
-          })
+            property: ["pipOrDLA"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -195,7 +195,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
             legend: (
               <FieldsetLegend>{questions["who-pip"]}</FieldsetLegend>
             ) as React.ReactNode,
-            checkboxes: householdMemberCheckboxes
+            checkboxes: householdMemberCheckboxes,
           } as CheckboxesProps,
           renderWhen(stepValues: {
             "pip-or-dla"?: ComponentValue<ProcessDatabaseSchema, "disability">;
@@ -210,8 +210,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
           >({
             storeName: "disability",
             key: keyFromSlug(),
-            property: ["whoPIP"]
-          })
+            property: ["whoPIP"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -223,7 +223,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
             legend: (
               <FieldsetLegend>{questions["who-dla"]}</FieldsetLegend>
             ) as React.ReactNode,
-            checkboxes: householdMemberCheckboxes
+            checkboxes: householdMemberCheckboxes,
           } as CheckboxesProps,
           renderWhen(stepValues: {
             "pip-or-dla"?: ComponentValue<ProcessDatabaseSchema, "disability">;
@@ -238,8 +238,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
           >({
             storeName: "disability",
             key: keyFromSlug(),
-            property: ["whoDLA"]
-          })
+            property: ["whoDLA"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -249,10 +249,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
           props: {
             name: "disability-notes",
             label: {
-              value: "Add note about any disability concerns if necessary."
+              value: "Add note about any disability concerns if necessary.",
             },
             rows: 4,
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaProps,
           renderWhen(stepValues: {
             disability?: ComponentValue<ProcessDatabaseSchema, "disability">;
@@ -267,12 +267,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
           >({
             storeName: "disability",
             key: keyFromSlug(),
-            property: ["notes"]
-          })
+            property: ["notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

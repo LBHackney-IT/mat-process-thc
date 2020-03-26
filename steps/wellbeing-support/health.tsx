@@ -4,7 +4,7 @@ import {
   ComponentDatabaseMap,
   ComponentValue,
   ComponentWrapper,
-  DynamicComponent
+  DynamicComponent,
 } from "remultiform/component-wrapper";
 import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { makeSubmit } from "../../components/makeSubmit";
@@ -24,26 +24,26 @@ const questions = {
   "health-concerns": "Does anyone in the household have any health concerns?",
   "health-concerns-who": "Who has health concerns?",
   "health-concerns-more-info":
-    "Are they interested in more information or to be linked to our support services for:"
+    "Are they interested in more information or to be linked to our support services for:",
 };
 
 const healthConcernsCheckboxes = [
   {
     label: "Childhood obesity",
-    value: "childhood obesity"
+    value: "childhood obesity",
   },
   {
     label: "Dementia",
-    value: "dementia"
+    value: "dementia",
   },
   {
     label: "Mental health",
-    value: "mental health"
+    value: "mental health",
   },
   {
     label: "Smoking",
-    value: "smoking"
-  }
+    value: "smoking",
+  },
 ];
 
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "healthConcerns"> = {
@@ -57,9 +57,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "healthConcerns"> = {
           "health-concerns": {
             renderValue(healthConcerns: string): React.ReactNode {
               return getRadioLabelFromValue(yesNoRadios, healthConcerns);
-            }
-          }
-        }
+            },
+          },
+        },
       },
       {
         label: questions["health-concerns-who"],
@@ -67,13 +67,13 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "healthConcerns"> = {
           "health-concerns-who": {
             renderValue(whoConcerns: string[]): React.ReactNode {
               return whoConcerns
-                .map(who => {
+                .map((who) => {
                   return getRadioLabelFromValue(householdMemberCheckboxes, who);
                 })
                 .join(", ");
-            }
-          }
-        }
+            },
+          },
+        },
       },
       {
         label: questions["health-concerns-more-info"],
@@ -85,16 +85,16 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "healthConcerns"> = {
                   return getRadioLabelFromValue(healthConcernsCheckboxes, info);
                 })
                 .join(", ");
-            }
+            },
           },
           "health-notes": {
             renderValue(notes: Note): React.ReactNode {
               return notes.value;
-            }
-          }
-        }
-      }
-    ]
+            },
+          },
+        },
+      },
+    ],
   },
   step: {
     slug: PageSlugs.Health,
@@ -102,7 +102,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "healthConcerns"> = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
@@ -114,7 +114,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "healthConcerns"> = {
             legend: (
               <FieldsetLegend>{questions["health-concerns"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           defaultValue: "",
           emptyValue: "",
@@ -124,8 +124,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "healthConcerns"> = {
           >({
             storeName: "healthConcerns",
             key: keyFromSlug(),
-            property: ["value"]
-          })
+            property: ["value"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -139,7 +139,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "healthConcerns"> = {
                 {questions["health-concerns-who"]}
               </FieldsetLegend>
             ) as React.ReactNode,
-            checkboxes: householdMemberCheckboxes
+            checkboxes: householdMemberCheckboxes,
           } as CheckboxesProps,
           renderWhen(stepValues: {
             "health-concerns"?: ComponentValue<
@@ -157,8 +157,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "healthConcerns"> = {
           >({
             storeName: "healthConcerns",
             key: keyFromSlug(),
-            property: ["who"]
-          })
+            property: ["who"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -172,7 +172,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "healthConcerns"> = {
                 {questions["health-concerns-more-info"]}
               </FieldsetLegend>
             ) as React.ReactNode,
-            checkboxes: healthConcernsCheckboxes
+            checkboxes: healthConcernsCheckboxes,
           } as CheckboxesProps,
           renderWhen(stepValues: {
             "health-concerns"?: ComponentValue<
@@ -190,8 +190,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "healthConcerns"> = {
           >({
             storeName: "healthConcerns",
             key: keyFromSlug(),
-            property: ["moreInfo"]
-          })
+            property: ["moreInfo"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -201,10 +201,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "healthConcerns"> = {
           props: {
             name: "health-notes",
             label: {
-              value: "Add note about any health concerns if necessary."
+              value: "Add note about any health concerns if necessary.",
             },
             rows: 4,
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaProps,
           renderWhen(stepValues: {
             "health-concerns"?: ComponentValue<
@@ -222,12 +222,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "healthConcerns"> = {
           >({
             storeName: "healthConcerns",
             key: keyFromSlug(),
-            property: ["notes"]
-          })
+            property: ["notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

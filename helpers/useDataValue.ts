@@ -4,7 +4,7 @@ import {
   Schema,
   StoreKey,
   StoreNames,
-  StoreValue
+  StoreValue,
 } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
 
@@ -39,7 +39,7 @@ const useDataValue = <
   return {
     loading: values.loading,
     result: values.result === undefined ? undefined : fetchValue(values.result),
-    error: values.error
+    error: values.error,
   };
 };
 

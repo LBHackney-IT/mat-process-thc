@@ -1,7 +1,7 @@
 import {
   FieldsetLegend,
   Heading,
-  HeadingLevels
+  HeadingLevels,
 } from "lbh-frontend-react/components";
 import React from "react";
 import {
@@ -9,7 +9,7 @@ import {
   ComponentValue,
   ComponentWrapper,
   DynamicComponent,
-  StaticComponent
+  StaticComponent,
 } from "remultiform/component-wrapper";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
@@ -42,17 +42,17 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
                   ? "Tenant agreed to be photographed"
                   : "Tenant does not want to be photographed")
               );
-            }
+            },
           },
           "tenant-photo-willing-notes": {
             renderValue(notes: Note): React.ReactNode {
               return notes.value;
-            }
-          }
+            },
+          },
         },
-        images: "tenant-photo"
-      }
-    ]
+        images: "tenant-photo",
+      },
+    ],
   },
   step: {
     slug: PageSlugs.TenantPhoto,
@@ -60,7 +60,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
@@ -74,7 +74,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
                 Is the tenant willing to be photographed?
               </FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           defaultValue: "",
           emptyValue: "",
@@ -84,8 +84,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
           >({
             storeName: "photo",
             key: keyFromSlug(true),
-            property: ["isWilling"]
-          })
+            property: ["isWilling"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -94,9 +94,9 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
           Component: TextArea,
           props: {
             label: {
-              value: "Explain why."
+              value: "Explain why.",
             } as { id?: string; value: React.ReactNode },
-            name: "tenant-photo-willing-notes"
+            name: "tenant-photo-willing-notes",
           },
           renderWhen(stepValues: {
             "tenant-photo-willing"?: ComponentValue<
@@ -114,8 +114,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
           >({
             storeName: "photo",
             key: keyFromSlug(true),
-            property: ["notes"]
-          })
+            property: ["notes"],
+          }),
         })
       ),
       ComponentWrapper.wrapStatic<ResidentDatabaseSchema, "photo">(
@@ -124,7 +124,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
           Component: Heading,
           props: {
             level: HeadingLevels.H2,
-            children: "Tenant photo"
+            children: "Tenant photo",
           },
           renderWhen(stepValues: {
             "tenant-photo-willing"?: ComponentValue<
@@ -133,7 +133,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
             >;
           }): boolean {
             return stepValues["tenant-photo-willing"] === "yes";
-          }
+          },
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -147,7 +147,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
               | string
               | null
               | undefined,
-            maxCount: 1 as number | null | undefined
+            maxCount: 1 as number | null | undefined,
           },
           renderWhen(stepValues: {
             "tenant-photo-willing"?: ComponentValue<
@@ -165,12 +165,12 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
           >({
             storeName: "photo",
             key: keyFromSlug(true),
-            property: ["images"]
-          })
+            property: ["images"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

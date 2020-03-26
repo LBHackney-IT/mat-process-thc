@@ -3,14 +3,14 @@ import React from "react";
 import {
   ComponentDatabaseMap,
   ComponentWrapper,
-  DynamicComponent
+  DynamicComponent,
 } from "remultiform/component-wrapper";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import {
   TextAreaDetails,
-  TextAreaDetailsProps
+  TextAreaDetailsProps,
 } from "../../components/TextAreaDetails";
 import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
@@ -25,28 +25,28 @@ import PageTitles from "../PageTitles";
 const idTypeRadios = [
   {
     label: "Valid passport",
-    value: "valid passport"
+    value: "valid passport",
   },
   {
     label: "Driving license",
-    value: "driving passport"
+    value: "driving passport",
   },
   {
     label: "Freedom pass",
-    value: "freedom pass"
+    value: "freedom pass",
   },
   {
     label: "Photographic work ID",
-    value: "photographic work id"
+    value: "photographic work id",
   },
   {
     label: "Photographic student ID",
-    value: "photographic student id"
+    value: "photographic student id",
   },
   {
     label: "Unable to verify ID",
-    value: "no id"
-  }
+    value: "no id",
+  },
 ];
 
 const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
@@ -61,17 +61,17 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
           "id-type": {
             renderValue(type: string): React.ReactNode {
               return getRadioLabelFromValue(idTypeRadios, type);
-            }
+            },
           },
           "id-notes": {
             renderValue(notes: Note): React.ReactNode {
               return notes.value;
-            }
-          }
+            },
+          },
         },
-        images: "id-images"
-      }
-    ]
+        images: "id-images",
+      },
+    ],
   },
   step: {
     slug: PageSlugs.Id,
@@ -79,7 +79,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
@@ -91,15 +91,15 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
             legend: (
               <FieldsetLegend>What type of ID?</FieldsetLegend>
             ) as React.ReactNode,
-            radios: idTypeRadios
+            radios: idTypeRadios,
           },
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<ResidentDatabaseSchema, "id">({
             storeName: "id",
             key: keyFromSlug(true),
-            property: ["type"]
-          })
+            property: ["type"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -114,15 +114,15 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
               | string
               | null
               | undefined,
-            maxCount: 3 as number | null | undefined
+            maxCount: 3 as number | null | undefined,
           },
           defaultValue: [],
           emptyValue: [] as string[],
           databaseMap: new ComponentDatabaseMap<ResidentDatabaseSchema, "id">({
             storeName: "id",
             key: keyFromSlug(true),
-            property: ["images"]
-          })
+            property: ["images"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -133,19 +133,19 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
             summary: "Add note about ID if necessary" as React.ReactNode,
             label: { value: "Notes" },
             name: "id-notes",
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<ResidentDatabaseSchema, "id">({
             storeName: "id",
             key: keyFromSlug(true),
-            property: ["notes"]
-          })
+            property: ["notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

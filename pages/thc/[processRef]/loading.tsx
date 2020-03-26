@@ -3,7 +3,7 @@ import {
   ErrorMessage,
   Heading,
   HeadingLevels,
-  Paragraph
+  Paragraph,
 } from "lbh-frontend-react/components";
 import { NextPage } from "next";
 import NextLink from "next/link";
@@ -15,7 +15,7 @@ import ProgressBar from "../../../components/ProgressBar";
 import { TenancySummary } from "../../../components/TenancySummary";
 import useApi from "../../../helpers/api/useApi";
 import useApiWithStorage, {
-  UseApiWithStorageReturn
+  UseApiWithStorageReturn,
 } from "../../../helpers/api/useApiWithStorage";
 import basePath from "../../../helpers/basePath";
 import getProcessRef from "../../../helpers/getProcessRef";
@@ -45,15 +45,15 @@ const useFetchProcessJson = (): {
     endpoint: `/v1/processes/${processRef}/processData`,
     jwt: {
       sessionStorageKey:
-        isClient && processRef ? `${processRef}:processApiJwt` : undefined
+        isClient && processRef ? `${processRef}:processApiJwt` : undefined,
     },
-    execute: Boolean(processRef)
+    execute: Boolean(processRef),
   });
 
   return {
     loading: processData.loading,
     error: processData.error,
-    result: processData.result?.processData
+    result: processData.result?.processData,
   };
 };
 
@@ -132,7 +132,7 @@ const useFetchImages = (
           throw new Error("Invalid JSON response from API");
         }
 
-        setFetchedImageCount(count => count + 1);
+        setFetchedImageCount((count) => count + 1);
 
         return { id, ext, image: image.base64Image };
       })
@@ -144,7 +144,7 @@ const useFetchImages = (
     result: images ? imageResults.result : undefined,
     error: imageResults.error,
     fetchedImageCount,
-    expectedImageCount: images ? images.length : 0
+    expectedImageCount: images ? images.length : 0,
   };
 };
 
@@ -187,7 +187,7 @@ const useFetchProcessJsonWithImages = (): {
 
           result = {
             ...processJson.result,
-            processData: JSON.parse(processDataString)
+            processData: JSON.parse(processDataString),
           };
         } else {
           result = processJson.result;
@@ -206,7 +206,7 @@ const useFetchProcessJsonWithImages = (): {
     processJson.result,
     images.loading,
     images.error,
-    images.result
+    images.result,
   ]);
 
   const loading =
@@ -222,7 +222,7 @@ const useFetchProcessJsonWithImages = (): {
       images.fetchedImageCount +
       (processJson.loading ? 0 : 1) +
       (processJsonWithImages.loading ? 0 : 1),
-    expectedStepCount: images.expectedImageCount + 2
+    expectedStepCount: images.expectedImageCount + 2,
   };
 };
 
@@ -257,7 +257,7 @@ const useFetchAndStoreProcessJson = (): {
     processRef,
     processJson.loading,
     processJson.error,
-    JSON.stringify(processJson.result)
+    JSON.stringify(processJson.result),
   ]);
 
   const loading = processJson.loading || offlineSync.loading;
@@ -269,7 +269,7 @@ const useFetchAndStoreProcessJson = (): {
     error,
     completedStepCount:
       processJson.completedStepCount + (offlineSync.loading ? 0 : 1),
-    expectedStepCount: processJson.expectedStepCount + 1
+    expectedStepCount: processJson.expectedStepCount + 1,
   };
 };
 
@@ -291,7 +291,7 @@ const useFetchResidentData = (): UseApiWithStorageReturn<
     query: { data },
     jwt: {
       sessionStorageKey:
-        isClient && processRef ? `${processRef}:matApiJwt` : undefined
+        isClient && processRef ? `${processRef}:matApiJwt` : undefined,
     },
     execute: Boolean(processRef),
     parse(data: {
@@ -306,7 +306,7 @@ const useFetchResidentData = (): UseApiWithStorageReturn<
       const fullAddress = data.results[0].fullAddressDisplay;
       const address = fullAddress
         .split("\n")
-        .map(line => titleCase(line.replace("\r", "")));
+        .map((line) => titleCase(line.replace("\r", "")));
 
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const cityAndPostcodeParts = address.pop()!.split(" ");
@@ -315,40 +315,40 @@ const useFetchResidentData = (): UseApiWithStorageReturn<
         cityAndPostcodeParts.slice(0, -2).join(" "),
         `${cityAndPostcodeParts[cityAndPostcodeParts.length - 2]} ${
           cityAndPostcodeParts[cityAndPostcodeParts.length - 1]
-        }`.toUpperCase()
+        }`.toUpperCase(),
       ];
 
       address.push(...cityAndPostcode);
 
       const tenants = data.results
-        .filter(contact => contact.responsible)
-        .map(contact => ({
+        .filter((contact) => contact.responsible)
+        .map((contact) => ({
           id: contact.contactId,
           fullName: contact.fullName,
-          dateOfBirth: new Date(contact.dateOfBirth)
+          dateOfBirth: new Date(contact.dateOfBirth),
         }))
         .sort((a, b) => (a.id > b.id ? 1 : a.id < b.id ? -1 : 0));
 
       const householdMembers = data.results
-        .filter(contact => !contact.responsible)
-        .map(contact => ({
+        .filter((contact) => !contact.responsible)
+        .map((contact) => ({
           id: contact.contactId,
           fullName: contact.fullName,
-          dateOfBirth: new Date(contact.dateOfBirth)
+          dateOfBirth: new Date(contact.dateOfBirth),
         }))
         .sort((a, b) => (a.id > b.id ? 1 : a.id < b.id ? -1 : 0));
 
       return {
         address,
         tenants,
-        householdMembers
+        householdMembers,
       };
     },
     databaseContext: Storage.ExternalContext,
     databaseMap: {
       storeName: "residents",
-      key: processRef
-    }
+      key: processRef,
+    },
   });
 };
 
@@ -370,7 +370,7 @@ const useFetchTenancyData = (): UseApiWithStorageReturn<
     query: { data },
     jwt: {
       sessionStorageKey:
-        isClient && processRef ? `${processRef}:matApiJwt` : undefined
+        isClient && processRef ? `${processRef}:matApiJwt` : undefined,
     },
     execute: Boolean(processRef),
     parse(data: {
@@ -384,14 +384,14 @@ const useFetchTenancyData = (): UseApiWithStorageReturn<
 
       return {
         tenureType,
-        startDate: new Date(tenancyStartDate)
+        startDate: new Date(tenancyStartDate),
       };
     },
     databaseContext: Storage.ExternalContext,
     databaseMap: {
       storeName: "tenancy",
-      key: processRef
-    }
+      key: processRef,
+    },
   });
 };
 
@@ -406,15 +406,15 @@ export const LoadingPage: NextPage = () => {
 
   const loading =
     processDataSyncStatus.loading ||
-    extraResults.some(result => result.loading);
+    extraResults.some((result) => result.loading);
   const errored =
     Boolean(processDataSyncStatus.error) ||
-    extraResults.some(result => result.error);
+    extraResults.some((result) => result.error);
   const ready =
     !loading &&
     !errored &&
     processDataSyncStatus.result !== undefined &&
-    extraResults.every(result => result.result !== undefined);
+    extraResults.every((result) => result.result !== undefined);
 
   for (const result of [processDataSyncStatus, ...extraResults]) {
     if (result.error) {
@@ -426,7 +426,8 @@ export const LoadingPage: NextPage = () => {
 
   const progress =
     (extraResults.filter(
-      result => !result.loading && !result.error && result.result !== undefined
+      (result) =>
+        !result.loading && !result.error && result.result !== undefined
     ).length +
       processDataSyncStatus.completedStepCount) /
     (extraResults.length + processDataSyncStatus.expectedStepCount);
@@ -458,7 +459,7 @@ export const LoadingPage: NextPage = () => {
             ? ["Error"]
             : undefined,
           tenants: residentData.result
-            ? residentData.result.tenants.map(tenant => tenant.fullName)
+            ? residentData.result.tenants.map((tenant) => tenant.fullName)
             : residentData.error
             ? ["Error"]
             : undefined,
@@ -471,7 +472,7 @@ export const LoadingPage: NextPage = () => {
             ? tenancyData.result.startDate
             : tenancyData.error
             ? "Error"
-            : undefined
+            : undefined,
         }}
       />
 

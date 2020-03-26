@@ -4,18 +4,18 @@ import { DatabaseContext } from "remultiform/database-context";
 import { v5 as uuid } from "uuid";
 import databaseSchemaVersion from "./databaseSchemaVersion";
 import ExternalDatabaseSchema, {
-  externalDatabaseName
+  externalDatabaseName,
 } from "./ExternalDatabaseSchema";
 import ProcessDatabaseSchema, {
   processDatabaseName,
   ProcessJson,
   ProcessRef,
-  processStoreNames
+  processStoreNames,
 } from "./ProcessDatabaseSchema";
 import ResidentDatabaseSchema, {
   residentDatabaseName,
   ResidentRef,
-  residentStoreNames
+  residentStoreNames,
 } from "./ResidentDatabaseSchema";
 
 const migrateProcessData = async (
@@ -45,7 +45,7 @@ const migrateProcessData = async (
       "childrenYoungPeopleSafeguardingNotes",
       "domesticSexualViolenceNotes",
       "mentalHealth18To65Notes",
-      "mentalHealthOver65Notes"
+      "mentalHealthOver65Notes",
     ];
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -63,7 +63,7 @@ const migrateProcessData = async (
 
           v[noteKey] = {
             value: noteValue,
-            isPostVisitAction: false
+            isPostVisitAction: false,
           };
         }
       }
@@ -146,7 +146,7 @@ export default class Storage {
                 `migrations from ${version} onwards`
             );
           }
-        }
+        },
       }
     );
 
@@ -204,7 +204,7 @@ export default class Storage {
                 `migrations from ${version} onwards`
             );
           }
-        }
+        },
       }
     );
 
@@ -247,7 +247,7 @@ export default class Storage {
                 `migrations from ${version} onwards`
             );
           }
-        }
+        },
       }
     );
 
@@ -275,7 +275,7 @@ export default class Storage {
 
     let processData = (
       await Promise.all(
-        processStoreNames.map(async storeName => {
+        processStoreNames.map(async (storeName) => {
           const value = await processDatabase.get(storeName, processRef);
 
           if (storeName === "lastModified") {
@@ -293,7 +293,7 @@ export default class Storage {
     ).reduce(
       (valuesObj, valueObj) => ({
         ...valuesObj,
-        ...valueObj
+        ...valueObj,
       }),
       {}
     ) as Exclude<ProcessJson["processData"], undefined>;
@@ -307,11 +307,11 @@ export default class Storage {
 
       processData.residents = (
         await Promise.all(
-          residentRefs.map(async ref => {
+          residentRefs.map(async (ref) => {
             return {
               [ref]: (
                 await Promise.all(
-                  residentStoreNames.map(async storeName => {
+                  residentStoreNames.map(async (storeName) => {
                     const value = await residentDatabase.get(storeName, ref);
 
                     return { [storeName]: value };
@@ -320,17 +320,17 @@ export default class Storage {
               ).reduce(
                 (valuesObj, valueObj) => ({
                   ...valuesObj,
-                  ...valueObj
+                  ...valueObj,
                 }),
                 {}
-              )
+              ),
             };
           })
         )
       ).reduce(
         (valuesObj, valueObj) => ({
           ...valuesObj,
-          ...valueObj
+          ...valueObj,
         }),
         {}
       );
@@ -371,9 +371,9 @@ export default class Storage {
         // this hack works for now.
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         dataSchemaVersion: (processDatabase as any).db.version,
-        processData
+        processData,
       },
-      imagesJson: images
+      imagesJson: images,
     };
   }
 
@@ -405,7 +405,7 @@ export default class Storage {
       dateCreated,
       dateLastModified,
       dataSchemaVersion,
-      processData
+      processData,
     } = data;
 
     if (!processData) {
@@ -456,14 +456,14 @@ export default class Storage {
 
     if (isNewer) {
       const realProcessStoreNames = processStoreNames.filter(
-        storeName => storeName !== "lastModified"
+        (storeName) => storeName !== "lastModified"
       );
 
       await processDatabase.transaction(
         realProcessStoreNames,
-        async stores => {
+        async (stores) => {
           await Promise.all([
-            ...realProcessStoreNames.map(async storeName => {
+            ...realProcessStoreNames.map(async (storeName) => {
               const store = stores[storeName];
               const value = migratedProcessData[storeName];
 
@@ -476,7 +476,7 @@ export default class Storage {
                   value as any
                 );
               }
-            })
+            }),
           ]);
         },
         TransactionMode.ReadWrite
@@ -488,13 +488,13 @@ export default class Storage {
       if (migratedResidentData && residentRefs && residentRefs.length > 0) {
         await residentDatabase.transaction(
           residentStoreNames,
-          async stores => {
+          async (stores) => {
             await Promise.all([
-              ...residentStoreNames.map(async storeName => {
+              ...residentStoreNames.map(async (storeName) => {
                 const store = stores[storeName];
 
                 await Promise.all(
-                  residentRefs.map(async residentRef => {
+                  residentRefs.map(async (residentRef) => {
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                     const ref = residentRef!;
                     const allValues = migratedResidentData[ref];
@@ -514,7 +514,7 @@ export default class Storage {
                     }
                   })
                 );
-              })
+              }),
             ]);
           },
           TransactionMode.ReadWrite
