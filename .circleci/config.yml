@@ -87,7 +87,9 @@ workflows:
           name: install-and-test-branch
           filters:
             branches:
-              ignore: master
+              ignore:
+                - development
+                - master
 
       - build:
           name: build-image-on-branch
