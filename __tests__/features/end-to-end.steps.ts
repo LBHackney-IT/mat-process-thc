@@ -319,6 +319,10 @@ const processData = {
       signature: "",
     },
   },
+  otherNotes: {
+    value: "Other notes",
+    isPostVisitAction: false,
+  },
 };
 
 defineFeature(loadFeature("./end-to-end.feature"), (test) => {
@@ -1391,7 +1395,7 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
         `${processRef}/review`
       );
 
-      // Review page Household section
+      // Review page - Household section
       await Expect.pageToContain("Household");
       await Expect.pageToContain("Member changes notes");
       await Expect.pageToContain("House moving schemes notes");
@@ -1404,7 +1408,7 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
       await Expect.pageToContain("Income officer notes");
       await Expect.pageToContain("Other property notes");
 
-      // Review page Property inspection section
+      // Review page - Property inspection section
       await Expect.pageToContain("Room notes");
       await Expect.pageToContain("Laminated flooring notes");
       await Expect.pageToContain("Structural changes notes");
@@ -1423,7 +1427,7 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
       await Expect.pageToContain("Other comments notes");
       await Expect.pageToContain("Repairs notes");
 
-      // Review page Wellbeing support section
+      // Review page - Wellbeing support section
       await Expect.pageToContain("Tenant 1");
       await Expect.pageToContain("Dementia, Smoking");
       await Expect.pageToContain("Health concerns notes");
@@ -1431,6 +1435,12 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
       await Expect.pageToContain("Children young people safeguarding notes");
       await Expect.pageToContain("Mental health 18 to 65 notes");
       await Expect.pageToContain("Mental health over 65 notes");
+
+      (
+        await browser!.waitForEnabledElement({
+          name: "other-notes",
+        })
+      ).sendKeys(processData.otherNotes.value);
 
       await browser!.submit();
 
