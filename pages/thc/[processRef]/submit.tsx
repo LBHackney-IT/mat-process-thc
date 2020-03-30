@@ -120,6 +120,8 @@ const SubmitPage: NextPage = () => {
               setSubmitting(true);
 
               await persistProcessData(router, setProgress);
+              sessionStorage.clear();
+
               await router.push(href, as);
             } catch (err) {
               console.error(err);
