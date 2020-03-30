@@ -1,13 +1,13 @@
 import {
   Heading,
-  HeadingLevels
+  HeadingLevels,
 } from "lbh-frontend-react/components/typography/Heading";
 import { Paragraph } from "lbh-frontend-react/components/typography/Paragraph";
 import {
   ComponentDatabaseMap,
   ComponentWrapper,
   DynamicComponent,
-  StaticComponent
+  StaticComponent,
 } from "remultiform/component-wrapper";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
@@ -26,12 +26,12 @@ const step = {
       makeSubmit([
         {
           slug: nextSlug as PageSlugs | undefined,
-          value: "Enter the property"
+          value: "Enter the property",
         },
         {
           slug: PageSlugs.Loading,
-          value: "Unable to enter property"
-        }
+          value: "Unable to enter property",
+        },
       ]),
     componentWrappers: [
       ComponentWrapper.wrapStatic(
@@ -40,8 +40,8 @@ const step = {
           Component: Heading,
           props: {
             level: HeadingLevels.H2,
-            children: "Outside property"
-          }
+            children: "Outside property",
+          },
         })
       ),
       ComponentWrapper.wrapStatic(
@@ -50,8 +50,8 @@ const step = {
           Component: Paragraph,
           props: {
             children:
-              "The photos of outside of the property should include as much as the front of the property as possible. If it is a flat, then try to take a photo of what you see when you are standing outside of the property itself."
-          }
+              "The photos of outside of the property should include as much as the front of the property as possible. If it is a flat, then try to take a photo of what you see when you are standing outside of the property itself.",
+          },
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -65,7 +65,7 @@ const step = {
               | string
               | null
               | undefined,
-            maxCount: 5 as number | null | undefined
+            maxCount: 5 as number | null | undefined,
           },
           defaultValue: [],
           emptyValue: [] as string[],
@@ -75,8 +75,8 @@ const step = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["outside", "images"]
-          })
+            property: ["outside", "images"],
+          }),
         })
       ),
       ComponentWrapper.wrapStatic(
@@ -85,8 +85,8 @@ const step = {
           Component: Heading,
           props: {
             level: HeadingLevels.H2,
-            children: "Metal gate across entrance?"
-          }
+            children: "Metal gate across entrance?",
+          },
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -100,7 +100,7 @@ const step = {
               | string
               | null
               | undefined,
-            maxCount: 3 as number | null | undefined
+            maxCount: 3 as number | null | undefined,
           },
           defaultValue: [],
           emptyValue: [] as string[],
@@ -110,8 +110,8 @@ const step = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["metalGates", "images"]
-          })
+            property: ["metalGates", "images"],
+          }),
         })
       ),
       ComponentWrapper.wrapStatic(
@@ -120,12 +120,12 @@ const step = {
           Component: Heading,
           props: {
             level: HeadingLevels.H3,
-            children: "What do you want to do next?"
-          }
+            children: "What do you want to do next?",
+          },
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

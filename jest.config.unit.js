@@ -9,10 +9,10 @@ module.exports = {
     "jest-axe/extend-expect",
     "jest-localstorage-mock",
     "jest-date-mock",
-    "<rootDir>/__tests__/jest.setup.unit.ts"
+    "<rootDir>/__tests__/jest.setup.unit.ts",
   ],
   moduleNameMapper: {
-    "^.+\\.css$": "<rootDir>/__tests__/helpers/transformers/fileTransformer"
+    "^.+\\.css$": "<rootDir>/__tests__/helpers/transformers/fileTransformer",
   },
   testMatch: ["<rootDir>/__tests__/**/?(*.)+(spec|steps|test).[jt]s?(x)"],
   testPathIgnorePatterns: ["<rootDir>/__tests__/features/"],
@@ -21,7 +21,7 @@ module.exports = {
   globals: {
     "ts-jest": {
       tsConfig: "<rootDir>/__tests__/tsconfig.json",
-      babelConfig
-    }
-  }
+      babelConfig,
+    },
+  },
 };

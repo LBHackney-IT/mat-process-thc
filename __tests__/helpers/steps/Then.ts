@@ -8,7 +8,7 @@ class Then {
   static iShouldBeAbleToContinue(defineStep: DefineStepFunction): void {
     defineStep("I should be able to continue", async () => {
       await Expect.toBeEnabled({
-        css: '[data-testid="submit"]'
+        css: '[data-testid="submit"]',
       });
     });
   }
@@ -16,7 +16,7 @@ class Then {
   static iShouldntBeAbleToContinue(defineStep: DefineStepFunction): void {
     defineStep("I shouldn't be able to continue", async () => {
       await Expect.toBeDisabled({
-        css: '[data-testid="submit"]'
+        css: '[data-testid="submit"]',
       });
     });
   }

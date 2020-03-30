@@ -5,7 +5,7 @@ const { join } = require("path");
 const findAllRoutes = (dir, filter, ignore, arr = [], rootDir = dir) => {
   const result = readdirSync(dir);
 
-  result.forEach(part => {
+  result.forEach((part) => {
     const absolutePath = join(dir, part);
 
     if (ignore && ignore.test(part)) {
@@ -24,11 +24,7 @@ const findAllRoutes = (dir, filter, ignore, arr = [], rootDir = dir) => {
     }
 
     arr.push(
-      absolutePath
-        .replace(rootDir, "")
-        .split(".")
-        .slice(0, -1)
-        .join(".")
+      absolutePath.replace(rootDir, "").split(".").slice(0, -1).join(".")
     );
   });
 

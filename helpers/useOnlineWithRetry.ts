@@ -30,7 +30,7 @@ const useOnlineWithRetry = (retryDelay = 3000): UseOnlineWithRetryReturn => {
 
     retry(): void {
       online.retry();
-    }
+    },
   };
 };
 

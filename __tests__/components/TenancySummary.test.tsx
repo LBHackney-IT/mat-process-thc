@@ -9,7 +9,7 @@ it("renders correctly with all props", () => {
         address: ["1 Test Street", "Test Town"],
         tenants: ["TestTenant1", "TestTenant2"],
         tenureType: "TestTenureType",
-        startDate: new Date(2019, 0, 1)
+        startDate: new Date(2019, 0, 1),
       }}
     />
   );

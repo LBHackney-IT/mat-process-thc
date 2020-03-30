@@ -4,27 +4,66 @@ import {
   ComponentDatabaseMap,
   ComponentValue,
   ComponentWrapper,
-  DynamicComponent
+  DynamicComponent,
 } from "remultiform/component-wrapper";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea, TextAreaProps } from "../../components/TextArea";
+import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import yesNoRadios from "../../helpers/yesNoRadios";
+import { Note } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step = {
+const questions = {
+  "has-laminated-flooring": "Is there any laminated flooring in the property?",
+  "has-permission": "Is there permission for laminated flooring?",
+};
+
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
   title: PageTitles.LaminatedFlooring,
   heading: "Laminated flooring",
+  review: {
+    rows: [
+      {
+        label: questions["has-laminated-flooring"],
+        values: {
+          "has-laminated-flooring": {
+            renderValue(hasLaminatedFlooring: string): React.ReactNode {
+              return getRadioLabelFromValue(yesNoRadios, hasLaminatedFlooring);
+            },
+          },
+          "laminated-flooring-notes": {
+            renderValue(laminatedFlooringNotes: Note): React.ReactNode {
+              return laminatedFlooringNotes.value;
+            },
+          },
+        },
+      },
+      {
+        label: questions["has-permission"],
+        values: {
+          "has-permission": {
+            renderValue(hasPermission: string): React.ReactNode {
+              return getRadioLabelFromValue(yesNoRadios, hasPermission);
+            },
+          },
+        },
+        images: "laminated-flooring-images",
+      },
+    ],
+  },
   step: {
     slug: PageSlugs.LaminatedFlooring,
     nextSlug: PageSlugs.StructuralChanges,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
@@ -35,19 +74,10 @@ const step = {
             name: "has-laminated-flooring",
             legend: (
               <FieldsetLegend>
-                Is there any laminated flooring in the property?
+                {questions["has-laminated-flooring"]}
               </FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios,
           },
           defaultValue: "",
           emptyValue: "",
@@ -57,8 +87,8 @@ const step = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["laminatedFlooring", "hasLaminatedFlooring"]
-          })
+            property: ["laminatedFlooring", "hasLaminatedFlooring"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -68,20 +98,9 @@ const step = {
           props: {
             name: "has-permission",
             legend: (
-              <FieldsetLegend>
-                Is there permission for laminated flooring?
-              </FieldsetLegend>
+              <FieldsetLegend>{questions["has-permission"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios,
           },
           renderWhen(stepValues: {
             "has-laminated-flooring"?: ComponentValue<
@@ -99,8 +118,8 @@ const step = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["laminatedFlooring", "hasPermission"]
-          })
+            property: ["laminatedFlooring", "hasPermission"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -114,7 +133,7 @@ const step = {
               | string
               | null
               | undefined,
-            maxCount: 5 as number | null | undefined
+            maxCount: 5 as number | null | undefined,
           },
           renderWhen(stepValues: {
             "has-laminated-flooring"?: ComponentValue<
@@ -132,8 +151,8 @@ const step = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["laminatedFlooring", "images"]
-          })
+            property: ["laminatedFlooring", "images"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -142,10 +161,10 @@ const step = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about laminated flooring if necessary."
+              value: "Add note about laminated flooring if necessary.",
             },
             name: "laminated-flooring-notes",
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaProps,
           renderWhen(stepValues: {
             "has-laminated-flooring"?: ComponentValue<
@@ -163,12 +182,12 @@ const step = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["laminatedFlooring", "notes"]
-          })
+            property: ["laminatedFlooring", "notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

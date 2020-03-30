@@ -12,11 +12,12 @@ import { isRepeatingStep } from "../../../helpers/isStep";
 import useDataValue from "../../../helpers/useDataValue";
 import MainLayout from "../../../layouts/MainLayout";
 import steps from "../../../steps";
+import PageSlugs from "../../../steps/PageSlugs";
 import ProcessDatabaseSchema from "../../../storage/ProcessDatabaseSchema";
 import ResidentDatabaseSchema from "../../../storage/ResidentDatabaseSchema";
 import Storage from "../../../storage/Storage";
 
-const innerSteps = steps.map(step => step.step) as StepDefinition<
+const innerSteps = steps.map((step) => step.step) as StepDefinition<
   ProcessDatabaseSchema | ResidentDatabaseSchema,
   StoreNames<ProcessDatabaseSchema["schema"] | ResidentDatabaseSchema["schema"]>
 >[];
@@ -52,13 +53,13 @@ const ProcessPage: NextPage = () => {
     Storage.ExternalContext,
     "tenancy",
     processRef,
-    values => (processRef ? values[processRef] : undefined)
+    (values) => (processRef ? values[processRef] : undefined)
   );
   const residentData = useDataValue(
     Storage.ExternalContext,
     "residents",
     processRef,
-    values => (processRef ? values[processRef] : undefined)
+    (values) => (processRef ? values[processRef] : undefined)
   );
 
   const { slug } = parseSlugFromQuery(router);
@@ -67,7 +68,7 @@ const ProcessPage: NextPage = () => {
     return null;
   }
 
-  const currentStep = steps.find(step => step.step.slug === slug);
+  const currentStep = steps.find((step) => step.step.slug === slug);
 
   if (!currentStep) {
     return <ErrorPage statusCode={404} />;
@@ -87,7 +88,7 @@ const ProcessPage: NextPage = () => {
             ? ["Error"]
             : undefined,
           tenants: residentData.result
-            ? residentData.result.tenants.map(tenant => tenant.fullName)
+            ? residentData.result.tenants.map((tenant) => tenant.fullName)
             : residentData.error
             ? ["Error"]
             : undefined,
@@ -100,7 +101,7 @@ const ProcessPage: NextPage = () => {
             ? tenancyData.result.startDate
             : tenancyData.error
             ? "Error"
-            : undefined
+            : undefined,
         }}
       />
 
@@ -132,20 +133,38 @@ const ProcessPage: NextPage = () => {
     </>
   );
 
+  const pausable = ![
+    PageSlugs.Outside,
+    PageSlugs.Start,
+    PageSlugs.AboutVisit,
+  ].includes(currentStep.step.slug as PageSlugs);
+
   let page: React.ReactElement;
 
   if (currentStep.heading) {
     page = (
-      <MainLayout title={currentStep.title} heading={currentStep.heading}>
+      <MainLayout
+        title={currentStep.title}
+        heading={currentStep.heading}
+        pausable={pausable}
+      >
         {content}
       </MainLayout>
     );
   } else if (currentStep.title) {
-    page = <MainLayout title={currentStep.title}>{content}</MainLayout>;
+    page = (
+      <MainLayout title={currentStep.title} pausable={pausable}>
+        {content}
+      </MainLayout>
+    );
   } else {
     console.error("At least one of title or heading is required");
 
-    page = <MainLayout title={slug}>{content}</MainLayout>;
+    page = (
+      <MainLayout title={slug} pausable={pausable}>
+        {content}
+      </MainLayout>
+    );
   }
 
   return page;

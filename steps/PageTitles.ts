@@ -53,7 +53,7 @@ enum PageTitles {
   // Review and submit
   Review = "Review",
   Submit = "Submit",
-  Confirmed = "Confirmed"
+  Confirmed = "Confirmed",
 }
 
 export default PageTitles;

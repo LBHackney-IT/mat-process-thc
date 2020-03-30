@@ -1,4 +1,4 @@
-export interface Note {
+export type Note = {
   value: string;
   isPostVisitAction?: boolean;
-}
+};

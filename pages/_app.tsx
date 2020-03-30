@@ -1,7 +1,7 @@
 import "cross-fetch/polyfill";
 import {
   ComponentRegister,
-  LinkComponentTypeProps
+  LinkComponentTypeProps,
 } from "lbh-frontend-react/helpers";
 import NextApp from "next/app";
 import ErrorPage from "next/error";
@@ -17,7 +17,7 @@ import urlsForRouter from "../helpers/urlsForRouter";
 import { precacheAll } from "../helpers/usePrecacheAll";
 import Storage from "../storage/Storage";
 
-const Link: React.FunctionComponent<LinkComponentTypeProps> = props => {
+const Link: React.FunctionComponent<LinkComponentTypeProps> = (props) => {
   const { href: originalHref } = props;
 
   const router = useRouter();
@@ -43,13 +43,13 @@ Link.propTypes = {
   id: PropTypes.string,
   className: PropTypes.string,
   href: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
 };
 
 ComponentRegister.init({
   components: {
-    Link
-  }
+    Link,
+  },
 });
 
 // The user's data does not exist on the server, so there's no need to attempt
@@ -91,7 +91,7 @@ export default class App extends NextApp<{}, {}, State> {
       return;
     }
 
-    this.setState(state => ({ ...state, ...stateUpdate }));
+    this.setState((state) => ({ ...state, ...stateUpdate }));
   }
 
   componentWillUnmount(): void {

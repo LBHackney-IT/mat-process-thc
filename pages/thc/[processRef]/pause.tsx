@@ -15,12 +15,12 @@ import MainLayout from "../../../layouts/MainLayout";
 import PageSlugs, { urlObjectForSlug } from "../../../steps/PageSlugs";
 import PageTitles from "../../../steps/PageTitles";
 
-const SubmitPage: NextPage = () => {
+const PausePage: NextPage = () => {
   const router = useRouter();
   const online = useOnlineWithRetry();
   const [progress, setProgress] = useState(0);
-  const [submitting, setSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState();
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState();
 
   // TODO: Replace these with the real values!
   const address = "1 Mare Street, London, E8 3AA";
@@ -36,7 +36,7 @@ const SubmitPage: NextPage = () => {
     );
   } else {
     content = (
-      <PageAnnouncement title="Process submission pending">
+      <PageAnnouncement title="Process pause pending">
         <Paragraph>
           {online.result
             ? "You are online."
@@ -44,8 +44,8 @@ const SubmitPage: NextPage = () => {
         </Paragraph>
         <Paragraph>
           The Tenancy and Household Check for the tenancy at {address}, occupied
-          by {tenants.join(", ")} has been saved to your device ready to be sent
-          to your manager for review.
+          by {tenants.join(", ")} has been saved to your device but still needs
+          to be saved to your work tray so you can resume it later.
         </Paragraph>
         <Paragraph>
           <strong>You need to be online on this device to continue.</strong>
@@ -54,13 +54,13 @@ const SubmitPage: NextPage = () => {
           If you can&apos;t go online now, when you are next online{" "}
           <strong>on this device</strong>, please come back to this Tenancy and
           Household Check from your work tray and click on the &lsquo;Save and
-          submit to manager&rsquo; button below that will become able to be
+          continue later&rsquo; button below that will become able to be
           clicked.
         </Paragraph>
         {!online.error && online.result && (
           <Paragraph>
-            <strong>You are online</strong>, and can submit this Tenancy and
-            Household Check to your manager now.
+            <strong>You are online</strong>, and can save this Tenancy and
+            Household Check to your work tray now.
           </Paragraph>
         )}
       </PageAnnouncement>
@@ -69,14 +69,14 @@ const SubmitPage: NextPage = () => {
 
   const { href, as } = urlsForRouter(
     router,
-    urlObjectForSlug(router, PageSlugs.Confirmed)
+    urlObjectForSlug(router, PageSlugs.Paused)
   );
 
   const disabled =
     online.loading ||
     Boolean(online.error) ||
     !online.result ||
-    submitting ||
+    saving ||
     !href.pathname ||
     !as.pathname;
 
@@ -90,51 +90,67 @@ const SubmitPage: NextPage = () => {
         </ErrorMessage>
       )}
 
-      {submitError && (
+      {saveError && (
         <ErrorMessage>
-          Something went wrong. Please try reopening this process from your
-          worktray and submitting it again.
+          Something went wrong. Please try going back and pausing this process
+          again.
         </ErrorMessage>
       )}
 
       {content}
 
-      {submitting && (
+      {saving && (
         <ProgressBar
           progress={progress}
-          incompleteLabel={submitError ? "Error" : "Submitting..."}
-          completeLabel={submitError ? "Error" : "Submitted"}
+          incompleteLabel={saveError ? "Error" : "Saving..."}
+          completeLabel={saveError ? "Error" : "Saved"}
         />
       )}
 
-      {!submitting && (
-        <Button
-          disabled={disabled}
-          preventDoubleClick
-          onClick={async (): Promise<void> => {
-            if (!href.pathname || !as.pathname) {
-              return;
-            }
+      {!saving && (
+        <>
+          <Button
+            disabled={disabled}
+            preventDoubleClick
+            onClick={async (): Promise<void> => {
+              if (!href.pathname || !as.pathname) {
+                return;
+              }
 
-            try {
-              setSubmitting(true);
+              try {
+                setSaving(true);
 
-              await persistProcessData(router, setProgress);
-              await router.push(href, as);
-            } catch (err) {
-              console.error(err);
-              setSubmitError(err);
-            }
-          }}
-          data-testid="submit"
-        >
-          {disabled
-            ? "Waiting for connectivity..."
-            : "Save and submit to manager"}
-        </Button>
+                await persistProcessData(router, setProgress);
+                await router.push(href, as);
+              } catch (err) {
+                console.error(err);
+                setSaveError(err);
+              }
+            }}
+            data-testid="submit"
+          >
+            {disabled
+              ? "Waiting for connectivity..."
+              : "Save and continue later"}
+          </Button>
+          <Button
+            className="lbh-button--secondary govuk-button--secondary"
+            onClick={(): void => {
+              router.back();
+            }}
+          >
+            Cancel and continue now
+          </Button>
+        </>
       )}
+
+      <style jsx>{`
+        :global(button:not(:last-child)) {
+          margin-right: 1em;
+        }
+      `}</style>
     </MainLayout>
   );
 };
 
-export default SubmitPage;
+export default PausePage;

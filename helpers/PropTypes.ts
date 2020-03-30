@@ -34,5 +34,5 @@ export default {
   elementType: PropTypes.elementType as PropTypes.Requireable<
     React.ComponentType
   > &
-    PropTypes.Validator<React.ComponentType | undefined>
+    PropTypes.Validator<React.ComponentType | undefined>,
 };

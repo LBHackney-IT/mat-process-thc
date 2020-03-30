@@ -4,7 +4,7 @@ import {
   Heading,
   HeadingLevels,
   LabelProps,
-  Textarea
+  Textarea,
 } from "lbh-frontend-react/components";
 import React from "react";
 import {
@@ -13,16 +13,17 @@ import {
   ComponentWrapper,
   DynamicComponent,
   makeDynamic,
-  StaticComponent
+  StaticComponent,
 } from "remultiform/component-wrapper";
 import { DateInput } from "../../components/DateInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import {
   TextAreaDetails,
-  TextAreaDetailsProps
+  TextAreaDetailsProps,
 } from "../../components/TextAreaDetails";
 import { TextInput } from "../../components/TextInput";
+import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
@@ -37,18 +38,18 @@ const questions = {
   "carer-needed": "Does the tenant have a carer?",
   "carer-type": "Who provides the care?",
   "carer-live-in": "Does the carer live in the property?",
-  "carer-details": "Carer details"
+  "carer-details": "Carer details",
 };
 
 const carerTypeRadios = [
   {
     label: "A registered carer",
-    value: "registered"
+    value: "registered",
   },
   {
     label: "A voluntary arrangement, e.g. a family member",
-    value: "voluntary"
-  }
+    value: "voluntary",
+  },
 ];
 
 const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
@@ -62,28 +63,28 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
         values: {
           "carer-needed": {
             renderValue(needed: string): React.ReactNode {
-              return yesNoRadios.find(({ value }) => value === needed)?.label;
-            }
-          }
-        }
+              return getRadioLabelFromValue(yesNoRadios, needed);
+            },
+          },
+        },
       },
       {
         label: questions["carer-type"],
         values: {
           "carer-type": {
             renderValue(type: string): React.ReactNode {
-              return carerTypeRadios.find(({ value }) => value === type)?.label;
-            }
-          }
-        }
+              return getRadioLabelFromValue(carerTypeRadios, type);
+            },
+          },
+        },
       },
       {
         label: questions["carer-live-in"],
         values: {
           "carer-live-in": {
             renderValue(liveIn: string): React.ReactNode {
-              return yesNoRadios.find(({ value }) => value === liveIn)?.label;
-            }
+              return getRadioLabelFromValue(yesNoRadios, liveIn);
+            },
           },
           "carer-live-in-start-date": {
             renderValue(startDate: {
@@ -100,9 +101,9 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
                       : startDate.year
                   }`
                 : null;
-            }
-          }
-        }
+            },
+          },
+        },
       },
       {
         label: questions["carer-details"],
@@ -110,31 +111,31 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
           "carer-full-name": {
             renderValue(name: string): React.ReactNode {
               return name;
-            }
+            },
           },
           "carer-relationship": {
             renderValue(relationship: string): React.ReactNode {
               return relationship;
-            }
+            },
           },
           "carer-phone-number": {
             renderValue(phone: string): React.ReactNode {
               return phone;
-            }
+            },
           },
           "carer-address": {
             renderValue(address: string): React.ReactNode {
               return address;
-            }
+            },
           },
           "carer-notes": {
             renderValue(notes: Note): React.ReactNode {
               return notes.value;
-            }
-          }
-        }
-      }
-    ]
+            },
+          },
+        },
+      },
+    ],
   },
   step: {
     slug: PageSlugs.Carer,
@@ -142,7 +143,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
@@ -154,7 +155,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             legend: (
               <FieldsetLegend>{questions["carer-needed"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           defaultValue: "",
           emptyValue: "",
@@ -164,8 +165,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
           >({
             storeName: "carer",
             key: keyFromSlug(true),
-            property: ["hasCarer"]
-          })
+            property: ["hasCarer"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -177,7 +178,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             legend: (
               <FieldsetLegend>{questions["carer-type"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: carerTypeRadios
+            radios: carerTypeRadios,
           },
           renderWhen(stepValues: {
             "carer-needed"?: ComponentValue<ResidentDatabaseSchema, "carer">;
@@ -192,8 +193,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
           >({
             storeName: "carer",
             key: keyFromSlug(true),
-            property: ["type"]
-          })
+            property: ["type"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -205,7 +206,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             legend: (
               <FieldsetLegend>{questions["carer-live-in"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios
+            radios: yesNoRadios,
           },
           renderWhen(stepValues: {
             "carer-needed"?: ComponentValue<ResidentDatabaseSchema, "carer">;
@@ -220,8 +221,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
           >({
             storeName: "carer",
             key: keyFromSlug(true),
-            property: ["isLiveIn"]
-          })
+            property: ["isLiveIn"],
+          }),
         })
       ),
       ComponentWrapper.wrapStatic<ResidentDatabaseSchema, "carer">(
@@ -229,13 +230,13 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
           key: "carer-live-in-start-date-heading",
           Component: FieldsetLegend,
           props: {
-            children: "When did the carer start living in the property?"
+            children: "When did the carer start living in the property?",
           },
           renderWhen(stepValues: {
             "carer-live-in"?: ComponentValue<ResidentDatabaseSchema, "carer">;
           }): boolean {
             return stepValues["carer-live-in"] === "yes";
-          }
+          },
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -243,7 +244,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
           key: "carer-live-in-start-date",
           Component: DateInput,
           props: {
-            name: "carer-live-in-start-date"
+            name: "carer-live-in-start-date",
           },
           renderWhen(stepValues: {
             "carer-live-in"?: ComponentValue<ResidentDatabaseSchema, "carer">;
@@ -258,8 +259,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
           >({
             storeName: "carer",
             key: keyFromSlug(true),
-            property: ["liveInStartDate"]
-          })
+            property: ["liveInStartDate"],
+          }),
         })
       ),
       ComponentWrapper.wrapStatic<ResidentDatabaseSchema, "carer">(
@@ -268,13 +269,13 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
           Component: Heading,
           props: {
             level: HeadingLevels.H2,
-            children: questions["carer-details"]
+            children: questions["carer-details"],
           },
           renderWhen(stepValues: {
             "carer-needed"?: ComponentValue<ResidentDatabaseSchema, "carer">;
           }): boolean {
             return stepValues["carer-needed"] === "yes";
-          }
+          },
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -283,7 +284,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
           Component: TextInput,
           props: {
             name: "carer-full-name",
-            label: "Full name"
+            label: "Full name",
           },
           renderWhen(stepValues: {
             "carer-needed"?: ComponentValue<ResidentDatabaseSchema, "carer">;
@@ -298,8 +299,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
           >({
             storeName: "carer",
             key: keyFromSlug(true),
-            property: ["fullName"]
-          })
+            property: ["fullName"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -308,7 +309,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
           Component: TextInput,
           props: {
             name: "carer-relationship",
-            label: "Relationship to tenant or 'Not related'"
+            label: "Relationship to tenant or 'Not related'",
           },
           renderWhen(stepValues: {
             "carer-needed"?: ComponentValue<ResidentDatabaseSchema, "carer">;
@@ -323,8 +324,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
           >({
             storeName: "carer",
             key: keyFromSlug(true),
-            property: ["relationship"]
-          })
+            property: ["relationship"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -333,7 +334,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
           Component: TextInput,
           props: {
             name: "carer-phone-number",
-            label: "Phone number"
+            label: "Phone number",
           },
           renderWhen(stepValues: {
             "carer-needed"?: ComponentValue<ResidentDatabaseSchema, "carer">;
@@ -348,8 +349,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
           >({
             storeName: "carer",
             key: keyFromSlug(true),
-            property: ["phoneNumber"]
-          })
+            property: ["phoneNumber"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -361,16 +362,16 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
               value: "value",
               onValueChange: "onChange",
               required: "required",
-              disabled: "disabled"
+              disabled: "disabled",
             },
-            value => value
+            (value) => value
           ),
           props: {
             name: "carer-address",
             label: {
-              children: "Address"
+              children: "Address",
             } as LabelProps,
-            rows: 4 as number | undefined
+            rows: 4 as number | undefined,
           },
           renderWhen(stepValues: {
             "carer-live-in"?: ComponentValue<ResidentDatabaseSchema, "carer">;
@@ -385,8 +386,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
           >({
             storeName: "carer",
             key: keyFromSlug(true),
-            property: ["address"]
-          })
+            property: ["address"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -397,7 +398,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             summary: "Add note about carer if necessary",
             label: { value: "Notes" },
             name: "carer-notes",
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaDetailsProps,
           renderWhen(stepValues: {
             "carer-needed"?: ComponentValue<ResidentDatabaseSchema, "carer">;
@@ -412,12 +413,12 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
           >({
             storeName: "carer",
             key: keyFromSlug(true),
-            property: ["notes"]
-          })
+            property: ["notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

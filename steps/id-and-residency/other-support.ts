@@ -3,7 +3,7 @@ import {
   ComponentDatabaseMap,
   ComponentWrapper,
   DynamicComponent,
-  StaticComponent
+  StaticComponent,
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import { TextInput } from "../../components/TextInput";
@@ -15,12 +15,12 @@ import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const questions = {
-  "other-support-details": "Other support details"
+  "other-support-details": "Other support details",
 };
 
 const step: ProcessStepDefinition<ResidentDatabaseSchema, "otherSupport"> = {
   title: PageTitles.OtherSupport,
-  heading: "Other Support",
+  heading: "Other support",
   context: Storage.ResidentContext,
   review: {
     rows: [
@@ -30,21 +30,21 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "otherSupport"> = {
           "other-support-full-name": {
             renderValue(name: string): React.ReactNode {
               return name;
-            }
+            },
           },
           "other-support-role": {
             renderValue(role: string): React.ReactNode {
               return role;
-            }
+            },
           },
           "other-support-phone-number": {
             renderValue(phoneNumber: string): React.ReactNode {
               return phoneNumber;
-            }
-          }
-        }
-      }
-    ]
+            },
+          },
+        },
+      },
+    ],
   },
   step: {
     slug: PageSlugs.OtherSupport,
@@ -52,7 +52,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "otherSupport"> = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapStatic<ResidentDatabaseSchema, "otherSupport">(
@@ -61,8 +61,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "otherSupport"> = {
           Component: Heading,
           props: {
             level: HeadingLevels.H2,
-            children: questions["other-support-details"]
-          }
+            children: questions["other-support-details"],
+          },
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -71,7 +71,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "otherSupport"> = {
           Component: TextInput,
           props: {
             name: "other-support-full-name",
-            label: "Full name"
+            label: "Full name",
           },
           defaultValue: "",
           emptyValue: "",
@@ -81,8 +81,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "otherSupport"> = {
           >({
             storeName: "otherSupport",
             key: keyFromSlug(),
-            property: ["fullName"]
-          })
+            property: ["fullName"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -91,7 +91,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "otherSupport"> = {
           Component: TextInput,
           props: {
             name: "other-support-role",
-            label: "Role (e.g. support worker, social worker, doctor)"
+            label: "Role (e.g. support worker, social worker, doctor)",
           },
           defaultValue: "",
           emptyValue: "",
@@ -101,8 +101,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "otherSupport"> = {
           >({
             storeName: "otherSupport",
             key: keyFromSlug(),
-            property: ["role"]
-          })
+            property: ["role"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -111,7 +111,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "otherSupport"> = {
           Component: TextInput,
           props: {
             name: "other-support-phone-number",
-            label: "Phone number"
+            label: "Phone number",
           },
           defaultValue: "",
           emptyValue: "",
@@ -121,12 +121,12 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "otherSupport"> = {
           >({
             storeName: "otherSupport",
             key: keyFromSlug(),
-            property: ["phoneNumber"]
-          })
+            property: ["phoneNumber"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

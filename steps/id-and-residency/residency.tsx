@@ -3,14 +3,14 @@ import React from "react";
 import {
   ComponentDatabaseMap,
   ComponentWrapper,
-  DynamicComponent
+  DynamicComponent,
 } from "remultiform/component-wrapper";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import {
   TextAreaDetails,
-  TextAreaDetailsProps
+  TextAreaDetailsProps,
 } from "../../components/TextAreaDetails";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import nextSlugWithId from "../../helpers/nextSlugWithId";
@@ -24,40 +24,40 @@ import PageTitles from "../PageTitles";
 const residencyProofTypeRadios = [
   {
     label: "Bank statement",
-    value: "bank statement"
+    value: "bank statement",
   },
   {
     label: "DWP document (e.g. benefits / pension)",
-    value: "dwp document"
+    value: "dwp document",
   },
   {
     label: "P45",
-    value: "p45"
+    value: "p45",
   },
   {
     label: "P60",
-    value: "p60"
+    value: "p60",
   },
   {
     label: "Tax Credit / Working Tax Credit",
-    value: "tax credit"
+    value: "tax credit",
   },
   {
     label: "Utility bill",
-    value: "utility bill"
+    value: "utility bill",
   },
   {
     label: "Valid UK residence permit",
-    value: "residence permit"
+    value: "residence permit",
   },
   {
     label: "Payslip",
-    value: "payslip"
+    value: "payslip",
   },
   {
     label: "Unable to provide proof of residency",
-    value: "no residency"
-  }
+    value: "no residency",
+  },
 ];
 
 const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
@@ -74,17 +74,17 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
               return residencyProofTypeRadios.find(
                 ({ value }) => value === type
               )?.label;
-            }
+            },
           },
           "residency-notes": {
             renderValue(notes: Note): React.ReactNode {
               return notes.value;
-            }
-          }
+            },
+          },
         },
-        images: "residency-proof-images"
-      }
-    ]
+        images: "residency-proof-images",
+      },
+    ],
   },
   step: {
     slug: PageSlugs.Residency,
@@ -92,7 +92,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
@@ -104,7 +104,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
             legend: (
               <FieldsetLegend>What type of proof of residency?</FieldsetLegend>
             ) as React.ReactNode,
-            radios: residencyProofTypeRadios
+            radios: residencyProofTypeRadios,
           },
           defaultValue: "",
           emptyValue: "",
@@ -114,8 +114,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
           >({
             storeName: "residency",
             key: keyFromSlug(true),
-            property: ["type"]
-          })
+            property: ["type"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -130,7 +130,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
               | string
               | null
               | undefined,
-            maxCount: 3 as number | null | undefined
+            maxCount: 3 as number | null | undefined,
           },
           defaultValue: [],
           emptyValue: [] as string[],
@@ -140,8 +140,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
           >({
             storeName: "residency",
             key: keyFromSlug(true),
-            property: ["images"]
-          })
+            property: ["images"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -152,7 +152,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
             summary: "Add note about residency if necessary",
             name: "residency-notes",
             label: { value: "Notes" },
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
@@ -162,12 +162,12 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
           >({
             storeName: "residency",
             key: keyFromSlug(true),
-            property: ["notes"]
-          })
+            property: ["notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

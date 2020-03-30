@@ -4,26 +4,64 @@ import {
   ComponentDatabaseMap,
   ComponentValue,
   ComponentWrapper,
-  DynamicComponent
+  DynamicComponent,
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea, TextAreaProps } from "../../components/TextArea";
+import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import yesNoRadios from "../../helpers/yesNoRadios";
+import { Note } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step = {
+const questions = {
+  "has-access": "Does the tenant have access to the roof?",
+  "items-stored-on-roof": "Are items being stored on the roof?",
+};
+
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
   title: PageTitles.Roof,
   heading: "Roof access",
+  review: {
+    rows: [
+      {
+        label: questions["has-access"],
+        values: {
+          "has-access": {
+            renderValue(hasAccess: string): React.ReactNode {
+              return getRadioLabelFromValue(yesNoRadios, hasAccess);
+            },
+          },
+        },
+      },
+      {
+        label: questions["items-stored-on-roof"],
+        values: {
+          "items-stored-on-roof": {
+            renderValue(itemsStoredOnRoof: string): React.ReactNode {
+              return getRadioLabelFromValue(yesNoRadios, itemsStoredOnRoof);
+            },
+          },
+          "roof-notes": {
+            renderValue(roofNotes: Note): React.ReactNode {
+              return roofNotes.value;
+            },
+          },
+        },
+      },
+    ],
+  },
   step: {
     slug: PageSlugs.Roof,
     nextSlug: PageSlugs.Loft,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
@@ -37,16 +75,7 @@ const step = {
                 Does the tenant have access to the roof?
               </FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios,
           },
           defaultValue: "",
           emptyValue: "",
@@ -56,8 +85,8 @@ const step = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["roof", "hasAccess"]
-          })
+            property: ["roof", "hasAccess"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -68,19 +97,10 @@ const step = {
             name: "items-stored-on-roof",
             legend: (
               <FieldsetLegend>
-                Are items being stored on the roof?
+                {questions["items-stored-on-roof"]}
               </FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios,
           },
           renderWhen(stepValues: {
             "has-access"?: ComponentValue<ProcessDatabaseSchema, "property">;
@@ -95,8 +115,8 @@ const step = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["roof", "itemsStoredOnRoof"]
-          })
+            property: ["roof", "itemsStoredOnRoof"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -105,10 +125,10 @@ const step = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about roof if necessary."
+              value: "Add note about roof if necessary.",
             },
             name: "roof-notes",
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaProps,
           renderWhen(stepValues: {
             "has-access"?: ComponentValue<ProcessDatabaseSchema, "property">;
@@ -123,12 +143,12 @@ const step = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["roof", "notes"]
-          })
+            property: ["roof", "notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

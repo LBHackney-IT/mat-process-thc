@@ -56,12 +56,12 @@ const decryptJson = (
 };
 
 const proxy = (options, req, res) => {
-  const clientReq = request(options, proxyRes => {
+  const clientReq = request(options, (proxyRes) => {
     proxyRes.setEncoding("utf8");
 
     res.status(proxyRes.statusCode);
 
-    proxyRes.on("data", chunk => {
+    proxyRes.on("data", (chunk) => {
       res.write(chunk);
     });
 
@@ -74,7 +74,7 @@ const proxy = (options, req, res) => {
     });
   });
 
-  clientReq.on("error", err => {
+  clientReq.on("error", (err) => {
     console.error(`> An error occurred for ${req.method} ${req.path}`);
     console.error(err);
 
@@ -112,8 +112,8 @@ router.get("/v1/processes/:ref/processData", (req, res) => {
     path: `${processApiBaseUrl}/v1/processData/${ref}`,
     method: req.method,
     headers: {
-      "X-API-KEY": processApiKey
-    }
+      "X-API-KEY": processApiKey,
+    },
   };
 
   proxy(options, req, res);
@@ -135,13 +135,13 @@ router.patch("/v1/processes/:ref/processData", (req, res) => {
     method: req.method,
     headers: {
       "Content-Type": "application/json",
-      "X-API-KEY": processApiKey
-    }
+      "X-API-KEY": processApiKey,
+    },
   };
 
   req.body = {
     processRef: ref,
-    processDataToUpdate: req.body
+    processDataToUpdate: req.body,
   };
 
   proxy(options, req, res);
@@ -164,9 +164,9 @@ router.get("/v1/processes/:ref/images/:imageId/:ext", (req, res) => {
     ),
     method: req.method,
     headers: {
-      "X-API-KEY": processApiKey
+      "X-API-KEY": processApiKey,
     },
-    timeout: 10 * 1000
+    timeout: 10 * 1000,
   };
 
   proxy(options, req, res);
@@ -186,9 +186,9 @@ router.post("/v1/processes/:ref/images", (req, res) => {
     method: req.method,
     headers: {
       "Content-Type": "application/json",
-      "X-API-KEY": processApiKey
+      "X-API-KEY": processApiKey,
     },
-    timeout: 10 * 1000
+    timeout: 10 * 1000,
   };
 
   const { ref } = req.params;
@@ -198,7 +198,7 @@ router.post("/v1/processes/:ref/images", (req, res) => {
     processRef: ref,
     imageId: id,
     base64Image: image,
-    processType: process.env.PROCESS_TYPE_NAME
+    processType: process.env.PROCESS_TYPE_NAME,
   };
 
   proxy(options, req, res);
@@ -229,8 +229,8 @@ router.get("/v1/tenancies", (req, res) => {
     path: `${matApiBaseUrl}/v1/Accounts/AccountDetailsByContactId?contactid=${contactId}`,
     method: req.method,
     headers: {
-      Authorization: matApiToken
-    }
+      Authorization: matApiToken,
+    },
   };
 
   proxy(options, req, res);
@@ -262,8 +262,8 @@ router.get("/v1/residents", (req, res) => {
     path: `${matApiBaseUrl}/v1/Contacts/GetContactsByUprn?urpn=${uprn}`,
     method: req.method,
     headers: {
-      Authorization: matApiToken
-    }
+      Authorization: matApiToken,
+    },
   };
 
   proxy(options, req, res);

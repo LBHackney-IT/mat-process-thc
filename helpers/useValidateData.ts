@@ -6,7 +6,7 @@ import {
   StoreKey,
   StoreMap,
   StoreNames,
-  StoreValue
+  StoreValue,
 } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
 
@@ -33,8 +33,8 @@ export const defaultValidator = <
         >;
       }
     | undefined
-  >(valueSets).every(valueSet =>
-    Object.values(valueSet || {}).every(value => value !== undefined)
+  >(valueSets).every((valueSet) =>
+    Object.values(valueSet || {}).every((value) => value !== undefined)
   );
 };
 
@@ -91,11 +91,11 @@ const useValidateData = <
         async (stores: StoreMap<DBSchema["schema"], Names[]>) => {
           const valueSets = (
             await Promise.all(
-              storeNames.map(async storeName =>
+              storeNames.map(async (storeName) =>
                 (
                   await Promise.all(
-                    keys.map(async key => ({
-                      [key]: await stores[storeName].get(key)
+                    keys.map(async (key) => ({
+                      [key]: await stores[storeName].get(key),
                     }))
                   )
                 ).reduce<
@@ -110,7 +110,7 @@ const useValidateData = <
                 >(
                   (valueSet, valueObj) => ({
                     ...valueSet,
-                    [storeName]: { ...valueSet[storeName], ...valueObj }
+                    [storeName]: { ...valueSet[storeName], ...valueObj },
                   }),
                   {}
                 )

@@ -2,7 +2,7 @@ import { NextRouter } from "next/router";
 import {
   repeatingStepSlugs,
   stepSlugs,
-  urlObjectForSlug
+  urlObjectForSlug,
 } from "../steps/PageSlugs";
 import prefixUrl from "./prefixUrl";
 
@@ -15,7 +15,7 @@ export const isRepeatingStep = (
   const maybeSlugId = parts[parts.length - 1];
 
   return Boolean(
-    repeatingStepSlugs.find(slug => {
+    repeatingStepSlugs.find((slug) => {
       const slugUrl = urlObjectForSlug(router, slug);
 
       // This will stop working properly if we ever have nested routes.
@@ -29,7 +29,7 @@ const isStep = (router: NextRouter, url: { pathname: string }): boolean => {
 
   return (
     Boolean(
-      stepSlugs.find(slug => {
+      stepSlugs.find((slug) => {
         const slugUrl = urlObjectForSlug(router, slug);
 
         return pathname === slugUrl.pathname;

@@ -2,7 +2,7 @@ import { Radios, RadioButton } from "lbh-frontend-react/components";
 import React from "react";
 import {
   DynamicComponentControlledProps,
-  DynamicComponent
+  DynamicComponent,
 } from "remultiform/component-wrapper";
 
 import PropTypes from "../helpers/PropTypes";
@@ -13,7 +13,9 @@ export type RadioButtonsProps = DynamicComponentControlledProps<string> & {
   radios: { value: string; label: string }[];
 };
 
-export const RadioButtons: React.FunctionComponent<RadioButtonsProps> = props => {
+export const RadioButtons: React.FunctionComponent<RadioButtonsProps> = (
+  props
+) => {
   const {
     name,
     legend,
@@ -21,10 +23,10 @@ export const RadioButtons: React.FunctionComponent<RadioButtonsProps> = props =>
     value: currentValue,
     onValueChange,
     required,
-    disabled
+    disabled,
   } = props;
 
-  const radioButtons = radios.map<RadioButton>(radio => {
+  const radioButtons = radios.map<RadioButton>((radio) => {
     const { value, label } = radio;
 
     const id = `${name}-${value.replace(/\s+/g, "-")}`;
@@ -34,7 +36,7 @@ export const RadioButtons: React.FunctionComponent<RadioButtonsProps> = props =>
       value,
       label: { id: id + "-label", children: label },
       checked: value === currentValue,
-      disabled
+      disabled,
     };
   });
 
@@ -56,7 +58,7 @@ RadioButtons.propTypes = {
   radios: PropTypes.arrayOf(
     PropTypes.shape({
       value: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired
+      label: PropTypes.string.isRequired,
     }).isRequired
-  ).isRequired
+  ).isRequired,
 };

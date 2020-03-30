@@ -20,8 +20,8 @@ const useOnline = (): UseOnlineReturn => {
     error: online.error,
 
     retry(): void {
-      setRetryCount(count => count + 1);
-    }
+      setRetryCount((count) => count + 1);
+    },
   };
 };
 

@@ -91,7 +91,7 @@ const storeNames: {
   nextOfKin: true,
   carer: true,
   otherSupport: true,
-  signature: true
+  signature: true,
 };
 
 export const residentStoreNames = Object.entries(storeNames)
@@ -99,7 +99,7 @@ export const residentStoreNames = Object.entries(storeNames)
   .reduce(
     (names, [name]) => [
       ...names,
-      name as StoreNames<ResidentDatabaseSchema["schema"]>
+      name as StoreNames<ResidentDatabaseSchema["schema"]>,
     ],
     [] as StoreNames<ResidentDatabaseSchema["schema"]>[]
   );

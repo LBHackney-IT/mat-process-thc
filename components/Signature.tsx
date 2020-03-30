@@ -8,7 +8,7 @@ interface Props {
   onChange: (value: string) => void;
 }
 
-const Signature: React.FunctionComponent<Props> = props => {
+const Signature: React.FunctionComponent<Props> = (props) => {
   const { value, onChange } = props;
 
   const canvasRef = createRef<SignatureCanvas>();
@@ -53,7 +53,7 @@ const Signature: React.FunctionComponent<Props> = props => {
 
 Signature.propTypes = {
   value: PropTypes.string,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
 };
 
 export default Signature;

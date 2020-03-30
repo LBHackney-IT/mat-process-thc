@@ -1,20 +1,20 @@
-import rooms from "./rooms";
-import laminatedFlooring from "./laminated-flooring";
-import structuralChanges from "./structural-changes";
-import damage from "./damage";
-import roof from "./roof";
-import loft from "./loft";
-import garden from "./garden";
-import storingMaterials from "./storing-materials";
-import fireExit from "./fire-exit";
-import smokeAlarm from "./smoke-alarm";
-import metalGates from "./metal-gates";
-import doorMats from "./door-mats";
-import communalAreas from "./communal-areas";
-import pets from "./pets";
 import antisocialBehaviour from "./antisocial-behaviour";
+import communalAreas from "./communal-areas";
+import damage from "./damage";
+import doorMats from "./door-mats";
+import fireExit from "./fire-exit";
+import garden from "./garden";
+import laminatedFlooring from "./laminated-flooring";
+import loft from "./loft";
+import metalGates from "./metal-gates";
 import otherComments from "./other-comments";
+import pets from "./pets";
 import repairs from "./repairs";
+import roof from "./roof";
+import rooms from "./rooms";
+import smokeAlarm from "./smoke-alarm";
+import storingMaterials from "./storing-materials";
+import structuralChanges from "./structural-changes";
 
 export default [
   rooms,
@@ -33,5 +33,5 @@ export default [
   pets,
   antisocialBehaviour,
   otherComments,
-  repairs
+  repairs,
 ];

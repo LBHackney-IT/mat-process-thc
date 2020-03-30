@@ -13,7 +13,7 @@ interface Props {
   };
 }
 
-export const TenancySummary: React.FunctionComponent<Props> = props => {
+export const TenancySummary: React.FunctionComponent<Props> = (props) => {
   const { details } = props;
   const { address, tenants, tenureType, startDate } = details || {};
 
@@ -26,15 +26,15 @@ export const TenancySummary: React.FunctionComponent<Props> = props => {
         rows={[
           {
             key: "Address",
-            value: address ? address.join(", ") : loading
+            value: address ? address.join(", ") : loading,
           },
           {
             key: "Tenants",
-            value: tenants ? tenants.join(", ") : loading
+            value: tenants ? tenants.join(", ") : loading,
           },
           {
             key: "Tenure type",
-            value: tenureType ? tenureType : loading
+            value: tenureType ? tenureType : loading,
           },
           {
             key: "Tenancy start date",
@@ -42,8 +42,8 @@ export const TenancySummary: React.FunctionComponent<Props> = props => {
               ? typeof startDate === "string"
                 ? startDate
                 : formatDate(startDate, "d MMMM yyyy")
-              : loading
-          }
+              : loading,
+          },
         ]}
       />
 
@@ -65,7 +65,7 @@ TenancySummary.propTypes = {
     tenureType: PropTypes.string,
     startDate: PropTypes.oneOfType([
       PropTypes.string.isRequired,
-      PropTypes.instanceOf(Date).isRequired
-    ])
-  })
+      PropTypes.instanceOf(Date).isRequired,
+    ]),
+  }),
 };

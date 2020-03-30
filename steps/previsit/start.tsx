@@ -1,13 +1,13 @@
 import { List, ListProps, ListTypes } from "lbh-frontend-react/components/List";
 import {
   Heading,
-  HeadingLevels
+  HeadingLevels,
 } from "lbh-frontend-react/components/typography/Heading";
 import { Paragraph } from "lbh-frontend-react/components/typography/Paragraph";
 import React from "react";
 import {
   ComponentWrapper,
-  StaticComponent
+  StaticComponent,
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import PageSlugs from "../PageSlugs";
@@ -23,12 +23,12 @@ const step = {
       makeSubmit([
         {
           slug: nextSlug as PageSlugs | undefined,
-          value: "Start visit with tenant"
+          value: "Start visit with tenant",
         },
         {
           slug: PageSlugs.Loading,
-          value: "Unable to enter property"
-        }
+          value: "Unable to enter property",
+        },
       ]),
     componentWrappers: [
       ComponentWrapper.wrapStatic(
@@ -37,8 +37,8 @@ const step = {
           Component: Heading,
           props: {
             level: HeadingLevels.H2,
-            children: "About Tenancy and Household Check"
-          }
+            children: "About Tenancy and Household Check",
+          },
         })
       ),
       ComponentWrapper.wrapStatic(
@@ -51,8 +51,8 @@ const step = {
                 Please read the following text to the tenant(s) to explain why
                 we collect information from them and what we do with it.
               </strong>
-            )
-          }
+            ),
+          },
         })
       ),
       ComponentWrapper.wrapStatic(
@@ -61,8 +61,8 @@ const step = {
           Component: Paragraph,
           props: {
             children:
-              "Housing Services carry out unannounced visits at tenants' homes."
-          }
+              "Housing Services carry out unannounced visits at tenants' homes.",
+          },
         })
       ),
       ComponentWrapper.wrapStatic(
@@ -70,8 +70,8 @@ const step = {
           key: "paragraph-3",
           Component: Paragraph,
           props: {
-            children: "The information we collect from our visits helps us to:"
-          }
+            children: "The information we collect from our visits helps us to:",
+          },
         })
       ),
       ComponentWrapper.wrapStatic(
@@ -82,10 +82,10 @@ const step = {
             items: [
               "maintain up-to-date records of who lives at a property",
               "ensure properties are being maintained",
-              "and identify any support needs."
+              "and identify any support needs.",
             ],
-            type: ListTypes.Bullet
-          } as ListProps
+            type: ListTypes.Bullet,
+          } as ListProps,
         })
       ),
       ComponentWrapper.wrapStatic(
@@ -94,8 +94,8 @@ const step = {
           Component: Paragraph,
           props: {
             children:
-              "We can also give advice about any tenancy issues or other enquiries."
-          }
+              "We can also give advice about any tenancy issues or other enquiries.",
+          },
         })
       ),
       ComponentWrapper.wrapStatic(
@@ -104,8 +104,8 @@ const step = {
           Component: Paragraph,
           props: {
             children:
-              "All the information collected from you will be stored electronically and kept secure. Once stored, it can be accessed by the Council’s Housing team and may be shared internally and with partner organisations, for instance, if you have medical or support needs."
-          }
+              "All the information collected from you will be stored electronically and kept secure. Once stored, it can be accessed by the Council’s Housing team and may be shared internally and with partner organisations, for instance, if you have medical or support needs.",
+          },
         })
       ),
       ComponentWrapper.wrapStatic(
@@ -114,8 +114,8 @@ const step = {
           Component: Paragraph,
           props: {
             children:
-              "We will keep your information for as long as the Council’s data retention schedule permits."
-          }
+              "We will keep your information for as long as the Council’s data retention schedule permits.",
+          },
         })
       ),
       ComponentWrapper.wrapStatic(
@@ -124,8 +124,8 @@ const step = {
           Component: Paragraph,
           props: {
             children:
-              "More about how we hold information about you and your access to it can be found on the privacy notice page of the Hackney Council website."
-          }
+              "More about how we hold information about you and your access to it can be found on the privacy notice page of the Hackney Council website.",
+          },
         })
       ),
       ComponentWrapper.wrapStatic(
@@ -133,12 +133,12 @@ const step = {
           key: "paragraph-8",
           Component: Paragraph,
           props: {
-            children: "Are you OK to start this visit?"
-          }
+            children: "Are you OK to start this visit?",
+          },
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

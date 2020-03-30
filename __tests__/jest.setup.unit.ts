@@ -7,6 +7,6 @@ jest.mock("../helpers/isServer", () => false);
 beforeEach(() => {
   jest.spyOn(router, "useRouter").mockImplementation(() => ({
     ...jest.fn()(),
-    query: { processRef: "test-process-ref" }
+    query: { processRef: "test-process-ref" },
   }));
 });

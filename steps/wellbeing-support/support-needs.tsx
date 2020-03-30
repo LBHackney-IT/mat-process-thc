@@ -6,38 +6,114 @@ import {
   ComponentDatabaseMap,
   ComponentWrapper,
   DynamicComponent,
-  StaticComponent
+  StaticComponent,
 } from "remultiform/component-wrapper";
+import { Note } from "storage/DatabaseSchema";
 import { makeSubmit } from "../../components/makeSubmit";
 import {
   TextAreaDetails,
-  TextAreaDetailsProps
+  TextAreaDetailsProps,
 } from "../../components/TextAreaDetails";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step = {
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
   title: PageTitles.SupportNeeds,
   heading: "Support needs",
+  review: {
+    rows: [
+      {
+        label: "Resident Sustainment",
+        values: {
+          "resident-sustainment": {
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
+            },
+          },
+        },
+      },
+      {
+        label: "Befriending",
+        values: {
+          befriending: {
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
+            },
+          },
+        },
+      },
+      {
+        label: "Adult Safeguarding",
+        values: {
+          "adult-safeguarding": {
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
+            },
+          },
+        },
+      },
+      {
+        label: "Children's Safeguarding",
+        values: {
+          "childrens-safeguarding": {
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
+            },
+          },
+        },
+      },
+      {
+        label: "Domestic Violence & Sexual Abuse",
+        values: {
+          "domestic-violences": {
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
+            },
+          },
+        },
+      },
+      {
+        label: "Mental Health - aged 18-65",
+        values: {
+          "mental-health-18-65": {
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
+            },
+          },
+        },
+      },
+      {
+        label: "Mental Health - Over-65",
+        values: {
+          "mental-health-over-65": {
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
+            },
+          },
+        },
+      },
+    ],
+  },
   step: {
     slug: PageSlugs.SupportNeeds,
     nextSlug: PageSlugs.Sections,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
-      ComponentWrapper.wrapStatic(
+      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "supportNeeds">(
         new StaticComponent({
           key: "support-needs-heading",
           Component: Heading,
           props: {
             level: HeadingLevels.H2,
-            children: "Does anyone have support needs?"
-          }
+            children: "Does anyone have support needs?",
+          },
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -58,7 +134,7 @@ const step = {
             name: "resident-sustainment-notes",
             label: {
               id: "resident-sustainment-notes-label",
-              value: "Add note for post visit referral."
+              value: "Add note for post visit referral.",
             },
             contentAfterTextArea: (
               <Paragraph>
@@ -72,7 +148,7 @@ const step = {
                 (online only, opens in a new tab)
               </Paragraph>
             ),
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
@@ -82,8 +158,8 @@ const step = {
           >({
             storeName: "supportNeeds",
             key: keyFromSlug(),
-            property: ["residentSustainmentNotes"]
-          })
+            property: ["residentSustainmentNotes"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -104,9 +180,9 @@ const step = {
             name: "befriending-notes",
             label: {
               id: "befriending-notes-label",
-              value: "Add note for post visit referral."
+              value: "Add note for post visit referral.",
             },
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
@@ -116,8 +192,8 @@ const step = {
           >({
             storeName: "supportNeeds",
             key: keyFromSlug(),
-            property: ["befriendingNotes"]
-          })
+            property: ["befriendingNotes"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -138,7 +214,7 @@ const step = {
             name: "adult-safeguarding-notes",
             label: {
               id: "adult-safeguarding-notes-label",
-              value: "Add note for post visit referral."
+              value: "Add note for post visit referral.",
             },
             contentAfterTextArea: (
               <Paragraph>
@@ -170,7 +246,7 @@ const step = {
                 (online only, opens in a new tab)
               </Paragraph>
             ),
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
@@ -180,8 +256,8 @@ const step = {
           >({
             storeName: "supportNeeds",
             key: keyFromSlug(),
-            property: ["adultSafeguardingNotes"]
-          })
+            property: ["adultSafeguardingNotes"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -202,7 +278,7 @@ const step = {
             name: "childrens-safeguarding-notes",
             label: {
               id: "childrens-safeguarding-notes-label",
-              value: "Add note for post visit referral."
+              value: "Add note for post visit referral.",
             },
             contentAfterTextArea: (
               <>
@@ -231,7 +307,7 @@ const step = {
                 </Paragraph>
               </>
             ),
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
@@ -241,8 +317,8 @@ const step = {
           >({
             storeName: "supportNeeds",
             key: keyFromSlug(),
-            property: ["childrenYoungPeopleSafeguardingNotes"]
-          })
+            property: ["childrenYoungPeopleSafeguardingNotes"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -263,7 +339,7 @@ const step = {
             name: "domestic-violence-notes",
             label: {
               id: "domestic-violence-notes-label",
-              value: "Add note for post visit referral."
+              value: "Add note for post visit referral.",
             },
             contentAfterTextArea: (
               <>
@@ -278,7 +354,7 @@ const step = {
                 </Paragraph>
               </>
             ),
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
@@ -288,8 +364,8 @@ const step = {
           >({
             storeName: "supportNeeds",
             key: keyFromSlug(),
-            property: ["domesticSexualViolenceNotes"]
-          })
+            property: ["domesticSexualViolenceNotes"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -310,7 +386,7 @@ const step = {
             name: "mental-health-18-65-notes",
             label: {
               id: "mental-health-18-65-notes-label",
-              value: "Add note for post visit referral."
+              value: "Add note for post visit referral.",
             },
             contentAfterTextArea: (
               <>
@@ -327,7 +403,7 @@ const step = {
                 </Paragraph>
               </>
             ),
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
@@ -337,8 +413,8 @@ const step = {
           >({
             storeName: "supportNeeds",
             key: keyFromSlug(),
-            property: ["mentalHealth18To65Notes"]
-          })
+            property: ["mentalHealth18To65Notes"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -359,7 +435,7 @@ const step = {
             name: "mental-health-over-65-notes",
             label: {
               id: "mental-health-over-65-notes-label",
-              value: "Add note for post visit referral."
+              value: "Add note for post visit referral.",
             },
             contentAfterTextArea: (
               <>
@@ -379,7 +455,7 @@ const step = {
                 </Paragraph>
               </>
             ),
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
@@ -389,12 +465,12 @@ const step = {
           >({
             storeName: "supportNeeds",
             key: keyFromSlug(),
-            property: ["mentalHealthOver65Notes"]
-          })
+            property: ["mentalHealthOver65Notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

@@ -5,7 +5,7 @@ import {
   Schema,
   StoreKey,
   StoreNames,
-  StoreValue
+  StoreValue,
 } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
 
@@ -53,7 +53,7 @@ const useDataSet = <
 
     return (
       await Promise.all(
-        keys.map(async key => ({ [key]: await db.get(storeName, key) }))
+        keys.map(async (key) => ({ [key]: await db.get(storeName, key) }))
       )
     ).reduce<
       {

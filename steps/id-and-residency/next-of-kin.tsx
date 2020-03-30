@@ -2,14 +2,14 @@ import {
   Heading,
   HeadingLevels,
   Textarea,
-  LabelProps
+  LabelProps,
 } from "lbh-frontend-react";
 import {
   ComponentDatabaseMap,
   ComponentWrapper,
   DynamicComponent,
   StaticComponent,
-  makeDynamic
+  makeDynamic,
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import { TextInput } from "../../components/TextInput";
@@ -22,7 +22,7 @@ import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const questions = {
-  "next-of-kin-details": "Next of kin details"
+  "next-of-kin-details": "Next of kin details",
 };
 
 const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
@@ -37,36 +37,36 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
           "next-of-kin-full-name": {
             renderValue(name: string): React.ReactNode {
               return name;
-            }
+            },
           },
           "next-of-kin-relationship": {
             renderValue(relationship: string): React.ReactNode {
               return relationship;
-            }
+            },
           },
           "next-of-kin-mobile-number": {
             renderValue(mobile: string): React.ReactNode {
               return mobile;
-            }
+            },
           },
           "next-of-kin-other-number": {
             renderValue(otherNumber: string): React.ReactNode {
               return otherNumber;
-            }
+            },
           },
           "next-of-kin-email": {
             renderValue(email: string): React.ReactNode {
               return email;
-            }
+            },
           },
           "next-of-kin-address": {
             renderValue(address: string): React.ReactNode {
               return address.trim().replace(/\n/g, ", ");
-            }
-          }
-        }
-      }
-    ]
+            },
+          },
+        },
+      },
+    ],
   },
   step: {
     slug: PageSlugs.NextOfKin,
@@ -74,7 +74,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapStatic<ResidentDatabaseSchema, "nextOfKin">(
@@ -83,8 +83,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
           Component: Heading,
           props: {
             level: HeadingLevels.H2,
-            children: questions["next-of-kin-details"]
-          }
+            children: questions["next-of-kin-details"],
+          },
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -93,7 +93,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
           Component: TextInput,
           props: {
             name: "next-of-kin-full-name",
-            label: "Full name"
+            label: "Full name",
           },
           defaultValue: "",
           emptyValue: "",
@@ -103,8 +103,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
           >({
             storeName: "nextOfKin",
             key: keyFromSlug(true),
-            property: ["fullName"]
-          })
+            property: ["fullName"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -113,7 +113,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
           Component: TextInput,
           props: {
             name: "next-of-kin-relationship",
-            label: "Relationship to tenant"
+            label: "Relationship to tenant",
           },
           defaultValue: "",
           emptyValue: "",
@@ -123,8 +123,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
           >({
             storeName: "nextOfKin",
             key: keyFromSlug(true),
-            property: ["relationship"]
-          })
+            property: ["relationship"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -133,7 +133,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
           Component: TextInput,
           props: {
             name: "next-of-kin-mobile-number",
-            label: "Mobile number"
+            label: "Mobile number",
           },
           defaultValue: "",
           emptyValue: "",
@@ -143,8 +143,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
           >({
             storeName: "nextOfKin",
             key: keyFromSlug(true),
-            property: ["mobileNumber"]
-          })
+            property: ["mobileNumber"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -153,7 +153,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
           Component: TextInput,
           props: {
             name: "next-of-kin-other-number",
-            label: "Other phone number"
+            label: "Other phone number",
           },
           defaultValue: "",
           emptyValue: "",
@@ -163,8 +163,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
           >({
             storeName: "nextOfKin",
             key: keyFromSlug(true),
-            property: ["otherNumber"]
-          })
+            property: ["otherNumber"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -173,7 +173,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
           Component: TextInput,
           props: {
             name: "next-of-kin-email",
-            label: "Email address"
+            label: "Email address",
           },
           defaultValue: "",
           emptyValue: "",
@@ -183,8 +183,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
           >({
             storeName: "nextOfKin",
             key: keyFromSlug(true),
-            property: ["email"]
-          })
+            property: ["email"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -196,16 +196,16 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
               value: "value",
               onValueChange: "onChange",
               required: "required",
-              disabled: "disabled"
+              disabled: "disabled",
             },
-            value => value
+            (value) => value
           ),
           props: {
             name: "next-of-kin-address",
             label: {
-              children: "Address"
+              children: "Address",
             } as LabelProps,
-            rows: 4 as number | undefined
+            rows: 4 as number | undefined,
           },
           defaultValue: "",
           emptyValue: "",
@@ -215,12 +215,12 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
           >({
             storeName: "nextOfKin",
             key: keyFromSlug(true),
-            property: ["address"]
-          })
+            property: ["address"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

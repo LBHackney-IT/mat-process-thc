@@ -7,7 +7,7 @@ interface Props {
   rows: React.ReactNode[][];
 }
 
-export const Table: React.FunctionComponent<Props> = props => {
+export const Table: React.FunctionComponent<Props> = (props) => {
   const { headings, rows } = props;
 
   return (
@@ -44,5 +44,5 @@ Table.propTypes = {
   headings: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   rows: PropTypes.arrayOf(
     PropTypes.arrayOf(PropTypes.node.isRequired).isRequired
-  ).isRequired
+  ).isRequired,
 };

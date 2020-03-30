@@ -4,26 +4,65 @@ import {
   ComponentDatabaseMap,
   ComponentValue,
   ComponentWrapper,
-  DynamicComponent
+  DynamicComponent,
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import { RadioButtons } from "../../components/RadioButtons";
 import { TextArea, TextAreaProps } from "../../components/TextArea";
+import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import yesNoRadios from "../../helpers/yesNoRadios";
+import { Note } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step = {
+const questions = {
+  "has-left-combustible-items":
+    "Has the tenant left combustible items in communal areas?",
+  "further-action-required": "Is further action required?",
+};
+
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
   title: PageTitles.CommunalAreas,
   heading: "Combustible items in communal areas",
+  review: {
+    rows: [
+      {
+        label: questions["has-left-combustible-items"],
+        values: {
+          "has-left-combustible-items": {
+            renderValue(leftCombustibleItems: string): React.ReactNode {
+              return getRadioLabelFromValue(yesNoRadios, leftCombustibleItems);
+            },
+          },
+          "communal-areas-notes": {
+            renderValue(communalAreasNotes: Note): React.ReactNode {
+              return communalAreasNotes.value;
+            },
+          },
+        },
+      },
+      {
+        label: questions["further-action-required"],
+        values: {
+          "further-action-required": {
+            renderValue(furtherActionRequired: string): React.ReactNode {
+              return getRadioLabelFromValue(yesNoRadios, furtherActionRequired);
+            },
+          },
+        },
+      },
+    ],
+  },
   step: {
     slug: PageSlugs.CommunalAreas,
     nextSlug: PageSlugs.Pets,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
@@ -34,19 +73,10 @@ const step = {
             name: "has-left-combustible-items",
             legend: (
               <FieldsetLegend>
-                Has the tenant left combustible items in communal areas?
+                {questions["has-left-combustible-items"]}
               </FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios,
           },
           defaultValue: "",
           emptyValue: "",
@@ -56,8 +86,8 @@ const step = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["communalAreas", "hasLeftCombustibleItems"]
-          })
+            property: ["communalAreas", "hasLeftCombustibleItems"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -67,18 +97,11 @@ const step = {
           props: {
             name: "further-action-required",
             legend: (
-              <FieldsetLegend>Is further action required?</FieldsetLegend>
+              <FieldsetLegend>
+                {questions["further-action-required"]}
+              </FieldsetLegend>
             ) as React.ReactNode,
-            radios: [
-              {
-                label: "Yes",
-                value: "yes"
-              },
-              {
-                label: "No",
-                value: "no"
-              }
-            ]
+            radios: yesNoRadios,
           },
           renderWhen(stepValues: {
             "has-left-combustible-items"?: ComponentValue<
@@ -96,8 +119,8 @@ const step = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["communalAreas", "furtherActionRequired"]
-          })
+            property: ["communalAreas", "furtherActionRequired"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -106,10 +129,10 @@ const step = {
           Component: TextArea,
           props: {
             label: {
-              value: "Add note about door mats / potted plants if necessary."
+              value: "Add note about door mats / potted plants if necessary.",
             },
             name: "communal-areas-notes",
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaProps,
           renderWhen(stepValues: {
             "has-left-combustible-items"?: ComponentValue<
@@ -127,12 +150,12 @@ const step = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["communalAreas", "notes"]
-          })
+            property: ["communalAreas", "notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

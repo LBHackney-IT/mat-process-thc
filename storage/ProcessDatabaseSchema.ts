@@ -214,6 +214,11 @@ type ProcessDatabaseSchema = NamedSchema<
         mentalHealthOver65Notes: Note;
       };
     };
+
+    otherNotes: {
+      key: ProcessRef;
+      value: Note;
+    };
   }
 >;
 
@@ -246,7 +251,8 @@ const storeNames: {
   homeCheck: true,
   healthConcerns: true,
   disability: true,
-  supportNeeds: true
+  supportNeeds: true,
+  otherNotes: true,
 };
 
 export const processStoreNames = Object.entries(storeNames)
@@ -254,7 +260,7 @@ export const processStoreNames = Object.entries(storeNames)
   .reduce(
     (names, [name]) => [
       ...names,
-      name as StoreNames<ProcessDatabaseSchema["schema"]>
+      name as StoreNames<ProcessDatabaseSchema["schema"]>,
     ],
     [] as StoreNames<ProcessDatabaseSchema["schema"]>[]
   );

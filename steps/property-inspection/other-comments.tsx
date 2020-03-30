@@ -1,46 +1,64 @@
+import ProcessStepDefinition from "helpers/ProcessStepDefinition";
 import {
   List,
   ListProps,
   ListTypes,
-  Paragraph
+  Paragraph,
 } from "lbh-frontend-react/components";
 import {
   ComponentDatabaseMap,
   ComponentWrapper,
   DynamicComponent,
-  StaticComponent
+  StaticComponent,
 } from "remultiform/component-wrapper";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { TextArea, TextAreaProps } from "../../components/TextArea";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import { Note } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step = {
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
   title: PageTitles.OtherComments,
   heading: "Other comments",
+  review: {
+    rows: [
+      {
+        label:
+          "Add notes about any other comments or points to investigate for the property",
+        values: {
+          "other-comments-notes": {
+            renderValue(notes: Note): React.ReactNode {
+              return notes.value;
+            },
+          },
+        },
+        images: "other-comments-images",
+      },
+    ],
+  },
   step: {
     slug: PageSlugs.OtherComments,
     nextSlug: PageSlugs.Sections,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
-      ComponentWrapper.wrapStatic(
+      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "property">(
         new StaticComponent({
           key: "paragraph-1",
           Component: Paragraph,
           props: {
             children:
-              "Include notes to record other subjects discussed with tenant or issues not included in the form:"
-          }
+              "Include notes to record other subjects discussed with tenant or issues not included in the form:",
+          },
         })
       ),
-      ComponentWrapper.wrapStatic(
+      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "property">(
         new StaticComponent({
           key: "paragraph-1-list",
           Component: List,
@@ -49,10 +67,10 @@ const step = {
               "hoarding",
               "signs of sub-letting (only record what you observe eg locks on bedroom doors)",
               "any further questions from the tenant about their home, estate or facilities",
-              "Tenant and Resident Association"
+              "Tenant and Resident Association",
             ],
-            type: ListTypes.Bullet
-          } as ListProps
+            type: ListTypes.Bullet,
+          } as ListProps,
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -66,7 +84,7 @@ const step = {
               | string
               | null
               | undefined,
-            maxCount: 5 as number | null | undefined
+            maxCount: 5 as number | null | undefined,
           },
           defaultValue: [],
           emptyValue: [] as string[],
@@ -76,8 +94,8 @@ const step = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["otherComments", "images"]
-          })
+            property: ["otherComments", "images"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -87,10 +105,10 @@ const step = {
           props: {
             label: {
               value:
-                "Add notes about any other comments or points to investigate for the property"
+                "Add notes about any other comments or points to investigate for the property",
             },
             name: "other-comments-notes",
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
@@ -100,12 +118,12 @@ const step = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["otherComments", "notes"]
-          })
+            property: ["otherComments", "notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

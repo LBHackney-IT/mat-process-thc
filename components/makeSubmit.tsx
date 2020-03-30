@@ -15,9 +15,11 @@ export const makeSubmit = (
 ): React.FunctionComponent<SubmitProps & { disabled?: boolean }> => {
   const buttonProps = Array.isArray(props) ? props : [props];
 
-  const Submit: React.FunctionComponent<SubmitProps & {
-    disabled?: boolean;
-  }> = ({ disabled, onSubmit }) => {
+  const Submit: React.FunctionComponent<
+    SubmitProps & {
+      disabled?: boolean;
+    }
+  > = ({ disabled, onSubmit }) => {
     const router = useRouter();
     const urls = buttonProps.map(
       ({ slug }) => urlObjectForSlug(router, slug).pathname

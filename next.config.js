@@ -11,7 +11,7 @@ const dev = process.env.NODE_ENV !== "production";
 
 const env = {
   ENVIRONMENT_NAME: process.env.ENVIRONMENT_NAME,
-  PROCESS_NAME: process.env.PROCESS_NAME
+  PROCESS_NAME: process.env.PROCESS_NAME,
 };
 
 if (dev) {
@@ -19,7 +19,7 @@ if (dev) {
     TEST_PROCESS_REF: process.env.TEST_PROCESS_REF,
     TEST_PROCESS_API_JWT: process.env.TEST_PROCESS_API_JWT,
     TEST_MAT_API_JWT: process.env.TEST_MAT_API_JWT,
-    TEST_MAT_API_DATA: process.env.TEST_MAT_API_DATA
+    TEST_MAT_API_DATA: process.env.TEST_MAT_API_DATA,
   });
 }
 
@@ -31,9 +31,9 @@ module.exports = withOffline({
       join(__dirname, "pages"),
       new RegExp(`\\.(?:${["js", "jsx", "ts", "tsx"].join("|")})$`),
       /^api/
-    )
+    ),
   },
   env,
   registerSwPrefix: basePath,
-  scope: `${basePath}/`
+  scope: `${basePath}/`,
 });

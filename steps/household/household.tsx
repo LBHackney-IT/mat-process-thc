@@ -2,40 +2,67 @@ import {
   Link,
   List,
   ListTypes,
-  Paragraph
+  Paragraph,
 } from "lbh-frontend-react/components";
 import React from "react";
 import {
   ComponentDatabaseMap,
   ComponentWrapper,
   DynamicComponent,
-  StaticComponent
+  StaticComponent,
 } from "remultiform/component-wrapper";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { Table } from "../../components/Table";
 import {
   TextAreaDetails,
-  TextAreaDetailsProps
+  TextAreaDetailsProps,
 } from "../../components/TextAreaDetails";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import { Note } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step = {
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
   title: PageTitles.Household,
   heading: "Review household members",
+  review: {
+    rows: [
+      {
+        label: "Change in household members",
+        values: {
+          "member-changes": {
+            renderValue(memberChanges: Note): React.ReactNode {
+              return memberChanges.value;
+            },
+          },
+        },
+        images: "household-document-images",
+      },
+      {
+        label: "Housing move schemes",
+        values: {
+          "house-moving-schemes": {
+            renderValue(houseMovingSchemes: Note): React.ReactNode {
+              return houseMovingSchemes.value;
+            },
+          },
+        },
+      },
+    ],
+  },
   step: {
     slug: PageSlugs.Household,
     nextSlug: PageSlugs.Rent,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue"
+        value: "Save and continue",
       }),
     componentWrappers: [
-      ComponentWrapper.wrapStatic(
+      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "household">(
         new StaticComponent({
           key: "household-members-table",
           Component: Table,
@@ -43,9 +70,9 @@ const step = {
             headings: ["Full name", "Relationship to tenant", "Date of birth"],
             rows: [
               ["Household member 1", "Father", "10/04/1967"],
-              ["Household member 2", "Uncle", "12/03/1978"]
-            ]
-          }
+              ["Household member 2", "Uncle", "12/03/1978"],
+            ],
+          },
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -59,7 +86,7 @@ const step = {
               | string
               | null
               | undefined,
-            maxCount: 3 as number | null | undefined
+            maxCount: 3 as number | null | undefined,
           },
           defaultValue: [],
           emptyValue: [] as string[],
@@ -69,8 +96,8 @@ const step = {
           >({
             storeName: "household",
             key: keyFromSlug(),
-            property: ["documents", "images"]
-          })
+            property: ["documents", "images"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -82,7 +109,7 @@ const step = {
               "House moving schemes: downsizing, overcrowding or aged over 60",
             name: "house-moving-schemes-notes",
             label: {
-              value: "House moving schemes notes"
+              value: "House moving schemes notes",
             },
             contentBeforeTextArea: (
               <>
@@ -117,12 +144,12 @@ const step = {
                         Seaside and country
                       </Link>{" "}
                       (online only, opens in a new tab) if aged over 60
-                    </>
+                    </>,
                   ]}
                 />
               </>
             ),
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
@@ -132,8 +159,8 @@ const step = {
           >({
             storeName: "household",
             key: keyFromSlug(),
-            property: ["houseMovingSchemes", "notes"]
-          })
+            property: ["houseMovingSchemes", "notes"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -144,7 +171,7 @@ const step = {
             summary: "Add note about any changes in household members",
             label: { value: "Notes" },
             name: "member-changes-notes",
-            includeCheckbox: true
+            includeCheckbox: true,
           } as TextAreaDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
@@ -154,12 +181,12 @@ const step = {
           >({
             storeName: "household",
             key: keyFromSlug(),
-            property: ["memberChanges", "notes"]
-          })
+            property: ["memberChanges", "notes"],
+          }),
         })
-      )
-    ]
-  }
+      ),
+    ],
+  },
 };
 
 export default step;

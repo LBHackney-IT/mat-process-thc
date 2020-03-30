@@ -25,8 +25,8 @@ beforeEach(() => {
     ...jest.fn()(),
     database: {
       ...jest.fn()(),
-      put: jest.fn()
-    }
+      put: jest.fn(),
+    },
   };
 
   Storage.ProcessContext = {
@@ -41,26 +41,30 @@ beforeEach(() => {
           processStoreNames.reduce(
             (stores, storeName) => ({
               ...stores,
-              [storeName]: { ...jest.fn()(), put: jest.fn(), delete: jest.fn() }
+              [storeName]: {
+                ...jest.fn()(),
+                put: jest.fn(),
+                delete: jest.fn(),
+              },
             }),
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             {} as any
           )
         );
-      }
-    }
+      },
+    },
   };
   Storage.ResidentContext = {
     ...jest.fn()(),
     database: {
       ...jest.fn()(),
-      db: { version: databaseSchemaVersion }
-    }
+      db: { version: databaseSchemaVersion },
+    },
   };
 
   jest.spyOn(router, "useRouter").mockImplementation(() => ({
     ...jest.fn()(),
-    query: { processRef: "test-process-ref" }
+    query: { processRef: "test-process-ref" },
   }));
 });
 
@@ -84,7 +88,7 @@ it("renders correctly when online", async () => {
         method === "GET"
       ) {
         body = {
-          base64Image: "data:image/jpeg;base64,someimagedata"
+          base64Image: "data:image/jpeg;base64,someimagedata",
         };
       } else if (url.includes("/api/v1/processes") && method === "GET") {
         body = {
@@ -95,18 +99,18 @@ it("renders correctly when online", async () => {
             processData: {
               property: {
                 outside: {
-                  images: ["image:imageid.jpeg"]
-                }
-              }
-            }
-          }
+                  images: ["image:imageid.jpeg"],
+                },
+              },
+            },
+          },
         };
       } else if (url.includes("/api/v1/tenancies") && method === "GET") {
         body = {
           results: {
             tenuretype: "Secure",
-            tenancyStartDate: "2019-01-01"
-          }
+            tenancyStartDate: "2019-01-01",
+          },
         };
       } else if (url.includes("/api/v1/residents") && method === "GET") {
         body = {
@@ -115,27 +119,27 @@ it("renders correctly when online", async () => {
               fullAddressDisplay:
                 "FLAT 1\r\n1 TEST STREET\r\nTEST TOWN TT1 1TT",
               responsible: true,
-              fullName: "TestTenant1"
+              fullName: "TestTenant1",
             },
             {
               fullAddressDisplay:
                 "FLAT 1\r\n1 TEST STREET\r\nTEST TOWN TT1 1TT",
               responsible: true,
-              fullName: "TestTenant2"
+              fullName: "TestTenant2",
             },
             {
               fullAddressDisplay:
                 "FLAT 1\r\n1 TEST STREET\r\nTEST TOWN TT1 1TT",
               responsible: false,
-              fullName: "TestHouseholdMember1"
+              fullName: "TestHouseholdMember1",
             },
             {
               fullAddressDisplay:
                 "FLAT 1\r\n1 TEST STREET\r\nTEST TOWN TT1 1TT",
               responsible: false,
-              fullName: "TestHouseholdMember2"
-            }
-          ]
+              fullName: "TestHouseholdMember2",
+            },
+          ],
         };
       }
 
@@ -356,6 +360,17 @@ it("renders correctly when online", async () => {
           </button>
         </div>
       </main>,
+      <style
+        jsx={true}
+      >
+        
+            :global(.pause-button) {
+              float: right;
+              margin-top: 0;
+              margin-left: 2em;
+            }
+          
+      </style>,
     ]
   `);
 });
@@ -632,6 +647,17 @@ Array [
       </button>
     </div>
   </main>,
+  <style
+    jsx={true}
+  >
+    
+        :global(.pause-button) {
+          float: right;
+          margin-top: 0;
+          margin-left: 2em;
+        }
+      
+  </style>,
 ]
 `);
 });

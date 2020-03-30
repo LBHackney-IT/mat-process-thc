@@ -1,11 +1,11 @@
 import {
   Checkboxes as LBHCheckboxes,
-  CheckboxItem
+  CheckboxItem,
 } from "lbh-frontend-react/components";
 import React from "react";
 import {
   DynamicComponentControlledProps,
-  DynamicComponent
+  DynamicComponent,
 } from "remultiform/component-wrapper";
 
 import PropTypes from "../helpers/PropTypes";
@@ -16,7 +16,7 @@ export type CheckboxesProps = DynamicComponentControlledProps<string[]> & {
   checkboxes: { value: string; label: string }[];
 };
 
-export const Checkboxes: React.FunctionComponent<CheckboxesProps> = props => {
+export const Checkboxes: React.FunctionComponent<CheckboxesProps> = (props) => {
   const {
     name,
     legend,
@@ -24,10 +24,10 @@ export const Checkboxes: React.FunctionComponent<CheckboxesProps> = props => {
     value: currentValues,
     onValueChange,
     required,
-    disabled
+    disabled,
   } = props;
 
-  const checkboxItems = checkboxes.map<CheckboxItem>(checkbox => {
+  const checkboxItems = checkboxes.map<CheckboxItem>((checkbox) => {
     const { value, label } = checkbox;
 
     const id = `${name}-${value.replace(/\s+/g, "-")}`;
@@ -37,7 +37,7 @@ export const Checkboxes: React.FunctionComponent<CheckboxesProps> = props => {
       value,
       label: { id: `${id}-label`, children: label },
       checked: currentValues.includes(value),
-      disabled
+      disabled,
     };
   });
 
@@ -61,7 +61,7 @@ Checkboxes.propTypes = {
   checkboxes: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired
+      value: PropTypes.string.isRequired,
     }).isRequired
-  ).isRequired
+  ).isRequired,
 };
