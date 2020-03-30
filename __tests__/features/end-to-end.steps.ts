@@ -1486,7 +1486,11 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
         )
       );
 
-      expect(persistedProcessData).toEqual(processData);
+      expect(persistedProcessData.submitted).toBeDefined();
+      expect({
+        ...persistedProcessData,
+        submitted: undefined,
+      }).toEqual(processData);
     });
   });
 });

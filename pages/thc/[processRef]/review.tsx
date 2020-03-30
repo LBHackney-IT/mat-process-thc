@@ -193,6 +193,12 @@ const ReviewPage: NextPage = () => {
             otherNotes
           );
 
+          await processDatabase.result.put(
+            "submitted",
+            processRef,
+            new Date().toISOString()
+          );
+
           return true;
         }}
       />

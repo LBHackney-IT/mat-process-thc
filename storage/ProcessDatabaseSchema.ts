@@ -21,6 +21,11 @@ type ProcessDatabaseSchema = NamedSchema<
       value: string;
     };
 
+    submitted: {
+      key: ProcessRef;
+      value: string;
+    };
+
     property: {
       key: ProcessRef;
       value: {
@@ -243,6 +248,7 @@ const storeNames: {
   [Name in StoreNames<ProcessDatabaseSchema["schema"]>]: boolean;
 } = {
   lastModified: true,
+  submitted: true,
   property: true,
   isUnannouncedVisit: true,
   isVisitInside: true,
