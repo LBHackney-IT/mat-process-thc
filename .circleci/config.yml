@@ -158,13 +158,13 @@ workflows:
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           region: AWS_REGION
-          repo: $AWS_ECR_PATH_PROD
+          repo: $AWS_ECR_PATH_PRODUCTION
           tag: $CIRCLE_SHA1
 
       - deploy:
           name: deploy-to-production
           requires:
             - build-and-push-to-production
-          cluster-name: $AWS_CLUSTER_PROD
-          service-name: $AWS_SERVICE_PROD
+          cluster-name: $AWS_CLUSTER_PRODUCTION
+          service-name: $AWS_SERVICE_PRODUCTION
           image-tag: $CIRCLE_SHA1
