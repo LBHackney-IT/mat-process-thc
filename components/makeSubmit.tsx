@@ -59,15 +59,19 @@ export const makeSubmit = (
                   return;
                 }
 
+                let successfulSubmit = false;
+
                 try {
-                  await onSubmit();
+                  successfulSubmit = await onSubmit();
                 } catch (error) {
                   // This is invisible to the user, so we should do something to
                   // display it to them.
                   console.error(error);
                 }
 
-                await router.push(href, as);
+                if (successfulSubmit) {
+                  await router.push(href, as);
+                }
               }}
               data-testid={i > 0 ? undefined : "submit"}
             >

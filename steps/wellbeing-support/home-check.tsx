@@ -25,6 +25,12 @@ const questions = {
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "homeCheck"> = {
   title: PageTitles.HomeCheck,
   heading: "Home Check",
+  errors: {
+    required: {
+      "home-check":
+        "You must specify whether or not to include a Home Check in this Tenancy and Household Check",
+    },
+  },
   review: {
     rows: [
       {
@@ -60,7 +66,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "homeCheck"> = {
           Component: Paragraph,
           props: {
             children:
-              "The Wellbeing support section is the Home Check part of the Tenancy and Household Check process. It includes questions about health, disability, antisocial behaviour, and referrals.",
+              "The wellbeing support section is the Home Check part of the Tenancy and Household Check process. It includes questions about health, disability, antisocial behaviour, and referrals.",
           },
         })
       ),
@@ -75,6 +81,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "homeCheck"> = {
             ) as React.ReactNode,
             radios: yesNoRadios,
           },
+          required: true,
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
@@ -93,7 +100,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "homeCheck"> = {
           Component: Paragraph,
           props: {
             children:
-              "Note: If you are not including a Home Check, the Wellbeing support section does not need to be completed.",
+              "Note: if you are not including a Home Check, the wellbeing support section does not need to be completed.",
           },
         })
       ),

@@ -9,6 +9,9 @@ interface BaseStepDefinition<
   Names extends StoreNames<DBSchema["schema"]>
 > {
   context?: DatabaseContext<DBSchema>;
+  errors?: {
+    required?: { [key: string]: string };
+  };
   review?: {
     rows: {
       label: string;

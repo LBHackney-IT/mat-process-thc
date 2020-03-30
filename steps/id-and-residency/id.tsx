@@ -53,6 +53,12 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
   title: PageTitles.Id,
   heading: "Verify proof of ID",
   context: Storage.ResidentContext,
+  errors: {
+    required: {
+      "id-type": "You must specify the type of the ID",
+      "id-images": "You must take at least one photo of the ID",
+    },
+  },
   review: {
     rows: [
       {
@@ -93,6 +99,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
             ) as React.ReactNode,
             radios: idTypeRadios,
           },
+          required: true,
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<ResidentDatabaseSchema, "id">({
@@ -116,6 +123,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
               | undefined,
             maxCount: 3 as number | null | undefined,
           },
+          required: true,
           defaultValue: [],
           emptyValue: [] as string[],
           databaseMap: new ComponentDatabaseMap<ResidentDatabaseSchema, "id">({
