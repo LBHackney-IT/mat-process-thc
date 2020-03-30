@@ -198,9 +198,13 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
             checkboxes: householdMemberCheckboxes,
           } as CheckboxesProps,
           renderWhen(stepValues: {
+            disability?: ComponentValue<ProcessDatabaseSchema, "disability">;
             "pip-or-dla"?: ComponentValue<ProcessDatabaseSchema, "disability">;
           }): boolean {
-            return stepValues["pip-or-dla"] === "yes";
+            return (
+              stepValues["disability"] === "yes" &&
+              stepValues["pip-or-dla"] === "yes"
+            );
           },
           defaultValue: [],
           emptyValue: [] as string[],
@@ -226,9 +230,13 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
             checkboxes: householdMemberCheckboxes,
           } as CheckboxesProps,
           renderWhen(stepValues: {
+            disability?: ComponentValue<ProcessDatabaseSchema, "disability">;
             "pip-or-dla"?: ComponentValue<ProcessDatabaseSchema, "disability">;
           }): boolean {
-            return stepValues["pip-or-dla"] === "yes";
+            return (
+              stepValues["disability"] === "yes" &&
+              stepValues["pip-or-dla"] === "yes"
+            );
           },
           defaultValue: [],
           emptyValue: [] as string[],

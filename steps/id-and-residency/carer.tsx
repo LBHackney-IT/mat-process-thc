@@ -233,9 +233,13 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             children: "When did the carer start living in the property?",
           },
           renderWhen(stepValues: {
+            "carer-needed"?: ComponentValue<ResidentDatabaseSchema, "carer">;
             "carer-live-in"?: ComponentValue<ResidentDatabaseSchema, "carer">;
           }): boolean {
-            return stepValues["carer-live-in"] === "yes";
+            return (
+              stepValues["carer-needed"] === "yes" &&
+              stepValues["carer-live-in"] === "yes"
+            );
           },
         })
       ),
@@ -247,9 +251,13 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             name: "carer-live-in-start-date",
           },
           renderWhen(stepValues: {
+            "carer-needed"?: ComponentValue<ResidentDatabaseSchema, "carer">;
             "carer-live-in"?: ComponentValue<ResidentDatabaseSchema, "carer">;
           }): boolean {
-            return stepValues["carer-live-in"] === "yes";
+            return (
+              stepValues["carer-needed"] === "yes" &&
+              stepValues["carer-live-in"] === "yes"
+            );
           },
           defaultValue: {},
           emptyValue: {} as { month?: number; year?: number },
@@ -374,9 +382,13 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             rows: 4 as number | undefined,
           },
           renderWhen(stepValues: {
+            "carer-needed"?: ComponentValue<ResidentDatabaseSchema, "carer">;
             "carer-live-in"?: ComponentValue<ResidentDatabaseSchema, "carer">;
           }): boolean {
-            return stepValues["carer-live-in"] === "no";
+            return (
+              stepValues["carer-needed"] === "yes" &&
+              stepValues["carer-live-in"] !== "yes"
+            );
           },
           defaultValue: "",
           emptyValue: "",

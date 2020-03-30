@@ -155,12 +155,19 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             radios: yesNoRadios,
           },
           renderWhen(stepValues: {
+            "has-metal-gates"?: ComponentValue<
+              ProcessDatabaseSchema,
+              "property"
+            >;
             "combustible-items-behind-gates"?: ComponentValue<
               ProcessDatabaseSchema,
               "property"
             >;
           }): boolean {
-            return stepValues["combustible-items-behind-gates"] === "yes";
+            return (
+              stepValues["has-metal-gates"] === "yes" &&
+              stepValues["combustible-items-behind-gates"] === "yes"
+            );
           },
           defaultValue: "",
           emptyValue: "",

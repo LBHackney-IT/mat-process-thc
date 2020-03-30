@@ -155,11 +155,13 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             radios: yesNoRadios,
           },
           renderWhen(stepValues: {
+            "has-garden"?: ComponentValue<ProcessDatabaseSchema, "property">;
             "garden-type"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
             return (
-              stepValues["garden-type"] === "private" ||
-              stepValues["garden-type"] === "not sure"
+              stepValues["has-garden"] === "yes" &&
+              (stepValues["garden-type"] === "private" ||
+                stepValues["garden-type"] === "not sure")
             );
           },
           defaultValue: "",
