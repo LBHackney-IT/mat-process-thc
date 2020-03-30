@@ -213,12 +213,16 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             maxCount: 1 as number | null | undefined,
           },
           renderWhen(stepValues: {
+            "has-pets"?: ComponentValue<ProcessDatabaseSchema, "property">;
             "has-permission"?: ComponentValue<
               ProcessDatabaseSchema,
               "property"
             >;
           }): boolean {
-            return stepValues["has-permission"] === "yes";
+            return (
+              stepValues["has-pets"] === "yes" &&
+              stepValues["has-permission"] === "yes"
+            );
           },
           defaultValue: [],
           emptyValue: [] as string[],
