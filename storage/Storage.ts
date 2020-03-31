@@ -90,8 +90,8 @@ const migrateProcessData = async (
     version = 5;
   }
 
-  if (version < 6) {
-    version = 6;
+  if (version < 7) {
+    version = 7;
   }
 
   if (version !== newVersion) {
@@ -195,7 +195,14 @@ export default class Storage {
 
           if (version === 5) {
             upgrade.createStore("otherNotes");
+
             version = 6;
+          }
+
+          if (version === 6) {
+            upgrade.createStore("submitted");
+
+            version = 7;
           }
 
           if (version !== upgrade.newVersion) {
@@ -237,8 +244,8 @@ export default class Storage {
             version = 3;
           }
 
-          if (version < 6) {
-            version = 6;
+          if (version < 7) {
+            version = 7;
           }
 
           if (version !== upgrade.newVersion) {

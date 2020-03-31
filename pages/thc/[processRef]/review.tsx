@@ -166,12 +166,14 @@ const ReviewPage: NextPage = () => {
 
       <SubmitButton
         disabled={
+          !processRef ||
           !residentDatabase.result ||
           !selectedTenantId ||
           !processDatabase.result
         }
         onSubmit={async (): Promise<boolean> => {
           if (
+            !processRef ||
             !residentDatabase.result ||
             !selectedTenantId ||
             !processDatabase.result
@@ -185,7 +187,17 @@ const ReviewPage: NextPage = () => {
             signatures[selectedTenantId] || ""
           );
 
-          await processDatabase.result.put("otherNotes", "notes", otherNotes);
+          await processDatabase.result.put(
+            "otherNotes",
+            processRef,
+            otherNotes
+          );
+
+          await processDatabase.result.put(
+            "submitted",
+            processRef,
+            new Date().toISOString()
+          );
 
           return true;
         }}
