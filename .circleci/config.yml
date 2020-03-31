@@ -96,7 +96,7 @@ workflows:
           requires:
             - install-and-test-branch
 
-  check-and-deploy-to-development:
+  check-and-deploy-to-development-and-staging:
     jobs:
       - install-and-test:
           name: install-and-test-development
@@ -123,18 +123,10 @@ workflows:
           service-name: $AWS_SERVICE_DEV
           image-tag: $CIRCLE_SHA1
 
-  check-and-deploy-to-staging-and-production:
-    jobs:
-      - install-and-test:
-          name: install-and-test-master
-          filters:
-            branches:
-              only: master
-
       - aws-ecr/build-and-push-image:
           name: build-and-push-to-staging
           requires:
-            - install-and-test-master
+            - deploy-to-development
           account-url: AWS_ECR_HOST
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
@@ -150,10 +142,18 @@ workflows:
           service-name: $AWS_SERVICE_STAGING
           image-tag: $CIRCLE_SHA1
 
+  check-and-deploy-to-production:
+    jobs:
+      - install-and-test:
+          name: install-and-test-master
+          filters:
+            branches:
+              only: master
+
       - aws-ecr/build-and-push-image:
           name: build-and-push-to-production
           requires:
-            - deploy-to-staging
+            - install-and-test-master
           account-url: AWS_ECR_HOST
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
