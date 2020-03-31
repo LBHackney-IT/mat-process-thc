@@ -12,11 +12,12 @@ import {
   PostVisitActionInputDetailsProps,
 } from "../../components/PostVisitActionInputDetails";
 import { RadioButtons } from "../../components/RadioButtons";
+import { ReviewNotes } from "../../components/ReviewNotes";
 import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
-import { Note } from "../../storage/DatabaseSchema";
+import { Notes } from "../../storage/DatabaseSchema";
 import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
 import Storage from "../../storage/Storage";
 import PageSlugs from "../PageSlugs";
@@ -70,8 +71,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
             },
           },
           "id-notes": {
-            renderValue(notes: Note): React.ReactNode {
-              return notes.value;
+            renderValue(notes: Notes): React.ReactNode {
+              return <ReviewNotes notes={notes} />;
             },
           },
         },
@@ -142,8 +143,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
             label: { value: "Notes" },
             name: "id-notes",
           } as PostVisitActionInputDetailsProps,
-          defaultValue: { value: "", isPostVisitAction: false },
-          emptyValue: { value: "", isPostVisitAction: false },
+          defaultValue: [] as Notes,
+          emptyValue: [] as Notes,
           databaseMap: new ComponentDatabaseMap<ResidentDatabaseSchema, "id">({
             storeName: "id",
             key: keyFromSlug(true),

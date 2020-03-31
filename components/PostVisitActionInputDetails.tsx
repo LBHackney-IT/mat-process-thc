@@ -1,7 +1,7 @@
 import React from "react";
 import { DynamicComponentControlledProps } from "remultiform/component-wrapper";
 import PropTypes from "../helpers/PropTypes";
-import { Note } from "../storage/DatabaseSchema";
+import { Notes } from "../storage/DatabaseSchema";
 import { Details } from "./Details";
 import {
   PostVisitActionInput,
@@ -9,7 +9,7 @@ import {
 } from "./PostVisitActionInput";
 
 export type PostVisitActionInputDetailsProps = DynamicComponentControlledProps<
-  Note
+  Notes
 > &
   PostVisitActionInputProps & {
     summary: React.ReactNode;

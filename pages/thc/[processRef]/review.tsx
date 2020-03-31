@@ -50,10 +50,12 @@ const ReviewPage: NextPage = () => {
     { [Ref in ResidentRef]?: string }
   >({});
 
-  const [otherNotes, setOtherNotes] = useState({
-    value: "",
-    isPostVisitAction: false,
-  });
+  const [otherNotes, setOtherNotes] = useState([
+    {
+      value: "",
+      isPostVisitAction: false,
+    },
+  ]);
 
   const tenantIds = tenants.result
     ? tenants.result.map((tenant) => tenant.id)
@@ -134,7 +136,7 @@ const ReviewPage: NextPage = () => {
 
       <PostVisitActionInput
         value={otherNotes}
-        onValueChange={(note): void => setOtherNotes(note)}
+        onValueChange={(notes): void => setOtherNotes(notes)}
         required={false}
         disabled={false}
         label={{ value: "Any other notes to be added?" }}

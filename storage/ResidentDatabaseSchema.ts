@@ -1,5 +1,5 @@
 import { NamedSchema, StoreNames } from "remultiform/database";
-import { Note } from "./DatabaseSchema";
+import { Notes } from "./DatabaseSchema";
 import databaseSchemaVersion from "./databaseSchemaVersion";
 
 export type ResidentRef = string;
@@ -17,7 +17,7 @@ type ResidentDatabaseSchema = NamedSchema<
       value: {
         type: string;
         images: string[];
-        notes: Note;
+        notes: Notes;
       };
     };
 
@@ -26,7 +26,7 @@ type ResidentDatabaseSchema = NamedSchema<
       value: {
         type: string;
         images: string[];
-        notes: Note;
+        notes: Notes;
       };
     };
 
@@ -35,7 +35,7 @@ type ResidentDatabaseSchema = NamedSchema<
       value: {
         isWilling: string;
         images: string[];
-        notes: Note;
+        notes: Notes;
       };
     };
 
@@ -62,7 +62,7 @@ type ResidentDatabaseSchema = NamedSchema<
         phoneNumber: string;
         relationship: string;
         address: string;
-        notes: Note;
+        notes: Notes;
       };
     };
 

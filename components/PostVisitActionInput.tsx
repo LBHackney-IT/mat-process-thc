@@ -6,10 +6,10 @@ import {
   DynamicComponentControlledProps,
 } from "remultiform/component-wrapper";
 import PropTypes from "../helpers/PropTypes";
-import { Note } from "../storage/DatabaseSchema";
+import { Note, Notes } from "../storage/DatabaseSchema";
 
 export type PostVisitActionInputProps = DynamicComponentControlledProps<
-  Note
+  Notes
 > & {
   label: {
     id?: string;
@@ -23,6 +23,8 @@ export const PostVisitActionInput: React.FunctionComponent<PostVisitActionInputP
   props
 ) => {
   const { label, name, rows, value, onValueChange, required, disabled } = props;
+
+  const currentNote: Note | undefined = value[0];
 
   const checkbox = {
     label: "Create a post-visit action",
@@ -42,15 +44,17 @@ export const PostVisitActionInput: React.FunctionComponent<PostVisitActionInputP
         label={{ id: labelId, children: label.value }}
         id={inputId}
         onChange={(textValue: string): void =>
-          onValueChange({
-            value: textValue,
-            isPostVisitAction: value.isPostVisitAction,
-          })
+          onValueChange([
+            {
+              value: textValue,
+              isPostVisitAction: currentNote?.isPostVisitAction || false,
+            },
+          ])
         }
         required={required}
         disabled={disabled}
         rows={rows}
-        value={value.value}
+        value={currentNote?.value}
       />
       <LBHCheckboxes
         name={name}
@@ -59,16 +63,18 @@ export const PostVisitActionInput: React.FunctionComponent<PostVisitActionInputP
             id: checkboxInputId,
             value: `${checkbox.value}`,
             label: { id: checkboxLabelId, children: checkbox.label },
-            checked: value.isPostVisitAction,
+            checked: currentNote?.isPostVisitAction,
             disabled,
           },
         ]}
         required={required}
         onChange={(checkboxValue: string[]): void => {
-          onValueChange({
-            value: value.value,
-            isPostVisitAction: checkboxValue[0] === "true",
-          });
+          onValueChange([
+            {
+              value: currentNote?.value,
+              isPostVisitAction: checkboxValue[0] === "true",
+            },
+          ]);
         }}
       />
     </>
@@ -77,10 +83,12 @@ export const PostVisitActionInput: React.FunctionComponent<PostVisitActionInputP
 
 PostVisitActionInput.propTypes = {
   ...DynamicComponent.controlledPropTypes(
-    PropTypes.exact({
-      value: PropTypes.string.isRequired,
-      isPostVisitAction: PropTypes.bool,
-    }).isRequired
+    PropTypes.arrayOf(
+      PropTypes.exact({
+        value: PropTypes.string.isRequired,
+        isPostVisitAction: PropTypes.bool.isRequired,
+      }).isRequired
+    ).isRequired
   ),
   label: PropTypes.exact({
     id: PropTypes.string,

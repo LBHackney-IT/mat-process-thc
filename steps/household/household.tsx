@@ -17,10 +17,11 @@ import {
   PostVisitActionInputDetails,
   PostVisitActionInputDetailsProps,
 } from "../../components/PostVisitActionInputDetails";
+import { ReviewNotes } from "../../components/ReviewNotes";
 import { Table } from "../../components/Table";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
-import { Note } from "../../storage/DatabaseSchema";
+import { Notes } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
@@ -34,8 +35,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
         label: "Change in household members",
         values: {
           "member-changes": {
-            renderValue(memberChanges: Note): React.ReactNode {
-              return memberChanges.value;
+            renderValue(memberChanges: Notes): React.ReactNode {
+              return <ReviewNotes notes={memberChanges} />;
             },
           },
         },
@@ -45,8 +46,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
         label: "Housing move schemes",
         values: {
           "house-moving-schemes": {
-            renderValue(houseMovingSchemes: Note): React.ReactNode {
-              return houseMovingSchemes.value;
+            renderValue(houseMovingSchemes: Notes): React.ReactNode {
+              return <ReviewNotes notes={houseMovingSchemes} />;
             },
           },
         },
@@ -150,8 +151,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
               </>
             ),
           } as PostVisitActionInputDetailsProps,
-          defaultValue: { value: "", isPostVisitAction: false },
-          emptyValue: { value: "", isPostVisitAction: false },
+          defaultValue: [] as Notes,
+          emptyValue: [] as Notes,
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "household"
@@ -171,8 +172,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
             label: { value: "Notes" },
             name: "member-changes-notes",
           } as PostVisitActionInputDetailsProps,
-          defaultValue: { value: "", isPostVisitAction: false },
-          emptyValue: { value: "", isPostVisitAction: false },
+          defaultValue: [] as Notes,
+          emptyValue: [] as Notes,
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "household"

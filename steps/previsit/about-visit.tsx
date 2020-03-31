@@ -10,6 +10,7 @@ import { makeSubmit } from "../../components/makeSubmit";
 import { PostVisitActionInput } from "../../components/PostVisitActionInput";
 import { RadioButtons } from "../../components/RadioButtons";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import { Notes } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
@@ -76,8 +77,8 @@ const step = {
           }): boolean {
             return stepValues["unannounced-visit"] === "no";
           },
-          defaultValue: { value: "", isPostVisitAction: false },
-          emptyValue: { value: "", isPostVisitAction: false },
+          defaultValue: [] as Notes,
+          emptyValue: [] as Notes,
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "isUnannouncedVisit"
@@ -141,8 +142,8 @@ const step = {
           }): boolean {
             return stepValues["inside-property"] === "no";
           },
-          defaultValue: { value: "", isPostVisitAction: false },
-          emptyValue: { value: "", isPostVisitAction: false },
+          defaultValue: [] as Notes,
+          emptyValue: [] as Notes,
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "isVisitInside"
