@@ -11,9 +11,9 @@ import {
 import { Note } from "storage/DatabaseSchema";
 import { makeSubmit } from "../../components/makeSubmit";
 import {
-  TextAreaDetails,
-  TextAreaDetailsProps,
-} from "../../components/TextAreaDetails";
+  PostVisitActionInputDetails,
+  PostVisitActionInputDetailsProps,
+} from "../../components/PostVisitActionInputDetails";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
@@ -119,7 +119,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "resident-sustainment",
-          Component: TextAreaDetails,
+          Component: PostVisitActionInputDetails,
           props: {
             summary: (
               <>
@@ -136,7 +136,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
               id: "resident-sustainment-notes-label",
               value: "Add note for post visit referral.",
             },
-            contentAfterTextArea: (
+            contentAfter: (
               <Paragraph>
                 Or refer now:{" "}
                 <Link
@@ -148,8 +148,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
                 (online only, opens in a new tab)
               </Paragraph>
             ),
-            includeCheckbox: true,
-          } as TextAreaDetailsProps,
+          } as PostVisitActionInputDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
@@ -165,7 +164,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "befriending",
-          Component: TextAreaDetails,
+          Component: PostVisitActionInputDetails,
           props: {
             summary: (
               <>
@@ -182,8 +181,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
               id: "befriending-notes-label",
               value: "Add note for post visit referral.",
             },
-            includeCheckbox: true,
-          } as TextAreaDetailsProps,
+          } as PostVisitActionInputDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
@@ -199,7 +197,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "adult-safeguarding",
-          Component: TextAreaDetails,
+          Component: PostVisitActionInputDetails,
           props: {
             summary: (
               <>
@@ -216,7 +214,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
               id: "adult-safeguarding-notes-label",
               value: "Add note for post visit referral.",
             },
-            contentAfterTextArea: (
+            contentAfter: (
               <Paragraph>
                 Website:{" "}
                 <Link
@@ -246,8 +244,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
                 (online only, opens in a new tab)
               </Paragraph>
             ),
-            includeCheckbox: true,
-          } as TextAreaDetailsProps,
+          } as PostVisitActionInputDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
@@ -263,7 +260,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "childrens-safeguarding",
-          Component: TextAreaDetails,
+          Component: PostVisitActionInputDetails,
           props: {
             summary: (
               <>
@@ -280,7 +277,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
               id: "childrens-safeguarding-notes-label",
               value: "Add note for post visit referral.",
             },
-            contentAfterTextArea: (
+            contentAfter: (
               <>
                 <Paragraph>Or refer now:</Paragraph>
                 <Paragraph>
@@ -307,8 +304,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
                 </Paragraph>
               </>
             ),
-            includeCheckbox: true,
-          } as TextAreaDetailsProps,
+          } as PostVisitActionInputDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
@@ -324,7 +320,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "domestic-violence",
-          Component: TextAreaDetails,
+          Component: PostVisitActionInputDetails,
           props: {
             summary: (
               <>
@@ -341,7 +337,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
               id: "domestic-violence-notes-label",
               value: "Add note for post visit referral.",
             },
-            contentAfterTextArea: (
+            contentAfter: (
               <>
                 <Paragraph>Or refer now:</Paragraph>
                 <Paragraph>
@@ -354,8 +350,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
                 </Paragraph>
               </>
             ),
-            includeCheckbox: true,
-          } as TextAreaDetailsProps,
+          } as PostVisitActionInputDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
@@ -371,7 +366,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "mental-health-18-65",
-          Component: TextAreaDetails,
+          Component: PostVisitActionInputDetails,
           props: {
             summary: (
               <>
@@ -388,7 +383,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
               id: "mental-health-18-65-notes-label",
               value: "Add note for post visit referral.",
             },
-            contentAfterTextArea: (
+            contentAfter: (
               <>
                 <Paragraph>Or refer now:</Paragraph>
                 <Paragraph>
@@ -403,8 +398,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
                 </Paragraph>
               </>
             ),
-            includeCheckbox: true,
-          } as TextAreaDetailsProps,
+          } as PostVisitActionInputDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
@@ -420,7 +414,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "mental-health-over-65",
-          Component: TextAreaDetails,
+          Component: PostVisitActionInputDetails,
           props: {
             summary: (
               <>
@@ -437,7 +431,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
               id: "mental-health-over-65-notes-label",
               value: "Add note for post visit referral.",
             },
-            contentAfterTextArea: (
+            contentAfter: (
               <>
                 <Paragraph>Or refer now:</Paragraph>
                 <Paragraph>
@@ -455,8 +449,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
                 </Paragraph>
               </>
             ),
-            includeCheckbox: true,
-          } as TextAreaDetailsProps,
+          } as PostVisitActionInputDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<

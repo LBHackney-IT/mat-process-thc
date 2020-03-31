@@ -8,8 +8,11 @@ import {
 } from "remultiform/component-wrapper";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
+import {
+  PostVisitActionInput,
+  PostVisitActionInputProps,
+} from "../../components/PostVisitActionInput";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea, TextAreaProps } from "../../components/TextArea";
 import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
@@ -159,15 +162,14 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "structural-changes-notes",
-          Component: TextArea,
+          Component: PostVisitActionInput,
           props: {
             label: {
               value:
                 "Add note about structural changes including when it was done and location in property.",
             },
             name: "structural-changes-notes",
-            includeCheckbox: true,
-          } as TextAreaProps,
+          } as PostVisitActionInputProps,
           renderWhen(stepValues: {
             "has-structural-changes"?: ComponentValue<
               ProcessDatabaseSchema,

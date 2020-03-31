@@ -7,11 +7,11 @@ import {
 } from "remultiform/component-wrapper";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
-import { RadioButtons } from "../../components/RadioButtons";
 import {
-  TextAreaDetails,
-  TextAreaDetailsProps,
-} from "../../components/TextAreaDetails";
+  PostVisitActionInputDetails,
+  PostVisitActionInputDetailsProps,
+} from "../../components/PostVisitActionInputDetails";
+import { RadioButtons } from "../../components/RadioButtons";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
@@ -157,13 +157,12 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "residency-notes",
-          Component: TextAreaDetails,
+          Component: PostVisitActionInputDetails,
           props: {
             summary: "Add note about residency if necessary",
             name: "residency-notes",
             label: { value: "Notes" },
-            includeCheckbox: true,
-          } as TextAreaDetailsProps,
+          } as PostVisitActionInputDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<

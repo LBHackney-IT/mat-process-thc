@@ -9,8 +9,8 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { makeSubmit } from "../../../components/makeSubmit";
+import { PostVisitActionInput } from "../../../components/PostVisitActionInput";
 import Signature from "../../../components/Signature";
-import { TextArea } from "../../../components/TextArea";
 import getProcessRef from "../../../helpers/getProcessRef";
 import useDatabase from "../../../helpers/useDatabase";
 import useDataValue from "../../../helpers/useDataValue";
@@ -132,12 +132,11 @@ const ReviewPage: NextPage = () => {
           </React.Fragment>
         ))}
 
-      <TextArea
+      <PostVisitActionInput
         value={otherNotes}
         onValueChange={(note): void => setOtherNotes(note)}
         required={false}
         disabled={false}
-        includeCheckbox
         label={{ value: "Any other notes to be added?" }}
         name="other-notes"
       />

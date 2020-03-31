@@ -8,8 +8,11 @@ import {
 } from "remultiform/component-wrapper";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
+import {
+  PostVisitActionInput,
+  PostVisitActionInputProps,
+} from "../../components/PostVisitActionInput";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea, TextAreaProps } from "../../components/TextArea";
 import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
@@ -158,14 +161,13 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "laminated-flooring-notes",
-          Component: TextArea,
+          Component: PostVisitActionInput,
           props: {
             label: {
               value: "Add note about laminated flooring if necessary.",
             },
             name: "laminated-flooring-notes",
-            includeCheckbox: true,
-          } as TextAreaProps,
+          } as PostVisitActionInputProps,
           renderWhen(stepValues: {
             "has-laminated-flooring"?: ComponentValue<
               ProcessDatabaseSchema,

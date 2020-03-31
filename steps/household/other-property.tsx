@@ -7,8 +7,11 @@ import {
   DynamicComponent,
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
+import {
+  PostVisitActionInput,
+  PostVisitActionInputProps,
+} from "../../components/PostVisitActionInput";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea, TextAreaProps } from "../../components/TextArea";
 import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
@@ -78,15 +81,14 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "other-property-notes",
-          Component: TextArea,
+          Component: PostVisitActionInput,
           props: {
             label: {
               value:
                 "Provide details: with / without mortgage, address of property",
             },
             name: "other-property-notes",
-            includeCheckbox: true,
-          } as TextAreaProps,
+          } as PostVisitActionInputProps,
           renderWhen(stepValues: {
             "has-other-property"?: ComponentValue<
               ProcessDatabaseSchema,

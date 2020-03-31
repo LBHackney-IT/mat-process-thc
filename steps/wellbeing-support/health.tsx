@@ -8,8 +8,11 @@ import {
 } from "remultiform/component-wrapper";
 import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { makeSubmit } from "../../components/makeSubmit";
+import {
+  PostVisitActionInput,
+  PostVisitActionInputProps,
+} from "../../components/PostVisitActionInput";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea, TextAreaProps } from "../../components/TextArea";
 import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import householdMemberCheckboxes from "../../helpers/householdMemberCheckboxes";
 import keyFromSlug from "../../helpers/keyFromSlug";
@@ -197,15 +200,14 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "healthConcerns"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "health-notes",
-          Component: TextArea,
+          Component: PostVisitActionInput,
           props: {
             name: "health-notes",
             label: {
               value: "Add note about any health concerns if necessary.",
             },
             rows: 4,
-            includeCheckbox: true,
-          } as TextAreaProps,
+          } as PostVisitActionInputProps,
           renderWhen(stepValues: {
             "health-concerns"?: ComponentValue<
               ProcessDatabaseSchema,

@@ -1,4 +1,4 @@
 export type Note = {
   value: string;
-  isPostVisitAction?: boolean;
+  isPostVisitAction: boolean;
 };

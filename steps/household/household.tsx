@@ -13,11 +13,11 @@ import {
 } from "remultiform/component-wrapper";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
-import { Table } from "../../components/Table";
 import {
-  TextAreaDetails,
-  TextAreaDetailsProps,
-} from "../../components/TextAreaDetails";
+  PostVisitActionInputDetails,
+  PostVisitActionInputDetailsProps,
+} from "../../components/PostVisitActionInputDetails";
+import { Table } from "../../components/Table";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import { Note } from "../../storage/DatabaseSchema";
@@ -103,7 +103,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "house-moving-schemes",
-          Component: TextAreaDetails,
+          Component: PostVisitActionInputDetails,
           props: {
             summary:
               "House moving schemes: downsizing, overcrowding or aged over 60",
@@ -111,7 +111,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
             label: {
               value: "House moving schemes notes",
             },
-            contentBeforeTextArea: (
+            contentBefore: (
               <>
                 <Paragraph>Schemes cover:</Paragraph>
                 <List
@@ -149,8 +149,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
                 />
               </>
             ),
-            includeCheckbox: true,
-          } as TextAreaDetailsProps,
+          } as PostVisitActionInputDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
@@ -166,13 +165,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "member-changes",
-          Component: TextAreaDetails,
+          Component: PostVisitActionInputDetails,
           props: {
             summary: "Add note about any changes in household members",
             label: { value: "Notes" },
             name: "member-changes-notes",
-            includeCheckbox: true,
-          } as TextAreaDetailsProps,
+          } as PostVisitActionInputDetailsProps,
           defaultValue: { value: "", isPostVisitAction: false },
           emptyValue: { value: "", isPostVisitAction: false },
           databaseMap: new ComponentDatabaseMap<
