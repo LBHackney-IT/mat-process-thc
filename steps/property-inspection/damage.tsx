@@ -8,13 +8,17 @@ import {
 } from "remultiform/component-wrapper";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
+import {
+  PostVisitActionInput,
+  PostVisitActionInputProps,
+} from "../../components/PostVisitActionInput";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea, TextAreaProps } from "../../components/TextArea";
+import { ReviewNotes } from "../../components/ReviewNotes";
 import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import yesNoRadios from "../../helpers/yesNoRadios";
-import { Note } from "../../storage/DatabaseSchema";
+import { Notes } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
@@ -37,8 +41,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             },
           },
           "damage-notes": {
-            renderValue(damageNotes: Note): React.ReactNode {
-              return damageNotes.value;
+            renderValue(notes: Notes): React.ReactNode {
+              return <ReviewNotes notes={notes} />;
             },
           },
         },
@@ -111,22 +115,21 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "damage-notes",
-          Component: TextArea,
+          Component: PostVisitActionInput,
           props: {
             label: {
               value:
                 "Add note about damage including how it was caused and location in property.",
             },
             name: "damage-notes",
-            includeCheckbox: true,
-          } as TextAreaProps,
+          } as PostVisitActionInputProps,
           renderWhen(stepValues: {
             "has-damage"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
             return stepValues["has-damage"] === "yes";
           },
-          defaultValue: { value: "", isPostVisitAction: false },
-          emptyValue: { value: "", isPostVisitAction: false },
+          defaultValue: [] as Notes,
+          emptyValue: [] as Notes,
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "property"

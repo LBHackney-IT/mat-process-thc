@@ -8,14 +8,18 @@ import {
 } from "remultiform/component-wrapper";
 import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { makeSubmit } from "../../components/makeSubmit";
+import {
+  PostVisitActionInput,
+  PostVisitActionInputProps,
+} from "../../components/PostVisitActionInput";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea, TextAreaProps } from "../../components/TextArea";
+import { ReviewNotes } from "../../components/ReviewNotes";
 import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import householdMemberCheckboxes from "../../helpers/householdMemberCheckboxes";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import yesNoRadios from "../../helpers/yesNoRadios";
-import { Note } from "../../storage/DatabaseSchema";
+import { Notes } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
@@ -52,8 +56,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
             },
           },
           "disability-notes": {
-            renderValue(notes: Note): React.ReactNode {
-              return notes.value;
+            renderValue(notes: Notes): React.ReactNode {
+              return <ReviewNotes notes={notes} />;
             },
           },
         },
@@ -253,22 +257,21 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "disability-notes",
-          Component: TextArea,
+          Component: PostVisitActionInput,
           props: {
             name: "disability-notes",
             label: {
               value: "Add note about any disability concerns if necessary.",
             },
             rows: 4,
-            includeCheckbox: true,
-          } as TextAreaProps,
+          } as PostVisitActionInputProps,
           renderWhen(stepValues: {
             disability?: ComponentValue<ProcessDatabaseSchema, "disability">;
           }): boolean {
             return stepValues["disability"] === "yes";
           },
-          defaultValue: { value: "", isPostVisitAction: false },
-          emptyValue: { value: "", isPostVisitAction: false },
+          defaultValue: [] as Notes,
+          emptyValue: [] as Notes,
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "disability"

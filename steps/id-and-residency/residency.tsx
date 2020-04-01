@@ -7,15 +7,16 @@ import {
 } from "remultiform/component-wrapper";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
-import { RadioButtons } from "../../components/RadioButtons";
 import {
-  TextAreaDetails,
-  TextAreaDetailsProps,
-} from "../../components/TextAreaDetails";
+  PostVisitActionInputDetails,
+  PostVisitActionInputDetailsProps,
+} from "../../components/PostVisitActionInputDetails";
+import { RadioButtons } from "../../components/RadioButtons";
+import { ReviewNotes } from "../../components/ReviewNotes";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
-import { Note } from "../../storage/DatabaseSchema";
+import { Notes } from "../../storage/DatabaseSchema";
 import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
 import Storage from "../../storage/Storage";
 import PageSlugs from "../PageSlugs";
@@ -83,8 +84,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
             },
           },
           "residency-notes": {
-            renderValue(notes: Note): React.ReactNode {
-              return notes.value;
+            renderValue(notes: Notes): React.ReactNode {
+              return <ReviewNotes notes={notes} />;
             },
           },
         },
@@ -154,15 +155,14 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "residency-notes",
-          Component: TextAreaDetails,
+          Component: PostVisitActionInputDetails,
           props: {
             summary: "Add note about residency if necessary",
             name: "residency-notes",
             label: { value: "Notes" },
-            includeCheckbox: true,
-          } as TextAreaDetailsProps,
-          defaultValue: { value: "", isPostVisitAction: false },
-          emptyValue: { value: "", isPostVisitAction: false },
+          } as PostVisitActionInputDetailsProps,
+          defaultValue: [] as Notes,
+          emptyValue: [] as Notes,
           databaseMap: new ComponentDatabaseMap<
             ResidentDatabaseSchema,
             "residency"

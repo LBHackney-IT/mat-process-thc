@@ -13,13 +13,14 @@ import {
 } from "remultiform/component-wrapper";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
+import { PostVisitActionInput } from "../../components/PostVisitActionInput";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
+import { ReviewNotes } from "../../components/ReviewNotes";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import yesNoRadios from "../../helpers/yesNoRadios";
-import { Note } from "../../storage/DatabaseSchema";
+import { Notes } from "../../storage/DatabaseSchema";
 import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
 import Storage from "../../storage/Storage";
 import PageSlugs from "../PageSlugs";
@@ -45,8 +46,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
             },
           },
           "tenant-photo-willing-notes": {
-            renderValue(notes: Note): React.ReactNode {
-              return notes.value;
+            renderValue(notes: Notes): React.ReactNode {
+              return <ReviewNotes notes={notes} />;
             },
           },
         },
@@ -91,7 +92,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "tenant-photo-willing-notes",
-          Component: TextArea,
+          Component: PostVisitActionInput,
           props: {
             label: {
               value: "Explain why.",
@@ -106,8 +107,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
           }): boolean {
             return stepValues["tenant-photo-willing"] === "no";
           },
-          defaultValue: { value: "", isPostVisitAction: false },
-          emptyValue: { value: "", isPostVisitAction: false },
+          defaultValue: [] as Notes,
+          emptyValue: [] as Notes,
           databaseMap: new ComponentDatabaseMap<
             ResidentDatabaseSchema,
             "photo"

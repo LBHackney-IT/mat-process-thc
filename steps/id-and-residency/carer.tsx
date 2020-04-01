@@ -17,18 +17,19 @@ import {
 } from "remultiform/component-wrapper";
 import { DateInput } from "../../components/DateInput";
 import { makeSubmit } from "../../components/makeSubmit";
-import { RadioButtons } from "../../components/RadioButtons";
 import {
-  TextAreaDetails,
-  TextAreaDetailsProps,
-} from "../../components/TextAreaDetails";
+  PostVisitActionInputDetails,
+  PostVisitActionInputDetailsProps,
+} from "../../components/PostVisitActionInputDetails";
+import { RadioButtons } from "../../components/RadioButtons";
+import { ReviewNotes } from "../../components/ReviewNotes";
 import { TextInput } from "../../components/TextInput";
 import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import yesNoRadios from "../../helpers/yesNoRadios";
-import { Note } from "../../storage/DatabaseSchema";
+import { Notes } from "../../storage/DatabaseSchema";
 import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
 import Storage from "../../storage/Storage";
 import PageSlugs from "../PageSlugs";
@@ -129,8 +130,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             },
           },
           "carer-notes": {
-            renderValue(notes: Note): React.ReactNode {
-              return notes.value;
+            renderValue(notes: Notes): React.ReactNode {
+              return <ReviewNotes notes={notes} />;
             },
           },
         },
@@ -405,20 +406,19 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "carer-notes",
-          Component: TextAreaDetails,
+          Component: PostVisitActionInputDetails,
           props: {
             summary: "Add note about carer if necessary",
             label: { value: "Notes" },
             name: "carer-notes",
-            includeCheckbox: true,
-          } as TextAreaDetailsProps,
+          } as PostVisitActionInputDetailsProps,
           renderWhen(stepValues: {
             "carer-needed"?: ComponentValue<ResidentDatabaseSchema, "carer">;
           }): boolean {
             return stepValues["carer-needed"] === "yes";
           },
-          defaultValue: { value: "", isPostVisitAction: false },
-          emptyValue: { value: "", isPostVisitAction: false },
+          defaultValue: [] as Notes,
+          emptyValue: [] as Notes,
           databaseMap: new ComponentDatabaseMap<
             ResidentDatabaseSchema,
             "carer"
