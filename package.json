@@ -40,7 +40,7 @@
     "querystring": "^0.2.0",
     "react": "^16.13.1",
     "react-async-hook": "^3.6.1",
-    "react-dom": "^16.13.0",
+    "react-dom": "^16.13.1",
     "react-fast-compare": "^3.0.1",
     "react-signature-canvas": "^1.0.3",
     "remultiform": "^0.2.0",
