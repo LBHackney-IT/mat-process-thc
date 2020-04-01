@@ -68,8 +68,6 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
     required: {
       "residency-proof-type":
         "You must specify the type of the proof of residency",
-      "residency-proof-images":
-        "You must take at least one photo of the proof of residency",
     },
   },
   review: {
@@ -141,7 +139,6 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
               | undefined,
             maxCount: 3 as number | null | undefined,
           },
-          required: true,
           defaultValue: [],
           emptyValue: [] as string[],
           databaseMap: new ComponentDatabaseMap<

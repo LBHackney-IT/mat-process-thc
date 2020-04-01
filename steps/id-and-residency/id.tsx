@@ -56,7 +56,6 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
   errors: {
     required: {
       "id-type": "You must specify the type of the ID",
-      "id-images": "You must take at least one photo of the ID",
     },
   },
   review: {
@@ -123,7 +122,6 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
               | undefined,
             maxCount: 3 as number | null | undefined,
           },
-          required: true,
           defaultValue: [],
           emptyValue: [] as string[],
           databaseMap: new ComponentDatabaseMap<ResidentDatabaseSchema, "id">({
