@@ -4,7 +4,10 @@ import {
   Header,
   Heading,
   HeadingLevels,
+  Link,
   Main,
+  Paragraph,
+  Tag,
 } from "lbh-frontend-react";
 import NextHead from "next/head";
 import NextLink from "next/link";
@@ -261,6 +264,17 @@ const MainLayout = ({
             ) : (
               pauseButton
             ))}
+          <Paragraph>
+            <Tag>{BETA}</Tag> This is a new service – your{" "}
+            <Link
+              href="https://docs.google.com/forms/d/e/1FAIpQLSdpefefhPQJ9fSu-fX6-Uvyanppp480ZRUNAe5dQAr8F2dexw/viewform"
+              target="_blank"
+            >
+              feedback
+            </Link>{" "}
+            will help us to improve it.
+          </Paragraph>
+          <hr />
           {heading && <Heading level={HeadingLevels.H1}>{heading}</Heading>}
           {children}
         </Container>
@@ -270,6 +284,11 @@ const MainLayout = ({
           float: right;
           margin-top: 0;
           margin-left: 2em;
+        }
+        :global(.lbh-tag) {
+          margin-right: 15px;
+          padding-top: 8px;
+          padding-bottom: 8px;
         }
       `}</style>
     </>

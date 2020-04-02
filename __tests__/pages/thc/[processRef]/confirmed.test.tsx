@@ -85,6 +85,27 @@ it("renders correctly", () => {
         <div
           className="govuk-container lbh-container"
         >
+          <p
+            className="lbh-body"
+          >
+            <strong
+              className="govuk-tag lbh-tag"
+            >
+              BETA
+            </strong>
+             This is a new service – your
+             
+            <a
+              className="govuk-link lbh-link"
+              href="https://docs.google.com/forms/d/e/1FAIpQLSdpefefhPQJ9fSu-fX6-Uvyanppp480ZRUNAe5dQAr8F2dexw/viewform"
+              target="_blank"
+            >
+              feedback
+            </a>
+             
+            will help us to improve it.
+            <hr />
+          </p>
           <section
             className="lbh-page-announcement"
           >
@@ -142,6 +163,11 @@ it("renders correctly", () => {
               float: right;
               margin-top: 0;
               margin-left: 2em;
+            }
+            :global(.lbh-tag) {
+              margin-right: 15px;
+              padding-top: 8px;
+              padding-bottom: 8px;
             }
           
       </style>,

@@ -235,6 +235,27 @@ it("renders correctly when online", async () => {
         <div
           className="govuk-container lbh-container"
         >
+          <p
+            className="lbh-body"
+          >
+            <strong
+              className="govuk-tag lbh-tag"
+            >
+              BETA
+            </strong>
+             This is a new service – your
+             
+            <a
+              className="govuk-link lbh-link"
+              href="https://docs.google.com/forms/d/e/1FAIpQLSdpefefhPQJ9fSu-fX6-Uvyanppp480ZRUNAe5dQAr8F2dexw/viewform"
+              target="_blank"
+            >
+              feedback
+            </a>
+             
+            will help us to improve it.
+            <hr />
+          </p>
           <h1
             className="lbh-heading-h1"
           >
@@ -309,6 +330,17 @@ it("renders correctly when online", async () => {
             }
           
           </style>
+          <span
+            className="govuk-error-message lbh-error-message"
+          >
+            <span
+              className="govuk-visually-hidden"
+            >
+              Error
+              :
+            </span>
+            Something went wrong. Please try reopening this process from your worktray.
+          </span>
           <h2
             className="lbh-heading-h2"
           >
@@ -322,7 +354,7 @@ it("renders correctly when online", async () => {
           <label
             className="govuk-label lbh-label"
           >
-            Ready (updated)
+            Error
             <div>
               <div
                 style={
@@ -350,13 +382,13 @@ it("renders correctly when online", async () => {
             </style>
           </label>
           <button
-            aria-disabled={false}
+            aria-disabled={true}
             className="govuk-button lbh-button"
             data-testid="submit"
-            disabled={false}
+            disabled={true}
             onClick={[Function]}
           >
-            Go
+            Loading...
           </button>
         </div>
       </main>,
@@ -368,6 +400,11 @@ it("renders correctly when online", async () => {
               float: right;
               margin-top: 0;
               margin-left: 2em;
+            }
+            :global(.lbh-tag) {
+              margin-right: 15px;
+              padding-top: 8px;
+              padding-bottom: 8px;
             }
           
       </style>,
@@ -511,6 +548,27 @@ Array [
     <div
       className="govuk-container lbh-container"
     >
+      <p
+        className="lbh-body"
+      >
+        <strong
+          className="govuk-tag lbh-tag"
+        >
+          BETA
+        </strong>
+         This is a new service – your
+         
+        <a
+          className="govuk-link lbh-link"
+          href="https://docs.google.com/forms/d/e/1FAIpQLSdpefefhPQJ9fSu-fX6-Uvyanppp480ZRUNAe5dQAr8F2dexw/viewform"
+          target="_blank"
+        >
+          feedback
+        </a>
+         
+        will help us to improve it.
+        <hr />
+      </p>
       <h1
         className="lbh-heading-h1"
       >
@@ -655,6 +713,11 @@ Array [
           float: right;
           margin-top: 0;
           margin-left: 2em;
+        }
+        :global(.lbh-tag) {
+          margin-right: 15px;
+          padding-top: 8px;
+          padding-bottom: 8px;
         }
       
   </style>,
