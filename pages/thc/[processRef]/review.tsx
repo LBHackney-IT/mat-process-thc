@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import { makeSubmit } from "../../../components/makeSubmit";
 import { PostVisitActionInput } from "../../../components/PostVisitActionInput";
 import Signature from "../../../components/Signature";
+import Thumbnail from "../../../components/Thumbnail";
 import getProcessRef from "../../../helpers/getProcessRef";
 import useDatabase from "../../../helpers/useDatabase";
 import useDataValue from "../../../helpers/useDataValue";
@@ -40,6 +41,20 @@ const ReviewPage: NextPage = () => {
     (values) => (processRef ? values[processRef]?.tenants : undefined)
   );
 
+  const address = useDataValue(
+    Storage.ExternalContext,
+    "residents",
+    processRef,
+    (values) => (processRef ? values[processRef]?.address : undefined)
+  );
+
+  const tenureType = useDataValue(
+    Storage.ExternalContext,
+    "tenancy",
+    processRef,
+    (values) => (processRef ? values[processRef]?.tenureType : undefined)
+  );
+
   const residentDatabase = useDatabase(Storage.ResidentContext);
   const processDatabase = useDatabase(Storage.ProcessContext);
 
@@ -61,9 +76,20 @@ const ReviewPage: NextPage = () => {
     ? tenants.result.map((tenant) => tenant.id)
     : [];
 
+  const tenantNames = tenants.result
+    ? tenants.result.map((tenant) => tenant.fullName)
+    : [];
+
   const [selectedTenantId, setSelectedTenantId] = useState<
     ResidentRef | undefined
   >();
+
+  const outsidePropertyImages = useDataValue(
+    Storage.ProcessContext,
+    "property",
+    processRef,
+    (values) => (processRef ? values[processRef]?.outside : undefined)
+  );
 
   // Long term we want an interface that allows the user to select which tenant
   // to use, but for now we stick to the first tenant in the list.
@@ -112,12 +138,47 @@ const ReviewPage: NextPage = () => {
     value: "Save and finish process",
   });
 
+  const outsidePropertyImageThumbnails = outsidePropertyImages.result
+    ? outsidePropertyImages.result.images.map((image) => (
+        <Thumbnail
+          key={image}
+          src={image}
+          alt={"Thumbnail of an uploaded image"}
+        />
+      ))
+    : [];
+
   return (
     <MainLayout
       title={PageTitles.Review}
       heading="Review Tenancy and Household Check"
       pausable
     >
+      <React.Fragment>
+        <SummaryList
+          className="govuk-summary-list--no-border mat-tenancy-summary"
+          rows={[
+            {
+              key: "Address",
+              value: address.result ? address.result.join(", ") : "Loading...",
+            },
+            {
+              key: "Tenants",
+              value: tenantNames ? tenantNames.join(", ") : "Loading...",
+            },
+            {
+              key: "Tenure type",
+              value: tenureType.result ? tenureType.result : "Loading...",
+            },
+            { key: "Ouside Property:", value: outsidePropertyImageThumbnails },
+          ]}
+        />
+        <style>{`
+          .mat-tenancy-summary img {
+            margin-right: 2em;
+          }
+        `}</style>
+      </React.Fragment>
       {sections
         .filter((section) => section.rows.length)
         .map(({ heading, rows }) => (
