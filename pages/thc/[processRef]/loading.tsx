@@ -18,6 +18,7 @@ import useApiWithStorage, {
   UseApiWithStorageReturn,
 } from "../../../helpers/api/useApiWithStorage";
 import basePath from "../../../helpers/basePath";
+import getMatApiData from "../../../helpers/getMatApiData";
 import getProcessRef from "../../../helpers/getProcessRef";
 import isClient from "../../../helpers/isClient";
 import isServer from "../../../helpers/isServer";
@@ -280,11 +281,7 @@ const useFetchResidentData = (): UseApiWithStorageReturn<
   const router = useRouter();
 
   const processRef = getProcessRef(router);
-
-  const data =
-    isClient && processRef
-      ? nullAsUndefined(sessionStorage.getItem(`${processRef}:matApiData`))
-      : undefined;
+  const data = getMatApiData(processRef);
 
   return useApiWithStorage({
     endpoint: "/v1/residents",
@@ -359,11 +356,7 @@ const useFetchTenancyData = (): UseApiWithStorageReturn<
   const router = useRouter();
 
   const processRef = getProcessRef(router);
-
-  const data =
-    isClient && processRef
-      ? nullAsUndefined(sessionStorage.getItem(`${processRef}:matApiData`))
-      : undefined;
+  const data = getMatApiData(processRef);
 
   return useApiWithStorage({
     endpoint: "/v1/tenancies",

@@ -1,9 +1,8 @@
 import { NextRouter } from "next/router";
-import { nullAsUndefined } from "null-as-undefined";
 import basePath from "./basePath";
+import getMatApiData from "./getMatApiData";
 import getMatApiJwt from "./getMatApiJwt";
 import getProcessRef from "./getProcessRef";
-import isClient from "./isClient";
 import { ProcessStage } from "./ProcessStage";
 
 const transferProcess = async (
@@ -12,11 +11,7 @@ const transferProcess = async (
 ): Promise<void> => {
   const processRef = getProcessRef(router);
   const matApiJwt = getMatApiJwt(processRef);
-
-  const data =
-    isClient && processRef
-      ? nullAsUndefined(sessionStorage.getItem(`${processRef}:matApiData`))
-      : undefined;
+  const data = getMatApiData(processRef);
 
   const response = await fetch(
     `${basePath}/api/v1/processes/${processRef}/transfer?jwt=${matApiJwt}&processStage=${stage}`,
