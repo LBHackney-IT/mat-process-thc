@@ -1,14 +1,15 @@
 import classNames from "classnames";
 import { Button } from "lbh-frontend-react";
-import { NextRouter, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 import React from "react";
+import { onClickSubmit } from "../helpers/onClickSubmit";
 import { ProcessStage } from "../helpers/ProcessStage";
 import urlsForRouter from "../helpers/urlsForRouter";
 import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 
 interface Props {
-  onSubmit(router: NextRouter): Promise<void>;
+  onSubmit(): Promise<boolean>;
   status: ProcessStage;
 }
 
@@ -30,17 +31,7 @@ const ManagerSubmitButton: React.FunctionComponent<Props> = (props) => {
           status === ProcessStage.Declined,
       })}
       onClick={async (): Promise<void> => {
-        if (!href.pathname || !as.pathname) {
-          return;
-        }
-
-        try {
-          await onSubmit(router);
-        } catch (err) {
-          console.error(err);
-        }
-
-        await router.push(href, as);
+        await onClickSubmit(router, href, as, onSubmit);
       }}
     >
       {buttonText}
