@@ -58,7 +58,7 @@ We use:
 
 1. Make a change, and see the page hot reload.
 
-### Changing the server
+### Changing the server code
 
 Hot reloading isn't set up for the local server, so you will need to restart it
 to see any changes.
@@ -71,6 +71,20 @@ If you want to try offline functionality locally, you will need to use:
 ```bash
 npm run build && npm start
 ```
+
+### Choosing a process stage
+
+One of the parameters passed to the process when starting it is the current
+process stage:
+
+- `"0"`: in progress
+- `"1"`: in manager review
+- `"2"`: approved
+- `"3"`: declined
+
+We use the `TEST_PROCESS_STAGE` environment variable to set this value locally
+during development. Override it in your `.env` file to work on a different
+stage.
 
 ## Running the tests
 

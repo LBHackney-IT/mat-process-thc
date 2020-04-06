@@ -20,6 +20,7 @@ if (dev) {
     TEST_PROCESS_API_JWT: process.env.TEST_PROCESS_API_JWT,
     TEST_MAT_API_JWT: process.env.TEST_MAT_API_JWT,
     TEST_MAT_API_DATA: process.env.TEST_MAT_API_DATA,
+    TEST_PROCESS_STAGE: process.env.TEST_PROCESS_STAGE,
   });
 }
 
