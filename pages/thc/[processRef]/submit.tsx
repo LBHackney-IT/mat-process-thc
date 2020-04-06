@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import ProgressBar from "../../../components/ProgressBar";
 import persistProcessData from "../../../helpers/persistProcessData";
+import { transferProcessToManager } from "../../../helpers/transferProcess";
 import urlsForRouter from "../../../helpers/urlsForRouter";
 import useOnlineWithRetry from "../../../helpers/useOnlineWithRetry";
 import MainLayout from "../../../layouts/MainLayout";
@@ -120,6 +121,7 @@ const SubmitPage: NextPage = () => {
               setSubmitting(true);
 
               await persistProcessData(router, setProgress);
+              await transferProcessToManager(router);
               sessionStorage.clear();
 
               await router.push(href, as);
