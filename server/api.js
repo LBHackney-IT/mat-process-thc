@@ -204,6 +204,75 @@ router.post("/v1/processes/:ref/images", (req, res) => {
   proxy(options, req, res);
 });
 
+router.put("/v1/processes/:ref/transfer", (req, res) => {
+  if (!verifyJwt(req.query.jwt, matApiJwtSecret)) {
+    res.status(401).send("Invalid JWT");
+
+    return;
+  }
+
+  const { ref } = req.params;
+
+  const { processStage } = req.query;
+  const { data } = req.body;
+
+  const {
+    matApiToken,
+    officerId,
+    officerFullName,
+    patchId,
+    subjectId,
+    serviceRequestId,
+    managerId,
+    areaId,
+  } = decryptJson(
+    data,
+    matApiDataSharedKey,
+    matApiDataSalt,
+    matApiDataIterations,
+    matApiDataKeyLength,
+    matApiDataAlgorithm,
+    matApiDataIV
+  );
+
+  const assignedToManager = processStage === "1";
+  const description = assignedToManager
+    ? `Transferred from ${officerFullName} to manager for review`
+    : `Transferred back to ${officerFullName} after manager review`;
+
+  const options = {
+    host: matApiHost,
+    port: 443,
+    path: `${matApiBaseUrl}/v1/TenancyManagementInteractions/TransferCall`,
+    method: req.method,
+    headers: {
+      Authorization: matApiToken,
+      "Content-Type": "application/json",
+    },
+    timeout: 10 * 1000,
+  };
+
+  req.body = {
+    interactionId: ref,
+    estateOfficerId: officerId,
+    estateOfficerName: officerFullName,
+    officerPatchId: patchId,
+    areaName: areaId,
+    managerId: managerId,
+    assignedToPatch: !assignedToManager,
+    assignedToManager: assignedToManager,
+    processStage: processStage,
+    serviceRequest: {
+      id: serviceRequestId,
+      title: "Tenancy Management",
+      description: description,
+      subject: subjectId,
+    },
+  };
+
+  proxy(options, req, res);
+});
+
 router.get("/v1/tenancies", (req, res) => {
   if (!verifyJwt(req.query.jwt, matApiJwtSecret)) {
     res.status(401).send("Invalid JWT");
