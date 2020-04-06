@@ -281,6 +281,81 @@ router.put("/v1/processes/:ref/transfer", (req, res) => {
   proxy(options, req, res);
 });
 
+router.patch("/v1/processes/:ref/appraise", (req, res) => {
+  if (!verifyJwt(req.query.jwt, matApiJwtSecret)) {
+    res.status(401).send("Invalid JWT");
+
+    return;
+  }
+
+  const { ref } = req.params;
+
+  const { processStage } = req.query;
+
+  if (processStage !== "2" && processStage !== "3") {
+    res.status(401).send("Invalid Process Stage");
+
+    return;
+  }
+
+  const { data } = req.body;
+
+  const {
+    matApiToken,
+    officerId,
+    officerFullName,
+    subjectId,
+    serviceRequestId,
+  } = decryptJson(
+    data,
+    matApiDataSharedKey,
+    matApiDataSalt,
+    matApiDataIterations,
+    matApiDataKeyLength,
+    matApiDataAlgorithm,
+    matApiDataIV
+  );
+
+  if (DISABLE_MAT_PROCESS_ACTIONS) {
+    res.status(200).send("Short circuit OK");
+
+    return;
+  }
+
+  const approved = processStage === "2";
+
+  const description = approved
+    ? `Closure: Approved by manager`
+    : `Closure: Declined by manager`;
+
+  const options = {
+    host: matApiHost,
+    port: 443,
+    path: `${matApiBaseUrl}/v1/TenancyManagementInteractions`,
+    method: req.method,
+    headers: {
+      Authorization: matApiToken,
+      "Content-Type": "application/json",
+    },
+    timeout: 10 * 1000,
+  };
+
+  req.body = {
+    interactionId: ref,
+    estateOfficerId: officerId,
+    estateOfficerName: officerFullName,
+    serviceRequest: {
+      id: serviceRequestId,
+      description: description,
+      subjectId: subjectId,
+    },
+    processStage: processStage,
+    status: 0,
+  };
+
+  proxy(options, req, res);
+});
+
 router.get("/v1/tenancies", (req, res) => {
   if (!verifyJwt(req.query.jwt, matApiJwtSecret)) {
     res.status(401).send("Invalid JWT");
