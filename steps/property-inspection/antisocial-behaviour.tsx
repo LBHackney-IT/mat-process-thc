@@ -28,13 +28,18 @@ import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
+const questions = {
+  "tenant-understands":
+    "Have you discussed antisocial behaviour with the tenant?",
+};
+
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
   title: PageTitles.AntisocialBehaviour,
   heading: "Antisocial behaviour",
   review: {
     rows: [
       {
-        label: "Does the tenant understand about antisocial behaviour?",
+        label: questions["tenant-understands"],
         values: {
           "tenant-understands": {
             renderValue(tenantUnderstands: string): React.ReactNode {
@@ -101,9 +106,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           props: {
             name: "tenant-understands",
             legend: (
-              <FieldsetLegend>
-                Have you discussed antisocial behaviour with the tenant?
-              </FieldsetLegend>
+              <FieldsetLegend>{questions["tenant-understands"]}</FieldsetLegend>
             ) as React.ReactNode,
             radios: yesNoRadios,
           },
