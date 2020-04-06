@@ -29,7 +29,7 @@
     "date-fns": "^2.11.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "is-online": "^8.2.1",
+    "is-online": "^8.3.0",
     "jsonwebtoken": "^8.5.1",
     "lbh-frontend-react": "0.0.13",
     "lodash": "^4.17.15",
