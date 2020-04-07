@@ -44,7 +44,7 @@
     "react-fast-compare": "^3.0.1",
     "react-signature-canvas": "^1.0.3",
     "remultiform": "^0.2.0",
-    "uuid": "^7.0.2"
+    "uuid": "^7.0.3"
   },
   "devDependencies": {
     "@types/jest": "^25.1.4",
