@@ -1473,6 +1473,11 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
         `${processRef}/review`
       );
 
+      // Review page - Tenancy summary section
+      await Expect.pageToContain("Hackney, London, E8");
+      await Expect.pageToContain("Dorian");
+      await Expect.pageToContain("Secure");
+
       // Review page - Household section
       await Expect.pageToContain("Household");
       await Expect.pageToContain("Member changes notes");
