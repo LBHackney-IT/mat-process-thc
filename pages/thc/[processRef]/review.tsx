@@ -41,6 +41,30 @@ const ReviewPage: NextPage = () => {
     (values) => (processRef ? values[processRef]?.tenants : undefined)
   );
 
+  const tenantIdsPresentForCheck = useDataValue(
+    Storage.ProcessContext,
+    "tenantsPresent",
+    processRef,
+    (values) => (processRef ? values[processRef] : undefined)
+  );
+
+  const getTenantNamesFromTenantIds = (
+    tenantIds: string[],
+    tenants: {
+      id: string;
+      fullName: string;
+      dateOfBirth: Date;
+    }[]
+  ): string[] =>
+    tenants
+      .filter((tenant) => tenantIds.includes(tenant.id))
+      .map((tenant) => tenant.fullName);
+
+  const tenantsPresent = getTenantNamesFromTenantIds(
+    tenantIdsPresentForCheck.result ? tenantIdsPresentForCheck.result : [],
+    tenants.result ? tenants.result : []
+  );
+
   const address = useDataValue(
     Storage.ExternalContext,
     "residents",
@@ -179,6 +203,13 @@ const ReviewPage: NextPage = () => {
           }
         `}</style>
       </React.Fragment>
+      <Paragraph>
+        The Tenancy and Household Check has now been completed. Please review
+        the answers with all present tenants and ask them to sign.
+      </Paragraph>
+      {tenantsPresent.length > 0 && (
+        <Paragraph>Present for check: {tenantsPresent.join(", ")}</Paragraph>
+      )}
       {sections
         .filter((section) => section.rows.length)
         .map(({ heading, rows }) => (
@@ -194,7 +225,6 @@ const ReviewPage: NextPage = () => {
             )}
           </React.Fragment>
         ))}
-
       <PostVisitActionInput
         value={otherNotes}
         onValueChange={(notes): void => setOtherNotes(notes)}
@@ -203,7 +233,6 @@ const ReviewPage: NextPage = () => {
         label={{ value: "Any other notes to be added?" }}
         name="other-notes"
       />
-
       <Heading level={HeadingLevels.H2}>Declaration</Heading>
       <Paragraph>
         I confirm that the information I have given for the purposes of this
@@ -214,7 +243,6 @@ const ReviewPage: NextPage = () => {
       <Paragraph>
         Date of visit: {formatDate(new Date(), "d MMMM yyyy")}
       </Paragraph>
-
       <Signature
         value={selectedTenantId && signatures[selectedTenantId]}
         onChange={(value): void => {
@@ -225,7 +253,6 @@ const ReviewPage: NextPage = () => {
           setSignatures((sigs) => ({ ...sigs, [selectedTenantId]: value }));
         }}
       />
-
       <SubmitButton
         disabled={
           !processRef ||
