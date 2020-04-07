@@ -8,6 +8,7 @@ import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 export interface MakeSubmitProps {
   slug: PageSlugs | undefined;
   value: string;
+  afterSubmit?(): Promise<void>;
 }
 
 export const makeSubmit = (
@@ -39,7 +40,7 @@ export const makeSubmit = (
 
     return (
       <>
-        {buttonProps.map(({ slug, value }, i) => {
+        {buttonProps.map(({ slug, value, afterSubmit }, i) => {
           const { href, as } = urlsForRouter(
             router,
             urlObjectForSlug(router, slug)
@@ -70,6 +71,10 @@ export const makeSubmit = (
                 }
 
                 if (successfulSubmit) {
+                  if (afterSubmit) {
+                    await afterSubmit();
+                  }
+
                   await router.push(href, as);
                 }
               }}
