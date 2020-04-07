@@ -90,8 +90,8 @@ const migrateProcessData = async (
     version = 5;
   }
 
-  if (version < 7) {
-    version = 7;
+  if (version < 8) {
+    version = 8;
   }
 
   if (version !== newVersion) {
@@ -205,6 +205,12 @@ export default class Storage {
             version = 7;
           }
 
+          if (version === 7) {
+            upgrade.createStore("unableToEnter");
+
+            version = 8;
+          }
+
           if (version !== upgrade.newVersion) {
             throw new Error(
               `Unable to upgrade to ${upgrade.newVersion} due to missing ` +
@@ -244,8 +250,8 @@ export default class Storage {
             version = 3;
           }
 
-          if (version < 7) {
-            version = 7;
+          if (version < 8) {
+            version = 8;
           }
 
           if (version !== upgrade.newVersion) {

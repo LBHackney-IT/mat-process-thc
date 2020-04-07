@@ -26,7 +26,7 @@ const step = {
           value: "Start visit with tenant",
         },
         {
-          slug: PageSlugs.Loading,
+          slug: PageSlugs.FirstFailedAttempt,
           value: "Unable to enter property",
         },
       ]),

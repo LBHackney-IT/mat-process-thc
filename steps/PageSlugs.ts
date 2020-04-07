@@ -61,6 +61,9 @@ enum PageSlugs {
   // Pause
   Pause = "pause",
   Paused = "paused",
+
+  // Unable to enter
+  FirstFailedAttempt = "first-failed-attempt",
 }
 
 const slugs: {
@@ -110,6 +113,7 @@ const slugs: {
   confirmed: false,
   pause: false,
   paused: false,
+  "first-failed-attempt": true,
 };
 
 export const stepSlugs = Object.entries(slugs)
@@ -127,9 +131,9 @@ export const repeatingStepSlugs = [
 
 export const urlObjectForSlug = (
   router: NextRouter,
-  slug: string | undefined
+  slug: string
 ): { pathname: string } => {
-  return prefixUrl(router, { pathname: slug === undefined ? "" : `/${slug}` });
+  return prefixUrl(router, { pathname: `/${slug}` });
 };
 
 export default PageSlugs;

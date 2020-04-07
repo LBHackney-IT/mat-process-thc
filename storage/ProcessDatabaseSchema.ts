@@ -224,6 +224,17 @@ type ProcessDatabaseSchema = NamedSchema<
       key: ProcessRef;
       value: Notes;
     };
+
+    unableToEnter: {
+      key: ProcessRef;
+      value: {
+        firstFailedAttempt: {
+          value: string[];
+          notes: string;
+          date: string;
+        };
+      };
+    };
   }
 >;
 
@@ -259,6 +270,7 @@ const storeNames: {
   disability: true,
   supportNeeds: true,
   otherNotes: true,
+  unableToEnter: true,
 };
 
 export const processStoreNames = Object.entries(storeNames)
