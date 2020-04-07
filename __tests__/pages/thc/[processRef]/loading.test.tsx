@@ -254,8 +254,8 @@ it("renders correctly when online", async () => {
             </a>
              
             will help us to improve it.
-            <hr />
           </p>
+          <hr />
           <h1
             className="lbh-heading-h1"
           >
@@ -330,17 +330,6 @@ it("renders correctly when online", async () => {
             }
           
           </style>
-          <span
-            className="govuk-error-message lbh-error-message"
-          >
-            <span
-              className="govuk-visually-hidden"
-            >
-              Error
-              :
-            </span>
-            Something went wrong. Please try reopening this process from your worktray.
-          </span>
           <h2
             className="lbh-heading-h2"
           >
@@ -354,7 +343,7 @@ it("renders correctly when online", async () => {
           <label
             className="govuk-label lbh-label"
           >
-            Error
+            Ready (updated)
             <div>
               <div
                 style={
@@ -382,13 +371,13 @@ it("renders correctly when online", async () => {
             </style>
           </label>
           <button
-            aria-disabled={true}
+            aria-disabled={false}
             className="govuk-button lbh-button"
             data-testid="submit"
-            disabled={true}
+            disabled={false}
             onClick={[Function]}
           >
-            Loading...
+            Go
           </button>
         </div>
       </main>,
@@ -567,8 +556,8 @@ Array [
         </a>
          
         will help us to improve it.
-        <hr />
       </p>
+      <hr />
       <h1
         className="lbh-heading-h1"
       >

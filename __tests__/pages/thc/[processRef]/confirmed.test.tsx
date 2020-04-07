@@ -104,8 +104,8 @@ it("renders correctly", () => {
             </a>
              
             will help us to improve it.
-            <hr />
           </p>
+          <hr />
           <section
             className="lbh-page-announcement"
           >

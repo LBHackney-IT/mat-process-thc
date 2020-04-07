@@ -117,8 +117,8 @@ it("renders correctly for all props", () => {
             </a>
              
             will help us to improve it.
-            <hr />
           </p>
+          <hr />
           <p>
             Test content
           </p>
@@ -250,8 +250,8 @@ it("renders correctly without optional props", () => {
             </a>
              
             will help us to improve it.
-            <hr />
           </p>
+          <hr />
           <h1
             className="lbh-heading-h1"
           >

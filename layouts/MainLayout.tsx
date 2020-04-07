@@ -265,7 +265,7 @@ const MainLayout = ({
               pauseButton
             ))}
           <Paragraph>
-            <Tag>{BETA}</Tag> This is a new service – your{" "}
+            <Tag>BETA</Tag> This is a new service – your{" "}
             <Link
               href="https://docs.google.com/forms/d/e/1FAIpQLSdpefefhPQJ9fSu-fX6-Uvyanppp480ZRUNAe5dQAr8F2dexw/viewform"
               target="_blank"

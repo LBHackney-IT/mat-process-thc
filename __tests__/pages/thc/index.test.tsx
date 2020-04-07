@@ -150,8 +150,8 @@ it("renders correctly when offline", async () => {
             </a>
              
             will help us to improve it.
-            <hr />
           </p>
+          <hr />
           <h1
             className="lbh-heading-h1"
           >

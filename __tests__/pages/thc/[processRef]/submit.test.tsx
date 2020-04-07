@@ -121,8 +121,8 @@ it("renders correctly when online", async () => {
             </a>
              
             will help us to improve it.
-            <hr />
           </p>
+          <hr />
           <section
             className="lbh-page-announcement"
           >
@@ -317,8 +317,8 @@ it("renders correctly when offline", async () => {
             </a>
              
             will help us to improve it.
-            <hr />
           </p>
+          <hr />
           <section
             className="lbh-page-announcement"
           >
