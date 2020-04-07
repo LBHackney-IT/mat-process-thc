@@ -6,7 +6,8 @@ import urlsForRouter from "../helpers/urlsForRouter";
 import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 
 export interface MakeSubmitProps {
-  slug: PageSlugs | undefined;
+  slug?: PageSlugs;
+  cancel?: boolean;
   value: string;
   afterSubmit?(): Promise<void>;
 }
@@ -22,9 +23,10 @@ export const makeSubmit = (
     }
   > = ({ disabled, onSubmit }) => {
     const router = useRouter();
-    const urls = buttonProps.map(
-      ({ slug }) => urlObjectForSlug(router, slug).pathname
-    );
+    const slugs = buttonProps
+      .filter(({ slug, cancel }) => !cancel && slug !== undefined)
+      .map(({ slug }) => slug) as PageSlugs[];
+    const urls = slugs.map((slug) => urlObjectForSlug(router, slug).pathname);
 
     useEffect(() => {
       for (const url of urls) {
@@ -40,11 +42,11 @@ export const makeSubmit = (
 
     return (
       <>
-        {buttonProps.map(({ slug, value, afterSubmit }, i) => {
-          const { href, as } = urlsForRouter(
-            router,
-            urlObjectForSlug(router, slug)
-          );
+        {buttonProps.map(({ slug, value, cancel, afterSubmit }, i) => {
+          const { href, as } =
+            slug === undefined
+              ? { href: { pathname: undefined }, as: { pathname: undefined } }
+              : urlsForRouter(router, urlObjectForSlug(router, slug));
 
           return (
             <Button
@@ -54,20 +56,26 @@ export const makeSubmit = (
                   ? "submit-button lbh-button--secondary govuk-button--secondary"
                   : "submit-button"
               }
-              disabled={disabled || !href.pathname || !as.pathname}
+              disabled={
+                disabled || (!cancel && (!href.pathname || !as.pathname))
+              }
               onClick={async (): Promise<void> => {
-                if (!href.pathname || !as.pathname) {
+                if (!cancel && (!href.pathname || !as.pathname)) {
                   return;
                 }
 
                 let successfulSubmit = false;
 
-                try {
-                  successfulSubmit = await onSubmit();
-                } catch (error) {
-                  // This is invisible to the user, so we should do something to
-                  // display it to them.
-                  console.error(error);
+                if (cancel) {
+                  successfulSubmit = true;
+                } else {
+                  try {
+                    successfulSubmit = await onSubmit();
+                  } catch (error) {
+                    // This is invisible to the user, so we should do something to
+                    // display it to them.
+                    console.error(error);
+                  }
                 }
 
                 if (successfulSubmit) {
@@ -75,7 +83,11 @@ export const makeSubmit = (
                     await afterSubmit();
                   }
 
-                  await router.push(href, as);
+                  if (cancel) {
+                    router.back();
+                  } else {
+                    await router.push(href, as);
+                  }
                 }
               }}
               data-testid={i > 0 ? undefined : "submit"}
