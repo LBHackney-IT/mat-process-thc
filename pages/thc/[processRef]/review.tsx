@@ -1,4 +1,3 @@
-import { ReviewSection } from "components/ReviewSection";
 import formatDate from "date-fns/format";
 import {
   Heading,
@@ -14,16 +13,15 @@ import { PostVisitActionInput } from "../../../components/PostVisitActionInput";
 import { HouseholdReviewSection } from "../../../components/review-sections/HouseholdReviewSection";
 import { IdAndResidencyReviewSection } from "../../../components/review-sections/IdAndResidencyReviewSection";
 import { PropertyInspectionReviewSection } from "../../../components/review-sections/PropertyInspectionReviewSection";
+import { WellbeingSupportReviewSection } from "../../../components/review-sections/WellbeingSupportReviewSection";
 import Signature from "../../../components/Signature";
 import Thumbnail from "../../../components/Thumbnail";
 import getProcessRef from "../../../helpers/getProcessRef";
 import useDatabase from "../../../helpers/useDatabase";
 import useDataValue from "../../../helpers/useDataValue";
-import useReviewSectionRows from "../../../helpers/useReviewSectionRows";
 import MainLayout from "../../../layouts/MainLayout";
 import PageSlugs from "../../../steps/PageSlugs";
 import PageTitles from "../../../steps/PageTitles";
-import wellbeingSupportSteps from "../../../steps/wellbeing-support";
 import { ResidentRef } from "../../../storage/ResidentDatabaseSchema";
 import Storage from "../../../storage/Storage";
 
@@ -119,15 +117,6 @@ const ReviewPage: NextPage = () => {
     setSelectedTenantId(tenantIds[0]);
   }
 
-  const sections = [
-    {
-      heading: "Wellbeing support",
-      rows: [
-        ...useReviewSectionRows(Storage.ProcessContext, wellbeingSupportSteps),
-      ],
-    },
-  ];
-
   const SubmitButton = makeSubmit({
     slug: PageSlugs.Submit,
     value: "Save and finish process",
@@ -186,11 +175,7 @@ const ReviewPage: NextPage = () => {
       )}
       <HouseholdReviewSection />
       <PropertyInspectionReviewSection />
-      {sections
-        .filter((section) => section.rows.length)
-        .map((section) => {
-          return <ReviewSection key={section.heading} section={section} />;
-        })}
+      <WellbeingSupportReviewSection />
       <PostVisitActionInput
         value={otherNotes}
         onValueChange={(notes): void => setOtherNotes(notes)}
