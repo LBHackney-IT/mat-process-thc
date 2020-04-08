@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { makeSubmit } from "../../../components/makeSubmit";
 import { PostVisitActionInput } from "../../../components/PostVisitActionInput";
+import { HouseholdReviewSection } from "../../../components/review-sections/HouseholdReviewSection";
 import { IdAndResidencyReviewSection } from "../../../components/review-sections/IdAndResidencyReviewSection";
 import Signature from "../../../components/Signature";
 import Thumbnail from "../../../components/Thumbnail";
@@ -19,7 +20,6 @@ import useDatabase from "../../../helpers/useDatabase";
 import useDataValue from "../../../helpers/useDataValue";
 import useReviewSectionRows from "../../../helpers/useReviewSectionRows";
 import MainLayout from "../../../layouts/MainLayout";
-import householdSteps from "../../../steps/household";
 import PageSlugs from "../../../steps/PageSlugs";
 import PageTitles from "../../../steps/PageTitles";
 import propertyInspectionSteps from "../../../steps/property-inspection";
@@ -121,10 +121,6 @@ const ReviewPage: NextPage = () => {
 
   const sections = [
     {
-      heading: "Household",
-      rows: [...useReviewSectionRows(Storage.ProcessContext, householdSteps)],
-    },
-    {
       heading: "Property inspection",
       rows: [
         ...useReviewSectionRows(
@@ -197,6 +193,7 @@ const ReviewPage: NextPage = () => {
       {selectedTenantId && (
         <IdAndResidencyReviewSection selectedTenantId={selectedTenantId} />
       )}
+      <HouseholdReviewSection />
       {sections
         .filter((section) => section.rows.length)
         .map((section) => {
