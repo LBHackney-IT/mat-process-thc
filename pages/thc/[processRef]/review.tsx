@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { makeSubmit } from "../../../components/makeSubmit";
 import { PostVisitActionInput } from "../../../components/PostVisitActionInput";
+import { IdAndResidencyReviewSection } from "../../../components/review-sections/IdAndResidencyReviewSection";
 import Signature from "../../../components/Signature";
 import Thumbnail from "../../../components/Thumbnail";
 import getProcessRef from "../../../helpers/getProcessRef";
@@ -19,10 +20,6 @@ import useDataValue from "../../../helpers/useDataValue";
 import useReviewSectionRows from "../../../helpers/useReviewSectionRows";
 import MainLayout from "../../../layouts/MainLayout";
 import householdSteps from "../../../steps/household";
-import {
-  idAndResidencyProcessSteps,
-  idAndResidencyResidentSteps,
-} from "../../../steps/id-and-residency";
 import PageSlugs from "../../../steps/PageSlugs";
 import PageTitles from "../../../steps/PageTitles";
 import propertyInspectionSteps from "../../../steps/property-inspection";
@@ -124,20 +121,6 @@ const ReviewPage: NextPage = () => {
 
   const sections = [
     {
-      heading: "ID, residency, and tenant information",
-      rows: [
-        ...useReviewSectionRows(
-          Storage.ProcessContext,
-          idAndResidencyProcessSteps
-        ),
-        ...useReviewSectionRows(
-          Storage.ResidentContext,
-          idAndResidencyResidentSteps,
-          selectedTenantId
-        ),
-      ],
-    },
-    {
       heading: "Household",
       rows: [...useReviewSectionRows(Storage.ProcessContext, householdSteps)],
     },
@@ -210,6 +193,9 @@ const ReviewPage: NextPage = () => {
       </Paragraph>
       {tenantsPresent.length > 0 && (
         <Paragraph>Present for check: {tenantsPresent.join(", ")}</Paragraph>
+      )}
+      {selectedTenantId && (
+        <IdAndResidencyReviewSection selectedTenantId={selectedTenantId} />
       )}
       {sections
         .filter((section) => section.rows.length)
