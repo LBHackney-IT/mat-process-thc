@@ -189,16 +189,21 @@ const ReviewPage: NextPage = () => {
       <Paragraph>
         Date of visit: {formatDate(new Date(), "d MMMM yyyy")}
       </Paragraph>
-      <Signature
-        value={selectedTenantId && signatures[selectedTenantId]}
-        onChange={(value): void => {
-          if (!selectedTenantId) {
-            return;
-          }
+      {tenantsPresent.map(({ fullName, id }) => (
+        <React.Fragment key={id}>
+          <Heading level={HeadingLevels.H3}>{fullName}</Heading>
+          <Signature
+            value={id && signatures[id]}
+            onChange={(value): void => {
+              if (!id) {
+                return;
+              }
 
-          setSignatures((sigs) => ({ ...sigs, [selectedTenantId]: value }));
-        }}
-      />
+              setSignatures((sigs) => ({ ...sigs, [id]: value }));
+            }}
+          />
+        </React.Fragment>
+      ))}
       <SubmitButton
         disabled={
           !processRef ||
@@ -216,11 +221,13 @@ const ReviewPage: NextPage = () => {
             return false;
           }
 
-          await residentDatabase.result.put(
-            "signature",
-            selectedTenantId,
-            signatures[selectedTenantId] || ""
-          );
+          for (const tenantId of presentTenantIds) {
+            await residentDatabase.result.put(
+              "signature",
+              tenantId,
+              signatures[tenantId] || ""
+            );
+          }
 
           await processDatabase.result.put(
             "otherNotes",
