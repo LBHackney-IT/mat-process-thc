@@ -13,6 +13,7 @@ import { makeSubmit } from "../../../components/makeSubmit";
 import { PostVisitActionInput } from "../../../components/PostVisitActionInput";
 import { HouseholdReviewSection } from "../../../components/review-sections/HouseholdReviewSection";
 import { IdAndResidencyReviewSection } from "../../../components/review-sections/IdAndResidencyReviewSection";
+import { PropertyInspectionReviewSection } from "../../../components/review-sections/PropertyInspectionReviewSection";
 import Signature from "../../../components/Signature";
 import Thumbnail from "../../../components/Thumbnail";
 import getProcessRef from "../../../helpers/getProcessRef";
@@ -22,7 +23,6 @@ import useReviewSectionRows from "../../../helpers/useReviewSectionRows";
 import MainLayout from "../../../layouts/MainLayout";
 import PageSlugs from "../../../steps/PageSlugs";
 import PageTitles from "../../../steps/PageTitles";
-import propertyInspectionSteps from "../../../steps/property-inspection";
 import wellbeingSupportSteps from "../../../steps/wellbeing-support";
 import { ResidentRef } from "../../../storage/ResidentDatabaseSchema";
 import Storage from "../../../storage/Storage";
@@ -121,15 +121,6 @@ const ReviewPage: NextPage = () => {
 
   const sections = [
     {
-      heading: "Property inspection",
-      rows: [
-        ...useReviewSectionRows(
-          Storage.ProcessContext,
-          propertyInspectionSteps
-        ),
-      ],
-    },
-    {
       heading: "Wellbeing support",
       rows: [
         ...useReviewSectionRows(Storage.ProcessContext, wellbeingSupportSteps),
@@ -194,6 +185,7 @@ const ReviewPage: NextPage = () => {
         <IdAndResidencyReviewSection selectedTenantId={selectedTenantId} />
       )}
       <HouseholdReviewSection />
+      <PropertyInspectionReviewSection />
       {sections
         .filter((section) => section.rows.length)
         .map((section) => {
