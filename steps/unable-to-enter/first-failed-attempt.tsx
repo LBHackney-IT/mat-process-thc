@@ -78,7 +78,7 @@ const step = {
           Component: Heading,
           props: {
             level: HeadingLevels.H2,
-            children: "First Attempt",
+            children: "First attempt",
           },
         })
       ),
@@ -145,8 +145,7 @@ const step = {
           props: {
             name: "first-attempt-notes",
             label: {
-              children:
-                "Explain why this visit is not happening inside a tenant's home.",
+              children: "If necessary, add any additional notes.",
             } as LabelProps,
           },
           defaultValue: "",
