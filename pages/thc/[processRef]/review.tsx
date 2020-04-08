@@ -37,6 +37,8 @@ const ReviewPage: NextPage = () => {
     (values) => (processRef ? values[processRef]?.tenants : undefined)
   );
 
+  const tenantsValue = tenants.result || [];
+
   const tenantIdsPresentForCheck = useDataValue(
     Storage.ProcessContext,
     "tenantsPresent",
@@ -44,21 +46,9 @@ const ReviewPage: NextPage = () => {
     (values) => (processRef ? values[processRef] : undefined)
   );
 
-  const getTenantNamesFromTenantIds = (
-    tenantIds: string[],
-    tenants: {
-      id: string;
-      fullName: string;
-      dateOfBirth: Date;
-    }[]
-  ): string[] =>
-    tenants
-      .filter((tenant) => tenantIds.includes(tenant.id))
-      .map((tenant) => tenant.fullName);
-
-  const tenantsPresent = getTenantNamesFromTenantIds(
-    tenantIdsPresentForCheck.result ? tenantIdsPresentForCheck.result : [],
-    tenants.result ? tenants.result : []
+  const tenantIdsPresentForCheckValue = tenantIdsPresentForCheck.result || [];
+  const tenantsPresent = tenantsValue.filter((tenant) =>
+    tenantIdsPresentForCheckValue.includes(tenant.id)
   );
 
   const address = useDataValue(
@@ -92,13 +82,9 @@ const ReviewPage: NextPage = () => {
     },
   ]);
 
-  const tenantIds = tenants.result
-    ? tenants.result.map((tenant) => tenant.id)
-    : [];
-
-  const tenantNames = tenants.result
-    ? tenants.result.map((tenant) => tenant.fullName)
-    : [];
+  const allTenantNames = tenantsValue.map(({ fullName }) => fullName);
+  const presentTenantNames = tenantsPresent.map(({ fullName }) => fullName);
+  const presentTenantIds = tenantsPresent.map(({ id }) => id);
 
   const [selectedTenantId, setSelectedTenantId] = useState<
     ResidentRef | undefined
@@ -113,8 +99,8 @@ const ReviewPage: NextPage = () => {
 
   // Long term we want an interface that allows the user to select which tenant
   // to use, but for now we stick to the first tenant in the list.
-  if (selectedTenantId !== tenantIds[0]) {
-    setSelectedTenantId(tenantIds[0]);
+  if (selectedTenantId !== presentTenantIds[0]) {
+    setSelectedTenantId(presentTenantIds[0]);
   }
 
   const SubmitButton = makeSubmit({
@@ -148,7 +134,10 @@ const ReviewPage: NextPage = () => {
             },
             {
               key: "Tenants",
-              value: tenantNames ? tenantNames.join(", ") : "Loading...",
+              value:
+                allTenantNames.length > 0
+                  ? allTenantNames.join(", ")
+                  : "Loading...",
             },
             {
               key: "Tenure type",
@@ -167,15 +156,21 @@ const ReviewPage: NextPage = () => {
         The Tenancy and Household Check has now been completed. Please review
         the answers with all present tenants and ask them to sign.
       </Paragraph>
-      {tenantsPresent.length > 0 && (
-        <Paragraph>Present for check: {tenantsPresent.join(", ")}</Paragraph>
-      )}
-      {selectedTenantId && (
-        <IdAndResidencyReviewSection selectedTenantId={selectedTenantId} />
-      )}
-      <HouseholdReviewSection />
-      <PropertyInspectionReviewSection />
-      <WellbeingSupportReviewSection />
+      <Paragraph>
+        Present for check:{" "}
+        {presentTenantNames.length > 0
+          ? presentTenantNames.join(", ")
+          : "Loading..."}
+      </Paragraph>
+      {tenantsPresent.map(({ fullName, id }) => (
+        <React.Fragment key={id}>
+          <Heading level={HeadingLevels.H2}>{fullName}</Heading>
+          <IdAndResidencyReviewSection selectedTenantId={id} />
+          <HouseholdReviewSection />
+          <PropertyInspectionReviewSection />
+          <WellbeingSupportReviewSection />
+        </React.Fragment>
+      ))}
       <PostVisitActionInput
         value={otherNotes}
         onValueChange={(notes): void => setOtherNotes(notes)}
