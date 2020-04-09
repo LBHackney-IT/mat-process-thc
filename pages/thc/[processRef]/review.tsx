@@ -47,9 +47,11 @@ const ReviewPage: NextPage = () => {
   );
 
   const tenantIdsPresentForCheckValue = tenantIdsPresentForCheck.result || [];
-  const tenantsPresent = tenantsValue.filter((tenant) =>
-    tenantIdsPresentForCheckValue.includes(tenant.id)
-  );
+
+  const tenantsWithPresentStatus = tenantsValue.map((tenant) => ({
+    ...tenant,
+    present: tenantIdsPresentForCheckValue.includes(tenant.id),
+  }));
 
   const address = useDataValue(
     Storage.ExternalContext,
@@ -83,6 +85,10 @@ const ReviewPage: NextPage = () => {
   ]);
 
   const allTenantNames = tenantsValue.map(({ fullName }) => fullName);
+
+  const tenantsPresent = tenantsValue.filter((tenant) =>
+    tenantIdsPresentForCheckValue.includes(tenant.id)
+  );
   const presentTenantNames = tenantsPresent.map(({ fullName }) => fullName);
   const presentTenantIds = tenantsPresent.map(({ id }) => id);
 
@@ -162,15 +168,10 @@ const ReviewPage: NextPage = () => {
           ? presentTenantNames.join(", ")
           : "Loading..."}
       </Paragraph>
-      {tenantsPresent.map(({ fullName, id }) => (
-        <React.Fragment key={id}>
-          <Heading level={HeadingLevels.H2}>{fullName}</Heading>
-          <IdAndResidencyReviewSection selectedTenantId={id} />
-          <HouseholdReviewSection />
-          <PropertyInspectionReviewSection />
-          <WellbeingSupportReviewSection />
-        </React.Fragment>
-      ))}
+      <IdAndResidencyReviewSection tenants={tenantsWithPresentStatus} />
+      <HouseholdReviewSection />
+      <PropertyInspectionReviewSection />
+      <WellbeingSupportReviewSection />
       <PostVisitActionInput
         value={otherNotes}
         onValueChange={(notes): void => setOtherNotes(notes)}

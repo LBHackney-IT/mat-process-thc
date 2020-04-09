@@ -20,9 +20,7 @@ export const ReviewSection: React.FunctionComponent<Props> = (props) => {
     <>
       <Heading level={HeadingLevels.H2}>{heading}</Heading>
       {rows && rows.length ? (
-        <SummaryList
-          rows={(rows as unknown) as { key: string; value: string }[]}
-        />
+        <SummaryList rows={rows} />
       ) : (
         <Paragraph>Loading...</Paragraph>
       )}
