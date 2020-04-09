@@ -233,6 +233,11 @@ type ProcessDatabaseSchema = NamedSchema<
           notes: string;
           date: string;
         };
+        secondFailedAttempt: {
+          value: string[];
+          notes: string;
+          date: string;
+        };
       };
     };
   }
