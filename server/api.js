@@ -4,6 +4,8 @@ const { Router, json } = require("express");
 const { request } = require("https");
 const jwt = require("jsonwebtoken");
 
+const { DISABLE_MAT_PROCESS_ACTIONS } = process.env;
+
 const processApiHost = process.env.PROCESS_API_HOST;
 const processApiBaseUrl = process.env.PROCESS_API_BASE_URL;
 const processApiJwtSecret = process.env.PROCESS_API_JWT_SECRET;
@@ -234,6 +236,12 @@ router.put("/v1/processes/:ref/transfer", (req, res) => {
     matApiDataAlgorithm,
     matApiDataIV
   );
+
+  if (DISABLE_MAT_PROCESS_ACTIONS) {
+    res.status(200).send("Short circuit OK");
+
+    return;
+  }
 
   const assignedToManager = processStage === "1";
   const description = assignedToManager
