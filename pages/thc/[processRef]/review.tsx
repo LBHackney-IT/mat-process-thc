@@ -10,22 +10,18 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { makeSubmit } from "../../../components/makeSubmit";
 import { PostVisitActionInput } from "../../../components/PostVisitActionInput";
+import { HouseholdReviewSection } from "../../../components/review-sections/HouseholdReviewSection";
+import { IdAndResidencyReviewSection } from "../../../components/review-sections/IdAndResidencyReviewSection";
+import { PropertyInspectionReviewSection } from "../../../components/review-sections/PropertyInspectionReviewSection";
+import { WellbeingSupportReviewSection } from "../../../components/review-sections/WellbeingSupportReviewSection";
 import Signature from "../../../components/Signature";
 import Thumbnail from "../../../components/Thumbnail";
 import getProcessRef from "../../../helpers/getProcessRef";
 import useDatabase from "../../../helpers/useDatabase";
 import useDataValue from "../../../helpers/useDataValue";
-import useReviewSectionRows from "../../../helpers/useReviewSectionRows";
 import MainLayout from "../../../layouts/MainLayout";
-import householdSteps from "../../../steps/household";
-import {
-  idAndResidencyProcessSteps,
-  idAndResidencyResidentSteps,
-} from "../../../steps/id-and-residency";
 import PageSlugs from "../../../steps/PageSlugs";
 import PageTitles from "../../../steps/PageTitles";
-import propertyInspectionSteps from "../../../steps/property-inspection";
-import wellbeingSupportSteps from "../../../steps/wellbeing-support";
 import { ResidentRef } from "../../../storage/ResidentDatabaseSchema";
 import Storage from "../../../storage/Storage";
 
@@ -41,6 +37,8 @@ const ReviewPage: NextPage = () => {
     (values) => (processRef ? values[processRef]?.tenants : undefined)
   );
 
+  const tenantsValue = tenants.result || [];
+
   const tenantIdsPresentForCheck = useDataValue(
     Storage.ProcessContext,
     "tenantsPresent",
@@ -48,22 +46,12 @@ const ReviewPage: NextPage = () => {
     (values) => (processRef ? values[processRef] : undefined)
   );
 
-  const getTenantNamesFromTenantIds = (
-    tenantIds: string[],
-    tenants: {
-      id: string;
-      fullName: string;
-      dateOfBirth: Date;
-    }[]
-  ): string[] =>
-    tenants
-      .filter((tenant) => tenantIds.includes(tenant.id))
-      .map((tenant) => tenant.fullName);
+  const tenantIdsPresentForCheckValue = tenantIdsPresentForCheck.result || [];
 
-  const tenantsPresent = getTenantNamesFromTenantIds(
-    tenantIdsPresentForCheck.result ? tenantIdsPresentForCheck.result : [],
-    tenants.result ? tenants.result : []
-  );
+  const tenantsWithPresentStatus = tenantsValue.map((tenant) => ({
+    ...tenant,
+    present: tenantIdsPresentForCheckValue.includes(tenant.id),
+  }));
 
   const address = useDataValue(
     Storage.ExternalContext,
@@ -96,17 +84,13 @@ const ReviewPage: NextPage = () => {
     },
   ]);
 
-  const tenantIds = tenants.result
-    ? tenants.result.map((tenant) => tenant.id)
-    : [];
+  const allTenantNames = tenantsValue.map(({ fullName }) => fullName);
 
-  const tenantNames = tenants.result
-    ? tenants.result.map((tenant) => tenant.fullName)
-    : [];
-
-  const [selectedTenantId, setSelectedTenantId] = useState<
-    ResidentRef | undefined
-  >();
+  const tenantsPresent = tenantsValue.filter((tenant) =>
+    tenantIdsPresentForCheckValue.includes(tenant.id)
+  );
+  const presentTenantNames = tenantsPresent.map(({ fullName }) => fullName);
+  const presentTenantIds = tenantsPresent.map(({ id }) => id);
 
   const outsidePropertyImages = useDataValue(
     Storage.ProcessContext,
@@ -114,48 +98,6 @@ const ReviewPage: NextPage = () => {
     processRef,
     (values) => (processRef ? values[processRef]?.outside : undefined)
   );
-
-  // Long term we want an interface that allows the user to select which tenant
-  // to use, but for now we stick to the first tenant in the list.
-  if (selectedTenantId !== tenantIds[0]) {
-    setSelectedTenantId(tenantIds[0]);
-  }
-
-  const sections = [
-    {
-      heading: "ID, residency, and tenant information",
-      rows: [
-        ...useReviewSectionRows(
-          Storage.ProcessContext,
-          idAndResidencyProcessSteps
-        ),
-        ...useReviewSectionRows(
-          Storage.ResidentContext,
-          idAndResidencyResidentSteps,
-          selectedTenantId
-        ),
-      ],
-    },
-    {
-      heading: "Household",
-      rows: [...useReviewSectionRows(Storage.ProcessContext, householdSteps)],
-    },
-    {
-      heading: "Property inspection",
-      rows: [
-        ...useReviewSectionRows(
-          Storage.ProcessContext,
-          propertyInspectionSteps
-        ),
-      ],
-    },
-    {
-      heading: "Wellbeing support",
-      rows: [
-        ...useReviewSectionRows(Storage.ProcessContext, wellbeingSupportSteps),
-      ],
-    },
-  ];
 
   const SubmitButton = makeSubmit({
     slug: PageSlugs.Submit,
@@ -188,7 +130,10 @@ const ReviewPage: NextPage = () => {
             },
             {
               key: "Tenants",
-              value: tenantNames ? tenantNames.join(", ") : "Loading...",
+              value:
+                allTenantNames.length > 0
+                  ? allTenantNames.join(", ")
+                  : "Loading...",
             },
             {
               key: "Tenure type",
@@ -207,24 +152,16 @@ const ReviewPage: NextPage = () => {
         The Tenancy and Household Check has now been completed. Please review
         the answers with all present tenants and ask them to sign.
       </Paragraph>
-      {tenantsPresent.length > 0 && (
-        <Paragraph>Present for check: {tenantsPresent.join(", ")}</Paragraph>
-      )}
-      {sections
-        .filter((section) => section.rows.length)
-        .map(({ heading, rows }) => (
-          <React.Fragment key={heading}>
-            <Heading level={HeadingLevels.H2}>{heading}</Heading>
-
-            {rows.length ? (
-              <SummaryList
-                rows={(rows as unknown) as { key: string; value: string }[]}
-              />
-            ) : (
-              <Paragraph>Loading...</Paragraph>
-            )}
-          </React.Fragment>
-        ))}
+      <Paragraph>
+        Present for check:{" "}
+        {presentTenantNames.length > 0
+          ? presentTenantNames.join(", ")
+          : "Loading..."}
+      </Paragraph>
+      <IdAndResidencyReviewSection tenants={tenantsWithPresentStatus} />
+      <HouseholdReviewSection />
+      <PropertyInspectionReviewSection />
+      <WellbeingSupportReviewSection />
       <PostVisitActionInput
         value={otherNotes}
         onValueChange={(notes): void => setOtherNotes(notes)}
@@ -243,38 +180,41 @@ const ReviewPage: NextPage = () => {
       <Paragraph>
         Date of visit: {formatDate(new Date(), "d MMMM yyyy")}
       </Paragraph>
-      <Signature
-        value={selectedTenantId && signatures[selectedTenantId]}
-        onChange={(value): void => {
-          if (!selectedTenantId) {
-            return;
-          }
+      {tenantsPresent.map(({ fullName, id }) => (
+        <React.Fragment key={id}>
+          <Heading level={HeadingLevels.H3}>{fullName}</Heading>
+          <Signature
+            value={id && signatures[id]}
+            onChange={(value): void => {
+              if (!id) {
+                return;
+              }
 
-          setSignatures((sigs) => ({ ...sigs, [selectedTenantId]: value }));
-        }}
-      />
+              setSignatures((sigs) => ({ ...sigs, [id]: value }));
+            }}
+          />
+        </React.Fragment>
+      ))}
       <SubmitButton
         disabled={
-          !processRef ||
-          !residentDatabase.result ||
-          !selectedTenantId ||
-          !processDatabase.result
+          !processRef || !residentDatabase.result || !processDatabase.result
         }
         onSubmit={async (): Promise<boolean> => {
           if (
             !processRef ||
             !residentDatabase.result ||
-            !selectedTenantId ||
             !processDatabase.result
           ) {
             return false;
           }
 
-          await residentDatabase.result.put(
-            "signature",
-            selectedTenantId,
-            signatures[selectedTenantId] || ""
-          );
+          for (const tenantId of presentTenantIds) {
+            await residentDatabase.result.put(
+              "signature",
+              tenantId,
+              signatures[tenantId] || ""
+            );
+          }
 
           await processDatabase.result.put(
             "otherNotes",
