@@ -92,22 +92,12 @@ const ReviewPage: NextPage = () => {
   const presentTenantNames = tenantsPresent.map(({ fullName }) => fullName);
   const presentTenantIds = tenantsPresent.map(({ id }) => id);
 
-  const [selectedTenantId, setSelectedTenantId] = useState<
-    ResidentRef | undefined
-  >();
-
   const outsidePropertyImages = useDataValue(
     Storage.ProcessContext,
     "property",
     processRef,
     (values) => (processRef ? values[processRef]?.outside : undefined)
   );
-
-  // Long term we want an interface that allows the user to select which tenant
-  // to use, but for now we stick to the first tenant in the list.
-  if (selectedTenantId !== presentTenantIds[0]) {
-    setSelectedTenantId(presentTenantIds[0]);
-  }
 
   const SubmitButton = makeSubmit({
     slug: PageSlugs.Submit,
@@ -207,16 +197,12 @@ const ReviewPage: NextPage = () => {
       ))}
       <SubmitButton
         disabled={
-          !processRef ||
-          !residentDatabase.result ||
-          !selectedTenantId ||
-          !processDatabase.result
+          !processRef || !residentDatabase.result || !processDatabase.result
         }
         onSubmit={async (): Promise<boolean> => {
           if (
             !processRef ||
             !residentDatabase.result ||
-            !selectedTenantId ||
             !processDatabase.result
           ) {
             return false;
