@@ -1,10 +1,5 @@
 import formatDate from "date-fns/format";
-import {
-  Heading,
-  HeadingLevels,
-  Paragraph,
-  SummaryList,
-} from "lbh-frontend-react";
+import { Heading, HeadingLevels, Paragraph } from "lbh-frontend-react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -16,6 +11,7 @@ import { IdAndResidencyReviewSection } from "../../../components/review-sections
 import { PropertyInspectionReviewSection } from "../../../components/review-sections/PropertyInspectionReviewSection";
 import { WellbeingSupportReviewSection } from "../../../components/review-sections/WellbeingSupportReviewSection";
 import Signature from "../../../components/Signature";
+import { TenancySummary } from "../../../components/TenancySummary";
 import Thumbnail from "../../../components/Thumbnail";
 import getProcessRef from "../../../helpers/getProcessRef";
 import isManager from "../../../helpers/isManager";
@@ -75,6 +71,13 @@ const ReviewPage: NextPage = () => {
     (values) => (processRef ? values[processRef]?.tenureType : undefined)
   );
 
+  const tenancyStartDate = useDataValue(
+    Storage.ExternalContext,
+    "tenancy",
+    processRef,
+    (values) => (processRef ? values[processRef]?.startDate : undefined)
+  );
+
   const residentDatabase = useDatabase(Storage.ResidentContext);
   const processDatabase = useDatabase(Storage.ProcessContext);
 
@@ -122,6 +125,10 @@ const ReviewPage: NextPage = () => {
       ))
     : [];
 
+  const extraRows = [
+    { key: "Outside property", value: outsidePropertyImageThumbnails },
+  ].filter(({ value }) => value.length > 0);
+
   return (
     <MainLayout
       title={PageTitles.Review}
@@ -129,26 +136,14 @@ const ReviewPage: NextPage = () => {
       pausable
     >
       <React.Fragment>
-        <SummaryList
-          className="govuk-summary-list--no-border mat-tenancy-summary"
-          rows={[
-            {
-              key: "Address",
-              value: address.result ? address.result.join(", ") : "Loading...",
-            },
-            {
-              key: "Tenants",
-              value:
-                allTenantNames.length > 0
-                  ? allTenantNames.join(", ")
-                  : "Loading...",
-            },
-            {
-              key: "Tenure type",
-              value: tenureType.result ? tenureType.result : "Loading...",
-            },
-            { key: "Ouside Property:", value: outsidePropertyImageThumbnails },
-          ]}
+        <TenancySummary
+          details={{
+            address: address.result,
+            tenants: allTenantNames,
+            tenureType: tenureType.result,
+            startDate: tenancyStartDate.result,
+          }}
+          extraRows={extraRows}
         />
         <style>{`
           .mat-tenancy-summary img {
