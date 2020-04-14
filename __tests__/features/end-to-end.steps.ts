@@ -281,10 +281,10 @@ const processData = {
   },
   disability: {
     value: "yes",
-    whoDisability: ["tenant 1"],
+    whoDisability: [presentTenantRef],
     pipOrDLA: "yes",
-    whoPIP: ["tenant 1"],
-    whoDLA: ["tenant 1"],
+    whoPIP: [presentTenantRef],
+    whoDLA: [presentTenantRef],
     notes: [
       {
         value: "Disability notes",
