@@ -270,7 +270,7 @@ const processData = {
   },
   healthConcerns: {
     value: "yes",
-    who: ["tenant 1"],
+    who: [presentTenantRef],
     moreInfo: ["dementia", "smoking"],
     notes: [
       {
@@ -1512,7 +1512,7 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
       await Expect.pageToContain("Repairs notes");
 
       // Review page - Wellbeing support section
-      await Expect.pageToContain("Tenant 1");
+      await Expect.pageToContain("Dorian");
       await Expect.pageToContain("Dementia, Smoking");
       await Expect.pageToContain("Health concerns notes");
       await Expect.pageToContain("Disability notes");
