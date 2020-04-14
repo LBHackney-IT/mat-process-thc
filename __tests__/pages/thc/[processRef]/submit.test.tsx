@@ -102,27 +102,34 @@ it("renders correctly when online", async () => {
         <div
           className="govuk-container lbh-container"
         >
-          <p
-            className="lbh-body"
+          <div
+            className="phase-banner"
           >
-            <strong
-              className="govuk-tag lbh-tag"
+            <p
+              className="lbh-body"
             >
-              BETA
-            </strong>
-             This is a new service – your
-             
-            <a
-              className="govuk-link lbh-link"
-              href="https://docs.google.com/forms/d/e/1FAIpQLSdpefefhPQJ9fSu-fX6-Uvyanppp480ZRUNAe5dQAr8F2dexw/viewform"
-              target="_blank"
-            >
-              feedback
-            </a>
-             
-            will help us to improve it.
-          </p>
-          <hr />
+              <strong
+                className="govuk-tag lbh-tag"
+              >
+                BETA
+              </strong>
+               This is a new service – your
+               
+              <a
+                className="govuk-link lbh-link"
+                href="https://docs.google.com/forms/d/e/1FAIpQLSdpefefhPQJ9fSu-fX6-Uvyanppp480ZRUNAe5dQAr8F2dexw/viewform"
+                target="_blank"
+              >
+                feedback
+              </a>
+               
+              will help us to improve it.
+            </p>
+            <hr />
+          </div>
+          <div
+            className="heading"
+          />
           <section
             className="lbh-page-announcement"
           >
@@ -191,15 +198,22 @@ it("renders correctly when online", async () => {
         jsx={true}
       >
         
-            :global(.pause-button) {
+            :global(#main-content) {
+              padding-top: 0;
+            }
+
+            .phase-banner {
+              margin-top: 1.5em;
+            }
+
+            .phase-banner :global(.lbh-tag) {
+              margin-right: 1em;
+            }
+
+            .heading :global(.pause-button) {
               float: right;
               margin-top: 0;
               margin-left: 2em;
-            }
-            :global(.lbh-tag) {
-              margin-right: 15px;
-              padding-top: 8px;
-              padding-bottom: 8px;
             }
           
       </style>,
@@ -298,27 +312,34 @@ it("renders correctly when offline", async () => {
         <div
           className="govuk-container lbh-container"
         >
-          <p
-            className="lbh-body"
+          <div
+            className="phase-banner"
           >
-            <strong
-              className="govuk-tag lbh-tag"
+            <p
+              className="lbh-body"
             >
-              BETA
-            </strong>
-             This is a new service – your
-             
-            <a
-              className="govuk-link lbh-link"
-              href="https://docs.google.com/forms/d/e/1FAIpQLSdpefefhPQJ9fSu-fX6-Uvyanppp480ZRUNAe5dQAr8F2dexw/viewform"
-              target="_blank"
-            >
-              feedback
-            </a>
-             
-            will help us to improve it.
-          </p>
-          <hr />
+              <strong
+                className="govuk-tag lbh-tag"
+              >
+                BETA
+              </strong>
+               This is a new service – your
+               
+              <a
+                className="govuk-link lbh-link"
+                href="https://docs.google.com/forms/d/e/1FAIpQLSdpefefhPQJ9fSu-fX6-Uvyanppp480ZRUNAe5dQAr8F2dexw/viewform"
+                target="_blank"
+              >
+                feedback
+              </a>
+               
+              will help us to improve it.
+            </p>
+            <hr />
+          </div>
+          <div
+            className="heading"
+          />
           <section
             className="lbh-page-announcement"
           >
@@ -379,15 +400,22 @@ it("renders correctly when offline", async () => {
         jsx={true}
       >
         
-            :global(.pause-button) {
+            :global(#main-content) {
+              padding-top: 0;
+            }
+
+            .phase-banner {
+              margin-top: 1.5em;
+            }
+
+            .phase-banner :global(.lbh-tag) {
+              margin-right: 1em;
+            }
+
+            .heading :global(.pause-button) {
               float: right;
               margin-top: 0;
               margin-left: 2em;
-            }
-            :global(.lbh-tag) {
-              margin-right: 15px;
-              padding-top: 8px;
-              padding-bottom: 8px;
             }
           
       </style>,

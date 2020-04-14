@@ -89,36 +89,44 @@ it("renders correctly for all props", () => {
         <div
           className="govuk-container lbh-container"
         >
-          <button
-            aria-disabled={false}
-            className="govuk-button lbh-button pause-button lbh-button--secondary govuk-button--secondary"
-            data-testid="pause"
-            disabled={false}
-            onClick={[Function]}
+          <div
+            className="phase-banner"
           >
-            Pause process
-          </button>
-          <p
-            className="lbh-body"
+            <p
+              className="lbh-body"
+            >
+              <strong
+                className="govuk-tag lbh-tag"
+              >
+                BETA
+              </strong>
+               This is a new service – your
+               
+              <a
+                className="govuk-link lbh-link"
+                href="https://docs.google.com/forms/d/e/1FAIpQLSdpefefhPQJ9fSu-fX6-Uvyanppp480ZRUNAe5dQAr8F2dexw/viewform"
+                target="_blank"
+              >
+                feedback
+              </a>
+               
+              will help us to improve it.
+            </p>
+            <hr />
+          </div>
+          <div
+            className="heading"
           >
-            <strong
-              className="govuk-tag lbh-tag"
+            <button
+              aria-disabled={false}
+              className="govuk-button lbh-button pause-button lbh-button--secondary govuk-button--secondary"
+              data-testid="pause"
+              disabled={false}
+              onClick={[Function]}
             >
-              BETA
-            </strong>
-             This is a new service – your
-             
-            <a
-              className="govuk-link lbh-link"
-              href="https://docs.google.com/forms/d/e/1FAIpQLSdpefefhPQJ9fSu-fX6-Uvyanppp480ZRUNAe5dQAr8F2dexw/viewform"
-              target="_blank"
-            >
-              feedback
-            </a>
-             
-            will help us to improve it.
-          </p>
-          <hr />
+              Pause process
+            </button>
+          </div>
           <p>
             Test content
           </p>
@@ -128,15 +136,22 @@ it("renders correctly for all props", () => {
         jsx={true}
       >
         
-            :global(.pause-button) {
+            :global(#main-content) {
+              padding-top: 0;
+            }
+
+            .phase-banner {
+              margin-top: 1.5em;
+            }
+
+            .phase-banner :global(.lbh-tag) {
+              margin-right: 1em;
+            }
+
+            .heading :global(.pause-button) {
               float: right;
               margin-top: 0;
               margin-left: 2em;
-            }
-            :global(.lbh-tag) {
-              margin-right: 15px;
-              padding-top: 8px;
-              padding-bottom: 8px;
             }
           
       </style>,
@@ -231,32 +246,40 @@ it("renders correctly without optional props", () => {
         <div
           className="govuk-container lbh-container"
         >
-          <p
-            className="lbh-body"
+          <div
+            className="phase-banner"
           >
-            <strong
-              className="govuk-tag lbh-tag"
+            <p
+              className="lbh-body"
             >
-              BETA
-            </strong>
-             This is a new service – your
-             
-            <a
-              className="govuk-link lbh-link"
-              href="https://docs.google.com/forms/d/e/1FAIpQLSdpefefhPQJ9fSu-fX6-Uvyanppp480ZRUNAe5dQAr8F2dexw/viewform"
-              target="_blank"
-            >
-              feedback
-            </a>
-             
-            will help us to improve it.
-          </p>
-          <hr />
-          <h1
-            className="lbh-heading-h1"
+              <strong
+                className="govuk-tag lbh-tag"
+              >
+                BETA
+              </strong>
+               This is a new service – your
+               
+              <a
+                className="govuk-link lbh-link"
+                href="https://docs.google.com/forms/d/e/1FAIpQLSdpefefhPQJ9fSu-fX6-Uvyanppp480ZRUNAe5dQAr8F2dexw/viewform"
+                target="_blank"
+              >
+                feedback
+              </a>
+               
+              will help us to improve it.
+            </p>
+            <hr />
+          </div>
+          <div
+            className="heading"
           >
-            Test heading
-          </h1>
+            <h1
+              className="lbh-heading-h1"
+            >
+              Test heading
+            </h1>
+          </div>
           <p>
             Test content
           </p>
@@ -266,15 +289,22 @@ it("renders correctly without optional props", () => {
         jsx={true}
       >
         
-            :global(.pause-button) {
+            :global(#main-content) {
+              padding-top: 0;
+            }
+
+            .phase-banner {
+              margin-top: 1.5em;
+            }
+
+            .phase-banner :global(.lbh-tag) {
+              margin-right: 1em;
+            }
+
+            .heading :global(.pause-button) {
               float: right;
               margin-top: 0;
               margin-left: 2em;
-            }
-            :global(.lbh-tag) {
-              margin-right: 15px;
-              padding-top: 8px;
-              padding-bottom: 8px;
             }
           
       </style>,

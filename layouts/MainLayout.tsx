@@ -256,39 +256,50 @@ const MainLayout = ({
       <Header serviceName="Manage a tenancy"></Header>
       <Main>
         <Container>
-          {pausable &&
-            (href.pathname && as.pathname ? (
-              <NextLink href={href} as={as}>
-                {pauseButton}
-              </NextLink>
-            ) : (
-              pauseButton
-            ))}
-          <Paragraph>
-            <Tag>BETA</Tag> This is a new service – your{" "}
-            <Link
-              href="https://docs.google.com/forms/d/e/1FAIpQLSdpefefhPQJ9fSu-fX6-Uvyanppp480ZRUNAe5dQAr8F2dexw/viewform"
-              target="_blank"
-            >
-              feedback
-            </Link>{" "}
-            will help us to improve it.
-          </Paragraph>
-          <hr />
-          {heading && <Heading level={HeadingLevels.H1}>{heading}</Heading>}
+          <div className="phase-banner">
+            <Paragraph>
+              <Tag>BETA</Tag> This is a new service – your{" "}
+              <Link
+                href="https://docs.google.com/forms/d/e/1FAIpQLSdpefefhPQJ9fSu-fX6-Uvyanppp480ZRUNAe5dQAr8F2dexw/viewform"
+                target="_blank"
+              >
+                feedback
+              </Link>{" "}
+              will help us to improve it.
+            </Paragraph>
+            <hr />
+          </div>
+          <div className="heading">
+            {pausable &&
+              (href.pathname && as.pathname ? (
+                <NextLink href={href} as={as}>
+                  {pauseButton}
+                </NextLink>
+              ) : (
+                pauseButton
+              ))}
+            {heading && <Heading level={HeadingLevels.H1}>{heading}</Heading>}
+          </div>
           {children}
         </Container>
       </Main>
       <style jsx>{`
-        :global(.pause-button) {
+        :global(#main-content) {
+          padding-top: 0;
+        }
+
+        .phase-banner {
+          margin-top: 1.5em;
+        }
+
+        .phase-banner :global(.lbh-tag) {
+          margin-right: 1em;
+        }
+
+        .heading :global(.pause-button) {
           float: right;
           margin-top: 0;
           margin-left: 2em;
-        }
-        :global(.lbh-tag) {
-          margin-right: 15px;
-          padding-top: 8px;
-          padding-bottom: 8px;
         }
       `}</style>
     </>
