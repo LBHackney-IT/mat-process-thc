@@ -31,7 +31,7 @@
     "express": "^4.17.1",
     "is-online": "^8.3.0",
     "jsonwebtoken": "^8.5.1",
-    "lbh-frontend-react": "0.0.13",
+    "lbh-frontend-react": "0.0.14",
     "lodash": "^4.17.15",
     "next": "^9.3.4",
     "next-offline": "^5.0.0",
