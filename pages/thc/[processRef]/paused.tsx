@@ -12,7 +12,7 @@ const PausedPage: NextPage = () => {
   const tenants = ["Jane Doe", "John Doe"];
 
   return (
-    <MainLayout title={PageTitles.Confirmed}>
+    <MainLayout title={PageTitles.Paused}>
       <PageAnnouncement title="Process paused">
         <Paragraph>
           The Tenancy and Household Check for the tenancy at {address}, occupied

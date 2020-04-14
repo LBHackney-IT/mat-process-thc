@@ -55,6 +55,10 @@ enum PageTitles {
   Submit = "Submit",
   Confirmed = "Confirmed",
 
+  // Pause
+  Pause = "Pause",
+  Paused = "Paused",
+
   // Unable to enter
   FirstFailedAttempt = "First failed attempt",
 }

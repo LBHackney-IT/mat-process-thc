@@ -81,7 +81,7 @@ const PausePage: NextPage = () => {
     !as.pathname;
 
   return (
-    <MainLayout title={PageTitles.Submit}>
+    <MainLayout title={PageTitles.Pause}>
       {online.error && (
         <ErrorMessage>
           Something went wrong while checking your online status. Please reload
