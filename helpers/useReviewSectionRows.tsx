@@ -1,5 +1,6 @@
+import { useRouter } from "next/router";
 import React, { useMemo } from "react";
-import { UseAsyncReturn, useAsync } from "react-async-hook";
+import { useAsync, UseAsyncReturn } from "react-async-hook";
 import {
   ComponentDatabaseMap,
   ComponentValue,
@@ -14,14 +15,19 @@ import {
   StoreValue,
 } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
-
+import InternalLink from "../components/InternalLink";
 import Thumbnail from "../components/Thumbnail";
+import PageSlugs, {
+  repeatingStepSlugs,
+  urlObjectForSlug,
+} from "../steps/PageSlugs";
 import ResidentDatabaseSchema, {
   ResidentRef,
   residentStoreNames,
 } from "../storage/ResidentDatabaseSchema";
-
+import nextSlugWithId from "./nextSlugWithId";
 import ProcessStepDefinition from "./ProcessStepDefinition";
+import urlsForRouter from "./urlsForRouter";
 import useDatabase from "./useDatabase";
 
 interface Value<
@@ -39,6 +45,7 @@ interface Row<
   label: string;
   values: Value<DBSchema, Names>[];
   images: ComponentDatabaseMap<DBSchema, Names>[];
+  changeSlug: PageSlugs;
 }
 
 export interface SectionRow {
@@ -144,6 +151,7 @@ const useRows = <
                         Boolean(databaseMap && row.images === key)
                       )?.databaseMap!,
                     ].filter(Boolean),
+                    changeSlug: step.slug as PageSlugs,
                   },
                 ],
                 []
@@ -324,6 +332,7 @@ const useReviewSectionRows = <
 ): SectionRow[] => {
   const rows = useRows(steps);
   const storeValues = useStoreValues(context, rows, tenantId);
+  const router = useRouter();
 
   return useMemo(
     () =>
@@ -377,6 +386,15 @@ const useReviewSectionRows = <
             []
           );
 
+          const changeSlug = repeatingStepSlugs.includes(row.changeSlug)
+            ? nextSlugWithId(row.changeSlug, tenantId)()
+            : row.changeSlug;
+
+          const changeLink = urlsForRouter(
+            router,
+            urlObjectForSlug(router, changeSlug, { review: "true" })
+          );
+
           if (!values.length && !images.length) {
             return undefined;
           }
@@ -400,6 +418,9 @@ const useReviewSectionRows = <
                     </div>
                   ))}
                 </div>
+                <div className="change-link">
+                  <InternalLink url={changeLink.as}>Change</InternalLink>
+                </div>
                 <style jsx>{`
                   .row {
                     display: flex;
@@ -418,13 +439,17 @@ const useReviewSectionRows = <
                   .images > div {
                     margin-left: 0.2em;
                   }
+
+                  .change-link {
+                    margin-left: 2em;
+                  }
                 `}</style>
               </div>
             ),
           };
         })
         .filter(Boolean) as SectionRow[],
-    [rows, storeValues.loading, storeValues.result, tenantId]
+    [router, rows, storeValues.loading, storeValues.result, tenantId]
   );
 };
 
