@@ -1477,6 +1477,7 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
       await Expect.pageToContain("Hackney, London, E8");
       await Expect.pageToContain("Dorian");
       await Expect.pageToContain("Secure");
+      await Expect.pageToContain("12 November 2007");
 
       // Review page - Household section
       await Expect.pageToContain("Household");
