@@ -18,8 +18,10 @@ import useApiWithStorage, {
   UseApiWithStorageReturn,
 } from "../../../helpers/api/useApiWithStorage";
 import basePath from "../../../helpers/basePath";
+import getMatApiData from "../../../helpers/getMatApiData";
 import getProcessRef from "../../../helpers/getProcessRef";
 import isClient from "../../../helpers/isClient";
+import isManager from "../../../helpers/isManager";
 import isServer from "../../../helpers/isServer";
 import titleCase from "../../../helpers/titleCase";
 import urlsForRouter from "../../../helpers/urlsForRouter";
@@ -280,11 +282,7 @@ const useFetchResidentData = (): UseApiWithStorageReturn<
   const router = useRouter();
 
   const processRef = getProcessRef(router);
-
-  const data =
-    isClient && processRef
-      ? nullAsUndefined(sessionStorage.getItem(`${processRef}:matApiData`))
-      : undefined;
+  const data = getMatApiData(processRef);
 
   return useApiWithStorage({
     endpoint: "/v1/residents",
@@ -359,11 +357,7 @@ const useFetchTenancyData = (): UseApiWithStorageReturn<
   const router = useRouter();
 
   const processRef = getProcessRef(router);
-
-  const data =
-    isClient && processRef
-      ? nullAsUndefined(sessionStorage.getItem(`${processRef}:matApiData`))
-      : undefined;
+  const data = getMatApiData(processRef);
 
   return useApiWithStorage({
     endpoint: "/v1/tenancies",
@@ -432,9 +426,12 @@ export const LoadingPage: NextPage = () => {
       processDataSyncStatus.completedStepCount) /
     (extraResults.length + processDataSyncStatus.expectedStepCount);
 
+  const isManagerPage = isManager(router);
+  const nextSlug = isManagerPage ? PageSlugs.Review : PageSlugs.Outside;
+
   const { href, as } = urlsForRouter(
     router,
-    urlObjectForSlug(router, PageSlugs.Outside)
+    urlObjectForSlug(router, nextSlug)
   );
 
   const button = (
@@ -485,8 +482,9 @@ export const LoadingPage: NextPage = () => {
 
       <Heading level={HeadingLevels.H2}>Loading</Heading>
       <Paragraph>
-        The system is updating the information you need for this process so that
-        you can go offline at any point.
+        {isManagerPage
+          ? "The system is fetching the information you need for this process."
+          : "The system is updating the information you need for this process so that you can go offline at any point."}
       </Paragraph>
 
       <ProgressBar

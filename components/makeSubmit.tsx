@@ -2,6 +2,7 @@ import { Button } from "lbh-frontend-react/components";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { SubmitProps, submitPropTypes } from "remultiform/step";
+import { onClickSubmit } from "../helpers/onClickSubmit";
 import urlsForRouter from "../helpers/urlsForRouter";
 import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 
@@ -60,35 +61,14 @@ export const makeSubmit = (
                 disabled || (!cancel && (!href.pathname || !as.pathname))
               }
               onClick={async (): Promise<void> => {
-                if (!cancel && (!href.pathname || !as.pathname)) {
-                  return;
-                }
-
-                let successfulSubmit = false;
-
-                if (cancel) {
-                  successfulSubmit = true;
-                } else {
-                  try {
-                    successfulSubmit = await onSubmit();
-                  } catch (error) {
-                    // This is invisible to the user, so we should do something to
-                    // display it to them.
-                    console.error(error);
-                  }
-                }
-
-                if (successfulSubmit) {
-                  if (afterSubmit) {
-                    await afterSubmit();
-                  }
-
-                  if (cancel) {
-                    router.back();
-                  } else {
-                    await router.push(href, as);
-                  }
-                }
+                await onClickSubmit(
+                  router,
+                  href,
+                  as,
+                  onSubmit,
+                  afterSubmit,
+                  cancel
+                );
               }}
               data-testid={i > 0 ? undefined : "submit"}
             >

@@ -143,8 +143,6 @@ const persistProcessData = async (
       },
       TransactionMode.ReadWrite
     );
-
-    sessionStorage.clear();
   }
 
   if (setProgress) {
