@@ -6,5 +6,12 @@ import { ReviewSection } from "../ReviewSection";
 
 export const HouseholdReviewSection: React.FunctionComponent = () => {
   const rows = useReviewSectionRows(Storage.ProcessContext, householdSteps);
-  return <ReviewSection heading={"Household"} rows={rows} />;
+
+  return (
+    <ReviewSection
+      heading={"Household"}
+      loading={rows.loading}
+      rows={rows.result}
+    />
+  );
 };

@@ -9,5 +9,12 @@ export const WellbeingSupportReviewSection: React.FunctionComponent = () => {
     Storage.ProcessContext,
     WellbeingSupportSteps
   );
-  return <ReviewSection heading={"Wellbeing support"} rows={rows} />;
+
+  return (
+    <ReviewSection
+      heading={"Wellbeing support"}
+      loading={rows.loading}
+      rows={rows.result}
+    />
+  );
 };

@@ -9,5 +9,12 @@ export const PropertyInspectionReviewSection: React.FunctionComponent = () => {
     Storage.ProcessContext,
     propertyInspectionSteps
   );
-  return <ReviewSection heading={"Property inspection"} rows={rows} />;
+
+  return (
+    <ReviewSection
+      heading={"Property inspection"}
+      loading={rows.loading}
+      rows={rows.result}
+    />
+  );
 };
