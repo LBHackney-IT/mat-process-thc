@@ -356,6 +356,75 @@ router.patch("/v1/processes/:ref/appraise", (req, res) => {
   proxy(options, req, res);
 });
 
+router.post("/v1/processes/:ref/post-visit-actions", (req, res) => {
+  if (!verifyJwt(req.query.jwt, matApiJwtSecret)) {
+    res.status(401).send("Invalid JWT");
+
+    return;
+  }
+
+  const { ref } = req.params;
+  const { description, category, subcategory, data } = req.body;
+
+  const {
+    matApiToken,
+    areaId,
+    contactId,
+    subjectId,
+    patchId,
+    householdId,
+    officerFullName,
+    officerId,
+  } = decryptJson(
+    data,
+    matApiDataSharedKey,
+    matApiDataSalt,
+    matApiDataIterations,
+    matApiDataKeyLength,
+    matApiDataAlgorithm,
+    matApiDataIV
+  );
+
+  const options = {
+    host: matApiHost,
+    port: 443,
+    path: `${matApiBaseUrl}/v1/TenancyManagementInteractions/CreateTenancyManagementInteraction`,
+    method: req.method,
+    headers: {
+      Authorization: matApiToken,
+      "Content-Type": "application/json",
+    },
+    timeout: 10 * 1000,
+  };
+
+  const estateOfficerSource = "1";
+  const postVisitActionProcessType = "2";
+  const serviceRequestTitle = process.env.PROCESS_TYPE_NAME;
+
+  req.body = {
+    subject: subjectId,
+    source: estateOfficerSource,
+    processType: postVisitActionProcessType,
+    ServiceRequest: {
+      title: serviceRequestTitle,
+      subject: subjectId,
+      contactId: contactId,
+      description: description,
+    },
+    officerPatchId: patchId,
+    estateOfficerId: officerId,
+    contactId: contactId,
+    estateOfficerName: officerFullName,
+    areaName: areaId,
+    householdId: householdId,
+    parentInteractionId: ref,
+    natureofEnquiry: category,
+    enquirySubject: subcategory,
+  };
+
+  proxy(options, req, res);
+});
+
 router.get("/v1/tenancies", (req, res) => {
   if (!verifyJwt(req.query.jwt, matApiJwtSecret)) {
     res.status(401).send("Invalid JWT");
