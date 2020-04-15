@@ -25,8 +25,8 @@ import ResidentDatabaseSchema, {
   ResidentRef,
   residentStoreNames,
 } from "../storage/ResidentDatabaseSchema";
-import nextSlugWithId from "./nextSlugWithId";
 import ProcessStepDefinition from "./ProcessStepDefinition";
+import slugForRepeatingStep from "./slugForRepeatingStep";
 import urlsForRouter from "./urlsForRouter";
 import useDatabase from "./useDatabase";
 
@@ -387,7 +387,7 @@ const useReviewSectionRows = <
           );
 
           const changeSlug = repeatingStepSlugs.includes(row.changeSlug)
-            ? nextSlugWithId(row.changeSlug, tenantId)()
+            ? slugForRepeatingStep(row.changeSlug)()
             : row.changeSlug;
 
           const changeLink = urlsForRouter(
