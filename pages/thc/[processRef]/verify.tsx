@@ -13,7 +13,7 @@ import React from "react";
 import { Table } from "../../../components/Table";
 import { TenancySummary } from "../../../components/TenancySummary";
 import getProcessRef from "../../../helpers/getProcessRef";
-import nextSlugWithId from "../../../helpers/nextSlugWithId";
+import slugWithId from "../../../helpers/slugWithId";
 import urlsForRouter from "../../../helpers/urlsForRouter";
 import useDataSet from "../../../helpers/useDataSet";
 import useDataValue from "../../../helpers/useDataValue";
@@ -103,8 +103,7 @@ export const VerifyPage: NextPage = () => {
       <Link
         key="verify-link"
         href={
-          urlObjectForSlug(router, nextSlugWithId(PageSlugs.Id, tenant.id)())
-            .pathname
+          urlObjectForSlug(router, slugWithId(PageSlugs.Id, tenant.id)).pathname
         }
       >
         {tenantsPresent.loading

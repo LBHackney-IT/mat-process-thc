@@ -14,8 +14,8 @@ import {
 import { RadioButtons } from "../../components/RadioButtons";
 import { ReviewNotes } from "../../components/ReviewNotes";
 import keyFromSlug from "../../helpers/keyFromSlug";
-import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import slugForRepeatingStep from "../../helpers/slugForRepeatingStep";
 import { Notes } from "../../storage/DatabaseSchema";
 import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
 import Storage from "../../storage/Storage";
@@ -95,7 +95,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
   },
   step: {
     slug: PageSlugs.Residency,
-    nextSlug: nextSlugWithId(PageSlugs.TenantPhoto),
+    nextSlug: slugForRepeatingStep(PageSlugs.TenantPhoto),
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
