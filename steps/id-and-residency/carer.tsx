@@ -26,8 +26,8 @@ import { ReviewNotes } from "../../components/ReviewNotes";
 import { TextInput } from "../../components/TextInput";
 import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
-import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import slugForRepeatingStep from "../../helpers/slugForRepeatingStep";
 import yesNoRadios from "../../helpers/yesNoRadios";
 import { Notes } from "../../storage/DatabaseSchema";
 import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
@@ -140,7 +140,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
   },
   step: {
     slug: PageSlugs.Carer,
-    nextSlug: nextSlugWithId(PageSlugs.OtherSupport),
+    nextSlug: slugForRepeatingStep(PageSlugs.OtherSupport),
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,

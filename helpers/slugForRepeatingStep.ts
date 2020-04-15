@@ -2,8 +2,9 @@ import router from "next/router";
 import PageSlugs from "../steps/PageSlugs";
 import idFromSlug from "./idFromSlug";
 import isServer from "./isServer";
+import slugWithId from "./slugWithId";
 
-const nextSlugWithId = (nextSlug: PageSlugs, id?: string): (() => string) => {
+const slugForRepeatingStep = (nextSlug: PageSlugs): (() => string) => {
   return (): string => {
     if (isServer) {
       return "";
@@ -11,10 +12,14 @@ const nextSlugWithId = (nextSlug: PageSlugs, id?: string): (() => string) => {
 
     // `router.query` might be an empty object when first loading a page for
     // some reason.
-    id = id || idFromSlug(router, router.query.slug);
+    const id = idFromSlug(router, router.query.slug);
 
-    return [nextSlug, id].join("/");
+    if (!id) {
+      return "";
+    }
+
+    return slugWithId(nextSlug, id);
   };
 };
 
-export default nextSlugWithId;
+export default slugForRepeatingStep;
