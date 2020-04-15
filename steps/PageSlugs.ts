@@ -131,9 +131,14 @@ export const repeatingStepSlugs = [
 
 export const urlObjectForSlug = (
   router: NextRouter,
-  slug: string
+  slug: string,
+  query?:
+    | {
+        [s: string]: string;
+      }
+    | undefined
 ): { pathname: string } => {
-  return prefixUrl(router, { pathname: `/${slug}` });
+  return prefixUrl(router, { pathname: `/${slug}`, query: query });
 };
 
 export default PageSlugs;

@@ -44,10 +44,12 @@ export const makeSubmit = (
     return (
       <>
         {buttonProps.map(({ slug, value, cancel, afterSubmit }, i) => {
+          const nextSlug = router.query.review ? PageSlugs.Review : slug;
+
           const { href, as } =
-            slug === undefined
+            nextSlug === undefined
               ? { href: { pathname: undefined }, as: { pathname: undefined } }
-              : urlsForRouter(router, urlObjectForSlug(router, slug));
+              : urlsForRouter(router, urlObjectForSlug(router, nextSlug));
 
           return (
             <Button
