@@ -295,10 +295,11 @@ const useFetchResidentData = (): UseApiWithStorageReturn<
     parse(data: {
       results: {
         contactId: ResidentRef;
-        fullName: string;
-        responsible: boolean;
-        fullAddressDisplay: string;
         dateOfBirth: string;
+        fullAddressDisplay: string;
+        fullName: string;
+        relationship: string;
+        responsible: boolean;
       }[];
     }) {
       const fullAddress = data.results[0].fullAddressDisplay;
@@ -333,6 +334,7 @@ const useFetchResidentData = (): UseApiWithStorageReturn<
           id: contact.contactId,
           fullName: contact.fullName,
           dateOfBirth: new Date(contact.dateOfBirth),
+          relationship: contact.relationship,
         }))
         .sort((a, b) => (a.id > b.id ? 1 : a.id < b.id ? -1 : 0));
 

@@ -1,5 +1,4 @@
 import { NamedSchema, StoreNames } from "remultiform/database";
-
 import { ProcessRef } from "./ProcessDatabaseSchema";
 import { ResidentRef } from "./ResidentDatabaseSchema";
 
@@ -31,6 +30,8 @@ type ExternalDatabaseSchema = NamedSchema<
         householdMembers: {
           id: ResidentRef;
           fullName: string;
+          dateOfBirth: Date;
+          relationship: string;
         }[];
       };
     };
