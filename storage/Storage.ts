@@ -6,6 +6,10 @@ import databaseSchemaVersion from "./databaseSchemaVersion";
 import ExternalDatabaseSchema, {
   externalDatabaseName,
 } from "./ExternalDatabaseSchema";
+import dataMigrations from "./migrations/data";
+import externalSchemaMigrations from "./migrations/schema/external";
+import processSchemaMigrations from "./migrations/schema/process";
+import residentSchemaMigrations from "./migrations/schema/resident";
 import ProcessDatabaseSchema, {
   processDatabaseName,
   ProcessJson,
@@ -28,77 +32,14 @@ const migrateProcessData = async (
   let version = oldVersion;
   processData = cloneDeep(processData);
 
-  if (version < 4) {
-    delete processData.id;
-    delete processData.residency;
-    delete processData.tenant;
+  while (version < newVersion) {
+    const migration = dataMigrations[version];
 
-    version = 4;
-  }
-
-  if (version === 4) {
-    const noteKeys = [
-      "notes",
-      "residentSustainmentNotes",
-      "befriendingNotes",
-      "adultSafeguardingNotes",
-      "childrenYoungPeopleSafeguardingNotes",
-      "domesticSexualViolenceNotes",
-      "mentalHealth18To65Notes",
-      "mentalHealthOver65Notes",
-    ];
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const migrateNotes = (storeValues: any): void => {
-      for (const value of Object.values(storeValues)) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const v = value as any;
-
-        for (const noteKey of noteKeys) {
-          const noteValue = v[noteKey];
-
-          if (noteValue === undefined) {
-            continue;
-          }
-
-          v[noteKey] = {
-            value: noteValue,
-            isPostVisitAction: false,
-          };
-        }
-      }
-    };
-
-    for (const storeName of processStoreNames) {
-      if (processData[storeName] === undefined) {
-        continue;
-      }
-
-      migrateNotes(processData[storeName]);
+    if (migration) {
+      processData = migration(processData);
     }
 
-    for (const storeName of residentStoreNames) {
-      if (
-        !processData.residents ||
-        processData.residents[storeName] === undefined
-      ) {
-        continue;
-      }
-      migrateNotes(processData.residents[storeName]);
-    }
-
-    version = 5;
-  }
-
-  if (version < 8) {
-    version = 8;
-  }
-
-  if (version !== newVersion) {
-    throw new Error(
-      `Unable to upgrade to ${newVersion} due to missing ` +
-        `data migrations from ${version} onwards`
-    );
+    version++;
   }
 
   return processData;
@@ -131,20 +72,20 @@ export default class Storage {
       1,
       {
         upgrade(upgrade) {
-          let version = upgrade.oldVersion;
-
-          if (version === 0) {
-            upgrade.createStore("tenancy");
-            upgrade.createStore("residents");
-
-            version = 1;
+          if (upgrade.newVersion === undefined) {
+            return;
           }
 
-          if (version !== upgrade.newVersion) {
-            throw new Error(
-              `Unable to upgrade to ${upgrade.newVersion} due to missing ` +
-                `migrations from ${version} onwards`
-            );
+          let version = upgrade.oldVersion;
+
+          while (version < upgrade.newVersion) {
+            const migration = externalSchemaMigrations[version];
+
+            if (migration) {
+              migration(upgrade);
+            }
+
+            version++;
           }
         },
       }
@@ -155,67 +96,20 @@ export default class Storage {
       databaseSchemaVersion,
       {
         upgrade(upgrade) {
+          if (upgrade.newVersion === undefined) {
+            return;
+          }
+
           let version = upgrade.oldVersion;
 
-          if (version === 0) {
-            upgrade.createStore("lastModified");
-            upgrade.createStore("property");
-            upgrade.createStore("isUnannouncedVisit");
-            upgrade.createStore("isVisitInside");
-            upgrade.createStore("homeCheck");
-            upgrade.createStore("healthConcerns");
-            upgrade.createStore("disability");
-            upgrade.createStore("supportNeeds");
+          while (version < upgrade.newVersion) {
+            const migration = processSchemaMigrations[version];
 
-            version = 1;
-          }
+            if (migration) {
+              migration(upgrade);
+            }
 
-          if (version === 1) {
-            upgrade.createStore("household");
-
-            version = 2;
-          }
-
-          if (version === 2) {
-            upgrade.createStore("tenantsPresent");
-
-            version = 3;
-          }
-
-          if (version === 3) {
-            // We don't remove the `id`, `residency`, or `tenants` stores,
-            // which were removed from the schema with this version, to guard
-            // against data loss.
-            version = 4;
-          }
-
-          if (version === 4) {
-            version = 5;
-          }
-
-          if (version === 5) {
-            upgrade.createStore("otherNotes");
-
-            version = 6;
-          }
-
-          if (version === 6) {
-            upgrade.createStore("submitted");
-
-            version = 7;
-          }
-
-          if (version === 7) {
-            upgrade.createStore("unableToEnter");
-
-            version = 8;
-          }
-
-          if (version !== upgrade.newVersion) {
-            throw new Error(
-              `Unable to upgrade to ${upgrade.newVersion} due to missing ` +
-                `migrations from ${version} onwards`
-            );
+            version++;
           }
         },
       }
@@ -226,39 +120,20 @@ export default class Storage {
       databaseSchemaVersion,
       {
         upgrade(upgrade) {
+          if (upgrade.newVersion === undefined) {
+            return;
+          }
+
           let version = upgrade.oldVersion;
 
-          if (version === 0) {
-            upgrade.createStore("id");
-            upgrade.createStore("residency");
-            upgrade.createStore("photo");
-            upgrade.createStore("nextOfKin");
-            upgrade.createStore("carer");
+          while (version < upgrade.newVersion) {
+            const migration = residentSchemaMigrations[version];
 
-            version = 1;
-          }
+            if (migration) {
+              migration(upgrade);
+            }
 
-          if (version === 1) {
-            upgrade.createStore("signature");
-
-            version = 2;
-          }
-
-          if (version === 2) {
-            upgrade.createStore("otherSupport");
-
-            version = 3;
-          }
-
-          if (version < 8) {
-            version = 8;
-          }
-
-          if (version !== upgrade.newVersion) {
-            throw new Error(
-              `Unable to upgrade to ${upgrade.newVersion} due to missing ` +
-                `migrations from ${version} onwards`
-            );
+            version++;
           }
         },
       }
