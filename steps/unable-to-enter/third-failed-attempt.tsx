@@ -1,4 +1,5 @@
-import { makeSubmit } from "components/makeSubmit";
+import formatDate from "date-fns/format";
+import failedAttemptReasonCheckboxes from "helpers/failedAttemptReasonCheckboxes";
 import { Heading } from "lbh-frontend-react";
 import {
   FieldsetLegend,
@@ -8,19 +9,23 @@ import {
   PageAnnouncement,
   Textarea,
 } from "lbh-frontend-react/components";
+import { useRouter } from "next/router";
 import React from "react";
-import { TransactionMode } from "remultiform/database";
 import {
   ComponentDatabaseMap,
   ComponentWrapper,
   DynamicComponent,
   makeDynamic,
   StaticComponent,
-} from "remultiform/dist/esm/component-wrapper";
-import PageSlugs from "steps/PageSlugs";
-import PageTitles from "steps/PageTitles";
+} from "remultiform/component-wrapper";
+import { TransactionMode } from "remultiform/database";
 import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
+import { makeSubmit } from "../../components/makeSubmit";
+import getProcessRef from "../../helpers/getProcessRef";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import useDataValue from "../../helpers/useDataValue";
+import PageSlugs from "../../steps/PageSlugs";
+import PageTitles from "../../steps/PageTitles";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import Storage from "../../storage/Storage";
 
@@ -87,20 +92,65 @@ const storeThirdVisitDate = async (): Promise<void> => {
 };
 
 const PreviousFailedAttemptsAnnouncement: React.FunctionComponent = () => {
-  // const router = useRouter();
-  // const processRef = getProcessRef(router);
-  // const date = useDataValue(
-  //   Storage.ProcessContext,
-  //   "unableToEnter",
-  //   processRef,
-  //   (values) => (processRef ? values[processRef] : undefined)
-  // );
-  // const dateValue = date.result ? date.result : "loading";
+  const router = useRouter();
+  const processRef = getProcessRef(router);
+  const firstFailedAttempt = useDataValue(
+    Storage.ProcessContext,
+    "unableToEnter",
+    processRef,
+    (values) =>
+      processRef ? values[processRef]?.firstFailedAttempt : undefined
+  );
+  const dateString =
+    firstFailedAttempt.loading || !firstFailedAttempt.result?.date
+      ? "Loading..."
+      : formatDate(new Date(firstFailedAttempt.result?.date), "d MMMM yyyy");
 
-  // console.log(date.result?.firstFailedAttempt);
+  const reasonValue =
+    firstFailedAttempt.loading || !firstFailedAttempt.result?.value
+      ? "Loading..."
+      : firstFailedAttempt.result?.value;
+
+  // const dateSecondString =
+  // secondFailedAttempt.loading || !secondFailedAttempt.result?.date
+  //   ? "Loading..."
+  //   : formatDate(new Date(secondFailedAttempt.result?.date), "d MMMM yyyy");
+
+  // const reasonSecondValue =
+  //   secondFailedAttempt.loading || !secondFailedAttempt.result?.value
+  //     ? "Loading..."
+  //     : secondFailedAttempt.result?.value;
+
+  const reasonLabel = failedAttemptReasonCheckboxes
+    .filter((checkbox) => reasonValue.includes(checkbox.value))
+    .map((checkbox) => checkbox.label);
+
+  // const reasonSecondLabel = failedAttemptReasonCheckboxes
+  // .filter((checkbox) => reasonSecondValue.includes(checkbox.value))
+  // .map((checkbox) => checkbox.label);
+
   return (
     <PageAnnouncement title={"Previous attempt"}>
-      <List key="one" items={["First failed attempt"]}></List>
+      <List
+        items={[
+          <React.Fragment key="first">
+            First failed attempt: {dateString}
+          </React.Fragment>,
+          <React.Fragment key="second">
+            Reason: <List items={reasonLabel.map((label) => label)} />
+          </React.Fragment>,
+        ]}
+      />
+      <List
+        items={[
+          <React.Fragment key="first">
+            Second failed attempt: {dateString}
+          </React.Fragment>,
+          <React.Fragment key="second">
+            Reason: <List items={reasonLabel.map((label) => label)} />
+          </React.Fragment>,
+        ]}
+      />
     </PageAnnouncement>
   );
 };

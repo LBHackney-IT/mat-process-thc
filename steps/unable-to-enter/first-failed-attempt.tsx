@@ -1,3 +1,4 @@
+import failedAttemptReasonCheckboxes from "helpers/failedAttemptReasonCheckboxes";
 import { Heading } from "lbh-frontend-react";
 import {
   FieldsetLegend,
@@ -94,28 +95,7 @@ const step = {
                 anything of concern?
               </FieldsetLegend>
             ) as React.ReactNode,
-            checkboxes: [
-              {
-                label: "Tenant not in",
-                value: "tenant not in",
-              },
-              {
-                label: "Not safe to enter property",
-                value: "not safe",
-              },
-              {
-                label: "Property may be abandoned",
-                value: "abandoned",
-              },
-              {
-                label: "There are signs of subletting",
-                value: "subletting",
-              },
-              {
-                label: "Other",
-                value: "other",
-              },
-            ],
+            checkboxes: failedAttemptReasonCheckboxes,
           } as CheckboxesProps,
           defaultValue: [],
           emptyValue: [] as string[],

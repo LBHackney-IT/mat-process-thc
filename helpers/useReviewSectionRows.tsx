@@ -15,6 +15,7 @@ import {
   StoreValue,
 } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
+import nextSlugWithId from "../../nextSlugWithId";
 import InternalLink from "../components/InternalLink";
 import Thumbnail from "../components/Thumbnail";
 import PageSlugs, {
@@ -25,7 +26,6 @@ import ResidentDatabaseSchema, {
   ResidentRef,
   residentStoreNames,
 } from "../storage/ResidentDatabaseSchema";
-import nextSlugWithId from "./nextSlugWithId";
 import ProcessStepDefinition from "./ProcessStepDefinition";
 import urlsForRouter from "./urlsForRouter";
 import useDatabase from "./useDatabase";
