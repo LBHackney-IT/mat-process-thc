@@ -18,9 +18,6 @@ interface Tenant {
   id: string;
   present: boolean;
 }
-interface IdAndResidencyReviewSectionProps {
-  tenants: Tenant[];
-}
 
 interface TenantSectionProps {
   tenant: Tenant;
@@ -29,6 +26,7 @@ interface TenantSectionProps {
 const TenantSection: React.FunctionComponent<TenantSectionProps> = (props) => {
   const { tenant } = props;
   const { id, fullName, present } = tenant;
+
   const rows = useReviewSectionRows(
     Storage.ResidentContext,
     idAndResidencyResidentSteps,
@@ -37,20 +35,31 @@ const TenantSection: React.FunctionComponent<TenantSectionProps> = (props) => {
 
   return (
     <>
-      {rows && rows.length ? (
-        <>
-          <Heading level={HeadingLevels.H3}>
-            {fullName}
-            {present ? "" : " (not present)"}
-          </Heading>
-          <SummaryList rows={rows} />
-        </>
-      ) : (
+      <Heading level={HeadingLevels.H3}>
+        {fullName}
+        {present ? "" : " (not present)"}
+      </Heading>
+      {rows.loading ? (
         <Paragraph>Loading...</Paragraph>
+      ) : (
+        rows.result &&
+        rows.result.length > 0 && <SummaryList rows={rows.result} />
       )}
     </>
   );
 };
+
+TenantSection.propTypes = {
+  tenant: PropTypes.shape({
+    fullName: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    present: PropTypes.bool.isRequired,
+  }).isRequired,
+};
+
+interface IdAndResidencyReviewSectionProps {
+  tenants: Tenant[];
+}
 
 export const IdAndResidencyReviewSection: React.FunctionComponent<IdAndResidencyReviewSectionProps> = (
   props
@@ -62,27 +71,22 @@ export const IdAndResidencyReviewSection: React.FunctionComponent<IdAndResidency
     idAndResidencyProcessSteps
   );
 
-  console.log(rows);
-
   return (
     <>
       <Heading level={HeadingLevels.H2}>
         ID, residency, and tenant information
       </Heading>
-      {rows && rows.length > 0 && <SummaryList rows={rows} />}
+      {rows.loading ? (
+        <Paragraph>Loading...</Paragraph>
+      ) : (
+        rows.result &&
+        rows.result.length > 0 && <SummaryList rows={rows.result} />
+      )}
       {tenants.map((tenant) => (
         <TenantSection key={tenant.id} tenant={tenant} />
       ))}
     </>
   );
-};
-
-TenantSection.propTypes = {
-  tenant: PropTypes.shape({
-    fullName: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
-    present: PropTypes.bool.isRequired,
-  }).isRequired,
 };
 
 IdAndResidencyReviewSection.propTypes = {

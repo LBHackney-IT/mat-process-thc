@@ -1,4 +1,5 @@
 import { FieldsetLegend } from "lbh-frontend-react/components";
+import router from "next/router";
 import React from "react";
 import {
   ComponentDatabaseMap,
@@ -6,21 +7,23 @@ import {
   ComponentWrapper,
   DynamicComponent,
 } from "remultiform/component-wrapper";
-import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
+import { Checkboxes } from "../../components/Checkboxes";
 import { makeSubmit } from "../../components/makeSubmit";
 import {
   PostVisitActionInput,
   PostVisitActionInputProps,
 } from "../../components/PostVisitActionInput";
 import { RadioButtons } from "../../components/RadioButtons";
+import ResidentCheckboxes from "../../components/ResidentCheckboxes";
 import { ReviewNotes } from "../../components/ReviewNotes";
+import getProcessRef from "../../helpers/getProcessRef";
 import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
-import householdMemberCheckboxes from "../../helpers/householdMemberCheckboxes";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import yesNoRadios from "../../helpers/yesNoRadios";
 import { Notes } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
+import Storage from "../../storage/Storage";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -69,11 +72,25 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "healthConcerns"> = {
         label: questions["health-concerns-who"],
         values: {
           "health-concerns-who": {
-            renderValue(whoConcerns: string[]): React.ReactNode {
-              return whoConcerns
-                .map((who) => {
-                  return getRadioLabelFromValue(householdMemberCheckboxes, who);
-                })
+            async renderValue(whoConcerns: string[]): Promise<React.ReactNode> {
+              const db = await Storage.ExternalContext?.database;
+
+              if (!db) {
+                return;
+              }
+
+              const processRef = getProcessRef(router);
+
+              if (!processRef) {
+                return;
+              }
+
+              const { tenants, householdMembers } =
+                (await db.get("residents", processRef)) || {};
+
+              return [...(tenants || []), ...(householdMembers || [])]
+                .filter(({ id }) => whoConcerns.includes(id))
+                .map(({ fullName }) => fullName)
                 .join(", ");
             },
           },
@@ -135,7 +152,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "healthConcerns"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "health-concerns-who",
-          Component: Checkboxes,
+          Component: ResidentCheckboxes,
           props: {
             name: "health-concerns-who",
             legend: (
@@ -143,8 +160,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "healthConcerns"> = {
                 {questions["health-concerns-who"]}
               </FieldsetLegend>
             ) as React.ReactNode,
-            checkboxes: householdMemberCheckboxes,
-          } as CheckboxesProps,
+          },
           renderWhen(stepValues: {
             "health-concerns"?: ComponentValue<
               ProcessDatabaseSchema,
@@ -177,7 +193,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "healthConcerns"> = {
               </FieldsetLegend>
             ) as React.ReactNode,
             checkboxes: healthConcernsCheckboxes,
-          } as CheckboxesProps,
+          },
           renderWhen(stepValues: {
             "health-concerns"?: ComponentValue<
               ProcessDatabaseSchema,

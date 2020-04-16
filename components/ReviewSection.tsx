@@ -10,19 +10,20 @@ import { SectionRow } from "../helpers/useReviewSectionRows";
 
 interface Props {
   heading: string;
+  loading: boolean;
   rows?: SectionRow[];
 }
 
 export const ReviewSection: React.FunctionComponent<Props> = (props) => {
-  const { heading, rows } = props || {};
+  const { heading, loading, rows } = props || {};
 
   return (
     <>
       <Heading level={HeadingLevels.H2}>{heading}</Heading>
-      {rows && rows.length ? (
-        <SummaryList rows={rows} />
-      ) : (
+      {loading ? (
         <Paragraph>Loading...</Paragraph>
+      ) : (
+        rows && rows.length > 0 && <SummaryList rows={rows} />
       )}
     </>
   );
@@ -30,6 +31,7 @@ export const ReviewSection: React.FunctionComponent<Props> = (props) => {
 
 ReviewSection.propTypes = {
   heading: PropTypes.string.isRequired,
+  loading: PropTypes.bool.isRequired,
   rows: PropTypes.arrayOf(
     PropTypes.shape({
       key: PropTypes.string.isRequired,

@@ -35,7 +35,9 @@ interface Value<
   Name extends StoreNames<DBSchema["schema"]>
 > {
   databaseMap: ComponentDatabaseMap<DBSchema, Name>;
-  renderValue(value: ComponentValue<DBSchema, Name>): React.ReactNode;
+  renderValue(
+    value: ComponentValue<DBSchema, Name>
+  ): React.ReactNode | Promise<React.ReactNode>;
 }
 
 interface Row<
@@ -79,7 +81,7 @@ const findValue = <
   databaseMap: ComponentDatabaseMap<DBSchema, Name>
 ): ComponentValue<DBSchema, Name> | undefined => {
   if (storeValue === undefined) {
-    return undefined;
+    return;
   }
 
   const propertyMap = databaseMap.property as
@@ -96,7 +98,7 @@ const findValue = <
   })[propertyMap[0]];
 
   if (child === undefined) {
-    return undefined;
+    return;
   }
 
   if (propertyMap.length === 1) {
@@ -110,7 +112,7 @@ const findValue = <
   })[propertyMap[0]][propertyMap[1]];
 
   if (grandChild === undefined) {
-    return undefined;
+    return;
   }
 
   return (grandChild as unknown) as ComponentValue<DBSchema, Name>;
@@ -329,128 +331,138 @@ const useReviewSectionRows = <
   context: DatabaseContext<DBSchema> | undefined,
   steps: ProcessStepDefinition<DBSchema, Names>[],
   tenantId?: ResidentRef
-): SectionRow[] => {
+): UseAsyncReturn<SectionRow[]> => {
   const rows = useRows(steps);
   const storeValues = useStoreValues(context, rows, tenantId);
   const router = useRouter();
 
-  return useMemo(
-    () =>
-      rows
-        .map((row) => {
-          const values = row.values
-            .map((v) => {
-              if (storeValues.loading || storeValues.result === undefined) {
-                return undefined;
-              }
+  return useAsync(
+    async () =>
+      (
+        await Promise.all(
+          rows.map(async (row) => {
+            const values = (
+              await Promise.all(
+                row.values.map((v) => {
+                  if (storeValues.loading || storeValues.result === undefined) {
+                    return;
+                  }
 
-              const { databaseMap, renderValue } = v;
-              const { storeName } = databaseMap;
+                  const { databaseMap, renderValue } = v;
+                  const { storeName } = databaseMap;
 
-              const key = findKey(databaseMap, tenantId);
-              const values = storeValues.result[storeName];
+                  const key = findKey(databaseMap, tenantId);
+                  const values = storeValues.result[storeName];
 
-              if (key === undefined || values === undefined) {
-                return undefined;
-              }
+                  if (key === undefined || values === undefined) {
+                    return;
+                  }
 
-              const value = findValue(values[key], databaseMap);
+                  const value = findValue(values[key], databaseMap);
 
-              if (value === undefined) {
-                return undefined;
-              }
+                  if (value === undefined) {
+                    return;
+                  }
 
-              return renderValue(value);
-            })
-            .filter(Boolean) as React.ReactNode[];
+                  return renderValue(value);
+                })
+              )
+            ).filter(Boolean) as React.ReactNode[];
 
-          const images = (row.images
-            .map((databaseMap) => {
-              if (storeValues.loading || storeValues.result === undefined) {
-                return undefined;
-              }
+            const images = (row.images
+              .map((databaseMap) => {
+                if (storeValues.loading || storeValues.result === undefined) {
+                  return;
+                }
 
-              const { storeName } = databaseMap;
+                const { storeName } = databaseMap;
 
-              const key = findKey(databaseMap, tenantId);
-              const values = storeValues.result[storeName];
+                const key = findKey(databaseMap, tenantId);
+                const values = storeValues.result[storeName];
 
-              if (key === undefined || values === undefined) {
-                return undefined;
-              }
+                if (key === undefined || values === undefined) {
+                  return;
+                }
 
-              return findValue(values[key], databaseMap);
-            })
-            .filter(Boolean) as string[][]).reduce<string[]>(
-            (i, images) => [...i, ...images],
-            []
-          );
+                return findValue(values[key], databaseMap);
+              })
+              .filter(Boolean) as string[][]).reduce<string[]>(
+              (i, images) => [...i, ...images],
+              []
+            );
 
-          const changeSlug =
-            tenantId && repeatingStepSlugs.includes(row.changeSlug)
-              ? slugWithId(row.changeSlug, tenantId)
-              : row.changeSlug;
+            const changeSlug =
+              tenantId && repeatingStepSlugs.includes(row.changeSlug)
+                ? slugWithId(row.changeSlug, tenantId)
+                : row.changeSlug;
 
-          const changeLink = urlsForRouter(
-            router,
-            urlObjectForSlug(router, changeSlug, { review: "true" })
-          );
+            const changeLink = urlsForRouter(
+              router,
+              urlObjectForSlug(router, changeSlug, { review: "true" })
+            );
 
-          if (!values.length && !images.length) {
-            return undefined;
-          }
+            if (!values.length && !images.length) {
+              return;
+            }
 
-          return {
-            key: row.label,
-            value: (
-              <div className="row">
-                <div className="values">
-                  {values.map((value, index) => (
-                    <div key={index}>{value}</div>
-                  ))}
+            return {
+              key: row.label,
+              value: (
+                <div className="row">
+                  <div className="values">
+                    {values.map((value, index) => (
+                      <div key={index}>{value}</div>
+                    ))}
+                  </div>
+                  <div className="images">
+                    {images.map((src, index) => (
+                      <div key={index}>
+                        <Thumbnail
+                          src={src}
+                          alt="Thumbnail of an uploaded image"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="change-link">
+                    <InternalLink url={changeLink.as}>Change</InternalLink>
+                  </div>
+                  <style jsx>{`
+                    .row {
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: stretch;
+                    }
+
+                    .images {
+                      flex: 1;
+                      margin-left: 2em;
+                      display: flex;
+                      flex-wrap: wrap;
+                      justify-content: flex-end;
+                    }
+
+                    .images > div {
+                      margin-left: 0.2em;
+                    }
+
+                    .change-link {
+                      margin-left: 2em;
+                    }
+                  `}</style>
                 </div>
-                <div className="images">
-                  {images.map((src, index) => (
-                    <div key={index}>
-                      <Thumbnail
-                        src={src}
-                        alt="Thumbnail of an uploaded image"
-                      />
-                    </div>
-                  ))}
-                </div>
-                <div className="change-link">
-                  <InternalLink url={changeLink.as}>Change</InternalLink>
-                </div>
-                <style jsx>{`
-                  .row {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: stretch;
-                  }
-
-                  .images {
-                    flex: 1;
-                    margin-left: 2em;
-                    display: flex;
-                    flex-wrap: wrap;
-                    justify-content: flex-end;
-                  }
-
-                  .images > div {
-                    margin-left: 0.2em;
-                  }
-
-                  .change-link {
-                    margin-left: 2em;
-                  }
-                `}</style>
-              </div>
-            ),
-          };
-        })
-        .filter(Boolean) as SectionRow[],
-    [router, rows, storeValues.loading, storeValues.result, tenantId]
+              ),
+            };
+          })
+        )
+      ).filter(Boolean) as SectionRow[],
+    [
+      Boolean(router),
+      JSON.stringify(rows),
+      storeValues.loading,
+      JSON.stringify(storeValues.result),
+      tenantId,
+    ]
   );
 };
 

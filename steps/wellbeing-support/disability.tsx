@@ -1,4 +1,5 @@
 import { FieldsetLegend } from "lbh-frontend-react/components";
+import router from "next/router";
 import React from "react";
 import {
   ComponentDatabaseMap,
@@ -6,21 +7,22 @@ import {
   ComponentWrapper,
   DynamicComponent,
 } from "remultiform/component-wrapper";
-import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { makeSubmit } from "../../components/makeSubmit";
 import {
   PostVisitActionInput,
   PostVisitActionInputProps,
 } from "../../components/PostVisitActionInput";
 import { RadioButtons } from "../../components/RadioButtons";
+import ResidentCheckboxes from "../../components/ResidentCheckboxes";
 import { ReviewNotes } from "../../components/ReviewNotes";
+import getProcessRef from "../../helpers/getProcessRef";
 import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
-import householdMemberCheckboxes from "../../helpers/householdMemberCheckboxes";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import yesNoRadios from "../../helpers/yesNoRadios";
 import { Notes } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
+import Storage from "../../storage/Storage";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -47,11 +49,27 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
             },
           },
           "who-disability": {
-            renderValue(whoDisability: string[]): React.ReactNode {
-              return whoDisability
-                .map((who) => {
-                  return getRadioLabelFromValue(householdMemberCheckboxes, who);
-                })
+            async renderValue(
+              whoDisability: string[]
+            ): Promise<React.ReactNode> {
+              const db = await Storage.ExternalContext?.database;
+
+              if (!db) {
+                return;
+              }
+
+              const processRef = getProcessRef(router);
+
+              if (!processRef) {
+                return;
+              }
+
+              const { tenants, householdMembers } =
+                (await db.get("residents", processRef)) || {};
+
+              return [...(tenants || []), ...(householdMembers || [])]
+                .filter(({ id }) => whoDisability.includes(id))
+                .map(({ fullName }) => fullName)
                 .join(", ");
             },
           },
@@ -76,11 +94,25 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
         label: "Who gets PIP?",
         values: {
           "who-pip": {
-            renderValue(whoPIP: string[]): React.ReactNode {
-              return whoPIP
-                .map((who) =>
-                  getRadioLabelFromValue(householdMemberCheckboxes, who)
-                )
+            async renderValue(whoPIP: string[]): Promise<React.ReactNode> {
+              const db = await Storage.ExternalContext?.database;
+
+              if (!db) {
+                return;
+              }
+
+              const processRef = getProcessRef(router);
+
+              if (!processRef) {
+                return;
+              }
+
+              const { tenants, householdMembers } =
+                (await db.get("residents", processRef)) || {};
+
+              return [...(tenants || []), ...(householdMembers || [])]
+                .filter(({ id }) => whoPIP.includes(id))
+                .map(({ fullName }) => fullName)
                 .join(", ");
             },
           },
@@ -90,11 +122,25 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
         label: "Who gets DLA?",
         values: {
           "who-dla": {
-            renderValue(whoDLA: string[]): React.ReactNode {
-              return whoDLA
-                .map((who) =>
-                  getRadioLabelFromValue(householdMemberCheckboxes, who)
-                )
+            async renderValue(whoDLA: string[]): Promise<React.ReactNode> {
+              const db = await Storage.ExternalContext?.database;
+
+              if (!db) {
+                return;
+              }
+
+              const processRef = getProcessRef(router);
+
+              if (!processRef) {
+                return;
+              }
+
+              const { tenants, householdMembers } =
+                (await db.get("residents", processRef)) || {};
+
+              return [...(tenants || []), ...(householdMembers || [])]
+                .filter(({ id }) => whoDLA.includes(id))
+                .map(({ fullName }) => fullName)
                 .join(", ");
             },
           },
@@ -137,14 +183,13 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "who-disability",
-          Component: Checkboxes,
+          Component: ResidentCheckboxes,
           props: {
             name: "who-disability",
             legend: (
               <FieldsetLegend>{questions["who-disability"]}</FieldsetLegend>
             ) as React.ReactNode,
-            checkboxes: householdMemberCheckboxes,
-          } as CheckboxesProps,
+          },
           renderWhen(stepValues: {
             disability?: ComponentValue<ProcessDatabaseSchema, "disability">;
           }): boolean {
@@ -193,14 +238,13 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "who-pip",
-          Component: Checkboxes,
+          Component: ResidentCheckboxes,
           props: {
             name: "who-pip",
             legend: (
               <FieldsetLegend>{questions["who-pip"]}</FieldsetLegend>
             ) as React.ReactNode,
-            checkboxes: householdMemberCheckboxes,
-          } as CheckboxesProps,
+          },
           renderWhen(stepValues: {
             disability?: ComponentValue<ProcessDatabaseSchema, "disability">;
             "pip-or-dla"?: ComponentValue<ProcessDatabaseSchema, "disability">;
@@ -225,14 +269,13 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "who-dla",
-          Component: Checkboxes,
+          Component: ResidentCheckboxes,
           props: {
             name: "who-dla",
             legend: (
               <FieldsetLegend>{questions["who-dla"]}</FieldsetLegend>
             ) as React.ReactNode,
-            checkboxes: householdMemberCheckboxes,
-          } as CheckboxesProps,
+          },
           renderWhen(stepValues: {
             disability?: ComponentValue<ProcessDatabaseSchema, "disability">;
             "pip-or-dla"?: ComponentValue<ProcessDatabaseSchema, "disability">;

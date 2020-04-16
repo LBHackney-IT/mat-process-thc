@@ -21,7 +21,7 @@ interface BaseStepDefinition<
               renderValue(
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 value: any
-              ): React.ReactNode;
+              ): React.ReactNode | Promise<React.ReactNode>;
             }
           | undefined;
       };
