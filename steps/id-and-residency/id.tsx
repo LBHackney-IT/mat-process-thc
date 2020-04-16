@@ -48,6 +48,10 @@ const idTypeRadios = [
     label: "Unable to verify ID",
     value: "no id",
   },
+  {
+    label: "Tenant not present",
+    value: "tenant not present",
+  },
 ];
 
 const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
