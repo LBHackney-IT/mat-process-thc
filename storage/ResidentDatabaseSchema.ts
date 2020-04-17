@@ -104,4 +104,55 @@ export const residentStoreNames = Object.entries(storeNames)
     [] as StoreNames<ResidentDatabaseSchema["schema"]>[]
   );
 
+export const residentNotesPaths: {
+  [Name in StoreNames<ResidentDatabaseSchema["schema"]>]: string[] | never[];
+} = {
+  carer: ["notes"],
+  id: ["notes"],
+  nextOfKin: [],
+  otherSupport: ["notes"],
+  photo: ["notes"],
+  residency: ["notes"],
+  signature: [],
+};
+
+export const residentPostVisitActionMap: {
+  [storeName in StoreNames<ResidentDatabaseSchema["schema"]>]: {
+    [path: string]: { category: string; subcategory: string };
+  };
+} = {
+  id: {
+    notes: {
+      category: "19",
+      subcategory: "100000196",
+    },
+  },
+  residency: {
+    notes: {
+      category: "19",
+      subcategory: "100000196",
+    },
+  },
+  photo: {
+    notes: {
+      category: "19",
+      subcategory: "100000185",
+    },
+  },
+  carer: {
+    notes: {
+      category: "19",
+      subcategory: "100000582",
+    },
+  },
+  nextOfKin: {},
+  otherSupport: {
+    notes: {
+      category: "19",
+      subcategory: "100000300",
+    },
+  },
+  signature: {},
+};
+
 export default ResidentDatabaseSchema;

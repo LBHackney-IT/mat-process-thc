@@ -283,4 +283,214 @@ export const processStoreNames = Object.entries(storeNames)
     [] as StoreNames<ProcessDatabaseSchema["schema"]>[]
   );
 
+export const processNotesPaths: {
+  [Name in StoreNames<ProcessDatabaseSchema["schema"]>]: string[] | never[];
+} = {
+  lastModified: [],
+  submitted: [],
+  property: [
+    "rooms.notes",
+    "laminatedFlooring.notes",
+    "structuralChanges.notes",
+    "damage.notes",
+    "repairs.notes",
+    "roof.notes",
+    "loft.notes",
+    "garden.notes",
+    "storingMaterials.notes",
+    "fireExit.notes",
+    "smokeAlarm.notes",
+    "metalGates.notes",
+    "doorMats.notes",
+    "communalAreas.notes",
+    "pets.notes",
+    "antisocialBehaviour.notes",
+    "otherComments.notes",
+  ],
+  isUnannouncedVisit: ["notes"],
+  isVisitInside: ["notes"],
+  tenantsPresent: [],
+  household: [
+    "houseMovingSchemes.notes",
+    "memberChanges.notes",
+    "rentArrears.notes",
+    "housingBenefits.notes",
+    "incomeOfficer.notes",
+    "otherProperty.notes",
+  ],
+  // Is there even a notes field for homeCheck?
+  homeCheck: ["notes"],
+  healthConcerns: ["notes"],
+  disability: ["notes"],
+  supportNeeds: [
+    "residentSustainmentNotes",
+    "befriendingNotes",
+    "adultSafeguardingNotes",
+    "childrenYoungPeopleSafeguardingNotes",
+    "domesticSexualViolenceNotes",
+    "mentalHealth18To65Notes",
+    "mentalHealthOver65Notes",
+  ],
+  otherNotes: ["<this>"],
+  unableToEnter: [],
+};
+
+export const processPostVisitActionMap: {
+  [storeName in StoreNames<ProcessDatabaseSchema["schema"]>]: {
+    [path: string]: { category: string; subcategory: string };
+  };
+} = {
+  lastModified: {},
+  submitted: {},
+  property: {
+    "room.notes": {
+      category: "20",
+      subcategory: "100000170",
+    },
+    "laminatedFlooring.notes": {
+      category: "20",
+      subcategory: "100000184",
+    },
+    "structuralChanges.notes": {
+      category: "20",
+      subcategory: "100000199",
+    },
+    "damage.notes": {
+      category: "20",
+      subcategory: "100000179",
+    },
+    "repairs.notes": {
+      category: "20",
+      subcategory: "100000555",
+    },
+    "roof.notes": {
+      category: "20",
+      subcategory: "100000172",
+    },
+    "loft.notes": {
+      category: "20",
+      subcategory: "100000171",
+    },
+    "garden.notes": {
+      category: "20",
+      subcategory: "100000183",
+    },
+    "storingMaterials.notes": {
+      category: "20",
+      subcategory: "100000556",
+    },
+    "fireExit.notes": {
+      category: "20",
+      subcategory: "100000182",
+    },
+    "smokeAlarm.notes": {
+      category: "20",
+      subcategory: "100000194",
+    },
+    "metalGates.notes": {
+      category: "20",
+      subcategory: "100000188",
+    },
+    "doorMats.notes": {
+      category: "16",
+      subcategory: "100000181",
+    },
+    "communalAreas.notes": {
+      category: "16",
+      subcategory: "100000177",
+    },
+    "pets.notes": {
+      category: "18",
+      subcategory: "100000202",
+    },
+    "antisocialBehaviour.notes": {
+      category: "23",
+      subcategory: "100000302",
+    },
+    "otherComments.notes": {
+      category: "20",
+      subcategory: "100000303",
+    },
+  },
+  isUnannouncedVisit: {},
+  isVisitInside: {},
+  tenantsPresent: {},
+  household: {
+    "houseMovingSchemes.notes": {
+      category: "17",
+      subcategory: "100000301",
+    },
+    "memberChanges.notes": {
+      category: "17",
+      subcategory: "100000193",
+    },
+    "rentArrears.notes": {
+      category: "17",
+      subcategory: "100000107",
+    },
+    "housingBenefits.notes": {
+      category: "17",
+      subcategory: "100000055",
+    },
+    "incomeOfficer.notes": {
+      category: "17",
+      subcategory: "100000215",
+    },
+    "otherProperty.notes": {
+      category: "17",
+      subcategory: "100000204",
+    },
+  },
+  supportNeeds: {
+    residentSustainmentNotes: {
+      category: "23",
+      subcategory: "100000192",
+    },
+    befriendingNotes: {
+      category: "23",
+      subcategory: "100000174",
+    },
+    adultSafeguardingNotes: {
+      category: "23",
+      subcategory: "100000173",
+    },
+    childrenYoungPeopleSafeguardingNotes: {
+      category: "23",
+      subcategory: "100000175",
+    },
+    domesticSexualViolenceNotes: {
+      category: "23",
+      subcategory: "100000180",
+    },
+    mentalHealth18To65Notes: {
+      category: "23",
+      subcategory: "100000186",
+    },
+    mentalHealthOver65Notes: {
+      category: "23",
+      subcategory: "100000187",
+    },
+  },
+  disability: {
+    notes: {
+      category: "23",
+      subcategory: "100000560",
+    },
+  },
+  homeCheck: {},
+  healthConcerns: {
+    notes: {
+      category: "23",
+      subcategory: "100000200",
+    },
+  },
+  otherNotes: {
+    "<this>": {
+      category: "24",
+      subcategory: "100000209",
+    },
+  },
+  unableToEnter: {},
+};
+
 export default ProcessDatabaseSchema;

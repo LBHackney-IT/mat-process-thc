@@ -7,6 +7,7 @@ import Storage from "../storage/Storage";
 import basePath from "./basePath";
 import getProcessApiJwt from "./getProcessApiJwt";
 import getProcessRef from "./getProcessRef";
+import { persistPostVisitActions } from "./persistPostVisitActions";
 
 const persistProcessData = async (
   router: NextRouter,
@@ -74,6 +75,14 @@ const persistProcessData = async (
       }
     })
   );
+
+  if (!processJson || !processJson.processData) {
+    console.warn("No process data to persist");
+
+    return;
+  }
+
+  await persistPostVisitActions(processJson, processRef);
 
   const response = await fetch(
     `${basePath}/api/v1/processes/${processRef}/processData?jwt=${processApiJwt}`,
