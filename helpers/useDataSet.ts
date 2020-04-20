@@ -1,6 +1,5 @@
 import { useAsync, UseAsyncReturn } from "react-async-hook";
 import {
-  Database,
   NamedSchema,
   Schema,
   StoreKey,
@@ -8,7 +7,6 @@ import {
   StoreValue,
 } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
-
 import useDatabase from "./useDatabase";
 
 const useDataSet = <
@@ -28,8 +26,7 @@ const useDataSet = <
         StoreName
       >;
     }
-  | undefined,
-  [boolean, Database<DBSchema> | undefined, StoreName, string]
+  | undefined
 > => {
   const database = useDatabase(context);
 
@@ -51,7 +48,7 @@ const useDataSet = <
       return;
     }
 
-    return (
+    const values = (
       await Promise.all(
         keys.map(async (key) => ({ [key]: await db.get(storeName, key) }))
       )
@@ -63,7 +60,14 @@ const useDataSet = <
         >;
       }
     >((values, value) => ({ ...values, ...value }), {});
-  }, [database.loading, database.result, storeName, keys.join(",")]);
+
+    return values;
+  }, [
+    database.loading,
+    Boolean(database.result),
+    storeName,
+    JSON.stringify(keys),
+  ]);
 };
 
 export default useDataSet;
