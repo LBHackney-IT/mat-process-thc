@@ -9,6 +9,10 @@ export default [
   },
   {
     label: "Tenant not present",
+<<<<<<< HEAD
     value: "Tenant not present",
+=======
+    value: "tenant not present",
+>>>>>>> add radio button to photo page
   },
 ];
