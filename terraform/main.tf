@@ -67,9 +67,11 @@ module "development" {
 
     MAT_API_HOST     = "g6bw0g0ojk.execute-api.eu-west-2.amazonaws.com"
     MAT_API_BASE_URL = "/development/manage-a-tenancy-api"
+
+    WORKTRAY_URL = "https://hlbctrial-dev.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx"
   }
 
-  task_definition_environment_variable_count = 1
+  task_definition_environment_variable_count = 11
 
   task_definition_secrets      = {}
   task_definition_secret_count = 0
@@ -112,9 +114,11 @@ module "staging" {
 
     MAT_API_HOST     = "g6bw0g0ojk.execute-api.eu-west-2.amazonaws.com"
     MAT_API_BASE_URL = "/staging/manage-a-tenancy-api"
+
+    WORKTRAY_URL = "https://hlbctrial-test.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx"
   }
 
-  task_definition_environment_variable_count = 10
+  task_definition_environment_variable_count = 11
 
   task_definition_secrets = {
     PROCESS_API_JWT_SECRET  = "${local.parameter_store}/staging-thc-ROCESS_API_JWT_SECRET"
@@ -168,9 +172,11 @@ module "production" {
 
     MAT_API_HOST     = "g6bw0g0ojk.execute-api.eu-west-2.amazonaws.com"
     MAT_API_BASE_URL = "/production/manage-a-tenancy-api"
+
+    WORKTRAY_URL = "https://hlbctrial.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx"
   }
 
-  task_definition_environment_variable_count = 10
+  task_definition_environment_variable_count = 11
 
   task_definition_secrets = {
     PROCESS_API_JWT_SECRET  = "${local.parameter_store}/production-thc-ROCESS_API_JWT_SECRET"

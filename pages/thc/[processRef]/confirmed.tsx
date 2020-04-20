@@ -52,10 +52,11 @@ const ConfirmedPage: NextPage = () => {
       )}
       <Paragraph>
         <Button
+          disabled={!process.env.WORKTRAY_URL}
           onClick={(): void => {
-            location.assign(
-              "https://hlbctrial-dev.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx"
-            );
+            if (process.env.WORKTRAY_URL) {
+              location.assign(process.env.WORKTRAY_URL);
+            }
           }}
         >
           Return to my work tray

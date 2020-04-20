@@ -154,7 +154,9 @@ it("renders correctly", () => {
             className="lbh-body"
           >
             <button
+              aria-disabled={false}
               className="govuk-button lbh-button"
+              disabled={false}
               onClick={[Function]}
             >
               Return to my work tray

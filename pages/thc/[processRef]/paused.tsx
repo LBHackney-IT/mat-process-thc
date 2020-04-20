@@ -22,7 +22,16 @@ const PausedPage: NextPage = () => {
       </PageAnnouncement>
 
       <Paragraph>
-        <Button>Return to my work tray</Button>
+        <Button
+          disabled={!process.env.WORKTRAY_URL}
+          onClick={(): void => {
+            if (process.env.WORKTRAY_URL) {
+              location.assign(process.env.WORKTRAY_URL);
+            }
+          }}
+        >
+          Return to my work tray
+        </Button>
       </Paragraph>
     </MainLayout>
   );
