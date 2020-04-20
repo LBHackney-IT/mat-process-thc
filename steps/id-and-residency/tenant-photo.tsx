@@ -1,3 +1,4 @@
+import yesNoNotPresentRadio from "helpers/yesNoNotPresentRadio";
 import {
   FieldsetLegend,
   Heading,
@@ -19,7 +20,6 @@ import { ReviewNotes } from "../../components/ReviewNotes";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import slugForRepeatingStep from "../../helpers/slugForRepeatingStep";
-import yesNoRadios from "../../helpers/yesNoRadios";
 import { Notes } from "../../storage/DatabaseSchema";
 import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
 import Storage from "../../storage/Storage";
@@ -75,7 +75,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
                 Is the tenant willing to be photographed?
               </FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios,
+            radios: yesNoNotPresentRadio,
           },
           defaultValue: "",
           emptyValue: "",
