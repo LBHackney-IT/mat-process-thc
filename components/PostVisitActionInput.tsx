@@ -54,7 +54,7 @@ export const PostVisitActionInput: React.FunctionComponent<PostVisitActionInputP
         required={required}
         disabled={disabled}
         rows={rows}
-        value={currentNote?.value}
+        value={currentNote?.value || ""}
       />
       <LBHCheckboxes
         name={name}
