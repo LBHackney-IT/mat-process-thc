@@ -13,46 +13,17 @@ import {
   makeDynamic,
   StaticComponent,
 } from "remultiform/component-wrapper";
-import { TransactionMode } from "remultiform/database";
 import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { makeSubmit } from "../../components/makeSubmit";
 import failedAttemptReasonCheckboxes from "../../helpers/failedAttemptReasonCheckboxes";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import {
+  FailedAttempts,
+  persistUnableToEnterDate,
+} from "../../helpers/persistUnableToEnterDate";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import Storage from "../../storage/Storage";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
-
-const storeFirstVisitDate = async (): Promise<void> => {
-  const db = await Storage.ProcessContext?.database;
-
-  if (!db) {
-    console.error("Unable to find process database");
-
-    return;
-  }
-
-  const processRef = keyFromSlug()();
-  const date = new Date().toISOString();
-
-  await db.transaction(
-    ["unableToEnter"],
-    async (stores) => {
-      const unableToEnter =
-        (await stores.unableToEnter.get(processRef)) ||
-        ({} as ProcessDatabaseSchema["schema"]["unableToEnter"]["value"]);
-
-      await stores.unableToEnter.put(processRef, {
-        ...unableToEnter,
-        firstFailedAttempt: {
-          ...unableToEnter.firstFailedAttempt,
-          date,
-        },
-      });
-    },
-    TransactionMode.ReadWrite
-  );
-};
 
 const step = {
   title: PageTitles.FirstFailedAttempt,
@@ -65,7 +36,8 @@ const step = {
         {
           slug: nextSlug as PageSlugs | undefined,
           value: "Save and continue",
-          afterSubmit: storeFirstVisitDate,
+          afterSubmit: (): Promise<void> =>
+            persistUnableToEnterDate(FailedAttempts.First),
         },
         {
           cancel: true,
