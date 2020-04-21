@@ -1,5 +1,9 @@
-import { Checkboxes as LBHCheckboxes } from "lbh-frontend-react/components";
-import { Textarea } from "lbh-frontend-react/components/Textarea";
+import formatDate from "date-fns/format";
+import {
+  Checkboxes as LBHCheckboxes,
+  List,
+  Textarea,
+} from "lbh-frontend-react/components";
 import React from "react";
 import {
   DynamicComponent,
@@ -7,6 +11,7 @@ import {
 } from "remultiform/component-wrapper";
 import PropTypes from "../helpers/PropTypes";
 import { Notes } from "../storage/DatabaseSchema";
+import { Details } from "./Details";
 
 export type PostVisitActionInputProps = DynamicComponentControlledProps<
   Notes
@@ -41,6 +46,10 @@ export const PostVisitActionInput: React.FunctionComponent<PostVisitActionInputP
 
   const checkboxLabelId = `${name}-post-visit-action-label`;
   const checkboxInputId = `${name}-post-visit-action-input`;
+
+  const previousPostVisitActions = value.filter(
+    (note) => note.isPostVisitAction && note.createdAt
+  );
 
   return (
     <>
@@ -84,6 +93,26 @@ export const PostVisitActionInput: React.FunctionComponent<PostVisitActionInputP
           onValueChange(newValue);
         }}
       />
+      {previousPostVisitActions.length > 0 && (
+        <Details
+          summary={{
+            id: "post-visit-actions",
+            value: "Previous post-visit-actions",
+          }}
+        >
+          <List
+            items={previousPostVisitActions.map((note) => {
+              if (!note.createdAt) {
+                return;
+              }
+
+              return `${formatDate(new Date(note.createdAt), "d MMMM yyyy")}: ${
+                note.value
+              }`;
+            })}
+          />
+        </Details>
+      )}
     </>
   );
 };
