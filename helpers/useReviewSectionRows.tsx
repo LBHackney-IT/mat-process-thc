@@ -15,6 +15,7 @@ import {
   StoreValue,
 } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
+import { StepDefinition } from "remultiform/step";
 import { ReviewSectionRow } from "../components/ReviewSectionRow";
 import PageSlugs, { repeatingStepSlugs } from "../steps/PageSlugs";
 import ResidentDatabaseSchema, {
@@ -113,6 +114,66 @@ const findValue = <
   return (grandChild as unknown) as ComponentValue<DBSchema, Name>;
 };
 
+const getValues = <
+  DBSchema extends NamedSchema<string, number, Schema>,
+  Names extends StoreNames<DBSchema["schema"]>
+>(
+  step: StepDefinition<DBSchema, Names>,
+  values: Required<
+    ProcessStepDefinition<DBSchema, Names>
+  >["review"]["rows"][number]["values"]
+): Value<DBSchema, Names>[] => {
+  return step.componentWrappers
+    .map(({ key, databaseMap }) => ({ databaseMap, value: values[key] }))
+    .filter(({ databaseMap, value }) => Boolean(databaseMap && value))
+    .map(({ databaseMap, value }) => {
+      return {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        databaseMap: databaseMap!,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/unbound-method
+        renderValue: value!.renderValue,
+      };
+    });
+};
+
+const getImages = <
+  DBSchema extends NamedSchema<string, number, Schema>,
+  Names extends StoreNames<DBSchema["schema"]>
+>(
+  step: StepDefinition<DBSchema, Names>,
+  images: Required<
+    ProcessStepDefinition<DBSchema, Names>
+  >["review"]["rows"][number]["images"]
+): ComponentDatabaseMap<DBSchema, Names>[] => {
+  return [
+    step.componentWrappers.find(({ key, databaseMap }) =>
+      Boolean(databaseMap && images === key)
+    )?.databaseMap,
+  ].filter(Boolean) as ComponentDatabaseMap<DBSchema, Names>[];
+};
+
+const getRows = <
+  DBSchema extends NamedSchema<string, number, Schema>,
+  Names extends StoreNames<DBSchema["schema"]>
+>(
+  step: ProcessStepDefinition<DBSchema, Names>
+): Row<DBSchema, Names>[] => {
+  return step.review
+    ? step.review.rows.reduce<Row<DBSchema, Names>[]>(
+        (r, row) => [
+          ...r,
+          {
+            label: row.label,
+            values: getValues(step.step, row.values),
+            images: getImages(step.step, row.images),
+            changeSlug: step.step.slug as PageSlugs,
+          },
+        ],
+        []
+      )
+    : [];
+};
+
 const useRows = <
   DBSchema extends NamedSchema<string, number, Schema>,
   Names extends StoreNames<DBSchema["schema"]>
@@ -122,39 +183,7 @@ const useRows = <
   return useMemo(
     () =>
       steps.reduce<Row<DBSchema, Names>[]>(
-        (r, { review, step }) => [
-          ...r,
-          ...(review
-            ? review.rows.reduce<Row<DBSchema, Names>[]>(
-                (r, row) => [
-                  ...r,
-                  {
-                    label: row.label,
-                    values: step.componentWrappers
-                      .filter(({ key, databaseMap }) =>
-                        Boolean(databaseMap && row.values[key])
-                      )
-                      .map(({ key, databaseMap }) => {
-                        return {
-                          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                          databaseMap: databaseMap!,
-                          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/unbound-method
-                          renderValue: row.values[key]!.renderValue,
-                        };
-                      }),
-                    images: [
-                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                      step.componentWrappers.find(({ key, databaseMap }) =>
-                        Boolean(databaseMap && row.images === key)
-                      )?.databaseMap!,
-                    ].filter(Boolean),
-                    changeSlug: step.slug as PageSlugs,
-                  },
-                ],
-                []
-              )
-            : []),
-        ],
+        (rows, step) => [...rows, ...getRows(step)],
         []
       ),
     [steps]
