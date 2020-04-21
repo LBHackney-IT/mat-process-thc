@@ -123,6 +123,16 @@ const getValues = <
     ProcessStepDefinition<DBSchema, Names>
   >["review"]["rows"][number]["values"]
 ): Value<DBSchema, Names>[] => {
+  if (step.componentWrappers.length === 0) {
+    const valueValues = Object.values(values).filter(Boolean) as NonNullable<
+      typeof values[keyof typeof values]
+    >[];
+
+    return valueValues.filter(({ databaseMap, renderValue }) =>
+      Boolean(databaseMap && renderValue)
+    ) as Value<DBSchema, Names>[];
+  }
+
   return step.componentWrappers
     .map(({ key, databaseMap }) => ({ databaseMap, value: values[key] }))
     .filter(({ databaseMap, value }) => Boolean(databaseMap && value))
