@@ -51,7 +51,15 @@ const ConfirmedPage: NextPage = () => {
         </Paragraph>
       )}
       <Paragraph>
-        <Button>Return to my work tray</Button>
+        <Button
+          onClick={(): void => {
+            location.assign(
+              "https://hlbctrial-dev.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx"
+            );
+          }}
+        >
+          Return to my work tray
+        </Button>
       </Paragraph>
     </MainLayout>
   );
