@@ -1,3 +1,4 @@
+import formatDate from "date-fns/format";
 import {
   Heading,
   HeadingLevels,
@@ -55,7 +56,7 @@ const HouseholdMembersTable: React.FunctionComponent = () => {
                 ({ fullName, relationship, dateOfBirth }) => [
                   fullName,
                   relationship,
-                  dateOfBirth,
+                  formatDate(dateOfBirth, "d MMMM yyyy"),
                 ]
               )
             : [["None"]]
