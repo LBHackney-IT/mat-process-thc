@@ -15,19 +15,14 @@ import {
   StoreValue,
 } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
-import InternalLink from "../components/InternalLink";
-import Thumbnail from "../components/Thumbnail";
-import PageSlugs, {
-  repeatingStepSlugs,
-  urlObjectForSlug,
-} from "../steps/PageSlugs";
+import { ReviewSectionRow } from "../components/ReviewSectionRow";
+import PageSlugs, { repeatingStepSlugs } from "../steps/PageSlugs";
 import ResidentDatabaseSchema, {
   ResidentRef,
   residentStoreNames,
 } from "../storage/ResidentDatabaseSchema";
 import ProcessStepDefinition from "./ProcessStepDefinition";
 import slugWithId from "./slugWithId";
-import urlsForRouter from "./urlsForRouter";
 import useDatabase from "./useDatabase";
 
 interface Value<
@@ -343,7 +338,7 @@ const useReviewSectionRows = <
           rows.map(async (row) => {
             const values = (
               await Promise.all(
-                row.values.map((v) => {
+                row.values.map(async (v) => {
                   if (storeValues.loading || storeValues.result === undefined) {
                     return;
                   }
@@ -364,7 +359,7 @@ const useReviewSectionRows = <
                     return;
                   }
 
-                  return renderValue(value);
+                  return await renderValue(value);
                 })
               )
             ).filter(Boolean) as React.ReactNode[];
@@ -391,66 +386,23 @@ const useReviewSectionRows = <
               []
             );
 
+            if (!values.length && !images.length) {
+              return;
+            }
+
             const changeSlug =
               tenantId && repeatingStepSlugs.includes(row.changeSlug)
                 ? slugWithId(row.changeSlug, tenantId)
                 : row.changeSlug;
 
-            const changeLink = urlsForRouter(
-              router,
-              urlObjectForSlug(router, changeSlug, { review: "true" })
-            );
-
-            if (!values.length && !images.length) {
-              return;
-            }
-
             return {
               key: row.label,
               value: (
-                <div className="row">
-                  <div className="values">
-                    {values.map((value, index) => (
-                      <div key={index}>{value}</div>
-                    ))}
-                  </div>
-                  <div className="images">
-                    {images.map((src, index) => (
-                      <div key={index}>
-                        <Thumbnail
-                          src={src}
-                          alt="Thumbnail of an uploaded image"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                  <div className="change-link">
-                    <InternalLink url={changeLink.as}>Change</InternalLink>
-                  </div>
-                  <style jsx>{`
-                    .row {
-                      display: flex;
-                      justify-content: space-between;
-                      align-items: stretch;
-                    }
-
-                    .images {
-                      flex: 1;
-                      margin-left: 2em;
-                      display: flex;
-                      flex-wrap: wrap;
-                      justify-content: flex-end;
-                    }
-
-                    .images > div {
-                      margin-left: 0.2em;
-                    }
-
-                    .change-link {
-                      margin-left: 2em;
-                    }
-                  `}</style>
-                </div>
+                <ReviewSectionRow
+                  values={values}
+                  images={images}
+                  changeSlug={changeSlug}
+                />
               ),
             };
           })
