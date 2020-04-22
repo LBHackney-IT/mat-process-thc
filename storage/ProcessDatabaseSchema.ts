@@ -238,6 +238,12 @@ type ProcessDatabaseSchema = NamedSchema<
           notes: string;
           date: string;
         };
+        thirdFailedAttempt: {
+          reasons: string[];
+          actions: string[];
+          notes: string;
+          date: string;
+        };
       };
     };
   }
@@ -246,6 +252,7 @@ type ProcessDatabaseSchema = NamedSchema<
 export enum UnableToEnterPropertyNames {
   First = "firstFailedAttempt",
   Second = "secondFailedAttempt",
+  Third = "thirdFailedAttempt",
 }
 
 export interface ProcessJson {

@@ -10,6 +10,7 @@ import { SubmitButtonProps, SubmitButtons } from "./SubmitButtons";
 const useUnableToEnterSlug = ():
   | PageSlugs.FirstFailedAttempt
   | PageSlugs.SecondFailedAttempt
+  | PageSlugs.ThirdFailedAttempt
   | undefined => {
   const router = useRouter();
   const processRef = getProcessRef(router);
@@ -35,6 +36,14 @@ const useUnableToEnterSlug = ():
 
   if (!madeSecondAttempt) {
     return PageSlugs.SecondFailedAttempt;
+  }
+
+  const madeThirdAttempt = Boolean(
+    unableToEnter.result?.thirdFailedAttempt?.date
+  );
+
+  if (!madeThirdAttempt) {
+    return PageSlugs.ThirdFailedAttempt;
   }
 };
 
