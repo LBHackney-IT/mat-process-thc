@@ -100,7 +100,7 @@ it("renders correctly", () => {
                
               <a
                 className="govuk-link lbh-link"
-                href="https://docs.google.com/forms/d/e/1FAIpQLSdpefefhPQJ9fSu-fX6-Uvyanppp480ZRUNAe5dQAr8F2dexw/viewform"
+                href="https://diversity.form"
                 target="_blank"
               >
                 feedback
@@ -144,7 +144,9 @@ it("renders correctly", () => {
             className="lbh-body"
           >
             <button
+              aria-disabled={false}
               className="govuk-button lbh-button"
+              disabled={false}
               onClick={[Function]}
             >
               Go to diversity monitoring form
@@ -154,7 +156,9 @@ it("renders correctly", () => {
             className="lbh-body"
           >
             <button
+              aria-disabled={false}
               className="govuk-button lbh-button"
+              disabled={false}
               onClick={[Function]}
             >
               Return to my work tray

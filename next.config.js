@@ -12,6 +12,8 @@ const dev = process.env.NODE_ENV !== "production";
 const env = {
   ENVIRONMENT_NAME: process.env.ENVIRONMENT_NAME,
   PROCESS_NAME: process.env.PROCESS_NAME,
+  WORKTRAY_URL: process.env.WORKTRAY_URL,
+  DIVERSITY_FORM_URL: process.env.DIVERSITY_FORM_URL,
 };
 
 if (dev) {

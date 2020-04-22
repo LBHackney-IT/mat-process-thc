@@ -250,7 +250,7 @@ it("renders correctly when online", async () => {
                
               <a
                 className="govuk-link lbh-link"
-                href="https://docs.google.com/forms/d/e/1FAIpQLSdpefefhPQJ9fSu-fX6-Uvyanppp480ZRUNAe5dQAr8F2dexw/viewform"
+                href="https://diversity.form"
                 target="_blank"
               >
                 feedback
@@ -567,7 +567,7 @@ Array [
            
           <a
             className="govuk-link lbh-link"
-            href="https://docs.google.com/forms/d/e/1FAIpQLSdpefefhPQJ9fSu-fX6-Uvyanppp480ZRUNAe5dQAr8F2dexw/viewform"
+            href="https://diversity.form"
             target="_blank"
           >
             feedback

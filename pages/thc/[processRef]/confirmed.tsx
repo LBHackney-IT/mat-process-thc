@@ -40,10 +40,11 @@ const ConfirmedPage: NextPage = () => {
       {isManagerPage || (
         <Paragraph>
           <Button
+            disabled={!process.env.DIVERSITY_FORM_URL}
             onClick={(): void => {
-              location.assign(
-                "https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform?usp=sf_link"
-              );
+              if (process.env.DIVERSITY_FORM_URL) {
+                location.assign(process.env.DIVERSITY_FORM_URL);
+              }
             }}
           >
             Go to diversity monitoring form
@@ -52,10 +53,11 @@ const ConfirmedPage: NextPage = () => {
       )}
       <Paragraph>
         <Button
+          disabled={!process.env.WORKTRAY_URL}
           onClick={(): void => {
-            location.assign(
-              "https://hlbctrial-dev.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx"
-            );
+            if (process.env.WORKTRAY_URL) {
+              location.assign(process.env.WORKTRAY_URL);
+            }
           }}
         >
           Return to my work tray
