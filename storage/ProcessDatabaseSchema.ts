@@ -243,6 +243,11 @@ type ProcessDatabaseSchema = NamedSchema<
   }
 >;
 
+export enum UnableToEnterPropertyNames {
+  First = "firstFailedAttempt",
+  Second = "secondFailedAttempt",
+}
+
 export interface ProcessJson {
   dateCreated: string;
   dateLastModified?: string;

@@ -18,13 +18,12 @@ import { makeSubmit } from "../../components/makeSubmit";
 import PreviousAttemptsAnnouncement from "../../components/PreviousAttemptsAnnouncement";
 import failedAttemptReasonCheckboxes from "../../helpers/failedAttemptReasonCheckboxes";
 import keyFromSlug from "../../helpers/keyFromSlug";
-import {
-  FailedAttempts,
-  persistUnableToEnterDate,
-} from "../../helpers/persistUnableToEnterDate";
+import { persistUnableToEnterDate } from "../../helpers/persistUnableToEnterDate";
 import PageSlugs from "../../steps/PageSlugs";
 import PageTitles from "../../steps/PageTitles";
-import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
+import ProcessDatabaseSchema, {
+  UnableToEnterPropertyNames,
+} from "../../storage/ProcessDatabaseSchema";
 
 const step = {
   title: PageTitles.SecondFailedAttempt,
@@ -38,7 +37,7 @@ const step = {
           slug: nextSlug as PageSlugs | undefined,
           value: "Save and continue",
           afterSubmit: (): Promise<void> =>
-            persistUnableToEnterDate(FailedAttempts.Second),
+            persistUnableToEnterDate(UnableToEnterPropertyNames.Second),
         },
         {
           cancel: true,
