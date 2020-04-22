@@ -74,8 +74,19 @@ module "development" {
 
   task_definition_environment_variable_count = 11
 
-  task_definition_secrets      = {}
-  task_definition_secret_count = 0
+  task_definition_secrets = {
+    PROCESS_API_JWT_SECRET  = "${local.parameter_store}/development-thc-ROCESS_API_JWT_SECRET"
+    PROCESS_API_KEY         = "${local.parameter_store}/development-thc-PROCESS_API_KEY"
+    MAT_API_JWT_SECRET      = "${local.parameter_store}/development-thc-MAT_API_JWT_SECRET"
+    MAT_API_DATA_SHARED_KEY = "${local.parameter_store}/development-thc-MAT_API_DATA_SHARED_KEY"
+    MAT_API_DATA_SALT       = "${local.parameter_store}/development-thc-MAT_API_DATA_SALT"
+    MAT_API_DATA_ITERATIONS = "${local.parameter_store}/development-thc-MAT_API_DATA_ITERATIONS"
+    MAT_API_DATA_KEY_SIZE   = "${local.parameter_store}/development-thc-MAT_API_DATA_KEY_SIZE"
+    MAT_API_DATA_ALGORITHM  = "${local.parameter_store}/development-thc-MAT_API_DATA_ALGORITHM"
+    MAT_API_DATA_IV         = "${local.parameter_store}/development-thc-MAT_API_DATA_IV"
+  }
+
+  task_definition_secret_count = 9
 }
 
 module "staging" {
