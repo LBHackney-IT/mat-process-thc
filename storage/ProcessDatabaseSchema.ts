@@ -243,6 +243,7 @@ type ProcessDatabaseSchema = NamedSchema<
           actions: string[];
           notes: string;
           date: string;
+          needsAppointmentLetterReminder: boolean;
         };
       };
     };

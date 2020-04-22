@@ -16,6 +16,7 @@ import {
 import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { makeSubmit } from "../../components/makeSubmit";
 import PreviousAttemptsAnnouncement from "../../components/PreviousAttemptsAnnouncement";
+import SingleCheckbox from "../../components/SingleCheckbox";
 import failedAttemptActionCheckboxes from "../../helpers/failedAttemptActionCheckboxes";
 import failedAttemptReasonCheckboxes from "../../helpers/failedAttemptReasonCheckboxes";
 import keyFromSlug from "../../helpers/keyFromSlug";
@@ -140,6 +141,26 @@ const step = {
             storeName: "unableToEnter",
             key: keyFromSlug(false),
             property: ["thirdFailedAttempt", "notes"],
+          }),
+        })
+      ),
+      ComponentWrapper.wrapDynamic(
+        new DynamicComponent({
+          key: "appointment-letter-reminder",
+          Component: SingleCheckbox,
+          props: {
+            name: "appointment-letter-reminder",
+            label: "Create reminder to send appointment letter (T&HC2)",
+          },
+          defaultValue: false,
+          emptyValue: false,
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "unableToEnter"
+          >({
+            storeName: "unableToEnter",
+            key: keyFromSlug(false),
+            property: ["thirdFailedAttempt", "needsAppointmentLetterReminder"],
           }),
         })
       ),
