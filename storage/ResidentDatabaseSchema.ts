@@ -121,6 +121,7 @@ export const residentNotesPaths: {
   otherSupport: ["notes"],
   photo: ["notes"],
   residency: ["notes"],
+  disabilities: [],
   signature: [],
 };
 
@@ -160,6 +161,7 @@ export const residentPostVisitActionMap: {
       subcategory: "100000300",
     },
   },
+  disabilities: {},
   signature: {},
 };
 
