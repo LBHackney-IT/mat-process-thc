@@ -413,7 +413,13 @@ export const processPostVisitActionMap: {
     },
   },
   isUnannouncedVisit: {},
-  isVisitInside: {},
+  isVisitInside: {
+    // needs updating - this wasn't on the spreadsheet
+    notes: {
+      category: "17",
+      subcategory: "100000301",
+    },
+  },
   tenantsPresent: {},
   household: {
     "houseMovingSchemes.notes": {
