@@ -4,10 +4,7 @@ import { DatabaseContext } from "remultiform/database-context";
 
 const useDatabase = <S extends NamedSchema<string, number, Schema>>(
   context: DatabaseContext<S> | undefined
-): UseAsyncReturn<
-  Database<S> | undefined,
-  (DatabaseContext<S> | undefined)[]
-> => {
+): UseAsyncReturn<Database<S> | undefined> => {
   return useAsync(async () => {
     if (!context) {
       return;
@@ -16,7 +13,7 @@ const useDatabase = <S extends NamedSchema<string, number, Schema>>(
     const db = await context.database;
 
     return db;
-  }, [context]);
+  }, [Boolean(context)]);
 };
 
 export default useDatabase;

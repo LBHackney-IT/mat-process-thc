@@ -390,6 +390,9 @@ const processData = {
         role: "other support role",
         phoneNumber: "0123455789",
       },
+      disabilities: {
+        what: ["vision", "hearing"],
+      },
       signature: "",
     },
   },
@@ -1356,6 +1359,22 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
             /\s/g,
             "-"
           )}`,
+        })
+      ).click();
+      (
+        await browser!.waitForEnabledElement({
+          id: `what-disabilities-${processData.disability.whoDisability[0].replace(
+            /\s/g,
+            "-"
+          )}-${processData.residents[presentTenantRef].disabilities.what[0]}`,
+        })
+      ).click();
+      (
+        await browser!.waitForEnabledElement({
+          id: `what-disabilities-${processData.disability.whoDisability[0].replace(
+            /\s/g,
+            "-"
+          )}-${processData.residents[presentTenantRef].disabilities.what[1]}`,
         })
       ).click();
       (

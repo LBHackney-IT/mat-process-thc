@@ -22,6 +22,7 @@ interface BaseStepDefinition<
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 value: any
               ): React.ReactNode | Promise<React.ReactNode>;
+              databaseMap?: ComponentDatabaseMap<DBSchema, Names>;
             }
           | undefined;
       };

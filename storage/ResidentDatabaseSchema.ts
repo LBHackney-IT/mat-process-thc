@@ -75,6 +75,13 @@ type ResidentDatabaseSchema = NamedSchema<
       };
     };
 
+    disabilities: {
+      key: ResidentRef;
+      value: {
+        what: string[];
+      };
+    };
+
     signature: {
       key: ResidentRef;
       value: string;
@@ -91,6 +98,7 @@ const storeNames: {
   nextOfKin: true,
   carer: true,
   otherSupport: true,
+  disabilities: true,
   signature: true,
 };
 

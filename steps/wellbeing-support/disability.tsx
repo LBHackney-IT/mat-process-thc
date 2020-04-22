@@ -1,19 +1,6 @@
-import { FieldsetLegend } from "lbh-frontend-react/components";
 import router from "next/router";
 import React from "react";
-import {
-  ComponentDatabaseMap,
-  ComponentValue,
-  ComponentWrapper,
-  DynamicComponent,
-} from "remultiform/component-wrapper";
-import { makeSubmit } from "../../components/makeSubmit";
-import {
-  PostVisitActionInput,
-  PostVisitActionInputProps,
-} from "../../components/PostVisitActionInput";
-import { RadioButtons } from "../../components/RadioButtons";
-import ResidentCheckboxes from "../../components/ResidentCheckboxes";
+import { ComponentDatabaseMap } from "remultiform/component-wrapper";
 import { ReviewNotes } from "../../components/ReviewNotes";
 import getProcessRef from "../../helpers/getProcessRef";
 import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
@@ -26,7 +13,7 @@ import Storage from "../../storage/Storage";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const questions = {
+export const disabilityQuestions = {
   disability: "Does anyone in the household have a disability?",
   "who-disability": "Who has a disability?",
   "pip-or-dla":
@@ -35,18 +22,77 @@ const questions = {
   "who-dla": "Who gets DLA?",
 };
 
+export const disabilityCheckboxes = [
+  {
+    label: "Hearing",
+    value: "hearing",
+  },
+  {
+    label: "Vision",
+    value: "vision",
+  },
+  {
+    label: "Mobility",
+    value: "mobility",
+  },
+  {
+    label: "Speech",
+    value: "speech",
+  },
+  {
+    label: "Mental illness",
+    value: "mental illness",
+  },
+  {
+    label: "Learning difficuties",
+    value: "learning difficulties",
+  },
+  {
+    label: "Physical co-ordination",
+    value: "physical coordination",
+  },
+  {
+    label: "Reduced physical capability",
+    value: "reduced physical capability",
+  },
+  {
+    label: "Physical disability",
+    value: "physical disability",
+  },
+  {
+    label: "Long term illness",
+    value: "illness",
+  },
+  {
+    label: "Other disability",
+    value: "other",
+  },
+  {
+    label: "Prefer not to say",
+    value: "prefer not to say",
+  },
+];
+
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
   title: PageTitles.Disability,
   heading: "Disability",
   review: {
     rows: [
       {
-        label: questions["disability"],
+        label: disabilityQuestions["disability"],
         values: {
           disability: {
             renderValue(anyDisability: string): React.ReactNode {
               return getRadioLabelFromValue(yesNoRadios, anyDisability);
             },
+            databaseMap: new ComponentDatabaseMap<
+              ProcessDatabaseSchema,
+              "disability"
+            >({
+              storeName: "disability",
+              key: keyFromSlug(),
+              property: ["value"],
+            }),
           },
           "who-disability": {
             async renderValue(
@@ -72,21 +118,45 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
                 .map(({ fullName }) => fullName)
                 .join(", ");
             },
+            databaseMap: new ComponentDatabaseMap<
+              ProcessDatabaseSchema,
+              "disability"
+            >({
+              storeName: "disability",
+              key: keyFromSlug(),
+              property: ["whoDisability"],
+            }),
           },
           "disability-notes": {
             renderValue(notes: Notes): React.ReactNode {
               return <ReviewNotes notes={notes} />;
             },
+            databaseMap: new ComponentDatabaseMap<
+              ProcessDatabaseSchema,
+              "disability"
+            >({
+              storeName: "disability",
+              key: keyFromSlug(),
+              property: ["notes"],
+            }),
           },
         },
       },
       {
-        label: questions["pip-or-dla"],
+        label: disabilityQuestions["pip-or-dla"],
         values: {
           "pip-or-dla": {
             renderValue(pipOrDLA: string): React.ReactNode {
               return getRadioLabelFromValue(yesNoRadios, pipOrDLA);
             },
+            databaseMap: new ComponentDatabaseMap<
+              ProcessDatabaseSchema,
+              "disability"
+            >({
+              storeName: "disability",
+              key: keyFromSlug(),
+              property: ["pipOrDLA"],
+            }),
           },
         },
       },
@@ -115,6 +185,14 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
                 .map(({ fullName }) => fullName)
                 .join(", ");
             },
+            databaseMap: new ComponentDatabaseMap<
+              ProcessDatabaseSchema,
+              "disability"
+            >({
+              storeName: "disability",
+              key: keyFromSlug(),
+              property: ["whoPIP"],
+            }),
           },
         },
       },
@@ -143,6 +221,14 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
                 .map(({ fullName }) => fullName)
                 .join(", ");
             },
+            databaseMap: new ComponentDatabaseMap<
+              ProcessDatabaseSchema,
+              "disability"
+            >({
+              storeName: "disability",
+              key: keyFromSlug(),
+              property: ["whoDLA"],
+            }),
           },
         },
       },
@@ -150,182 +236,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
   },
   step: {
     slug: PageSlugs.Disability,
-    nextSlug: PageSlugs.SupportNeeds,
-    submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
-      makeSubmit({
-        slug: nextSlug as PageSlugs | undefined,
-        value: "Save and continue",
-      }),
-    componentWrappers: [
-      ComponentWrapper.wrapDynamic(
-        new DynamicComponent({
-          key: "disability",
-          Component: RadioButtons,
-          props: {
-            name: "disability",
-            legend: (
-              <FieldsetLegend>{questions["disability"]}</FieldsetLegend>
-            ) as React.ReactNode,
-            radios: yesNoRadios,
-          },
-          defaultValue: "",
-          emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "disability"
-          >({
-            storeName: "disability",
-            key: keyFromSlug(),
-            property: ["value"],
-          }),
-        })
-      ),
-      ComponentWrapper.wrapDynamic(
-        new DynamicComponent({
-          key: "who-disability",
-          Component: ResidentCheckboxes,
-          props: {
-            name: "who-disability",
-            legend: (
-              <FieldsetLegend>{questions["who-disability"]}</FieldsetLegend>
-            ) as React.ReactNode,
-          },
-          renderWhen(stepValues: {
-            disability?: ComponentValue<ProcessDatabaseSchema, "disability">;
-          }): boolean {
-            return stepValues["disability"] === "yes";
-          },
-          defaultValue: [],
-          emptyValue: [] as string[],
-          databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "disability"
-          >({
-            storeName: "disability",
-            key: keyFromSlug(),
-            property: ["whoDisability"],
-          }),
-        })
-      ),
-      ComponentWrapper.wrapDynamic(
-        new DynamicComponent({
-          key: "pip-or-dla",
-          Component: RadioButtons,
-          props: {
-            name: "pip-or-dla",
-            legend: (
-              <FieldsetLegend>{questions["pip-or-dla"]}</FieldsetLegend>
-            ) as React.ReactNode,
-            radios: yesNoRadios,
-          },
-          renderWhen(stepValues: {
-            disability?: ComponentValue<ProcessDatabaseSchema, "disability">;
-          }): boolean {
-            return stepValues["disability"] === "yes";
-          },
-          defaultValue: "",
-          emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "disability"
-          >({
-            storeName: "disability",
-            key: keyFromSlug(),
-            property: ["pipOrDLA"],
-          }),
-        })
-      ),
-      ComponentWrapper.wrapDynamic(
-        new DynamicComponent({
-          key: "who-pip",
-          Component: ResidentCheckboxes,
-          props: {
-            name: "who-pip",
-            legend: (
-              <FieldsetLegend>{questions["who-pip"]}</FieldsetLegend>
-            ) as React.ReactNode,
-          },
-          renderWhen(stepValues: {
-            disability?: ComponentValue<ProcessDatabaseSchema, "disability">;
-            "pip-or-dla"?: ComponentValue<ProcessDatabaseSchema, "disability">;
-          }): boolean {
-            return (
-              stepValues["disability"] === "yes" &&
-              stepValues["pip-or-dla"] === "yes"
-            );
-          },
-          defaultValue: [],
-          emptyValue: [] as string[],
-          databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "disability"
-          >({
-            storeName: "disability",
-            key: keyFromSlug(),
-            property: ["whoPIP"],
-          }),
-        })
-      ),
-      ComponentWrapper.wrapDynamic(
-        new DynamicComponent({
-          key: "who-dla",
-          Component: ResidentCheckboxes,
-          props: {
-            name: "who-dla",
-            legend: (
-              <FieldsetLegend>{questions["who-dla"]}</FieldsetLegend>
-            ) as React.ReactNode,
-          },
-          renderWhen(stepValues: {
-            disability?: ComponentValue<ProcessDatabaseSchema, "disability">;
-            "pip-or-dla"?: ComponentValue<ProcessDatabaseSchema, "disability">;
-          }): boolean {
-            return (
-              stepValues["disability"] === "yes" &&
-              stepValues["pip-or-dla"] === "yes"
-            );
-          },
-          defaultValue: [],
-          emptyValue: [] as string[],
-          databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "disability"
-          >({
-            storeName: "disability",
-            key: keyFromSlug(),
-            property: ["whoDLA"],
-          }),
-        })
-      ),
-      ComponentWrapper.wrapDynamic(
-        new DynamicComponent({
-          key: "disability-notes",
-          Component: PostVisitActionInput,
-          props: {
-            name: "disability-notes",
-            label: {
-              value: "Add note about any disability concerns if necessary.",
-            },
-            rows: 4,
-          } as PostVisitActionInputProps,
-          renderWhen(stepValues: {
-            disability?: ComponentValue<ProcessDatabaseSchema, "disability">;
-          }): boolean {
-            return stepValues["disability"] === "yes";
-          },
-          defaultValue: [] as Notes,
-          emptyValue: [] as Notes,
-          databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "disability"
-          >({
-            storeName: "disability",
-            key: keyFromSlug(),
-            property: ["notes"],
-          }),
-        })
-      ),
-    ],
+    componentWrappers: [],
   },
 };
 

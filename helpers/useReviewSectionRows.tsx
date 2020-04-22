@@ -15,19 +15,15 @@ import {
   StoreValue,
 } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
-import InternalLink from "../components/InternalLink";
-import Thumbnail from "../components/Thumbnail";
-import PageSlugs, {
-  repeatingStepSlugs,
-  urlObjectForSlug,
-} from "../steps/PageSlugs";
+import { StepDefinition } from "remultiform/step";
+import { ReviewSectionRow } from "../components/ReviewSectionRow";
+import PageSlugs, { repeatingStepSlugs } from "../steps/PageSlugs";
 import ResidentDatabaseSchema, {
   ResidentRef,
   residentStoreNames,
 } from "../storage/ResidentDatabaseSchema";
 import ProcessStepDefinition from "./ProcessStepDefinition";
 import slugWithId from "./slugWithId";
-import urlsForRouter from "./urlsForRouter";
 import useDatabase from "./useDatabase";
 
 interface Value<
@@ -118,6 +114,76 @@ const findValue = <
   return (grandChild as unknown) as ComponentValue<DBSchema, Name>;
 };
 
+const getValues = <
+  DBSchema extends NamedSchema<string, number, Schema>,
+  Names extends StoreNames<DBSchema["schema"]>
+>(
+  step: StepDefinition<DBSchema, Names>,
+  values: Required<
+    ProcessStepDefinition<DBSchema, Names>
+  >["review"]["rows"][number]["values"]
+): Value<DBSchema, Names>[] => {
+  if (step.componentWrappers.length === 0) {
+    const valueValues = Object.values(values).filter(Boolean) as NonNullable<
+      typeof values[keyof typeof values]
+    >[];
+
+    return valueValues.filter(({ databaseMap, renderValue }) =>
+      Boolean(databaseMap && renderValue)
+    ) as Value<DBSchema, Names>[];
+  }
+
+  return step.componentWrappers
+    .map(({ key, databaseMap }) => ({ databaseMap, value: values[key] }))
+    .filter(({ databaseMap, value }) => Boolean(databaseMap && value))
+    .map(({ databaseMap, value }) => {
+      return {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        databaseMap: databaseMap!,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/unbound-method
+        renderValue: value!.renderValue,
+      };
+    });
+};
+
+const getImages = <
+  DBSchema extends NamedSchema<string, number, Schema>,
+  Names extends StoreNames<DBSchema["schema"]>
+>(
+  step: StepDefinition<DBSchema, Names>,
+  images: Required<
+    ProcessStepDefinition<DBSchema, Names>
+  >["review"]["rows"][number]["images"]
+): ComponentDatabaseMap<DBSchema, Names>[] => {
+  return [
+    step.componentWrappers.find(({ key, databaseMap }) =>
+      Boolean(databaseMap && images === key)
+    )?.databaseMap,
+  ].filter(Boolean) as ComponentDatabaseMap<DBSchema, Names>[];
+};
+
+const getRows = <
+  DBSchema extends NamedSchema<string, number, Schema>,
+  Names extends StoreNames<DBSchema["schema"]>
+>(
+  step: ProcessStepDefinition<DBSchema, Names>
+): Row<DBSchema, Names>[] => {
+  return step.review
+    ? step.review.rows.reduce<Row<DBSchema, Names>[]>(
+        (r, row) => [
+          ...r,
+          {
+            label: row.label,
+            values: getValues(step.step, row.values),
+            images: getImages(step.step, row.images),
+            changeSlug: step.step.slug as PageSlugs,
+          },
+        ],
+        []
+      )
+    : [];
+};
+
 const useRows = <
   DBSchema extends NamedSchema<string, number, Schema>,
   Names extends StoreNames<DBSchema["schema"]>
@@ -127,39 +193,7 @@ const useRows = <
   return useMemo(
     () =>
       steps.reduce<Row<DBSchema, Names>[]>(
-        (r, { review, step }) => [
-          ...r,
-          ...(review
-            ? review.rows.reduce<Row<DBSchema, Names>[]>(
-                (r, row) => [
-                  ...r,
-                  {
-                    label: row.label,
-                    values: step.componentWrappers
-                      .filter(({ key, databaseMap }) =>
-                        Boolean(databaseMap && row.values[key])
-                      )
-                      .map(({ key, databaseMap }) => {
-                        return {
-                          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                          databaseMap: databaseMap!,
-                          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/unbound-method
-                          renderValue: row.values[key]!.renderValue,
-                        };
-                      }),
-                    images: [
-                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                      step.componentWrappers.find(({ key, databaseMap }) =>
-                        Boolean(databaseMap && row.images === key)
-                      )?.databaseMap!,
-                    ].filter(Boolean),
-                    changeSlug: step.slug as PageSlugs,
-                  },
-                ],
-                []
-              )
-            : []),
-        ],
+        (rows, step) => [...rows, ...getRows(step)],
         []
       ),
     [steps]
@@ -343,7 +377,7 @@ const useReviewSectionRows = <
           rows.map(async (row) => {
             const values = (
               await Promise.all(
-                row.values.map((v) => {
+                row.values.map(async (v) => {
                   if (storeValues.loading || storeValues.result === undefined) {
                     return;
                   }
@@ -364,7 +398,7 @@ const useReviewSectionRows = <
                     return;
                   }
 
-                  return renderValue(value);
+                  return await renderValue(value);
                 })
               )
             ).filter(Boolean) as React.ReactNode[];
@@ -391,66 +425,23 @@ const useReviewSectionRows = <
               []
             );
 
+            if (!values.length && !images.length) {
+              return;
+            }
+
             const changeSlug =
               tenantId && repeatingStepSlugs.includes(row.changeSlug)
                 ? slugWithId(row.changeSlug, tenantId)
                 : row.changeSlug;
 
-            const changeLink = urlsForRouter(
-              router,
-              urlObjectForSlug(router, changeSlug, { review: "true" })
-            );
-
-            if (!values.length && !images.length) {
-              return;
-            }
-
             return {
               key: row.label,
               value: (
-                <div className="row">
-                  <div className="values">
-                    {values.map((value, index) => (
-                      <div key={index}>{value}</div>
-                    ))}
-                  </div>
-                  <div className="images">
-                    {images.map((src, index) => (
-                      <div key={index}>
-                        <Thumbnail
-                          src={src}
-                          alt="Thumbnail of an uploaded image"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                  <div className="change-link">
-                    <InternalLink url={changeLink.as}>Change</InternalLink>
-                  </div>
-                  <style jsx>{`
-                    .row {
-                      display: flex;
-                      justify-content: space-between;
-                      align-items: stretch;
-                    }
-
-                    .images {
-                      flex: 1;
-                      margin-left: 2em;
-                      display: flex;
-                      flex-wrap: wrap;
-                      justify-content: flex-end;
-                    }
-
-                    .images > div {
-                      margin-left: 0.2em;
-                    }
-
-                    .change-link {
-                      margin-left: 2em;
-                    }
-                  `}</style>
-                </div>
+                <ReviewSectionRow
+                  values={values}
+                  images={images}
+                  changeSlug={changeSlug}
+                />
               ),
             };
           })

@@ -106,7 +106,7 @@ const slugs: {
   "other-comments": true,
   "home-check": true,
   health: true,
-  disability: true,
+  disability: false,
   "support-needs": true,
   review: false,
   submit: false,
