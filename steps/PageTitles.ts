@@ -61,6 +61,7 @@ enum PageTitles {
 
   // Unable to enter
   FirstFailedAttempt = "First failed attempt",
+  SecondFailedAttempt = "Second failed attempt",
 }
 
 export default PageTitles;

@@ -11,6 +11,7 @@ import {
 } from "remultiform/component-wrapper";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
+import { makeUnableToEnterSubmit } from "../../components/makeUnableToEnterSubmit";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
@@ -23,16 +24,10 @@ const step = {
     slug: PageSlugs.Outside,
     nextSlug: PageSlugs.Start,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
-      makeSubmit([
-        {
-          slug: nextSlug as PageSlugs | undefined,
-          value: "Enter the property",
-        },
-        {
-          slug: PageSlugs.FirstFailedAttempt,
-          value: "Unable to enter property",
-        },
-      ]),
+      makeUnableToEnterSubmit({
+        slug: nextSlug as PageSlugs | undefined,
+        value: "Enter the property",
+      }),
     componentWrappers: [
       ComponentWrapper.wrapStatic(
         new StaticComponent({
