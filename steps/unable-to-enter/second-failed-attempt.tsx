@@ -1,14 +1,10 @@
-import formatDate from "date-fns/format";
 import { Heading } from "lbh-frontend-react";
 import {
   FieldsetLegend,
   HeadingLevels,
   LabelProps,
-  PageAnnouncement,
-  SummaryList,
   Textarea,
 } from "lbh-frontend-react/components";
-import { useRouter } from "next/router";
 import React from "react";
 import {
   ComponentDatabaseMap,
@@ -19,61 +15,16 @@ import {
 } from "remultiform/component-wrapper";
 import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { makeSubmit } from "../../components/makeSubmit";
+import PreviousAttemptsAnnouncement from "../../components/PreviousAttemptsAnnouncement";
 import failedAttemptReasonCheckboxes from "../../helpers/failedAttemptReasonCheckboxes";
-import getProcessRef from "../../helpers/getProcessRef";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import {
   FailedAttempts,
   persistUnableToEnterDate,
 } from "../../helpers/persistUnableToEnterDate";
-import useDataValue from "../../helpers/useDataValue";
 import PageSlugs from "../../steps/PageSlugs";
 import PageTitles from "../../steps/PageTitles";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
-import Storage from "../../storage/Storage";
-
-const PreviousFailedAttemptsAnnouncement: React.FunctionComponent = () => {
-  const router = useRouter();
-  const processRef = getProcessRef(router);
-  const firstFailedAttempt = useDataValue(
-    Storage.ProcessContext,
-    "unableToEnter",
-    processRef,
-    (values) =>
-      processRef ? values[processRef]?.firstFailedAttempt : undefined
-  );
-  const dateString =
-    firstFailedAttempt.loading || !firstFailedAttempt.result?.date
-      ? "Loading..."
-      : formatDate(new Date(firstFailedAttempt.result?.date), "d MMMM yyyy");
-
-  const reasonValue =
-    firstFailedAttempt.loading || !firstFailedAttempt.result?.value
-      ? "Loading..."
-      : firstFailedAttempt.result?.value;
-
-  const reasons = failedAttemptReasonCheckboxes
-    .filter((checkbox) => reasonValue.includes(checkbox.value))
-    .map((checkbox) => checkbox.label);
-
-  return (
-    <PageAnnouncement title="Previous attempts">
-      <Heading level={HeadingLevels.H4}>First attempt</Heading>
-      <SummaryList
-        rows={[
-          {
-            key: "Date",
-            value: dateString,
-          },
-          {
-            key: "Reasons",
-            value: reasons.join(", "),
-          },
-        ]}
-      />
-    </PageAnnouncement>
-  );
-};
 
 const step = {
   title: PageTitles.SecondFailedAttempt,
@@ -107,8 +58,8 @@ const step = {
       ),
       ComponentWrapper.wrapStatic(
         new StaticComponent({
-          key: "one",
-          Component: PreviousFailedAttemptsAnnouncement,
+          key: "previous-attempts",
+          Component: PreviousAttemptsAnnouncement,
           props: {},
         })
       ),
