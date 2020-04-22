@@ -6,7 +6,7 @@ import {
   DynamicComponentControlledProps,
 } from "remultiform/component-wrapper";
 import PropTypes from "../helpers/PropTypes";
-import { Note, Notes } from "../storage/DatabaseSchema";
+import { Notes } from "../storage/DatabaseSchema";
 
 export type PostVisitActionInputProps = DynamicComponentControlledProps<
   Notes
@@ -24,7 +24,12 @@ export const PostVisitActionInput: React.FunctionComponent<PostVisitActionInputP
 ) => {
   const { label, name, rows, value, onValueChange, required, disabled } = props;
 
-  const currentNote: Note | undefined = value[0];
+  const noteIndex =
+    value.findIndex((note) => !note.createdAt) > -1
+      ? value.findIndex((note) => !note.createdAt)
+      : value.length;
+
+  const currentNote = value[noteIndex];
 
   const checkbox = {
     label: "Create a post-visit action",
@@ -69,12 +74,14 @@ export const PostVisitActionInput: React.FunctionComponent<PostVisitActionInputP
         ]}
         required={required}
         onChange={(checkboxValue: string[]): void => {
-          onValueChange([
-            {
-              value: currentNote?.value,
-              isPostVisitAction: checkboxValue[0] === "true",
-            },
-          ]);
+          const newValue = [...value];
+
+          newValue[noteIndex] = {
+            value: currentNote?.value || "",
+            isPostVisitAction: checkboxValue[0] === "true",
+          };
+
+          onValueChange(newValue);
         }}
       />
     </>
