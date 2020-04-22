@@ -7,6 +7,25 @@ import PageSlugs from "../steps/PageSlugs";
 import Storage from "../storage/Storage";
 import { SubmitButtonProps, SubmitButtons } from "./SubmitButtons";
 
+const useUnableToEnterSlug = ():
+  | PageSlugs.FirstFailedAttempt
+  | PageSlugs.SecondFailedAttempt => {
+  const router = useRouter();
+  const processRef = getProcessRef(router);
+
+  const firstFailedAttempt = useDataValue(
+    Storage.ProcessContext,
+    "unableToEnter",
+    processRef,
+    (values) =>
+      processRef ? values[processRef]?.firstFailedAttempt : undefined
+  );
+
+  return firstFailedAttempt.result && firstFailedAttempt.result.date
+    ? PageSlugs.SecondFailedAttempt
+    : PageSlugs.FirstFailedAttempt;
+};
+
 export const makeUnableToEnterSubmit = (
   buttons: SubmitButtonProps | SubmitButtonProps[]
 ): React.FunctionComponent<SubmitProps & { disabled?: boolean }> => {
@@ -15,20 +34,7 @@ export const makeUnableToEnterSubmit = (
       disabled?: boolean;
     }
   > = ({ disabled, onSubmit }) => {
-    const router = useRouter();
-    const processRef = getProcessRef(router);
-
-    const firstFailedAttempt = useDataValue(
-      Storage.ProcessContext,
-      "unableToEnter",
-      processRef,
-      (values) =>
-        processRef ? values[processRef]?.firstFailedAttempt : undefined
-    );
-    const unableToEnterSlug =
-      firstFailedAttempt.result && firstFailedAttempt.result.date
-        ? PageSlugs.SecondFailedAttempt
-        : PageSlugs.FirstFailedAttempt;
+    const unableToEnterSlug = useUnableToEnterSlug();
 
     const allButtons = [
       ...(Array.isArray(buttons) ? buttons : [buttons]),
