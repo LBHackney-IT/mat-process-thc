@@ -9,6 +9,6 @@ export default [
   },
   {
     label: "Tenant not present",
-    value: "Tenant not present",
+    value: "tenant not present",
   },
 ];

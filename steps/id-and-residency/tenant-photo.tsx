@@ -37,12 +37,13 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
         values: {
           "tenant-photo-willing": {
             renderValue(willing: string): React.ReactNode {
-              return (
-                willing &&
-                (willing === "yes"
-                  ? "Tenant agreed to be photographed"
-                  : "Tenant does not want to be photographed")
-              );
+              return willing === "yes"
+                ? "Tenant agreed to be photographed"
+                : willing === "no"
+                ? "Tenant does not want to be photographed"
+                : willing === "tenant not present"
+                ? "Tenant not present"
+                : undefined;
             },
           },
           "tenant-photo-willing-notes": {
