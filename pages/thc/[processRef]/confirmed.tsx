@@ -34,22 +34,23 @@ const ConfirmedPage: NextPage = () => {
     .map((tenant) => tenant.fullName)
     .join(", ");
 
+  const managerApprovedText = `The Tenancy and Household Check for the tenancy at ${address}, occupied by ${tenants} has been approved by you.`;
+  const managerDeclinedText = `The Tenancy and Household Check for the tenancy at ${address}, occupied by ${tenants} has been declined by you. The Housing Officer will be notified.`;
+  const officerText = `The Tenancy and Household Check for the tenancy at ${address}, occupied by ${tenants} has been submitted for manager review.`;
+
+  const managerText = status
+    ? status === "2"
+      ? managerApprovedText
+      : managerDeclinedText
+    : "Loading...";
+
   return (
     <MainLayout title={PageTitles.Confirmed}>
       <PageAnnouncement title="Process submission confirmed">
         {residentData.loading ? (
           "Loading..."
         ) : (
-          <Paragraph>
-            The Tenancy and Household Check for the tenancy at {address},
-            occupied by {tenants}
-            {isManagerPage
-              ? ` has been ${status} by you.`
-              : " has been submitted for manager review."}
-            {isManagerPage &&
-              status === "declined" &&
-              " The Housing Officer will be notified."}
-          </Paragraph>
+          <Paragraph>{isManagerPage ? managerText : officerText}</Paragraph>
         )}
       </PageAnnouncement>
 
