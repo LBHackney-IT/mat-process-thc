@@ -152,7 +152,7 @@ const step = {
             name: "appointment-letter-reminder",
             label: "Create reminder to send appointment letter (T&HC2)",
           },
-          defaultValue: false,
+          defaultValue: true,
           emptyValue: false,
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
