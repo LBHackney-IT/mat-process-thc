@@ -101,8 +101,6 @@ const ReviewPage: NextPage = () => {
 
   const officerFullNameValue = officerFullName.result || "Loading...";
 
-  const reasonForVisit = "WILL COME FROM OUTSYSTEMS";
-
   const submittedDate = useDataValue(
     Storage.ProcessContext,
     "submitted",
@@ -192,7 +190,6 @@ const ReviewPage: NextPage = () => {
     { key: "Date completed", value: submittedDateValue },
     { key: "The visit was", value: visitType },
     { key: "The visit took place", value: visitTookPlace },
-    { key: "Reason for visit", value: reasonForVisit },
     {
       key: "Present for check",
       value:
