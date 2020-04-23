@@ -89,13 +89,13 @@ const PreviousAttemptsAnnouncement: React.FunctionComponent<{
           date={unableToEnter.result?.firstFailedAttempt?.date}
           reasons={
             summary
-              ? unableToEnter.result?.firstFailedAttempt?.value
-              : undefined
+              ? undefined
+              : unableToEnter.result?.firstFailedAttempt?.value
           }
           notes={
             summary
-              ? unableToEnter.result?.firstFailedAttempt?.notes
-              : undefined
+              ? undefined
+              : unableToEnter.result?.firstFailedAttempt?.notes
           }
         />
       ),
@@ -114,13 +114,13 @@ const PreviousAttemptsAnnouncement: React.FunctionComponent<{
           date={unableToEnter.result?.secondFailedAttempt?.date}
           reasons={
             summary
-              ? unableToEnter.result?.secondFailedAttempt?.value
-              : undefined
+              ? undefined
+              : unableToEnter.result?.secondFailedAttempt?.value
           }
           notes={
             summary
-              ? unableToEnter.result?.secondFailedAttempt?.notes
-              : undefined
+              ? undefined
+              : unableToEnter.result?.secondFailedAttempt?.notes
           }
         />
       ),
@@ -139,18 +139,18 @@ const PreviousAttemptsAnnouncement: React.FunctionComponent<{
           date={unableToEnter.result?.thirdFailedAttempt?.date}
           reasons={
             summary
-              ? unableToEnter.result?.thirdFailedAttempt?.reasons
-              : undefined
+              ? undefined
+              : unableToEnter.result?.thirdFailedAttempt?.reasons
           }
           actions={
             summary
-              ? unableToEnter.result?.thirdFailedAttempt?.actions
-              : undefined
+              ? undefined
+              : unableToEnter.result?.thirdFailedAttempt?.actions
           }
           notes={
             summary
-              ? unableToEnter.result?.thirdFailedAttempt?.notes
-              : undefined
+              ? undefined
+              : unableToEnter.result?.thirdFailedAttempt?.notes
           }
         />
       ),
@@ -169,13 +169,13 @@ const PreviousAttemptsAnnouncement: React.FunctionComponent<{
           date={unableToEnter.result?.fourthFailedAttempt?.date}
           reasons={
             summary
-              ? unableToEnter.result?.fourthFailedAttempt?.reasons
-              : undefined
+              ? undefined
+              : unableToEnter.result?.fourthFailedAttempt?.reasons
           }
           notes={
             summary
-              ? unableToEnter.result?.fourthFailedAttempt?.notes
-              : undefined
+              ? undefined
+              : unableToEnter.result?.fourthFailedAttempt?.notes
           }
         />
       ),
