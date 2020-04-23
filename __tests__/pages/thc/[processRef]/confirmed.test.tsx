@@ -124,15 +124,7 @@ it("renders correctly", () => {
             <div
               className="lbh-page-announcement__content"
             >
-              <p
-                className="lbh-body"
-              >
-                The Tenancy and Household Check for the tenancy at 
-                1 Mare Street, London, E8 3AA
-                , occupied by 
-                Jane Doe, John Doe
-                 has been submitted for manager review.
-              </p>
+              Loading...
             </div>
           </section>
           <h3

@@ -150,9 +150,8 @@ it("renders correctly when online", async () => {
                 className="lbh-body"
               >
                 The Tenancy and Household Check for the tenancy at 
-                1 Mare Street, London, E8 3AA
                 , occupied by 
-                Jane Doe, John Doe
+                
                  has been saved to your device ready to be sent to your manager for review.
               </p>
               <p
@@ -360,9 +359,8 @@ it("renders correctly when offline", async () => {
                 className="lbh-body"
               >
                 The Tenancy and Household Check for the tenancy at 
-                1 Mare Street, London, E8 3AA
                 , occupied by 
-                Jane Doe, John Doe
+                
                  has been saved to your device ready to be sent to your manager for review.
               </p>
               <p
