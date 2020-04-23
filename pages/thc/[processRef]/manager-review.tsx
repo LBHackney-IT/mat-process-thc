@@ -3,10 +3,15 @@ import {
   declineProcess,
 } from ".../../../helpers/transferProcess";
 import formatDate from "date-fns/format";
-import { Heading, HeadingLevels, Paragraph } from "lbh-frontend-react";
+import {
+  Heading,
+  HeadingLevels,
+  Paragraph,
+  Textarea,
+} from "lbh-frontend-react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import { Notes } from "storage/DatabaseSchema";
 import ManagerSubmitButton from "../../../components/ManagerSubmitButton";
 import { HouseholdReviewSection } from "../../../components/review-sections/HouseholdReviewSection";
@@ -17,6 +22,7 @@ import { TenancySummary } from "../../../components/TenancySummary";
 import Thumbnail from "../../../components/Thumbnail";
 import getProcessRef from "../../../helpers/getProcessRef";
 import { ProcessStage } from "../../../helpers/ProcessStage";
+import useDatabase from "../../../helpers/useDatabase";
 import useDataSet from "../../../helpers/useDataSet";
 import useDataValue from "../../../helpers/useDataValue";
 import MainLayout from "../../../layouts/MainLayout";
@@ -39,8 +45,8 @@ const getManagerSummaryText = (
 
 const ReviewPage: NextPage = () => {
   const router = useRouter();
-
   const processRef = getProcessRef(router);
+  const processDatabase = useDatabase(Storage.ProcessContext);
 
   const tenants = useDataValue(
     Storage.ExternalContext,
@@ -114,6 +120,8 @@ const ReviewPage: NextPage = () => {
     processRef,
     (values) => (processRef ? values[processRef] : undefined)
   );
+
+  const [managerComment, setManagerComment] = useState("");
 
   const visitType = isUnannouncedVisit.result
     ? getManagerSummaryText(
@@ -237,24 +245,57 @@ const ReviewPage: NextPage = () => {
         ({ fullName, id }) =>
           signatureValues[id] && (
             <React.Fragment key={id}>
-              <Heading level={HeadingLevels.H3}>
-                {fullName}&apos;s signature
-              </Heading>
-              <img className="signature" src={signatureValues[id]} />
+              <img
+                className="signature"
+                src={signatureValues[id]}
+                alt={`${fullName}'s signature`}
+              />
             </React.Fragment>
           )
       )}
+      <Textarea
+        name="manager-comment"
+        label={{
+          children: (
+            <Heading level={HeadingLevels.H2}>Manager&apos;s comment</Heading>
+          ),
+        }}
+        onChange={(textValue: string): void => setManagerComment(textValue)}
+        value={managerComment}
+        rows={4}
+      />
       <ManagerSubmitButton
+        disabled={!processRef || !processDatabase.result}
         onSubmit={async (): Promise<boolean> => {
+          if (!processRef || !processDatabase.result) {
+            return false;
+          }
+
           await approveProcess(router);
 
+          await processDatabase.result.put(
+            "managerComment",
+            processRef,
+            managerComment
+          );
           return true;
         }}
         status={ProcessStage.Approved}
       />
       <ManagerSubmitButton
+        disabled={!processRef || !processDatabase.result}
         onSubmit={async (): Promise<boolean> => {
+          if (!processRef || !processDatabase.result) {
+            return false;
+          }
+
           await declineProcess(router);
+
+          await processDatabase.result.put(
+            "managerComment",
+            processRef,
+            managerComment
+          );
 
           return true;
         }}
