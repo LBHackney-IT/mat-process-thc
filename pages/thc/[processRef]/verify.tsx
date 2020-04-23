@@ -61,11 +61,14 @@ export const VerifyPage: NextPage = () => {
     name: tenant.fullName,
     dateOfBirth: tenant.dateOfBirth,
     verified: {
-      id: tenantsPresent.result?.includes(tenant.id)
-        ? idData.result
-          ? Boolean(idData.result[tenant.id])
-          : false
-        : undefined,
+      id:
+        idData.result &&
+        idData.result[tenant.id]?.type &&
+        idData.result[tenant.id]?.type !== "tenant not present"
+          ? true
+          : tenantsPresent.result?.includes(tenant.id)
+          ? false
+          : undefined,
       residency: residencyData.result
         ? Boolean(residencyData.result[tenant.id])
         : false,
