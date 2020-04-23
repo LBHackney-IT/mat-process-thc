@@ -18,7 +18,8 @@ const Value: React.FunctionComponent<{
   actions?: string[];
   notes?: string;
 }> = (props) => {
-  const date = props.date && formatDate(new Date(props.date), "d MMMM yyyy");
+  const date =
+    props.date && formatDate(new Date(props.date), "HH:mm 'on' d MMMM yyyy");
   const reasons = props.reasons || [];
   const actions = props.actions || [];
   const notes = props.notes;
