@@ -294,3 +294,10 @@ Feature: Accessibility
     And I visit /third-failed-attempt for the process
     Then the page should be accessible
     And the page should have a descriptive title
+
+  Scenario: Fourth failed attempt page is accessible
+    When I start the process
+    And I wait for the data to be fetched
+    And I visit /fourth-failed-attempt for the process
+    Then the page should be accessible
+    And the page should have a descriptive title

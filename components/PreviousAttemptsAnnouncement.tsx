@@ -6,6 +6,7 @@ import {
 } from "lbh-frontend-react/components";
 import { useRouter } from "next/router";
 import React from "react";
+import failedAttemptActionCheckboxes from "../helpers/failedAttemptActionCheckboxes";
 import failedAttemptReasonCheckboxes from "../helpers/failedAttemptReasonCheckboxes";
 import getProcessRef from "../helpers/getProcessRef";
 import useDataValue from "../helpers/useDataValue";
@@ -14,14 +15,21 @@ import Storage from "../storage/Storage";
 const Value: React.FunctionComponent<{
   date?: string;
   reasons?: string[];
+  actions?: string[];
   notes?: string;
 }> = (props) => {
   const date = props.date && formatDate(new Date(props.date), "d MMMM yyyy");
   const reasons = props.reasons || [];
+  const actions = props.actions || [];
   const notes = props.notes;
 
   const reason = failedAttemptReasonCheckboxes
     .filter((checkbox) => reasons.includes(checkbox.value))
+    .map((checkbox) => checkbox.label)
+    .join(", ");
+
+  const action = failedAttemptActionCheckboxes
+    .filter((checkbox) => actions.includes(checkbox.value))
     .map((checkbox) => checkbox.label)
     .join(", ");
 
@@ -32,6 +40,12 @@ const Value: React.FunctionComponent<{
         <span>
           <br />
           {reason}
+        </span>
+      )}
+      {action && (
+        <span>
+          <br />
+          {action}
         </span>
       )}
       {notes && (
@@ -88,6 +102,41 @@ const PreviousAttemptsAnnouncement: React.FunctionComponent = () => {
           date={unableToEnter.result?.secondFailedAttempt?.date}
           reasons={unableToEnter.result?.secondFailedAttempt?.value}
           notes={unableToEnter.result?.secondFailedAttempt?.notes}
+        />
+      ),
+    });
+  }
+
+  const madeThirdAttempt = Boolean(
+    unableToEnter.result?.thirdFailedAttempt?.date
+  );
+
+  if (madeThirdAttempt) {
+    rows.push({
+      key: "Third attempt",
+      value: (
+        <Value
+          date={unableToEnter.result?.thirdFailedAttempt?.date}
+          reasons={unableToEnter.result?.thirdFailedAttempt?.reasons}
+          actions={unableToEnter.result?.thirdFailedAttempt?.actions}
+          notes={unableToEnter.result?.thirdFailedAttempt?.notes}
+        />
+      ),
+    });
+  }
+
+  const madeFourthAttempt = Boolean(
+    unableToEnter.result?.fourthFailedAttempt?.date
+  );
+
+  if (madeFourthAttempt) {
+    rows.push({
+      key: "Fourth attempt (by appointment)",
+      value: (
+        <Value
+          date={unableToEnter.result?.fourthFailedAttempt?.date}
+          reasons={unableToEnter.result?.fourthFailedAttempt?.reasons}
+          notes={unableToEnter.result?.fourthFailedAttempt?.notes}
         />
       ),
     });

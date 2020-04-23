@@ -17,7 +17,6 @@ import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { makeSubmit } from "../../components/makeSubmit";
 import PreviousAttemptsAnnouncement from "../../components/PreviousAttemptsAnnouncement";
 import SingleCheckbox from "../../components/SingleCheckbox";
-import failedAttemptActionCheckboxes from "../../helpers/failedAttemptActionCheckboxes";
 import failedAttemptReasonCheckboxes from "../../helpers/failedAttemptReasonCheckboxes";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import { persistUnableToEnterDate } from "../../helpers/persistUnableToEnterDate";
@@ -28,10 +27,10 @@ import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const step = {
-  title: PageTitles.ThirdFailedAttempt,
+  title: PageTitles.FourthFailedAttempt,
   heading: "Unable to enter the property",
   step: {
-    slug: PageSlugs.ThirdFailedAttempt,
+    slug: PageSlugs.FourthFailedAttempt,
     nextSlug: PageSlugs.Pause,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit([
@@ -39,7 +38,7 @@ const step = {
           slug: nextSlug as PageSlugs | undefined,
           value: "Save and continue",
           afterSubmit: (): Promise<void> =>
-            persistUnableToEnterDate(UnableToEnterPropertyNames.Third),
+            persistUnableToEnterDate(UnableToEnterPropertyNames.Fourth),
         },
         {
           cancel: true,
@@ -49,11 +48,11 @@ const step = {
     componentWrappers: [
       ComponentWrapper.wrapStatic(
         new StaticComponent({
-          key: "third-attempt-heading",
+          key: "fourth-attempt-heading",
           Component: Heading,
           props: {
             level: HeadingLevels.H2,
-            children: "Third attempt",
+            children: "Fourth attempt (by appointment)",
           },
         })
       ),
@@ -86,36 +85,13 @@ const step = {
           >({
             storeName: "unableToEnter",
             key: keyFromSlug(),
-            property: ["thirdFailedAttempt", "reasons"],
+            property: ["fourthFailedAttempt", "reasons"],
           }),
         })
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "what-action",
-          Component: Checkboxes,
-          props: {
-            name: "what-action",
-            legend: (
-              <FieldsetLegend>What did you do?</FieldsetLegend>
-            ) as React.ReactNode,
-            checkboxes: failedAttemptActionCheckboxes,
-          } as CheckboxesProps,
-          defaultValue: [],
-          emptyValue: [] as string[],
-          databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "unableToEnter"
-          >({
-            storeName: "unableToEnter",
-            key: keyFromSlug(),
-            property: ["thirdFailedAttempt", "actions"],
-          }),
-        })
-      ),
-      ComponentWrapper.wrapDynamic(
-        new DynamicComponent({
-          key: "third-attempt-notes",
+          key: "fourth-attempt-notes",
           Component: makeDynamic(
             Textarea,
             {
@@ -127,7 +103,7 @@ const step = {
             (value) => value
           ),
           props: {
-            name: "third-attempt-notes",
+            name: "fourth-attempt-notes",
             label: {
               children: "If necessary, add any additional notes.",
             } as LabelProps,
@@ -140,17 +116,17 @@ const step = {
           >({
             storeName: "unableToEnter",
             key: keyFromSlug(false),
-            property: ["thirdFailedAttempt", "notes"],
+            property: ["fourthFailedAttempt", "notes"],
           }),
         })
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "appointment-letter-reminder",
+          key: "fraud-reminder",
           Component: SingleCheckbox,
           props: {
-            name: "appointment-letter-reminder",
-            label: "Create reminder to send appointment letter (T&HC2)",
+            name: "fraud-reminder",
+            label: "Create reminder to start fraud investigation",
           },
           defaultValue: true,
           emptyValue: false,
@@ -160,7 +136,33 @@ const step = {
           >({
             storeName: "unableToEnter",
             key: keyFromSlug(false),
-            property: ["thirdFailedAttempt", "needsAppointmentLetterReminder"],
+            property: [
+              "fourthFailedAttempt",
+              "needsFraudInvestigationReminder",
+            ],
+          }),
+        })
+      ),
+      ComponentWrapper.wrapDynamic(
+        new DynamicComponent({
+          key: "fraud-letter-reminder",
+          Component: SingleCheckbox,
+          props: {
+            name: "fraud-letter-reminder",
+            label: "Create reminder to send fraud investigation letter (T&HC3)",
+          },
+          defaultValue: true,
+          emptyValue: false,
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "unableToEnter"
+          >({
+            storeName: "unableToEnter",
+            key: keyFromSlug(false),
+            property: [
+              "fourthFailedAttempt",
+              "needsFraudInvestigationLetterReminder",
+            ],
           }),
         })
       ),

@@ -244,6 +244,13 @@ type ProcessDatabaseSchema = NamedSchema<
           date: string;
           needsAppointmentLetterReminder: boolean;
         };
+        fourthFailedAttempt: {
+          reasons: string[];
+          notes: string;
+          date: string;
+          needsFraudInvestigationReminder: boolean;
+          needsFraudInvestigationLetterReminder: boolean;
+        };
       };
     };
   }
@@ -253,6 +260,7 @@ export enum UnableToEnterPropertyNames {
   First = "firstFailedAttempt",
   Second = "secondFailedAttempt",
   Third = "thirdFailedAttempt",
+  Fourth = "fourthFailedAttempt",
 }
 
 export interface ProcessJson {

@@ -11,6 +11,7 @@ const useUnableToEnterSlug = ():
   | PageSlugs.FirstFailedAttempt
   | PageSlugs.SecondFailedAttempt
   | PageSlugs.ThirdFailedAttempt
+  | PageSlugs.FourthFailedAttempt
   | undefined => {
   const router = useRouter();
   const processRef = getProcessRef(router);
@@ -44,6 +45,14 @@ const useUnableToEnterSlug = ():
 
   if (!madeThirdAttempt) {
     return PageSlugs.ThirdFailedAttempt;
+  }
+
+  const madeFourthAttempt = Boolean(
+    unableToEnter.result?.fourthFailedAttempt?.date
+  );
+
+  if (!madeFourthAttempt) {
+    return PageSlugs.FourthFailedAttempt;
   }
 };
 
