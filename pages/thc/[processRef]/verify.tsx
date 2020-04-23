@@ -45,35 +45,32 @@ export const VerifyPage: NextPage = () => {
     processRef,
     (values) => (processRef ? values[processRef] : undefined)
   );
-  const idData = useDataSet(
-    Storage.ResidentContext,
-    "id",
-    tenantsPresent.result
-  );
+
+  const tenants = residentData.result?.tenants || [];
+  const tenantIds = tenants.map((tenant) => tenant.id);
+
+  const idData = useDataSet(Storage.ResidentContext, "id", tenantIds);
   const residencyData = useDataSet(
     Storage.ResidentContext,
     "residency",
-    residentData.result?.tenants.map((tenant) => tenant.id)
+    tenantIds
   );
 
-  const tenantData =
-    residentData.result?.tenants.map((tenant) => {
-      return {
-        id: tenant.id,
-        name: tenant.fullName,
-        dateOfBirth: tenant.dateOfBirth,
-        verified: {
-          id: tenantsPresent.result?.includes(tenant.id)
-            ? idData.result
-              ? Boolean(idData.result[tenant.id])
-              : false
-            : undefined,
-          residency: residencyData.result
-            ? Boolean(residencyData.result[tenant.id])
-            : false,
-        },
-      };
-    }) || [];
+  const tenantData = tenants.map((tenant) => ({
+    id: tenant.id,
+    name: tenant.fullName,
+    dateOfBirth: tenant.dateOfBirth,
+    verified: {
+      id: tenantsPresent.result?.includes(tenant.id)
+        ? idData.result
+          ? Boolean(idData.result[tenant.id])
+          : false
+        : undefined,
+      residency: residencyData.result
+        ? Boolean(residencyData.result[tenant.id])
+        : false,
+    },
+  }));
 
   const allVerified =
     !residentData.loading &&
