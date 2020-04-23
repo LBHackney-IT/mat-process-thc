@@ -23,11 +23,10 @@ const PausedPage: NextPage = () => {
 
       <Paragraph>
         <Button
-          disabled={!process.env.WORKTRAY_URL}
           onClick={(): void => {
-            if (process.env.WORKTRAY_URL) {
-              location.assign(process.env.WORKTRAY_URL);
-            }
+            location.assign(
+              "https://hlbctrial-dev.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx"
+            );
           }}
         >
           Return to my work tray
