@@ -436,8 +436,18 @@ export const processPostVisitActionMap: {
       subcategory: "100000303",
     },
   },
-  isUnannouncedVisit: {},
-  isVisitInside: {},
+  isUnannouncedVisit: {
+    notes: {
+      category: "29",
+      subcategory: "100000304",
+    },
+  },
+  isVisitInside: {
+    notes: {
+      category: "29",
+      subcategory: "100000305",
+    },
+  },
   tenantsPresent: {},
   household: {
     "houseMovingSchemes.notes": {
