@@ -429,7 +429,7 @@ export const LoadingPage: NextPage = () => {
     (extraResults.length + processDataSyncStatus.expectedStepCount);
 
   const isManagerPage = isManager(router);
-  const nextSlug = isManagerPage ? PageSlugs.Review : PageSlugs.Outside;
+  const nextSlug = isManagerPage ? PageSlugs.ManagerReview : PageSlugs.Outside;
 
   const { href, as } = urlsForRouter(
     router,

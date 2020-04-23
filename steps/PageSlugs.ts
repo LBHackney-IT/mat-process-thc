@@ -55,6 +55,7 @@ enum PageSlugs {
 
   // Review and submit
   Review = "review",
+  ManagerReview = "manager-review",
   Submit = "submit",
   Confirmed = "confirmed",
 
@@ -112,6 +113,7 @@ const slugs: {
   disability: false,
   "support-needs": true,
   review: false,
+  "manager-review": false,
   submit: false,
   confirmed: false,
   pause: false,

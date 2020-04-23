@@ -52,6 +52,7 @@ enum PageTitles {
 
   // Review and submit
   Review = "Review",
+  ManagerReview = "Review",
   Submit = "Submit",
   Confirmed = "Confirmed",
 
