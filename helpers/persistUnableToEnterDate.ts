@@ -1,16 +1,13 @@
 import router from "next/router";
 import { TransactionMode } from "remultiform/database";
-import ProcessDatabaseSchema from "storage/ProcessDatabaseSchema";
+import ProcessDatabaseSchema, {
+  UnableToEnterPropertyNames,
+} from "storage/ProcessDatabaseSchema";
 import Storage from "../storage/Storage";
 import getProcessRef from "./getProcessRef";
 
-export enum FailedAttempts {
-  First = "firstFailedAttempt",
-  Second = "secondFailedAttempt",
-}
-
 export const persistUnableToEnterDate = async (
-  attemptKey: FailedAttempts
+  attemptKey: UnableToEnterPropertyNames
 ): Promise<void> => {
   const db = await Storage.ProcessContext?.database;
 

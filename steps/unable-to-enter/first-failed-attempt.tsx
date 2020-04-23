@@ -17,11 +17,10 @@ import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { makeSubmit } from "../../components/makeSubmit";
 import failedAttemptReasonCheckboxes from "../../helpers/failedAttemptReasonCheckboxes";
 import keyFromSlug from "../../helpers/keyFromSlug";
-import {
-  FailedAttempts,
-  persistUnableToEnterDate,
-} from "../../helpers/persistUnableToEnterDate";
-import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
+import { persistUnableToEnterDate } from "../../helpers/persistUnableToEnterDate";
+import ProcessDatabaseSchema, {
+  UnableToEnterPropertyNames,
+} from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -37,7 +36,7 @@ const step = {
           slug: nextSlug as PageSlugs | undefined,
           value: "Save and continue",
           afterSubmit: (): Promise<void> =>
-            persistUnableToEnterDate(FailedAttempts.First),
+            persistUnableToEnterDate(UnableToEnterPropertyNames.First),
         },
         {
           cancel: true,

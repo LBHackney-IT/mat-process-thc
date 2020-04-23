@@ -16,20 +16,22 @@ import {
 import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { makeSubmit } from "../../components/makeSubmit";
 import PreviousAttemptsAnnouncement from "../../components/PreviousAttemptsAnnouncement";
+import SingleCheckbox from "../../components/SingleCheckbox";
+import failedAttemptActionCheckboxes from "../../helpers/failedAttemptActionCheckboxes";
 import failedAttemptReasonCheckboxes from "../../helpers/failedAttemptReasonCheckboxes";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import { persistUnableToEnterDate } from "../../helpers/persistUnableToEnterDate";
-import PageSlugs from "../../steps/PageSlugs";
-import PageTitles from "../../steps/PageTitles";
 import ProcessDatabaseSchema, {
   UnableToEnterPropertyNames,
 } from "../../storage/ProcessDatabaseSchema";
+import PageSlugs from "../PageSlugs";
+import PageTitles from "../PageTitles";
 
 const step = {
-  title: PageTitles.SecondFailedAttempt,
+  title: PageTitles.ThirdFailedAttempt,
   heading: "Unable to enter the property",
   step: {
-    slug: PageSlugs.SecondFailedAttempt,
+    slug: PageSlugs.ThirdFailedAttempt,
     nextSlug: PageSlugs.Pause,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit([
@@ -37,7 +39,7 @@ const step = {
           slug: nextSlug as PageSlugs | undefined,
           value: "Save and continue",
           afterSubmit: (): Promise<void> =>
-            persistUnableToEnterDate(UnableToEnterPropertyNames.Second),
+            persistUnableToEnterDate(UnableToEnterPropertyNames.Third),
         },
         {
           cancel: true,
@@ -47,11 +49,11 @@ const step = {
     componentWrappers: [
       ComponentWrapper.wrapStatic(
         new StaticComponent({
-          key: "second-attempt-heading",
+          key: "third-attempt-heading",
           Component: Heading,
           props: {
             level: HeadingLevels.H2,
-            children: "Second attempt",
+            children: "Third attempt",
           },
         })
       ),
@@ -84,13 +86,36 @@ const step = {
           >({
             storeName: "unableToEnter",
             key: keyFromSlug(),
-            property: ["secondFailedAttempt", "value"],
+            property: ["thirdFailedAttempt", "reasons"],
           }),
         })
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "second-attempt-notes",
+          key: "what-action",
+          Component: Checkboxes,
+          props: {
+            name: "what-action",
+            legend: (
+              <FieldsetLegend>What did you do?</FieldsetLegend>
+            ) as React.ReactNode,
+            checkboxes: failedAttemptActionCheckboxes,
+          } as CheckboxesProps,
+          defaultValue: [],
+          emptyValue: [] as string[],
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "unableToEnter"
+          >({
+            storeName: "unableToEnter",
+            key: keyFromSlug(),
+            property: ["thirdFailedAttempt", "actions"],
+          }),
+        })
+      ),
+      ComponentWrapper.wrapDynamic(
+        new DynamicComponent({
+          key: "third-attempt-notes",
           Component: makeDynamic(
             Textarea,
             {
@@ -102,7 +127,7 @@ const step = {
             (value) => value
           ),
           props: {
-            name: "second-attempt-notes",
+            name: "third-attempt-notes",
             label: {
               children: "If necessary, add any additional notes.",
             } as LabelProps,
@@ -115,7 +140,27 @@ const step = {
           >({
             storeName: "unableToEnter",
             key: keyFromSlug(false),
-            property: ["secondFailedAttempt", "notes"],
+            property: ["thirdFailedAttempt", "notes"],
+          }),
+        })
+      ),
+      ComponentWrapper.wrapDynamic(
+        new DynamicComponent({
+          key: "appointment-letter-reminder",
+          Component: SingleCheckbox,
+          props: {
+            name: "appointment-letter-reminder",
+            label: "Create reminder to send appointment letter (T&HC2)",
+          },
+          defaultValue: false,
+          emptyValue: false,
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "unableToEnter"
+          >({
+            storeName: "unableToEnter",
+            key: keyFromSlug(false),
+            property: ["thirdFailedAttempt", "needsAppointmentLetterReminder"],
           }),
         })
       ),

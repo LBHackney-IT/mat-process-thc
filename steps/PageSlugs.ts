@@ -65,6 +65,7 @@ enum PageSlugs {
   // Unable to enter
   FirstFailedAttempt = "first-failed-attempt",
   SecondFailedAttempt = "second-failed-attempt",
+  ThirdFailedAttempt = "third-failed-attempt",
 }
 
 const slugs: {
@@ -116,6 +117,7 @@ const slugs: {
   paused: false,
   "first-failed-attempt": true,
   "second-failed-attempt": true,
+  "third-failed-attempt": true,
 };
 
 export const stepSlugs = Object.entries(slugs)

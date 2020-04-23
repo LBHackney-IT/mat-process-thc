@@ -9,21 +9,42 @@ import { SubmitButtonProps, SubmitButtons } from "./SubmitButtons";
 
 const useUnableToEnterSlug = ():
   | PageSlugs.FirstFailedAttempt
-  | PageSlugs.SecondFailedAttempt => {
+  | PageSlugs.SecondFailedAttempt
+  | PageSlugs.ThirdFailedAttempt
+  | undefined => {
   const router = useRouter();
   const processRef = getProcessRef(router);
 
-  const firstFailedAttempt = useDataValue(
+  const unableToEnter = useDataValue(
     Storage.ProcessContext,
     "unableToEnter",
     processRef,
-    (values) =>
-      processRef ? values[processRef]?.firstFailedAttempt : undefined
+    (values) => (processRef ? values[processRef] : undefined)
   );
 
-  return firstFailedAttempt.result && firstFailedAttempt.result.date
-    ? PageSlugs.SecondFailedAttempt
-    : PageSlugs.FirstFailedAttempt;
+  const madeFirstAttempt = Boolean(
+    unableToEnter.result?.firstFailedAttempt?.date
+  );
+
+  if (!madeFirstAttempt) {
+    return PageSlugs.FirstFailedAttempt;
+  }
+
+  const madeSecondAttempt = Boolean(
+    unableToEnter.result?.secondFailedAttempt?.date
+  );
+
+  if (!madeSecondAttempt) {
+    return PageSlugs.SecondFailedAttempt;
+  }
+
+  const madeThirdAttempt = Boolean(
+    unableToEnter.result?.thirdFailedAttempt?.date
+  );
+
+  if (!madeThirdAttempt) {
+    return PageSlugs.ThirdFailedAttempt;
+  }
 };
 
 export const makeUnableToEnterSubmit = (
