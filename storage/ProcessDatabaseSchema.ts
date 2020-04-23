@@ -181,7 +181,6 @@ type ProcessDatabaseSchema = NamedSchema<
       key: ProcessRef;
       value: {
         value: string;
-        notes: Notes;
       };
     };
 
@@ -336,8 +335,7 @@ export const processNotesPaths: {
     "incomeOfficer.notes",
     "otherProperty.notes",
   ],
-  // Is there even a notes field for homeCheck?
-  homeCheck: ["notes"],
+  homeCheck: [],
   healthConcerns: ["notes"],
   disability: ["notes"],
   supportNeeds: [
