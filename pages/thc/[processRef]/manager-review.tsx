@@ -1,5 +1,8 @@
+import {
+  approveProcess,
+  declineProcess,
+} from ".../../../helpers/transferProcess";
 import formatDate from "date-fns/format";
-import { approveProcess, declineProcess } from "helpers/transferProcess";
 import { Heading, HeadingLevels, Paragraph } from "lbh-frontend-react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
@@ -198,16 +201,14 @@ const ReviewPage: NextPage = () => {
           }}
           extraRows={extraRows}
         />
-        <style>{`
-          .mat-tenancy-summary img {
-            margin-right: 2em;
-          }
-        `}</style>
       </React.Fragment>
-      <IdAndResidencyReviewSection tenants={tenantsWithPresentStatus} />
-      <HouseholdReviewSection />
-      <PropertyInspectionReviewSection />
-      <WellbeingSupportReviewSection />
+      <IdAndResidencyReviewSection
+        tenants={tenantsWithPresentStatus}
+        readOnly
+      />
+      <HouseholdReviewSection readOnly />
+      <PropertyInspectionReviewSection readOnly />
+      <WellbeingSupportReviewSection readOnly />
       {otherNotesValues.length > 0 && (
         <>
           <Heading level={HeadingLevels.H2}>Other Notes</Heading>

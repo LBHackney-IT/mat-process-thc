@@ -4,8 +4,19 @@ import householdSteps from "../../steps/household";
 import Storage from "../../storage/Storage";
 import { ReviewSection } from "../ReviewSection";
 
-export const HouseholdReviewSection: React.FunctionComponent = () => {
-  const rows = useReviewSectionRows(Storage.ProcessContext, householdSteps);
+interface Props {
+  readOnly?: boolean;
+}
+
+export const HouseholdReviewSection: React.FunctionComponent<Props> = (
+  props
+) => {
+  const { readOnly } = props;
+  const rows = useReviewSectionRows(
+    Storage.ProcessContext,
+    householdSteps,
+    readOnly || false
+  );
 
   return (
     <ReviewSection

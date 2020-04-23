@@ -4,10 +4,19 @@ import propertyInspectionSteps from "../../steps/property-inspection";
 import Storage from "../../storage/Storage";
 import { ReviewSection } from "../ReviewSection";
 
-export const PropertyInspectionReviewSection: React.FunctionComponent = () => {
+interface Props {
+  readOnly?: boolean;
+}
+
+export const PropertyInspectionReviewSection: React.FunctionComponent<Props> = (
+  props
+) => {
+  const { readOnly } = props;
+
   const rows = useReviewSectionRows(
     Storage.ProcessContext,
-    propertyInspectionSteps
+    propertyInspectionSteps,
+    readOnly || false
   );
 
   return (
