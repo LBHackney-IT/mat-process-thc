@@ -1,39 +1,56 @@
-import { Button } from "lbh-frontend-react/components/Button";
-import { PageAnnouncement } from "lbh-frontend-react/components/PageAnnouncement";
 import {
+  Button,
   Heading,
   HeadingLevels,
-} from "lbh-frontend-react/components/typography/Heading";
-import { Paragraph } from "lbh-frontend-react/components/typography/Paragraph";
+  PageAnnouncement,
+  Paragraph,
+} from "lbh-frontend-react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React from "react";
+import getProcessRef from "../../../helpers/getProcessRef";
 import isManager from "../../../helpers/isManager";
+import useDataValue from "../../../helpers/useDataValue";
 import MainLayout from "../../../layouts/MainLayout";
 import PageTitles from "../../../steps/PageTitles";
+import Storage from "../../../storage/Storage";
 
 const ConfirmedPage: NextPage = () => {
   const router = useRouter();
-  const { status } = router.query;
+  const processRef = getProcessRef(router);
   const isManagerPage = isManager(router);
 
-  // TODO: Replace these with the real values!
-  const address = "1 Mare Street, London, E8 3AA";
-  const tenants = ["Jane Doe", "John Doe"];
+  const { status } = router.query;
+
+  const residentData = useDataValue(
+    Storage.ExternalContext,
+    "residents",
+    processRef,
+    (values) => (processRef ? values[processRef] : undefined)
+  );
+
+  const address = residentData.result?.address.join(", ");
+  const tenants = (residentData.result?.tenants || [])
+    .map((tenant) => tenant.fullName)
+    .join(", ");
 
   return (
     <MainLayout title={PageTitles.Confirmed}>
       <PageAnnouncement title="Process submission confirmed">
-        <Paragraph>
-          The Tenancy and Household Check for the tenancy at {address}, occupied
-          by {tenants.join(", ")}
-          {isManagerPage
-            ? ` has been ${status} by you.`
-            : " has been submitted for manager review."}
-          {isManagerPage &&
-            status === "declined" &&
-            " The Housing Officer will be notified."}
-        </Paragraph>
+        {residentData.loading ? (
+          "Loading..."
+        ) : (
+          <Paragraph>
+            The Tenancy and Household Check for the tenancy at {address},
+            occupied by {tenants}
+            {isManagerPage
+              ? ` has been ${status} by you.`
+              : " has been submitted for manager review."}
+            {isManagerPage &&
+              status === "declined" &&
+              " The Housing Officer will be notified."}
+          </Paragraph>
+        )}
       </PageAnnouncement>
 
       <Heading level={HeadingLevels.H3}>What to do next?</Heading>
