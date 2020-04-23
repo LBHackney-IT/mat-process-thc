@@ -92,4 +92,5 @@ defineFeature(loadFeature("./accessibility.feature"), (test) => {
   testAccessibility(test, "First failed attempt");
   testAccessibility(test, "Second failed attempt");
   testAccessibility(test, "Third failed attempt");
+  testAccessibility(test, "Fourth failed attempt");
 });
