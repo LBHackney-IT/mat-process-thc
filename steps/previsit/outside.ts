@@ -12,6 +12,7 @@ import {
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { makeUnableToEnterSubmit } from "../../components/makeUnableToEnterSubmit";
+import PreviousAttemptsAnnouncement from "../../components/PreviousAttemptsAnnouncement";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
@@ -114,8 +115,17 @@ const step = {
           key: "next-heading",
           Component: Heading,
           props: {
-            level: HeadingLevels.H3,
+            level: HeadingLevels.H2,
             children: "What do you want to do next?",
+          },
+        })
+      ),
+      ComponentWrapper.wrapStatic(
+        new StaticComponent({
+          key: "previous-attempts",
+          Component: PreviousAttemptsAnnouncement,
+          props: {
+            summary: true,
           },
         })
       ),
