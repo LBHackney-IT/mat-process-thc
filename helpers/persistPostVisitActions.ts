@@ -6,7 +6,7 @@ import {
   StoreNames,
   TransactionMode,
 } from "remultiform/database";
-import { Note, Notes } from "../storage/DatabaseSchema";
+import { Notes } from "../storage/DatabaseSchema";
 import ProcessDatabaseSchema, {
   ProcessJson,
   processNotesPaths,
@@ -141,19 +141,15 @@ export const getResidentDataNotes = (
   return notesByRef;
 };
 
-const postNoteToBackend = async (
-  note: Note,
+const postValueToBackend = async (
+  value: string,
   postVisitActionMap: { category: string; subcategory: string },
   processRef: string
 ): Promise<void> => {
-  if (!note.isPostVisitAction) {
-    return;
-  }
-
   const matApiJwt = getMatApiJwt(processRef);
 
   const body = {
-    description: note.value,
+    description: value,
     category: postVisitActionMap.category,
     subcategory: postVisitActionMap.subcategory,
     data: getMatApiData(processRef),
@@ -272,11 +268,11 @@ export const persistPostVisitActions = async (
 
       await Promise.all(
         notes.map(async (note, index) => {
-          if (note.createdAt || note.value === "") {
+          if (note.createdAt || !note.isPostVisitAction || note.value === "") {
             return;
           }
 
-          await postNoteToBackend(note, postVisitActionMap, processRef);
+          await postValueToBackend(note.value, postVisitActionMap, processRef);
           await updateCreatedAt(
             processDatabase,
             storeName as StoreNames<ProcessDatabaseSchema["schema"]>,
@@ -318,11 +314,19 @@ export const persistPostVisitActions = async (
 
         await Promise.all(
           notes.map(async (note, index) => {
-            if (note.createdAt || note.value === "") {
+            if (
+              note.createdAt ||
+              !note.isPostVisitAction ||
+              note.value === ""
+            ) {
               return;
             }
 
-            await postNoteToBackend(note, postVisitActionMap, processRef);
+            await postValueToBackend(
+              note.value,
+              postVisitActionMap,
+              processRef
+            );
             await updateCreatedAt(
               residentDatabase,
               storeName as StoreNames<ResidentDatabaseSchema["schema"]>,
