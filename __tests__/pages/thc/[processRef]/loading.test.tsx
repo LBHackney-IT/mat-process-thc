@@ -467,6 +467,24 @@ it("renders correctly when offline", async () => {
       Array [
         [Error: Request timed out],
       ],
+      Array [
+        [Error: Request timed out],
+      ],
+      Array [
+        [Error: Request timed out],
+      ],
+      Array [
+        [Error: Request timed out],
+      ],
+      Array [
+        [Error: Request timed out],
+      ],
+      Array [
+        [Error: Request timed out],
+      ],
+      Array [
+        [Error: Request timed out],
+      ],
     ]
   `);
 
@@ -684,7 +702,7 @@ Array [
           <div
             style={
               Object {
-                "width": "50%",
+                "width": "43%",
               }
             }
           />

@@ -86,7 +86,15 @@ const ReviewPage: NextPage = () => {
     (values) => (processRef ? values[processRef]?.startDate : undefined)
   );
 
-  const officerFullName = "COMES FROM MAT DATA BLOB";
+  const officerFullName = useDataValue(
+    Storage.ExternalContext,
+    "officer",
+    processRef,
+    (values) => (processRef ? values[processRef]?.fullName : undefined)
+  );
+
+  const officerFullNameValue = officerFullName.result || "Loading...";
+
   const reasonForVisit = "WILL COME FROM OUTSYSTEMS";
 
   const submittedDate = useDataValue(
@@ -172,7 +180,7 @@ const ReviewPage: NextPage = () => {
 
   const extraRows = [
     { key: "Outside property", value: outsidePropertyImageThumbnails },
-    { key: "Completed by", value: officerFullName },
+    { key: "Completed by", value: officerFullNameValue },
     { key: "Date completed", value: submittedDateValue },
     { key: "The visit was", value: visitType },
     { key: "The visit took place", value: visitTookPlace },
