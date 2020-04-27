@@ -171,6 +171,102 @@ const postValueToBackend = async (
   }
 };
 
+export const persistUnableToEnterPostVisitActions = async (
+  unableToEnterData: Partial<
+    ProcessDatabaseSchema["schema"]["unableToEnter"]["value"]
+  >,
+  processRef: ProcessRef
+): Promise<void> => {
+  if (!unableToEnterData) {
+    return;
+  }
+
+  const unableToEnterMap = processPostVisitActionMap["unableToEnter"];
+  const externalDatabase = await Storage.ExternalContext?.database;
+
+  if (!externalDatabase) {
+    return;
+  }
+  const residents = await externalDatabase.get("residents", processRef);
+  const tenantNames = residents
+    ? residents.tenants.map((tenant) => tenant.fullName).join(", ")
+    : "N/A";
+  const address = residents ? residents.address.join(", ") : "N/A";
+
+  const firstFailedAttempt = unableToEnterData["firstFailedAttempt"];
+  const secondFailedAttempt = unableToEnterData["secondFailedAttempt"];
+  const thirdFailedAttempt = unableToEnterData["thirdFailedAttempt"];
+  const fourthFailedAttempt = unableToEnterData["fourthFailedAttempt"];
+
+  const firstFailedAttemptNotes =
+    (firstFailedAttempt && firstFailedAttempt["notes"]) || "N/A";
+
+  const secondFailedAttemptNotes =
+    (secondFailedAttempt && secondFailedAttempt["notes"]) || "N/A";
+
+  const thirdFailedAttemptNotes =
+    (thirdFailedAttempt && thirdFailedAttempt["notes"]) || "N/A";
+
+  const fourthFailedAttemptNotes =
+    (fourthFailedAttempt && fourthFailedAttempt["notes"]) || "N/A";
+
+  const firstAttemptDate =
+    (firstFailedAttempt && firstFailedAttempt["date"]) || "N/A";
+
+  const secondAttemptDate =
+    (secondFailedAttempt && secondFailedAttempt["date"]) || "N/A";
+
+  const thirdAttemptDate =
+    (thirdFailedAttempt && thirdFailedAttempt["date"]) || "N/A";
+
+  const fourthAttemptDate =
+    (fourthFailedAttempt && fourthFailedAttempt["date"]) || "N/A";
+
+  if (thirdFailedAttempt) {
+    if (thirdFailedAttempt.needsAppointmentLetterReminder) {
+      const config =
+        unableToEnterMap["thirdFailedAttempt.needsAppointmentLetterReminder"];
+      const description = `Action: Third Failed Attempt - Appointment Letter Reminder
+Address: ${address}.
+Resident(s) details: ${tenantNames}.
+First Attempt: ${firstAttemptDate}, Notes: ${firstFailedAttemptNotes}.
+Second Attempt: ${secondAttemptDate}, Notes: ${secondFailedAttemptNotes}.
+Third Attempt: ${thirdAttemptDate}, Notes: ${thirdFailedAttemptNotes}`;
+
+      postValueToBackend(description, config, processRef);
+    }
+  }
+
+  if (fourthFailedAttempt) {
+    const details = `Address: ${address}.
+Resident(s) details: ${tenantNames}.
+First Attempt: ${firstAttemptDate}, Notes: ${firstFailedAttemptNotes}.
+Second Attempt: ${secondAttemptDate}, Notes: ${secondFailedAttemptNotes}.
+Third Attempt: ${thirdAttemptDate}, Notes: ${thirdFailedAttemptNotes}.
+Fourth Attempt: ${fourthAttemptDate}, Notes: ${fourthFailedAttemptNotes}.`;
+
+    if (fourthFailedAttempt.needsFraudInvestigationLetterReminder) {
+      const config =
+        unableToEnterMap[
+          "fourthFailedAttempt.needsFraudInvestigationLetterReminder"
+        ];
+
+      const description = `Action: Fourth Failed Attempt - Fraud Investigation Letter Reminder\n${details}`;
+
+      postValueToBackend(description, config, processRef);
+    }
+
+    if (fourthFailedAttempt.needsFraudInvestigationReminder) {
+      const config =
+        unableToEnterMap["fourthFailedAttempt.needsFraudInvestigationReminder"];
+
+      const description = `Action: Fourth Failed Attempt - Fraud Investigation Reminder\n${details}`;
+
+      postValueToBackend(description, config, processRef);
+    }
+  }
+};
+
 const updateCreatedAt = async <
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   DBSchema extends NamedSchema<string, number, any>,
@@ -338,5 +434,16 @@ export const persistPostVisitActions = async (
         );
       }
     }
+  }
+
+  const unableToEnterData =
+    processData !== undefined && processData.unableToEnter !== undefined
+      ? (processData.unableToEnter as Partial<
+          ProcessDatabaseSchema["schema"]["unableToEnter"]["value"]
+        >)
+      : {};
+
+  if (unableToEnterData) {
+    await persistUnableToEnterPostVisitActions(unableToEnterData, processRef);
   }
 };

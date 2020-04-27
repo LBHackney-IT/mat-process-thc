@@ -531,7 +531,20 @@ export const processPostVisitActionMap: {
       subcategory: "100000209",
     },
   },
-  unableToEnter: {},
+  unableToEnter: {
+    "thirdFailedAttempt.needsAppointmentLetterReminder": {
+      category: "30",
+      subcategory: "100000206",
+    },
+    "fourthFailedAttempt.needsFraudInvestigationReminder": {
+      category: "30",
+      subcategory: "100000595",
+    },
+    "fourthFailedAttempt.needsFraudInvestigationLetterReminder": {
+      category: "30",
+      subcategory: "100000206",
+    },
+  },
   managerComment: {},
 };
 
