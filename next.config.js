@@ -9,6 +9,8 @@ const basePath = require("./server/helpers/basePath");
 
 const dev = process.env.NODE_ENV !== "production";
 
+// Environment variables need to be set at build time to have them be included
+// in the client files.
 const env = {
   ENVIRONMENT_NAME: process.env.ENVIRONMENT_NAME,
   PROCESS_NAME: process.env.PROCESS_NAME,

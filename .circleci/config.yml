@@ -52,15 +52,29 @@ jobs:
           command: TEST_BROWSER=chrome npm test
 
   build:
+    parameters:
+      environment-name:
+        type: string
+      worktray-url:
+        type: string
+      diversity-form-url:
+        type: string
+
     docker:
       - image: docker:stable-git
+
     steps:
       - checkout
       - setup_remote_docker
 
       - run:
           name: Build Docker image
-          command: docker build .
+          command: |
+            docker build . \
+              --build-args ENVIRONMENT_NAME="<<parameters.environment-name>>" \
+              --build-args PROCESS_NAME="thc" \
+              --build-args WORKTRAY_URL="<<parameters.worktray-url>>" \
+              --build-args DIVERSITY_FORM_URL="<<parameters.diversity-form-url>>"
 
   deploy:
     parameters:
@@ -95,6 +109,9 @@ workflows:
           name: build-image-on-branch
           requires:
             - install-and-test-branch
+          environment-name: branch
+          worktray-url: https://work.tray
+          diversity-form-url: https://diversity.form
 
   check-and-deploy-to-development-and-staging:
     jobs:
@@ -111,6 +128,11 @@ workflows:
           account-url: AWS_ECR_HOST
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          extra-build-args: |
+            --build-args ENVIRONMENT_NAME="development" \
+            --build-args PROCESS_NAME="thc" \
+            --build-args WORKTRAY_URL="https://hlbctrial-dev.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx" \
+            --build-args DIVERSITY_FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform"
           region: AWS_REGION
           repo: $AWS_ECR_PATH_DEV
           tag: $CIRCLE_SHA1
@@ -130,6 +152,11 @@ workflows:
           account-url: AWS_ECR_HOST
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          extra-build-args: |
+            --build-args ENVIRONMENT_NAME="staging" \
+            --build-args PROCESS_NAME="thc" \
+            --build-args WORKTRAY_URL="https://hlbctrial-tst.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx" \
+            --build-args DIVERSITY_FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform"
           region: AWS_REGION
           repo: $AWS_ECR_PATH_STAGING
           tag: $CIRCLE_SHA1
@@ -157,6 +184,11 @@ workflows:
           account-url: AWS_ECR_HOST
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          extra-build-args: |
+            --build-args ENVIRONMENT_NAME="production" \
+            --build-args PROCESS_NAME="thc" \
+            --build-args WORKTRAY_URL="https://hlbctrial.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx" \
+            --build-args DIVERSITY_FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform"
           region: AWS_REGION
           repo: $AWS_ECR_PATH_PRODUCTION
           tag: $CIRCLE_SHA1

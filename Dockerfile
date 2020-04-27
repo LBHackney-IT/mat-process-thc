@@ -12,6 +12,11 @@ RUN apk add --no-cache bash
 
 WORKDIR /app
 
+ARG ENVIRONMENT_NAME
+ARG PROCESS_NAME
+ARG WORKTRAY_URL
+ARG DIVERSITY_FORM_URL
+
 ENV NODE_ENV production
 
 # ------------------------------------------------------------------------------
