@@ -124,7 +124,11 @@ it("renders correctly", () => {
             <div
               className="lbh-page-announcement__content"
             >
-              Loading...
+              <p
+                className="lbh-body"
+              >
+                The Tenancy and Household Check has been submitted for manager review.
+              </p>
             </div>
           </section>
           <h3
