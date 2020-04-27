@@ -272,7 +272,7 @@ export const persistPostVisitActions = async (
 
       await Promise.all(
         notes.map(async (note, index) => {
-          if (note.createdAt) {
+          if (note.createdAt || note.value === "") {
             return;
           }
 
@@ -318,7 +318,7 @@ export const persistPostVisitActions = async (
 
         await Promise.all(
           notes.map(async (note, index) => {
-            if (note.createdAt) {
+            if (note.createdAt || note.value === "") {
               return;
             }
 
