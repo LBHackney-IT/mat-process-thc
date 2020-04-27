@@ -8,7 +8,7 @@ export const externalDatabaseName = `mat-process-${
 
 type ExternalDatabaseSchema = NamedSchema<
   typeof externalDatabaseName,
-  1,
+  2,
   {
     tenancy: {
       key: ProcessRef;
@@ -35,6 +35,13 @@ type ExternalDatabaseSchema = NamedSchema<
         }[];
       };
     };
+
+    officer: {
+      key: ProcessRef;
+      value: {
+        fullName: string;
+      };
+    };
   }
 >;
 
@@ -43,6 +50,7 @@ const storeNames: {
 } = {
   tenancy: true,
   residents: true,
+  officer: true,
 };
 
 export const externalStoreNames = Object.entries(storeNames)

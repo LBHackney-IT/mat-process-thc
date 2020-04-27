@@ -4,7 +4,6 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { makeSubmit } from "../../../components/makeSubmit";
-import ManagerSubmitButton from "../../../components/ManagerSubmitButton";
 import { PostVisitActionInput } from "../../../components/PostVisitActionInput";
 import { HouseholdReviewSection } from "../../../components/review-sections/HouseholdReviewSection";
 import { IdAndResidencyReviewSection } from "../../../components/review-sections/IdAndResidencyReviewSection";
@@ -14,12 +13,6 @@ import Signature from "../../../components/Signature";
 import { TenancySummary } from "../../../components/TenancySummary";
 import Thumbnail from "../../../components/Thumbnail";
 import getProcessRef from "../../../helpers/getProcessRef";
-import isManager from "../../../helpers/isManager";
-import { ProcessStage } from "../../../helpers/ProcessStage";
-import {
-  approveProcess,
-  declineProcess,
-} from "../../../helpers/transferProcess";
 import useDatabase from "../../../helpers/useDatabase";
 import useDataValue from "../../../helpers/useDataValue";
 import MainLayout from "../../../layouts/MainLayout";
@@ -32,7 +25,6 @@ const ReviewPage: NextPage = () => {
   const router = useRouter();
 
   const processRef = getProcessRef(router);
-  const isManagerPage = isManager(router);
 
   const tenants = useDataValue(
     Storage.ExternalContext,
@@ -198,68 +190,42 @@ const ReviewPage: NextPage = () => {
           />
         </React.Fragment>
       ))}
-      {isManagerPage ? (
-        <>
-          <ManagerSubmitButton
-            onSubmit={async (): Promise<boolean> => {
-              await approveProcess(router);
-
-              return true;
-            }}
-            status={ProcessStage.Approved}
-          />
-          <ManagerSubmitButton
-            onSubmit={async (): Promise<boolean> => {
-              await declineProcess(router);
-
-              return true;
-            }}
-            status={ProcessStage.Declined}
-          />
-          <style jsx>{`
-            :global(.lbh-button--warning) {
-              margin-left: 1em;
-            }
-          `}</style>
-        </>
-      ) : (
-        <SubmitButton
-          disabled={
-            !processRef || !residentDatabase.result || !processDatabase.result
+      <SubmitButton
+        disabled={
+          !processRef || !residentDatabase.result || !processDatabase.result
+        }
+        onSubmit={async (): Promise<boolean> => {
+          if (
+            !processRef ||
+            !residentDatabase.result ||
+            !processDatabase.result
+          ) {
+            return false;
           }
-          onSubmit={async (): Promise<boolean> => {
-            if (
-              !processRef ||
-              !residentDatabase.result ||
-              !processDatabase.result
-            ) {
-              return false;
-            }
 
-            for (const tenantId of presentTenantIds) {
-              await residentDatabase.result.put(
-                "signature",
-                tenantId,
-                signatures[tenantId] || ""
-              );
-            }
-
-            await processDatabase.result.put(
-              "otherNotes",
-              processRef,
-              otherNotes
+          for (const tenantId of presentTenantIds) {
+            await residentDatabase.result.put(
+              "signature",
+              tenantId,
+              signatures[tenantId] || ""
             );
+          }
 
-            await processDatabase.result.put(
-              "submitted",
-              processRef,
-              new Date().toISOString()
-            );
+          await processDatabase.result.put(
+            "otherNotes",
+            processRef,
+            otherNotes
+          );
 
-            return true;
-          }}
-        />
-      )}
+          await processDatabase.result.put(
+            "submitted",
+            processRef,
+            new Date().toISOString()
+          );
+
+          return true;
+        }}
+      />
     </MainLayout>
   );
 };

@@ -490,4 +490,28 @@ router.get("/v1/residents", (req, res) => {
   proxy(options, req, res);
 });
 
+router.get("/v1/officer", (req, res) => {
+  if (!verifyJwt(req.query.jwt, matApiJwtSecret)) {
+    res.status(401).send("Invalid JWT");
+
+    return;
+  }
+
+  const { data } = req.query;
+
+  const { officerFullName } = decryptJson(
+    data,
+    matApiDataSharedKey,
+    matApiDataSalt,
+    matApiDataIterations,
+    matApiDataKeyLength,
+    matApiDataAlgorithm,
+    matApiDataIV
+  );
+
+  res.send({
+    fullName: officerFullName,
+  });
+});
+
 module.exports = router;

@@ -364,6 +364,7 @@ const useReviewSectionRows = <
 >(
   context: DatabaseContext<DBSchema> | undefined,
   steps: ProcessStepDefinition<DBSchema, Names>[],
+  readOnly: boolean,
   tenantId?: ResidentRef
 ): UseAsyncReturn<SectionRow[]> => {
   const rows = useRows(steps);
@@ -429,10 +430,11 @@ const useReviewSectionRows = <
               return;
             }
 
-            const changeSlug =
-              tenantId && repeatingStepSlugs.includes(row.changeSlug)
-                ? slugWithId(row.changeSlug, tenantId)
-                : row.changeSlug;
+            const changeSlug = readOnly
+              ? undefined
+              : tenantId && repeatingStepSlugs.includes(row.changeSlug)
+              ? slugWithId(row.changeSlug, tenantId)
+              : row.changeSlug;
 
             return {
               key: row.label,

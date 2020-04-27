@@ -11,10 +11,11 @@ import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 interface Props {
   onSubmit(): Promise<boolean>;
   status: ProcessStage;
+  disabled?: boolean;
 }
 
 const ManagerSubmitButton: React.FunctionComponent<Props> = (props) => {
-  const { onSubmit, status } = props;
+  const { onSubmit, status, disabled } = props;
   const router = useRouter();
   const buttonText = status === ProcessStage.Approved ? "Approve" : "Decline";
 
@@ -26,6 +27,7 @@ const ManagerSubmitButton: React.FunctionComponent<Props> = (props) => {
   return (
     <Button
       preventDoubleClick
+      disabled={disabled}
       className={classNames({
         "lbh-button--warning govuk-button--warning":
           status === ProcessStage.Declined,
@@ -43,6 +45,7 @@ ManagerSubmitButton.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   status: PropTypes.oneOf([ProcessStage.Approved, ProcessStage.Declined])
     .isRequired,
+  disabled: PropTypes.bool,
 };
 
 export default ManagerSubmitButton;

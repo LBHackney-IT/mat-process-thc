@@ -21,15 +21,17 @@ interface Tenant {
 
 interface TenantSectionProps {
   tenant: Tenant;
+  readOnly?: boolean;
 }
 
 const TenantSection: React.FunctionComponent<TenantSectionProps> = (props) => {
-  const { tenant } = props;
+  const { tenant, readOnly } = props;
   const { id, fullName, present } = tenant;
 
   const rows = useReviewSectionRows(
     Storage.ResidentContext,
     idAndResidencyResidentSteps,
+    readOnly || false,
     id
   );
 
@@ -59,16 +61,18 @@ TenantSection.propTypes = {
 
 interface IdAndResidencyReviewSectionProps {
   tenants: Tenant[];
+  readOnly?: boolean;
 }
 
 export const IdAndResidencyReviewSection: React.FunctionComponent<IdAndResidencyReviewSectionProps> = (
   props
 ) => {
-  const { tenants } = props;
+  const { tenants, readOnly } = props;
 
   const rows = useReviewSectionRows(
     Storage.ProcessContext,
-    idAndResidencyProcessSteps
+    idAndResidencyProcessSteps,
+    readOnly || false
   );
 
   return (
@@ -83,7 +87,7 @@ export const IdAndResidencyReviewSection: React.FunctionComponent<IdAndResidency
         rows.result.length > 0 && <SummaryList rows={rows.result} />
       )}
       {tenants.map((tenant) => (
-        <TenantSection key={tenant.id} tenant={tenant} />
+        <TenantSection key={tenant.id} tenant={tenant} readOnly={readOnly} />
       ))}
     </>
   );

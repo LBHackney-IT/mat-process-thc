@@ -391,14 +391,48 @@ const useFetchTenancyData = (): UseApiWithStorageReturn<
   });
 };
 
+const useOfficerData = (): UseApiWithStorageReturn<
+  ExternalDatabaseSchema,
+  "officer"
+> => {
+  const router = useRouter();
+
+  const processRef = getProcessRef(router);
+  const data = getMatApiData(processRef);
+
+  return useApiWithStorage({
+    endpoint: "/v1/officer",
+    query: { data },
+    jwt: {
+      sessionStorageKey:
+        isClient && processRef ? `${processRef}:matApiJwt` : undefined,
+    },
+    execute: Boolean(processRef),
+    parse(data: { fullName: string }) {
+      return { fullName: data.fullName };
+    },
+    databaseContext: Storage.ExternalContext,
+    databaseMap: {
+      storeName: "officer",
+      key: processRef,
+    },
+  });
+};
+
 export const LoadingPage: NextPage = () => {
   const router = useRouter();
   const processDataSyncStatus = useFetchAndStoreProcessJson();
   const residentData = useFetchResidentData();
   const tenancyData = useFetchTenancyData();
+  const officerData = useOfficerData();
   const precacheProcessPages = usePrecacheAll();
 
-  const extraResults = [residentData, tenancyData, precacheProcessPages];
+  const extraResults = [
+    residentData,
+    tenancyData,
+    officerData,
+    precacheProcessPages,
+  ];
 
   const loading =
     processDataSyncStatus.loading ||
@@ -429,7 +463,7 @@ export const LoadingPage: NextPage = () => {
     (extraResults.length + processDataSyncStatus.expectedStepCount);
 
   const isManagerPage = isManager(router);
-  const nextSlug = isManagerPage ? PageSlugs.Review : PageSlugs.Outside;
+  const nextSlug = isManagerPage ? PageSlugs.ManagerReview : PageSlugs.Outside;
 
   const { href, as } = urlsForRouter(
     router,

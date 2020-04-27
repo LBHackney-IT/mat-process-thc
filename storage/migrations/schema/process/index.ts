@@ -2,6 +2,7 @@ import { Upgrade } from "remultiform/database";
 import ProcessDatabaseSchema from "../../../ProcessDatabaseSchema";
 import from0 from "./from0";
 import from1 from "./from1";
+import from10 from "./from10";
 import from2 from "./from2";
 import from3 from "./from3";
 import from5 from "./from5";
@@ -16,6 +17,7 @@ export default {
   5: from5,
   6: from6,
   7: from7,
+  10: from10,
 } as {
   [n: number]:
     | ((upgrade: Upgrade<ProcessDatabaseSchema["schema"]>) => void)

@@ -69,7 +69,7 @@ export default class Storage {
   static init(): void {
     const externalDatabasePromise = Database.open<ExternalDatabaseSchema>(
       externalDatabaseName,
-      1,
+      2,
       {
         upgrade(upgrade) {
           if (upgrade.newVersion === undefined) {
