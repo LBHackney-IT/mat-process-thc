@@ -39,4 +39,20 @@ module.exports = withOffline({
   env,
   registerSwPrefix: basePath,
   scope: `${basePath}/`,
+  workboxOpts: {
+    exclude: [/\/api\//],
+    runtimeCaching: [
+      {
+        urlPattern: /^https?.*/,
+        handler: "CacheFirst",
+        method: "GET",
+        options: {
+          cacheName: "offlineCache",
+          expiration: {
+            maxEntries: 200,
+          },
+        },
+      },
+    ],
+  },
 });
