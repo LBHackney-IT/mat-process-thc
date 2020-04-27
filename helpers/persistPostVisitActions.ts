@@ -64,7 +64,7 @@ const collectNotesByStoreName = <
   const pathArray = notesPaths.map((path) => path.split("."));
 
   for (const path of pathArray) {
-    let valueForPath = storeValue as ComponentValue<DBSchema, StoreName>;
+    let valueForPath: ComponentValue<DBSchema, StoreName> = storeValue;
 
     const pathName = path.join(".");
 
@@ -85,10 +85,14 @@ const collectNotesByStoreName = <
     }
 
     if (valueForPath) {
-      notesByStore[storeName][pathName] = [
-        ...notesByStore[storeName][pathName],
-        ...valueForPath,
-      ];
+      if (Array.isArray(valueForPath)) {
+        notesByStore[storeName][pathName] = [
+          ...notesByStore[storeName][pathName],
+          ...valueForPath,
+        ];
+      } else {
+        console.error(`Invalid note found at ${pathName}`);
+      }
     }
   }
 
