@@ -28,6 +28,12 @@ if (dev) {
   });
 }
 
+for (const [key, value] of Object.entries(env)) {
+  if (value === undefined) {
+    throw new Error(`Environment value ${key} is required but missing`);
+  }
+}
+
 module.exports = withOffline({
   assetPrefix: basePath,
   distDir: process.env.NEXT_DIST_DIR || ".next",
