@@ -1,4 +1,3 @@
-import { CurrentTenantNames } from "components/CurrentTenantNames";
 import { FieldsetLegend } from "lbh-frontend-react/components";
 import React from "react";
 import {
@@ -7,6 +6,7 @@ import {
   DynamicComponent,
   StaticComponent,
 } from "remultiform/component-wrapper";
+import { CurrentTenantNames } from "../../components/CurrentTenantNames";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import {

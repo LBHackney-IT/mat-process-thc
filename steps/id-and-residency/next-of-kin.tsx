@@ -1,4 +1,3 @@
-import { CurrentTenantNames } from "components/CurrentTenantNames";
 import {
   Heading,
   HeadingLevels,
@@ -12,6 +11,7 @@ import {
   makeDynamic,
   StaticComponent,
 } from "remultiform/component-wrapper";
+import { CurrentTenantNames } from "../../components/CurrentTenantNames";
 import { makeSubmit } from "../../components/makeSubmit";
 import { TextInput } from "../../components/TextInput";
 import keyFromSlug from "../../helpers/keyFromSlug";

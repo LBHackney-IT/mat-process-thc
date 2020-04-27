@@ -1,4 +1,3 @@
-import { CurrentTenantNames } from "components/CurrentTenantNames";
 import formatDate from "date-fns/format";
 import {
   FieldsetLegend,
@@ -16,6 +15,7 @@ import {
   makeDynamic,
   StaticComponent,
 } from "remultiform/component-wrapper";
+import { CurrentTenantNames } from "../../components/CurrentTenantNames";
 import { DateInput } from "../../components/DateInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import {
