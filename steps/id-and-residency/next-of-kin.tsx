@@ -11,6 +11,7 @@ import {
   makeDynamic,
   StaticComponent,
 } from "remultiform/component-wrapper";
+import { CurrentTenantNames } from "../../components/CurrentTenantNames";
 import { makeSubmit } from "../../components/makeSubmit";
 import { TextInput } from "../../components/TextInput";
 import keyFromSlug from "../../helpers/keyFromSlug";
@@ -77,6 +78,13 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
         value: "Save and continue",
       }),
     componentWrappers: [
+      ComponentWrapper.wrapStatic(
+        new StaticComponent({
+          key: "previous-attempts",
+          Component: CurrentTenantNames,
+          props: {},
+        })
+      ),
       ComponentWrapper.wrapStatic<ResidentDatabaseSchema, "nextOfKin">(
         new StaticComponent({
           key: "next-of-kin-heading",

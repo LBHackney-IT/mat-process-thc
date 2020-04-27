@@ -1,4 +1,3 @@
-import yesNoNotPresentRadio from "helpers/yesNoNotPresentRadio";
 import {
   FieldsetLegend,
   Heading,
@@ -12,6 +11,7 @@ import {
   DynamicComponent,
   StaticComponent,
 } from "remultiform/component-wrapper";
+import { CurrentTenantNames } from "../../components/CurrentTenantNames";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import { PostVisitActionInput } from "../../components/PostVisitActionInput";
@@ -20,6 +20,7 @@ import { ReviewNotes } from "../../components/ReviewNotes";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import slugForRepeatingStep from "../../helpers/slugForRepeatingStep";
+import yesNoNotPresentRadio from "../../helpers/yesNoNotPresentRadio";
 import { Notes } from "../../storage/DatabaseSchema";
 import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
 import Storage from "../../storage/Storage";
@@ -65,6 +66,13 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
         value: "Save and continue",
       }),
     componentWrappers: [
+      ComponentWrapper.wrapStatic(
+        new StaticComponent({
+          key: "previous-attempts",
+          Component: CurrentTenantNames,
+          props: {},
+        })
+      ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "tenant-photo-willing",
