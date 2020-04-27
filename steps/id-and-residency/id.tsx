@@ -1,20 +1,22 @@
-import { FieldsetLegend } from "lbh-frontend-react/components";
+import { CurrentTenantNames } from "components/CurrentTenantNames";
+import { ImageInput } from "components/ImageInput";
+import {
+  PostVisitActionInputDetails,
+  PostVisitActionInputDetailsProps,
+} from "components/PostVisitActionInputDetails";
+import { RadioButtons } from "components/RadioButtons";
+import keyFromSlug from "helpers/keyFromSlug";
+import { FieldsetLegend } from "lbh-frontend-react";
 import React from "react";
 import {
   ComponentDatabaseMap,
   ComponentWrapper,
   DynamicComponent,
+  StaticComponent,
 } from "remultiform/component-wrapper";
-import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
-import {
-  PostVisitActionInputDetails,
-  PostVisitActionInputDetailsProps,
-} from "../../components/PostVisitActionInputDetails";
-import { RadioButtons } from "../../components/RadioButtons";
 import { ReviewNotes } from "../../components/ReviewNotes";
 import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
-import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import slugForRepeatingStep from "../../helpers/slugForRepeatingStep";
 import { Notes } from "../../storage/DatabaseSchema";
@@ -92,6 +94,13 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
         value: "Save and continue",
       }),
     componentWrappers: [
+      ComponentWrapper.wrapStatic(
+        new StaticComponent({
+          key: "previous-attempts",
+          Component: CurrentTenantNames,
+          props: {},
+        })
+      ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "id-type",

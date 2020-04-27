@@ -1,3 +1,4 @@
+import { CurrentTenantNames } from "components/CurrentTenantNames";
 import yesNoNotPresentRadio from "helpers/yesNoNotPresentRadio";
 import {
   FieldsetLegend,
@@ -65,6 +66,13 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
         value: "Save and continue",
       }),
     componentWrappers: [
+      ComponentWrapper.wrapStatic(
+        new StaticComponent({
+          key: "previous-attempts",
+          Component: CurrentTenantNames,
+          props: {},
+        })
+      ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "tenant-photo-willing",

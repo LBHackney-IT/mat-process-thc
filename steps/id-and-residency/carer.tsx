@@ -1,3 +1,4 @@
+import { CurrentTenantNames } from "components/CurrentTenantNames";
 import formatDate from "date-fns/format";
 import {
   FieldsetLegend,
@@ -147,6 +148,13 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
         value: "Save and continue",
       }),
     componentWrappers: [
+      ComponentWrapper.wrapStatic(
+        new StaticComponent({
+          key: "previous-attempts",
+          Component: CurrentTenantNames,
+          props: {},
+        })
+      ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "carer-needed",

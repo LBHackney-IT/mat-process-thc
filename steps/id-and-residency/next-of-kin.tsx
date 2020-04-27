@@ -1,3 +1,4 @@
+import { CurrentTenantNames } from "components/CurrentTenantNames";
 import {
   Heading,
   HeadingLevels,
@@ -77,6 +78,13 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
         value: "Save and continue",
       }),
     componentWrappers: [
+      ComponentWrapper.wrapStatic(
+        new StaticComponent({
+          key: "previous-attempts",
+          Component: CurrentTenantNames,
+          props: {},
+        })
+      ),
       ComponentWrapper.wrapStatic<ResidentDatabaseSchema, "nextOfKin">(
         new StaticComponent({
           key: "next-of-kin-heading",

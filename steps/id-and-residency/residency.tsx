@@ -1,9 +1,11 @@
+import { CurrentTenantNames } from "components/CurrentTenantNames";
 import { FieldsetLegend } from "lbh-frontend-react/components";
 import React from "react";
 import {
   ComponentDatabaseMap,
   ComponentWrapper,
   DynamicComponent,
+  StaticComponent,
 } from "remultiform/component-wrapper";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
@@ -102,6 +104,13 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
         value: "Save and continue",
       }),
     componentWrappers: [
+      ComponentWrapper.wrapStatic(
+        new StaticComponent({
+          key: "previous-attempts",
+          Component: CurrentTenantNames,
+          props: {},
+        })
+      ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "residency-proof-type",
