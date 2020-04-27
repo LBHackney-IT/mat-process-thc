@@ -126,7 +126,7 @@ module "staging" {
     MAT_API_HOST     = "g6bw0g0ojk.execute-api.eu-west-2.amazonaws.com"
     MAT_API_BASE_URL = "/staging/manage-a-tenancy-api"
 
-    WORKTRAY_URL       = "https://hlbctrial-test.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx"
+    WORKTRAY_URL       = "https://hlbctrial-tst.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx"
     DIVERSITY_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform"
   }
 
