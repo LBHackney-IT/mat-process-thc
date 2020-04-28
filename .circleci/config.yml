@@ -50,6 +50,7 @@ jobs:
       - run:
           name: Run tests in Chrome
           command: TEST_BROWSER=chrome npm test
+          no_output_timeout: 20m
 
   build:
     parameters:
