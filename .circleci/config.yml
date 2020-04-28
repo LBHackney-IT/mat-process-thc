@@ -71,11 +71,12 @@ jobs:
       - run:
           name: Build Docker image
           command: |
-            docker build . \
+            docker build \
               --build-arg ENVIRONMENT_NAME="<<parameters.environment-name>>" \
               --build-arg PROCESS_NAME="thc" \
               --build-arg WORKTRAY_URL="<<parameters.worktray-url>>" \
-              --build-arg DIVERSITY_FORM_URL="<<parameters.diversity-form-url>>"
+              --build-arg DIVERSITY_FORM_URL="<<parameters.diversity-form-url>>" \
+              .
 
   deploy:
     parameters:
