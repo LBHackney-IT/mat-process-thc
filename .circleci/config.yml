@@ -134,7 +134,7 @@ workflows:
             --build-arg ENVIRONMENT_NAME="development" \
             --build-arg PROCESS_NAME="thc" \
             --build-arg WORKTRAY_URL="https://hlbctrial-dev.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx" \
-            --build-arg DIVERSITY_FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform"
+            --build-arg DIVERSITY_FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform" \
           region: AWS_REGION
           repo: $AWS_ECR_PATH_DEV
           tag: $CIRCLE_SHA1
@@ -158,7 +158,7 @@ workflows:
             --build-arg ENVIRONMENT_NAME="staging" \
             --build-arg PROCESS_NAME="thc" \
             --build-arg WORKTRAY_URL="https://hlbctrial-tst.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx" \
-            --build-arg DIVERSITY_FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform"
+            --build-arg DIVERSITY_FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform" \
           region: AWS_REGION
           repo: $AWS_ECR_PATH_STAGING
           tag: $CIRCLE_SHA1
@@ -190,7 +190,7 @@ workflows:
             --build-arg ENVIRONMENT_NAME="production" \
             --build-arg PROCESS_NAME="thc" \
             --build-arg WORKTRAY_URL="https://hlbctrial.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx" \
-            --build-arg DIVERSITY_FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform"
+            --build-arg DIVERSITY_FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform" \
           region: AWS_REGION
           repo: $AWS_ECR_PATH_PRODUCTION
           tag: $CIRCLE_SHA1
