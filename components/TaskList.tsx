@@ -1,7 +1,6 @@
 import { Link, List, Tag } from "lbh-frontend-react/components";
 import querystring from "querystring";
 import React from "react";
-
 import PropTypes, { PropTypesTypes } from "../helpers/PropTypes";
 
 export enum TaskListStatus {
@@ -81,6 +80,11 @@ export const TaskList: React.FunctionComponent<Props> = (props) => {
 
         :global(.task-list li .lbh-tag) {
           margin-right: 2em;
+        }
+
+        :global(.task-list li span),
+        :global(.task-list li a) {
+          margin: 0;
         }
       `}</style>
     </>
