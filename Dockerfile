@@ -18,6 +18,10 @@ ARG WORKTRAY_URL
 ARG DIVERSITY_FORM_URL
 
 ENV NODE_ENV production
+ENV ENVIRONMENT_NAME ${ENVIRONMENT_NAME}
+ENV PROCESS_NAME ${PROCESS_NAME}
+ENV WORKTRAY_URL ${WORKTRAY_URL}
+ENV DIVERSITY_FORM_URL ${DIVERSITY_FORM_URL}
 
 # ------------------------------------------------------------------------------
 # dependencies
@@ -43,14 +47,6 @@ RUN apk add --no-cache g++ make python3
 COPY . /app
 
 RUN NODE_ENV=development npm ci
-
-RUN { \
-  echo "NODE_ENV=${NODE_ENV}" \
-  echo "ENVIRONMENT_NAME=${ENVIRONMENT_NAME}" ; \
-  echo "PROCESS_NAME=${PROCESS_NAME}" ; \
-  echo "WORKTRAY_URL=${WORKTRAY_URL}" ; \
-  echo "DIVERSITY_FORM_URL=${DIVERSITY_FORM_URL}" ; \
-  } >> .env
 
 RUN npm run build
 
