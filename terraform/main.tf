@@ -54,11 +54,6 @@ module "development" {
   lb_iam_role_arn    = "${data.aws_iam_role.ec2_container_service_role.arn}"
 
   task_definition_environment_variables = {
-    NODE_ENV = "production"
-
-    ENVIRONMENT_NAME = "development"
-
-    PROCESS_NAME       = "thc"
     PROCESS_TYPE_VALUE = "100000156"
     PROCESS_TYPE_NAME  = "Tenancy and household check"
 
@@ -67,13 +62,9 @@ module "development" {
 
     MAT_API_HOST     = "g6bw0g0ojk.execute-api.eu-west-2.amazonaws.com"
     MAT_API_BASE_URL = "/development/manage-a-tenancy-api"
-
-    WORKTRAY_URL       = "https://hlbctrial-dev.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx"
-    TENANCY_URL        = "https://hlbctrial-dev.outsystemsenterprise.com/manageatenancy/CustomerDashboard.aspx"
-    DIVERSITY_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform"
   }
 
-  task_definition_environment_variable_count = 12
+  task_definition_environment_variable_count = 6
 
   task_definition_secrets = {
     PROCESS_API_JWT_SECRET  = "${local.parameter_store}/development-thc-ROCESS_API_JWT_SECRET"
@@ -113,11 +104,6 @@ module "staging" {
   lb_iam_role_arn    = "${data.aws_iam_role.ec2_container_service_role.arn}"
 
   task_definition_environment_variables = {
-    NODE_ENV = "production"
-
-    ENVIRONMENT_NAME = "staging"
-
-    PROCESS_NAME       = "thc"
     PROCESS_TYPE_VALUE = "100000156"
     PROCESS_TYPE_NAME  = "Tenancy and household check"
 
@@ -126,13 +112,9 @@ module "staging" {
 
     MAT_API_HOST     = "g6bw0g0ojk.execute-api.eu-west-2.amazonaws.com"
     MAT_API_BASE_URL = "/staging/manage-a-tenancy-api"
-
-    WORKTRAY_URL       = "https://hlbctrial-tst.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx"
-    TENANCY_URL        = "https://hlbctrial-tst.outsystemsenterprise.com/manageatenancy/CustomerDashboard.aspx"
-    DIVERSITY_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform"
   }
 
-  task_definition_environment_variable_count = 12
+  task_definition_environment_variable_count = 6
 
   task_definition_secrets = {
     PROCESS_API_JWT_SECRET  = "${local.parameter_store}/staging-thc-ROCESS_API_JWT_SECRET"
@@ -172,11 +154,6 @@ module "production" {
   lb_iam_role_arn    = "${data.aws_iam_role.ec2_container_service_role.arn}"
 
   task_definition_environment_variables = {
-    NODE_ENV = "production"
-
-    ENVIRONMENT_NAME = "production"
-
-    PROCESS_NAME       = "thc"
     PROCESS_TYPE_VALUE = "100000156"
     PROCESS_TYPE_NAME  = "Tenancy and household check"
 
@@ -185,13 +162,9 @@ module "production" {
 
     MAT_API_HOST     = "g6bw0g0ojk.execute-api.eu-west-2.amazonaws.com"
     MAT_API_BASE_URL = "/production/manage-a-tenancy-api"
-
-    WORKTRAY_URL       = "https://hlbctrial.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx"
-    TENANCY_URL        = "https://hlbctrial.outsystemsenterprise.com/manageatenancy/CustomerDashboard.aspx"
-    DIVERSITY_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform"
   }
 
-  task_definition_environment_variable_count = 12
+  task_definition_environment_variable_count = 6
 
   task_definition_secrets = {
     PROCESS_API_JWT_SECRET  = "${local.parameter_store}/production-thc-ROCESS_API_JWT_SECRET"
