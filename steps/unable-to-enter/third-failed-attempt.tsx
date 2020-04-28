@@ -19,17 +19,72 @@ import PreviousAttemptsAnnouncement from "../../components/PreviousAttemptsAnnou
 import SingleCheckbox from "../../components/SingleCheckbox";
 import failedAttemptActionCheckboxes from "../../helpers/failedAttemptActionCheckboxes";
 import failedAttemptReasonCheckboxes from "../../helpers/failedAttemptReasonCheckboxes";
+import { getCheckboxLabelsFromValues } from "../../helpers/getCheckboxLabelsFromValues";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import { persistUnableToEnterDate } from "../../helpers/persistUnableToEnterDate";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import ProcessDatabaseSchema, {
   UnableToEnterPropertyNames,
 } from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step = {
+const questions = {
+  "why-unable-to-enter":
+    "Why were you unable to enter the property? Did you observe anything of concern?",
+  "what-action": "What did you do?",
+};
+
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "unableToEnter"> = {
   title: PageTitles.ThirdFailedAttempt,
   heading: "Unable to enter the property",
+  review: {
+    rows: [
+      {
+        label: questions["why-unable-to-enter"],
+        values: {
+          "why-unable-to-enter": {
+            renderValue(reasons: string[]): React.ReactNode {
+              return getCheckboxLabelsFromValues(
+                failedAttemptReasonCheckboxes,
+                reasons
+              );
+            },
+          },
+          "third-attempt-notes": {
+            renderValue(thirdAttemptNotes: string): React.ReactNode {
+              return thirdAttemptNotes;
+            },
+          },
+        },
+      },
+      {
+        label: questions["what-action"],
+        values: {
+          "what-action": {
+            renderValue(actions: string[]): React.ReactNode {
+              return getCheckboxLabelsFromValues(
+                failedAttemptActionCheckboxes,
+                actions
+              );
+            },
+          },
+        },
+      },
+      {
+        label: "Actions",
+        values: {
+          "appointment-letter-reminder": {
+            renderValue(created: boolean): React.ReactNode {
+              if (created) {
+                return "Created reminder to send appointment letter (T&HC2)";
+              }
+            },
+          },
+        },
+      },
+    ],
+  },
   step: {
     slug: PageSlugs.ThirdFailedAttempt,
     nextSlug: PageSlugs.Pause,
@@ -72,8 +127,7 @@ const step = {
             name: "why-unable-to-enter",
             legend: (
               <FieldsetLegend>
-                Why were you unable to enter the property? Did you observe
-                anything of concern?
+                {questions["why-unable-to-enter"]}
               </FieldsetLegend>
             ) as React.ReactNode,
             checkboxes: failedAttemptReasonCheckboxes,
@@ -97,7 +151,7 @@ const step = {
           props: {
             name: "what-action",
             legend: (
-              <FieldsetLegend>What did you do?</FieldsetLegend>
+              <FieldsetLegend>{questions["what-action"]}</FieldsetLegend>
             ) as React.ReactNode,
             checkboxes: failedAttemptActionCheckboxes,
           } as CheckboxesProps,
