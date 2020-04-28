@@ -10,6 +10,7 @@ import React, { useState } from "react";
 import ProgressBar from "../../../components/ProgressBar";
 import getProcessRef from "../../../helpers/getProcessRef";
 import persistProcessData from "../../../helpers/persistProcessData";
+import stringifyArray from "../../../helpers/stringifyArray";
 import urlsForRouter from "../../../helpers/urlsForRouter";
 import useDataValue from "../../../helpers/useDataValue";
 import useOnlineWithRetry from "../../../helpers/useOnlineWithRetry";
@@ -34,9 +35,10 @@ const PausePage: NextPage = () => {
   );
 
   const address = residentData.result?.address.join(", ");
-  const tenants = (residentData.result?.tenants || [])
-    .map((tenant) => tenant.fullName)
-    .join(", ");
+  const tenantNames = (residentData.result?.tenants || []).map(
+    (tenant) => tenant.fullName
+  );
+  const tenants = stringifyArray(tenantNames);
 
   let content: React.ReactElement;
 
@@ -59,8 +61,8 @@ const PausePage: NextPage = () => {
                 : "You are currently working offline."}
             </Paragraph>
             <Paragraph>
-              The Tenancy and Household Check for the tenancy at {address}{" "}
-              occupied by {tenants} has been saved to your device but still
+              The Tenancy and Household Check for the tenancy at {address},
+              occupied by {tenants}, has been saved to your device but still
               needs to be saved to your work tray so you can resume it later.
             </Paragraph>
             <Paragraph>
