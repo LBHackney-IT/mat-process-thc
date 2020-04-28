@@ -15,6 +15,7 @@ const env = {
   ENVIRONMENT_NAME: process.env.ENVIRONMENT_NAME,
   PROCESS_NAME: process.env.PROCESS_NAME,
   WORKTRAY_URL: process.env.WORKTRAY_URL,
+  TENANCY_URL: process.env.TENANCY_URL,
   DIVERSITY_FORM_URL: process.env.DIVERSITY_FORM_URL,
 };
 

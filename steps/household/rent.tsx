@@ -2,8 +2,10 @@ import {
   FieldsetLegend,
   Heading,
   HeadingLevels,
+  Link,
   Paragraph,
 } from "lbh-frontend-react/components";
+import { useRouter } from "next/router";
 import React from "react";
 import {
   ComponentDatabaseMap,
@@ -19,12 +21,15 @@ import {
 } from "../../components/PostVisitActionInputDetails";
 import { RadioButtons } from "../../components/RadioButtons";
 import { ReviewNotes } from "../../components/ReviewNotes";
+import getProcessRef from "../../helpers/getProcessRef";
 import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import useDataValue from "../../helpers/useDataValue";
 import yesNoRadios from "../../helpers/yesNoRadios";
 import { Notes } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
+import Storage from "../../storage/Storage";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -76,6 +81,47 @@ const questions = {
     "Has Housing Benefit / Universal Credit been applied for?",
   "contact-income-officer":
     "Would the tenant like to be put in contact with the Income Officer?",
+};
+
+const CurrentBalance: React.FunctionComponent = () => {
+  const router = useRouter();
+  const processRef = getProcessRef(router);
+
+  const currentBalance = useDataValue(
+    Storage.ExternalContext,
+    "tenancy",
+    processRef,
+    (values) => (processRef ? values[processRef]?.currentBalance : undefined)
+  );
+
+  const tenancyUrl = process.env.TENANCY_URL;
+
+  const currentBalanceValue = currentBalance.result
+    ? `£${currentBalance.result}`
+    : "Loading...";
+
+  return (
+    <>
+      <Paragraph>
+        <strong>Current rent balance: {currentBalanceValue}</strong>
+      </Paragraph>
+      {tenancyUrl && (
+        <>
+          <Paragraph className="rent-details">
+            <Link href={tenancyUrl}>Full rent account details</Link> (opens in a
+            new tab)
+          </Paragraph>
+          <style jsx>
+            {`
+              :global(.rent-details) {
+                margin-top: 0;
+              }
+            `}
+          </style>
+        </>
+      )}
+    </>
+  );
 };
 
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
@@ -142,6 +188,13 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
         value: "Save and continue",
       }),
     componentWrappers: [
+      ComponentWrapper.wrapStatic(
+        new StaticComponent({
+          key: "current-balance",
+          Component: CurrentBalance,
+          props: {},
+        })
+      ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "rent-arrears-type",

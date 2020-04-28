@@ -373,14 +373,17 @@ const useFetchTenancyData = (): UseApiWithStorageReturn<
       results: {
         tenuretype: string;
         tenancyStartDate: string;
+        currentBalance: string;
       };
     }) {
       const tenureType = data.results.tenuretype;
       const tenancyStartDate = data.results.tenancyStartDate;
+      const currentBalance = data.results.currentBalance;
 
       return {
         tenureType,
         startDate: new Date(tenancyStartDate),
+        currentBalance,
       };
     },
     databaseContext: Storage.ExternalContext,
