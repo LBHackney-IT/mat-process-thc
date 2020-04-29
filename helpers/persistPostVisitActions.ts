@@ -70,6 +70,8 @@ const collectNotesByStoreName = <
 
     while (path.length > 0) {
       if (typeof valueForPath !== "object") {
+        valueForPath = undefined;
+
         break;
       }
 
