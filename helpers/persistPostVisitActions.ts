@@ -48,10 +48,10 @@ const collectNotesByStoreName = <
   notesPaths: string[],
   data: SchemaValues<DBSchema["schema"]>
 ): NotesByStore => {
-  const notesByStore = {} as NotesByStore;
+  const notesByStore: NotesByStore = {};
 
   notesByStore[storeName] = notesPaths.reduce(
-    (notePaths, path) => ({ ...notePaths, [path]: [] }),
+    (paths, path) => ({ ...paths, [path]: [] }),
     {}
   );
 
@@ -61,37 +61,38 @@ const collectNotesByStoreName = <
     return {};
   }
 
-  const pathArray = notesPaths.map((path) => path.split("."));
-
-  for (const path of pathArray) {
+  for (const path of notesPaths) {
+    const pathComponents = path.split(".");
     let valueForPath: ComponentValue<DBSchema, StoreName> = storeValue;
 
-    const pathName = path.join(".");
-
-    while (path.length > 0) {
+    while (pathComponents.length > 0) {
       if (typeof valueForPath !== "object") {
+        valueForPath = undefined;
+
         break;
       }
 
-      const key = path.shift() as
-        | keyof ComponentValue<DBSchema, StoreName>
-        | "<this>";
-
-      if (key === "<this>") {
-        continue;
-      }
+      const key: keyof ComponentValue<
+        DBSchema,
+        StoreName
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      > = pathComponents.shift()!;
 
       valueForPath = valueForPath[key];
     }
 
-    if (valueForPath) {
+    if (valueForPath !== undefined) {
       if (Array.isArray(valueForPath)) {
-        notesByStore[storeName][pathName] = [
-          ...notesByStore[storeName][pathName],
+        notesByStore[storeName][path] = [
+          ...notesByStore[storeName][path],
           ...valueForPath,
         ];
       } else {
-        console.error(`Invalid note found at ${pathName}`);
+        console.error(
+          `Invalid note found at ${path} for ${storeName}: ${JSON.stringify(
+            valueForPath
+          )}`
+        );
       }
     }
   }
@@ -112,17 +113,19 @@ const getNotes = <
     return {};
   }
 
-  return Object.entries<string[] | never[]>(notesPaths).reduce(
-    (noteValues, [storeName, paths]) => ({
-      ...noteValues,
-      ...collectNotesByStoreName<DBSchema, StoreNames<DBSchema["schema"]>>(
-        storeName as StoreNames<DBSchema["schema"]>,
-        paths,
-        values
-      ),
-    }),
-    {} as NotesByStore
-  );
+  return Object.entries<string[] | never[]>(notesPaths)
+    .filter(([, path]) => path.length > 0)
+    .reduce<NotesByStore>(
+      (noteValues, [storeName, paths]) => ({
+        ...noteValues,
+        ...collectNotesByStoreName<DBSchema, StoreNames<DBSchema["schema"]>>(
+          storeName as StoreNames<DBSchema["schema"]>,
+          paths,
+          values
+        ),
+      }),
+      {}
+    );
 };
 
 export const getProcessDataNotes = (
@@ -295,44 +298,29 @@ const updateCreatedAt = async <
         throw new Error("No existing value to update for note");
       }
 
-      let notes = value as ComponentValue<
-        ProcessDatabaseSchema,
-        StoreNames<ProcessDatabaseSchema["schema"]>
-      >;
+      let notes: ComponentValue<DBSchema, StoreName> = value;
 
-      let key:
-        | keyof ComponentValue<
-            ProcessDatabaseSchema,
-            StoreNames<ProcessDatabaseSchema["schema"]>
-          >
-        | "<this>"
-        | undefined;
+      let key: keyof ComponentValue<DBSchema, StoreName> | undefined;
 
       while (pathComponents.length > 0) {
-        const newKey = pathComponents.shift() as
-          | keyof ComponentValue<
-              ProcessDatabaseSchema,
-              StoreNames<ProcessDatabaseSchema["schema"]>
-            >
-          | "<this>";
-
-        if (newKey === "<this>") {
-          break;
-        }
+        const newKey: keyof ComponentValue<
+          DBSchema,
+          StoreName
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        > = pathComponents.shift()!;
 
         key = newKey;
         notes = notes[key];
       }
 
-      const newNotes = notes as Notes;
+      const newNotes: Notes = notes;
 
       newNotes[noteIndex] = {
         ...newNotes[noteIndex],
         createdAt: new Date().toISOString(),
       };
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await store.put(ref, value as any);
+      await store.put(ref, value);
     },
     TransactionMode.ReadWrite
   );

@@ -3,6 +3,7 @@ import { Heading, HeadingLevels, Paragraph } from "lbh-frontend-react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
+import { TransactionMode } from "remultiform/database";
 import { makeSubmit } from "../../../components/makeSubmit";
 import { PostVisitActionInput } from "../../../components/PostVisitActionInput";
 import { HouseholdReviewSection } from "../../../components/review-sections/HouseholdReviewSection";
@@ -211,10 +212,17 @@ const ReviewPage: NextPage = () => {
             );
           }
 
-          await processDatabase.result.put(
-            "otherNotes",
-            processRef,
-            otherNotes
+          await processDatabase.result.transaction(
+            ["other"],
+            async (stores) => {
+              const otherValue = await stores.other.get(processRef);
+
+              await stores.other.put(processRef, {
+                ...otherValue,
+                notes: otherNotes,
+              });
+            },
+            TransactionMode.ReadWrite
           );
 
           await processDatabase.result.put(
