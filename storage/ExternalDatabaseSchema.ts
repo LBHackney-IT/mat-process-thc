@@ -15,6 +15,7 @@ type ExternalDatabaseSchema = NamedSchema<
       value: {
         tenureType: string;
         startDate: Date;
+        currentBalance: string;
       };
     };
 

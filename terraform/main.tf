@@ -69,10 +69,11 @@ module "development" {
     MAT_API_BASE_URL = "/development/manage-a-tenancy-api"
 
     WORKTRAY_URL       = "https://hlbctrial-dev.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx"
+    TENANCY_URL        = "https://hlbctrial-dev.outsystemsenterprise.com/manageatenancy/CustomerDashboard.aspx"
     DIVERSITY_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform"
   }
 
-  task_definition_environment_variable_count = 11
+  task_definition_environment_variable_count = 12
 
   task_definition_secrets = {
     PROCESS_API_JWT_SECRET  = "${local.parameter_store}/development-thc-ROCESS_API_JWT_SECRET"
@@ -127,10 +128,11 @@ module "staging" {
     MAT_API_BASE_URL = "/staging/manage-a-tenancy-api"
 
     WORKTRAY_URL       = "https://hlbctrial-tst.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx"
+    TENANCY_URL        = "https://hlbctrial-tst.outsystemsenterprise.com/manageatenancy/CustomerDashboard.aspx"
     DIVERSITY_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform"
   }
 
-  task_definition_environment_variable_count = 11
+  task_definition_environment_variable_count = 12
 
   task_definition_secrets = {
     PROCESS_API_JWT_SECRET  = "${local.parameter_store}/staging-thc-ROCESS_API_JWT_SECRET"
@@ -185,10 +187,11 @@ module "production" {
     MAT_API_BASE_URL = "/production/manage-a-tenancy-api"
 
     WORKTRAY_URL       = "https://hlbctrial.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx"
+    TENANCY_URL        = "https://hlbctrial.outsystemsenterprise.com/manageatenancy/CustomerDashboard.aspx"
     DIVERSITY_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform"
   }
 
-  task_definition_environment_variable_count = 11
+  task_definition_environment_variable_count = 12
 
   task_definition_secrets = {
     PROCESS_API_JWT_SECRET  = "${local.parameter_store}/production-thc-ROCESS_API_JWT_SECRET"

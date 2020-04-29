@@ -58,6 +58,8 @@ jobs:
         type: string
       worktray-url:
         type: string
+      tenancy-url:
+        type: string
       diversity-form-url:
         type: string
 
@@ -75,6 +77,7 @@ jobs:
               --build-arg ENVIRONMENT_NAME="<<parameters.environment-name>>" \
               --build-arg PROCESS_NAME="thc" \
               --build-arg WORKTRAY_URL="<<parameters.worktray-url>>" \
+              --build-arg TENANCY_URL="<<parameters.tenancy-url>>" \
               --build-arg DIVERSITY_FORM_URL="<<parameters.diversity-form-url>>" \
               .
 
@@ -113,6 +116,7 @@ workflows:
             - install-and-test-branch
           environment-name: branch
           worktray-url: https://work.tray
+          tenancy-url: https://tenancy.management
           diversity-form-url: https://diversity.form
 
   check-and-deploy-to-development-and-staging:
@@ -134,6 +138,7 @@ workflows:
             --build-arg ENVIRONMENT_NAME="development" \
             --build-arg PROCESS_NAME="thc" \
             --build-arg WORKTRAY_URL="https://hlbctrial-dev.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx" \
+            --build-arg TENANCY_URL="https://hlbctrial-dev.outsystemsenterprise.com/manageatenancy/CustomerDashboard.aspx" \
             --build-arg DIVERSITY_FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform" \
           region: AWS_REGION
           repo: $AWS_ECR_PATH_DEV
@@ -158,6 +163,7 @@ workflows:
             --build-arg ENVIRONMENT_NAME="staging" \
             --build-arg PROCESS_NAME="thc" \
             --build-arg WORKTRAY_URL="https://hlbctrial-tst.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx" \
+            --build-arg TENANCY_URL="https://hlbctrial-tst.outsystemsenterprise.com/manageatenancy/CustomerDashboard.aspx" \
             --build-arg DIVERSITY_FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform" \
           region: AWS_REGION
           repo: $AWS_ECR_PATH_STAGING
@@ -190,6 +196,7 @@ workflows:
             --build-arg ENVIRONMENT_NAME="production" \
             --build-arg PROCESS_NAME="thc" \
             --build-arg WORKTRAY_URL="https://hlbctrial.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx" \
+            --build-arg TENANCY_URL="https://hlbctrial.outsystemsenterprise.com/manageatenancy/CustomerDashboard.aspx" \
             --build-arg DIVERSITY_FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform" \
           region: AWS_REGION
           repo: $AWS_ECR_PATH_PRODUCTION
