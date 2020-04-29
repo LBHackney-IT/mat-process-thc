@@ -396,12 +396,14 @@ const processData = {
       signature: "",
     },
   },
-  otherNotes: [
-    {
-      value: "Other notes",
-      isPostVisitAction: false,
-    },
-  ],
+  other: {
+    notes: [
+      {
+        value: "Other notes",
+        isPostVisitAction: false,
+      },
+    ],
+  },
 };
 
 defineFeature(loadFeature("./end-to-end.feature"), (test) => {
@@ -1543,7 +1545,7 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
         await browser!.waitForEnabledElement({
           name: "other-notes",
         })
-      ).sendKeys(processData.otherNotes[0].value);
+      ).sendKeys(processData.other.notes[0].value);
 
       await browser!.submit();
 

@@ -142,9 +142,9 @@ const ReviewPage: NextPage = () => {
 
   const otherNotes = useDataValue(
     Storage.ProcessContext,
-    "otherNotes",
+    "other",
     processRef,
-    (values) => (processRef ? values[processRef] : [])
+    (values) => (processRef && values[processRef]?.notes) || []
   );
 
   const otherNotesValues = otherNotes.result

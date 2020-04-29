@@ -6,8 +6,6 @@ import ResidentDatabaseSchema, { ResidentRef } from "./ResidentDatabaseSchema";
 
 export type ProcessRef = string;
 
-export const processDatabaseVersion = 5;
-
 export const processDatabaseName = `mat-process-${
   process.env.PROCESS_NAME
 }-process-${process.env.ENVIRONMENT_NAME || "unknown"}`;
@@ -219,9 +217,11 @@ type ProcessDatabaseSchema = NamedSchema<
       };
     };
 
-    otherNotes: {
+    other: {
       key: ProcessRef;
-      value: Notes;
+      value: {
+        notes: Notes;
+      };
     };
 
     unableToEnter: {
@@ -299,7 +299,7 @@ const storeNames: {
   healthConcerns: true,
   disability: true,
   supportNeeds: true,
-  otherNotes: true,
+  other: true,
   unableToEnter: true,
   managerComment: true,
 };
@@ -361,7 +361,7 @@ export const processNotesPaths: {
     "mentalHealth18To65Notes",
     "mentalHealthOver65Notes",
   ],
-  otherNotes: ["<this>"],
+  other: ["notes"],
   unableToEnter: [],
   managerComment: [],
 };
@@ -525,8 +525,8 @@ export const processPostVisitActionMap: {
       subcategory: "100000200",
     },
   },
-  otherNotes: {
-    "<this>": {
+  other: {
+    notes: {
       category: "24",
       subcategory: "100000209",
     },

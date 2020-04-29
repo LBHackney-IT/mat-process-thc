@@ -48,7 +48,7 @@ const collectNotesByStoreName = <
   notesPaths: string[],
   data: SchemaValues<DBSchema["schema"]>
 ): NotesByStore => {
-  const notesByStore = {} as NotesByStore;
+  const notesByStore: NotesByStore = {};
 
   notesByStore[storeName] = notesPaths.reduce(
     (paths, path) => ({ ...paths, [path]: [] }),
