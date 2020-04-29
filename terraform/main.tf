@@ -67,7 +67,7 @@ module "development" {
   task_definition_environment_variable_count = 6
 
   task_definition_secrets = {
-    PROCESS_API_JWT_SECRET  = "${local.parameter_store}/development-thc-ROCESS_API_JWT_SECRET"
+    PROCESS_API_JWT_SECRET  = "${local.parameter_store}/development-thc-PROCESS_API_JWT_SECRET"
     PROCESS_API_KEY         = "${local.parameter_store}/development-thc-PROCESS_API_KEY"
     MAT_API_JWT_SECRET      = "${local.parameter_store}/development-thc-MAT_API_JWT_SECRET"
     MAT_API_DATA_SHARED_KEY = "${local.parameter_store}/development-thc-MAT_API_DATA_SHARED_KEY"
@@ -117,7 +117,7 @@ module "staging" {
   task_definition_environment_variable_count = 6
 
   task_definition_secrets = {
-    PROCESS_API_JWT_SECRET  = "${local.parameter_store}/staging-thc-ROCESS_API_JWT_SECRET"
+    PROCESS_API_JWT_SECRET  = "${local.parameter_store}/staging-thc-PROCESS_API_JWT_SECRET"
     PROCESS_API_KEY         = "${local.parameter_store}/staging-thc-PROCESS_API_KEY"
     MAT_API_JWT_SECRET      = "${local.parameter_store}/staging-thc-MAT_API_JWT_SECRET"
     MAT_API_DATA_SHARED_KEY = "${local.parameter_store}/staging-thc-MAT_API_DATA_SHARED_KEY"
@@ -167,7 +167,7 @@ module "production" {
   task_definition_environment_variable_count = 6
 
   task_definition_secrets = {
-    PROCESS_API_JWT_SECRET  = "${local.parameter_store}/production-thc-ROCESS_API_JWT_SECRET"
+    PROCESS_API_JWT_SECRET  = "${local.parameter_store}/production-thc-PROCESS_API_JWT_SECRET"
     PROCESS_API_KEY         = "${local.parameter_store}/production-thc-PROCESS_API_KEY"
     MAT_API_JWT_SECRET      = "${local.parameter_store}/production-thc-MAT_API_JWT_SECRET"
     MAT_API_DATA_SHARED_KEY = "${local.parameter_store}/production-thc-MAT_API_DATA_SHARED_KEY"
