@@ -53,10 +53,21 @@ module.exports = withOffline({
     runtimeCaching: [
       {
         urlPattern: /^https?.*/,
+        handler: "NetworkFirst",
+        method: "GET",
+        options: {
+          cacheName: "offlinePageCache",
+          expiration: {
+            maxEntries: 200,
+          },
+        },
+      },
+      {
+        urlPattern: /\.(?:css|js)$/,
         handler: "CacheFirst",
         method: "GET",
         options: {
-          cacheName: "offlineCache",
+          cacheName: "offlineFileCache",
           expiration: {
             maxEntries: 200,
           },
