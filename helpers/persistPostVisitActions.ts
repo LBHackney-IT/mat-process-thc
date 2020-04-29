@@ -51,7 +51,7 @@ const collectNotesByStoreName = <
   const notesByStore = {} as NotesByStore;
 
   notesByStore[storeName] = notesPaths.reduce(
-    (notePaths, path) => ({ ...notePaths, [path]: [] }),
+    (paths, path) => ({ ...paths, [path]: [] }),
     {}
   );
 
@@ -112,17 +112,19 @@ const getNotes = <
     return {};
   }
 
-  return Object.entries<string[] | never[]>(notesPaths).reduce(
-    (noteValues, [storeName, paths]) => ({
-      ...noteValues,
-      ...collectNotesByStoreName<DBSchema, StoreNames<DBSchema["schema"]>>(
-        storeName as StoreNames<DBSchema["schema"]>,
-        paths,
-        values
-      ),
-    }),
-    {} as NotesByStore
-  );
+  return Object.entries<string[] | never[]>(notesPaths)
+    .filter(([, path]) => path.length > 0)
+    .reduce<NotesByStore>(
+      (noteValues, [storeName, paths]) => ({
+        ...noteValues,
+        ...collectNotesByStoreName<DBSchema, StoreNames<DBSchema["schema"]>>(
+          storeName as StoreNames<DBSchema["schema"]>,
+          paths,
+          values
+        ),
+      }),
+      {}
+    );
 };
 
 export const getProcessDataNotes = (
