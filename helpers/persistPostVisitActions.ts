@@ -368,6 +368,12 @@ export const persistPostVisitActions = async (
 
       await Promise.all(
         notes.map(async (note, index) => {
+          if (!note) {
+            console.error(`Note for ${path} was ${note}`);
+
+            return;
+          }
+
           if (note.createdAt || !note.isPostVisitAction || note.value === "") {
             return;
           }
@@ -414,6 +420,12 @@ export const persistPostVisitActions = async (
 
         await Promise.all(
           notes.map(async (note, index) => {
+            if (!note) {
+              console.error(`Note for ${path} was ${note}`);
+
+              return;
+            }
+
             if (
               note.createdAt ||
               !note.isPostVisitAction ||
