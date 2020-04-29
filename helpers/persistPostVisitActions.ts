@@ -77,6 +77,7 @@ const collectNotesByStoreName = <
         StoreName
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       > = pathComponents.shift()!;
+
       valueForPath = valueForPath[key];
     }
 
@@ -297,44 +298,29 @@ const updateCreatedAt = async <
         throw new Error("No existing value to update for note");
       }
 
-      let notes = value as ComponentValue<
-        ProcessDatabaseSchema,
-        StoreNames<ProcessDatabaseSchema["schema"]>
-      >;
+      let notes: ComponentValue<DBSchema, StoreName> = value;
 
-      let key:
-        | keyof ComponentValue<
-            ProcessDatabaseSchema,
-            StoreNames<ProcessDatabaseSchema["schema"]>
-          >
-        | "<this>"
-        | undefined;
+      let key: keyof ComponentValue<DBSchema, StoreName> | undefined;
 
       while (pathComponents.length > 0) {
-        const newKey = pathComponents.shift() as
-          | keyof ComponentValue<
-              ProcessDatabaseSchema,
-              StoreNames<ProcessDatabaseSchema["schema"]>
-            >
-          | "<this>";
-
-        if (newKey === "<this>") {
-          break;
-        }
+        const newKey: keyof ComponentValue<
+          DBSchema,
+          StoreName
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        > = pathComponents.shift()!;
 
         key = newKey;
         notes = notes[key];
       }
 
-      const newNotes = notes as Notes;
+      const newNotes: Notes = notes;
 
       newNotes[noteIndex] = {
         ...newNotes[noteIndex],
         createdAt: new Date().toISOString(),
       };
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await store.put(ref, value as any);
+      await store.put(ref, value);
     },
     TransactionMode.ReadWrite
   );
