@@ -61,39 +61,37 @@ const collectNotesByStoreName = <
     return {};
   }
 
-  const pathArray = notesPaths.map((path) => path.split("."));
-
-  for (const path of pathArray) {
+  for (const path of notesPaths) {
+    const pathComponents = path.split(".");
     let valueForPath: ComponentValue<DBSchema, StoreName> = storeValue;
 
-    const pathName = path.join(".");
-
-    while (path.length > 0) {
+    while (pathComponents.length > 0) {
       if (typeof valueForPath !== "object") {
         valueForPath = undefined;
 
         break;
       }
 
-      const key = path.shift() as
-        | keyof ComponentValue<DBSchema, StoreName>
-        | "<this>";
-
-      if (key === "<this>") {
-        continue;
-      }
-
+      const key: keyof ComponentValue<
+        DBSchema,
+        StoreName
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      > = pathComponents.shift()!;
       valueForPath = valueForPath[key];
     }
 
-    if (valueForPath) {
+    if (valueForPath !== undefined) {
       if (Array.isArray(valueForPath)) {
-        notesByStore[storeName][pathName] = [
-          ...notesByStore[storeName][pathName],
+        notesByStore[storeName][path] = [
+          ...notesByStore[storeName][path],
           ...valueForPath,
         ];
       } else {
-        console.error(`Invalid note found at ${pathName}`);
+        console.error(
+          `Invalid note found at ${path} for ${storeName}: ${JSON.stringify(
+            valueForPath
+          )}`
+        );
       }
     }
   }
