@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import failedAttemptActionCheckboxes from "../helpers/failedAttemptActionCheckboxes";
 import failedAttemptReasonCheckboxes from "../helpers/failedAttemptReasonCheckboxes";
+import { getCheckboxLabelsFromValues } from "../helpers/getCheckboxLabelsFromValues";
 import getProcessRef from "../helpers/getProcessRef";
 import useDataValue from "../helpers/useDataValue";
 import Storage from "../storage/Storage";
@@ -24,10 +25,10 @@ const Value: React.FunctionComponent<{
   const actions = props.actions || [];
   const notes = props.notes;
 
-  const reason = failedAttemptReasonCheckboxes
-    .filter((checkbox) => reasons.includes(checkbox.value))
-    .map((checkbox) => checkbox.label)
-    .join(", ");
+  const reason = getCheckboxLabelsFromValues(
+    failedAttemptReasonCheckboxes,
+    reasons
+  );
 
   const action = failedAttemptActionCheckboxes
     .filter((checkbox) => actions.includes(checkbox.value))
