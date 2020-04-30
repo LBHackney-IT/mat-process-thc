@@ -1,3 +1,8 @@
+export const tenantNotPresent = {
+  label: "Tenant not present",
+  value: "tenant not present",
+};
+
 export default [
   {
     label: "Yes",
@@ -7,8 +12,5 @@ export default [
     label: "No",
     value: "no",
   },
-  {
-    label: "Tenant not present",
-    value: "tenant not present",
-  },
+  tenantNotPresent,
 ];

@@ -19,6 +19,7 @@ import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import slugForRepeatingStep from "../../helpers/slugForRepeatingStep";
+import { tenantNotPresent } from "../../helpers/yesNoNotPresentRadio";
 import { Notes } from "../../storage/DatabaseSchema";
 import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
 import Storage from "../../storage/Storage";
@@ -50,10 +51,7 @@ const idTypeRadios = [
     label: "Unable to verify ID",
     value: "no id",
   },
-  {
-    label: "Tenant not present",
-    value: "tenant not present",
-  },
+  tenantNotPresent,
 ];
 
 const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {

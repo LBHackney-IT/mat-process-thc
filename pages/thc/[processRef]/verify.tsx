@@ -17,6 +17,7 @@ import slugWithId from "../../../helpers/slugWithId";
 import urlsForRouter from "../../../helpers/urlsForRouter";
 import useDataSet from "../../../helpers/useDataSet";
 import useDataValue from "../../../helpers/useDataValue";
+import { tenantNotPresent } from "../../../helpers/yesNoNotPresentRadio";
 import MainLayout from "../../../layouts/MainLayout";
 import PageSlugs, { urlObjectForSlug } from "../../../steps/PageSlugs";
 import PageTitles from "../../../steps/PageTitles";
@@ -64,7 +65,7 @@ export const VerifyPage: NextPage = () => {
       id:
         idData.result &&
         idData.result[tenant.id]?.type &&
-        idData.result[tenant.id]?.type !== "tenant not present"
+        idData.result[tenant.id]?.type !== tenantNotPresent.value
           ? true
           : tenantsPresent.result?.includes(tenant.id)
           ? false
