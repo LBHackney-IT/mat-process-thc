@@ -1,5 +1,4 @@
 import { NamedSchema, StoreNames } from "remultiform/database";
-
 import { ProcessRef } from "./ProcessDatabaseSchema";
 import { ResidentRef } from "./ResidentDatabaseSchema";
 
@@ -9,13 +8,14 @@ export const externalDatabaseName = `mat-process-${
 
 type ExternalDatabaseSchema = NamedSchema<
   typeof externalDatabaseName,
-  1,
+  2,
   {
     tenancy: {
       key: ProcessRef;
       value: {
         tenureType: string;
         startDate: Date;
+        currentBalance: string;
       };
     };
 
@@ -31,7 +31,16 @@ type ExternalDatabaseSchema = NamedSchema<
         householdMembers: {
           id: ResidentRef;
           fullName: string;
+          dateOfBirth: Date;
+          relationship: string;
         }[];
+      };
+    };
+
+    officer: {
+      key: ProcessRef;
+      value: {
+        fullName: string;
       };
     };
   }
@@ -42,6 +51,7 @@ const storeNames: {
 } = {
   tenancy: true,
   residents: true,
+  officer: true,
 };
 
 export const externalStoreNames = Object.entries(storeNames)

@@ -7,13 +7,17 @@ import {
   DynamicComponent,
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
+import {
+  PostVisitActionInput,
+  PostVisitActionInputProps,
+} from "../../components/PostVisitActionInput";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea, TextAreaProps } from "../../components/TextArea";
+import { ReviewNotes } from "../../components/ReviewNotes";
 import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import yesNoRadios from "../../helpers/yesNoRadios";
-import { Note } from "../../storage/DatabaseSchema";
+import { Notes } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
@@ -38,8 +42,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             },
           },
           "communal-areas-notes": {
-            renderValue(communalAreasNotes: Note): React.ReactNode {
-              return communalAreasNotes.value;
+            renderValue(notes: Notes): React.ReactNode {
+              return <ReviewNotes notes={notes} />;
             },
           },
         },
@@ -126,14 +130,13 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "communal-areas-notes",
-          Component: TextArea,
+          Component: PostVisitActionInput,
           props: {
             label: {
               value: "Add note about door mats / potted plants if necessary.",
             },
             name: "communal-areas-notes",
-            includeCheckbox: true,
-          } as TextAreaProps,
+          } as PostVisitActionInputProps,
           renderWhen(stepValues: {
             "has-left-combustible-items"?: ComponentValue<
               ProcessDatabaseSchema,
@@ -142,8 +145,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           }): boolean {
             return stepValues["has-left-combustible-items"] === "yes";
           },
-          defaultValue: { value: "", isPostVisitAction: false },
-          emptyValue: { value: "", isPostVisitAction: false },
+          defaultValue: [] as Notes,
+          emptyValue: [] as Notes,
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "property"

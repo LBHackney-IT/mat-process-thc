@@ -2,8 +2,10 @@ import {
   FieldsetLegend,
   Heading,
   HeadingLevels,
+  Link,
   Paragraph,
 } from "lbh-frontend-react/components";
+import { useRouter } from "next/router";
 import React from "react";
 import {
   ComponentDatabaseMap,
@@ -13,17 +15,21 @@ import {
   StaticComponent,
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
-import { RadioButtons } from "../../components/RadioButtons";
 import {
-  TextAreaDetails,
-  TextAreaDetailsProps,
-} from "../../components/TextAreaDetails";
+  PostVisitActionInputDetails,
+  PostVisitActionInputDetailsProps,
+} from "../../components/PostVisitActionInputDetails";
+import { RadioButtons } from "../../components/RadioButtons";
+import { ReviewNotes } from "../../components/ReviewNotes";
+import getProcessRef from "../../helpers/getProcessRef";
 import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import useDataValue from "../../helpers/useDataValue";
 import yesNoRadios from "../../helpers/yesNoRadios";
-import { Note } from "../../storage/DatabaseSchema";
+import { Notes } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
+import Storage from "../../storage/Storage";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -77,6 +83,47 @@ const questions = {
     "Would the tenant like to be put in contact with the Income Officer?",
 };
 
+const CurrentBalance: React.FunctionComponent = () => {
+  const router = useRouter();
+  const processRef = getProcessRef(router);
+
+  const currentBalance = useDataValue(
+    Storage.ExternalContext,
+    "tenancy",
+    processRef,
+    (values) => (processRef ? values[processRef]?.currentBalance : undefined)
+  );
+
+  const tenancyUrl = process.env.TENANCY_URL;
+
+  const currentBalanceValue = currentBalance.result
+    ? `£${currentBalance.result}`
+    : "Loading...";
+
+  return (
+    <>
+      <Paragraph>
+        <strong>Current rent balance: {currentBalanceValue}</strong>
+      </Paragraph>
+      {tenancyUrl && (
+        <>
+          <Paragraph className="rent-details">
+            <Link href={tenancyUrl}>Full rent account details</Link> (opens in a
+            new tab)
+          </Paragraph>
+          <style jsx>
+            {`
+              :global(.rent-details) {
+                margin-top: 0;
+              }
+            `}
+          </style>
+        </>
+      )}
+    </>
+  );
+};
+
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
   title: PageTitles.Rent,
   heading: "Rent, housing benefits, and income officer",
@@ -91,8 +138,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
             },
           },
           "rent-arrears-notes": {
-            renderValue(rentArrearsNotes: Note): React.ReactNode {
-              return rentArrearsNotes.value;
+            renderValue(rentArrearsNotes: Notes): React.ReactNode {
+              return <ReviewNotes notes={rentArrearsNotes} />;
             },
           },
         },
@@ -109,8 +156,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
             },
           },
           "housing-benefits-notes": {
-            renderValue(housingBenefitNotes: Note): React.ReactNode {
-              return housingBenefitNotes.value;
+            renderValue(housingBenefitNotes: Notes): React.ReactNode {
+              return <ReviewNotes notes={housingBenefitNotes} />;
             },
           },
         },
@@ -124,8 +171,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
             },
           },
           "income-officer-notes": {
-            renderValue(incomeOfficerNotes: Note): React.ReactNode {
-              return incomeOfficerNotes.value;
+            renderValue(incomeOfficerNotes: Notes): React.ReactNode {
+              return <ReviewNotes notes={incomeOfficerNotes} />;
             },
           },
         },
@@ -141,6 +188,13 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
         value: "Save and continue",
       }),
     componentWrappers: [
+      ComponentWrapper.wrapStatic(
+        new StaticComponent({
+          key: "current-balance",
+          Component: CurrentBalance,
+          props: {},
+        })
+      ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "rent-arrears-type",
@@ -171,15 +225,14 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "rent-arrears-notes",
-          Component: TextAreaDetails,
+          Component: PostVisitActionInputDetails,
           props: {
             summary: "Add notes about rent arrears if necessary",
             label: { value: "Notes" },
             name: "rent-arrears-notes",
-            includeCheckbox: true,
-          } as TextAreaDetailsProps,
-          defaultValue: { value: "", isPostVisitAction: false },
-          emptyValue: { value: "", isPostVisitAction: false },
+          } as PostVisitActionInputDetailsProps,
+          defaultValue: [] as Notes,
+          emptyValue: [] as Notes,
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "household"
@@ -232,13 +285,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "housing-benefits-notes",
-          Component: TextAreaDetails,
+          Component: PostVisitActionInputDetails,
           props: {
             summary: "Add details about Housing Benefit if necessary",
             label: { value: "Notes" },
             name: "housing-benefits-notes",
-            includeCheckbox: true,
-          } as TextAreaDetailsProps,
+          } as PostVisitActionInputDetailsProps,
           renderWhen(stepValues: {
             "rent-arrears-type"?: ComponentValue<
               ProcessDatabaseSchema,
@@ -251,8 +303,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
               stepValues["rent-arrears-type"] === "no"
             );
           },
-          defaultValue: { value: "", isPostVisitAction: false },
-          emptyValue: { value: "", isPostVisitAction: false },
+          defaultValue: [] as Notes,
+          emptyValue: [] as Notes,
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "household"
@@ -354,13 +406,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "income-officer-notes",
-          Component: TextAreaDetails,
+          Component: PostVisitActionInputDetails,
           props: {
             summary: "Add details about the Income Officer if necessary",
             label: { value: "Notes" },
             name: "income-officer-notes",
-            includeCheckbox: true,
-          } as TextAreaDetailsProps,
+          } as PostVisitActionInputDetailsProps,
           renderWhen(stepValues: {
             "rent-arrears-type"?: ComponentValue<
               ProcessDatabaseSchema,
@@ -369,8 +420,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
           }): boolean {
             return Boolean(stepValues["rent-arrears-type"]);
           },
-          defaultValue: { value: "", isPostVisitAction: false },
-          emptyValue: { value: "", isPostVisitAction: false },
+          defaultValue: [] as Notes,
+          emptyValue: [] as Notes,
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "household"

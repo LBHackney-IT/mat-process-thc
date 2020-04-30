@@ -4,7 +4,10 @@ import {
   Header,
   Heading,
   HeadingLevels,
+  Link,
   Main,
+  Paragraph,
+  Tag,
 } from "lbh-frontend-react";
 import NextHead from "next/head";
 import NextLink from "next/link";
@@ -253,20 +256,44 @@ const MainLayout = ({
       <Header serviceName="Manage a tenancy"></Header>
       <Main>
         <Container>
-          {pausable &&
-            (href.pathname && as.pathname ? (
-              <NextLink href={href} as={as}>
-                {pauseButton}
-              </NextLink>
-            ) : (
-              pauseButton
-            ))}
-          {heading && <Heading level={HeadingLevels.H1}>{heading}</Heading>}
+          <div className="phase-banner">
+            <Paragraph>
+              <Tag>BETA</Tag> This is a new service – your{" "}
+              <Link href={process.env.DIVERSITY_FORM_URL || ""} target="_blank">
+                feedback
+              </Link>{" "}
+              will help us to improve it.
+            </Paragraph>
+            <hr />
+          </div>
+          <div className="heading">
+            {pausable &&
+              (href.pathname && as.pathname ? (
+                <NextLink href={href} as={as}>
+                  {pauseButton}
+                </NextLink>
+              ) : (
+                pauseButton
+              ))}
+            {heading && <Heading level={HeadingLevels.H1}>{heading}</Heading>}
+          </div>
           {children}
         </Container>
       </Main>
       <style jsx>{`
-        :global(.pause-button) {
+        :global(#main-content) {
+          padding-top: 0;
+        }
+
+        .phase-banner {
+          margin-top: 1.5em;
+        }
+
+        .phase-banner :global(.lbh-tag) {
+          margin-right: 1em;
+        }
+
+        .heading :global(.pause-button) {
           float: right;
           margin-top: 0;
           margin-left: 2em;

@@ -235,11 +235,40 @@ it("renders correctly when online", async () => {
         <div
           className="govuk-container lbh-container"
         >
-          <h1
-            className="lbh-heading-h1"
+          <div
+            className="phase-banner"
           >
-            Tenancy and Household Check
-          </h1>
+            <p
+              className="lbh-body"
+            >
+              <strong
+                className="govuk-tag lbh-tag"
+              >
+                BETA
+              </strong>
+               This is a new service – your
+               
+              <a
+                className="govuk-link lbh-link"
+                href="https://diversity.form"
+                target="_blank"
+              >
+                feedback
+              </a>
+               
+              will help us to improve it.
+            </p>
+            <hr />
+          </div>
+          <div
+            className="heading"
+          >
+            <h1
+              className="lbh-heading-h1"
+            >
+              Tenancy and Household Check
+            </h1>
+          </div>
           <dl
             className="govuk-summary-list lbh-summary-list govuk-summary-list--no-border mat-tenancy-summary"
           >
@@ -364,7 +393,19 @@ it("renders correctly when online", async () => {
         jsx={true}
       >
         
-            :global(.pause-button) {
+            :global(#main-content) {
+              padding-top: 0;
+            }
+
+            .phase-banner {
+              margin-top: 1.5em;
+            }
+
+            .phase-banner :global(.lbh-tag) {
+              margin-right: 1em;
+            }
+
+            .heading :global(.pause-button) {
               float: right;
               margin-top: 0;
               margin-left: 2em;
@@ -390,6 +431,24 @@ it("renders correctly when offline", async () => {
 
   expect(consoleErrorSpy.mock.calls).toMatchInlineSnapshot(`
     Array [
+      Array [
+        [Error: Request timed out],
+      ],
+      Array [
+        [Error: Request timed out],
+      ],
+      Array [
+        [Error: Request timed out],
+      ],
+      Array [
+        [Error: Request timed out],
+      ],
+      Array [
+        [Error: Request timed out],
+      ],
+      Array [
+        [Error: Request timed out],
+      ],
       Array [
         [Error: Request timed out],
       ],
@@ -511,11 +570,40 @@ Array [
     <div
       className="govuk-container lbh-container"
     >
-      <h1
-        className="lbh-heading-h1"
+      <div
+        className="phase-banner"
       >
-        Tenancy and Household Check
-      </h1>
+        <p
+          className="lbh-body"
+        >
+          <strong
+            className="govuk-tag lbh-tag"
+          >
+            BETA
+          </strong>
+           This is a new service – your
+           
+          <a
+            className="govuk-link lbh-link"
+            href="https://diversity.form"
+            target="_blank"
+          >
+            feedback
+          </a>
+           
+          will help us to improve it.
+        </p>
+        <hr />
+      </div>
+      <div
+        className="heading"
+      >
+        <h1
+          className="lbh-heading-h1"
+        >
+          Tenancy and Household Check
+        </h1>
+      </div>
       <dl
         className="govuk-summary-list lbh-summary-list govuk-summary-list--no-border mat-tenancy-summary"
       >
@@ -614,7 +702,7 @@ Array [
           <div
             style={
               Object {
-                "width": "50%",
+                "width": "43%",
               }
             }
           />
@@ -651,7 +739,19 @@ Array [
     jsx={true}
   >
     
-        :global(.pause-button) {
+        :global(#main-content) {
+          padding-top: 0;
+        }
+
+        .phase-banner {
+          margin-top: 1.5em;
+        }
+
+        .phase-banner :global(.lbh-tag) {
+          margin-right: 1em;
+        }
+
+        .heading :global(.pause-button) {
           float: right;
           margin-top: 0;
           margin-left: 2em;

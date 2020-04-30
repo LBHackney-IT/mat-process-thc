@@ -27,11 +27,13 @@ const useCacheQueryParameters = (): void => {
   let processApiJwt = router.query.processApiJwt as string | undefined;
   let matApiJwt = router.query.matApiJwt as string | undefined;
   let matApiData = router.query.data as string | undefined;
+  let processStage = router.query.processStage as string | undefined;
 
   if (process.env.NODE_ENV !== "production") {
     processApiJwt = processApiJwt || process.env.TEST_PROCESS_API_JWT;
     matApiJwt = matApiJwt || process.env.TEST_MAT_API_JWT;
     matApiData = matApiData || process.env.TEST_MAT_API_DATA;
+    processStage = processStage || process.env.TEST_PROCESS_STAGE;
   }
 
   if (processApiJwt) {
@@ -50,6 +52,12 @@ const useCacheQueryParameters = (): void => {
     sessionStorage.setItem(`${processRef}:matApiData`, matApiData);
   } else {
     sessionStorage.removeItem(`${processRef}:matApiData`);
+  }
+
+  if (processStage) {
+    sessionStorage.setItem(`${processRef}:processStage`, processStage);
+  } else {
+    sessionStorage.removeItem(`${processRef}:processStage`);
   }
 };
 

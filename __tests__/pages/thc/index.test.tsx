@@ -131,11 +131,40 @@ it("renders correctly when offline", async () => {
         <div
           className="govuk-container lbh-container"
         >
-          <h1
-            className="lbh-heading-h1"
+          <div
+            className="phase-banner"
           >
-            Tenancy and Household Check
-          </h1>
+            <p
+              className="lbh-body"
+            >
+              <strong
+                className="govuk-tag lbh-tag"
+              >
+                BETA
+              </strong>
+               This is a new service – your
+               
+              <a
+                className="govuk-link lbh-link"
+                href="https://diversity.form"
+                target="_blank"
+              >
+                feedback
+              </a>
+               
+              will help us to improve it.
+            </p>
+            <hr />
+          </div>
+          <div
+            className="heading"
+          >
+            <h1
+              className="lbh-heading-h1"
+            >
+              Tenancy and Household Check
+            </h1>
+          </div>
           <p
             className="lbh-body"
           >
@@ -147,7 +176,19 @@ it("renders correctly when offline", async () => {
         jsx={true}
       >
         
-            :global(.pause-button) {
+            :global(#main-content) {
+              padding-top: 0;
+            }
+
+            .phase-banner {
+              margin-top: 1.5em;
+            }
+
+            .phase-banner :global(.lbh-tag) {
+              margin-right: 1em;
+            }
+
+            .heading :global(.pause-button) {
               float: right;
               margin-top: 0;
               margin-left: 2em;

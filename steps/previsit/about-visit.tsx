@@ -7,9 +7,10 @@ import {
   DynamicComponent,
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
+import { PostVisitActionInput } from "../../components/PostVisitActionInput";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea } from "../../components/TextArea";
 import keyFromSlug from "../../helpers/keyFromSlug";
+import { Notes } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
@@ -61,7 +62,7 @@ const step = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "unannounced-visit-notes",
-          Component: TextArea,
+          Component: PostVisitActionInput,
           props: {
             label: {
               value: "Explain why this visit was pre-arranged.",
@@ -76,8 +77,8 @@ const step = {
           }): boolean {
             return stepValues["unannounced-visit"] === "no";
           },
-          defaultValue: { value: "", isPostVisitAction: false },
-          emptyValue: { value: "", isPostVisitAction: false },
+          defaultValue: [] as Notes,
+          emptyValue: [] as Notes,
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "isUnannouncedVisit"
@@ -125,7 +126,7 @@ const step = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "inside-property-notes",
-          Component: TextArea,
+          Component: PostVisitActionInput,
           props: {
             label: {
               value:
@@ -141,8 +142,8 @@ const step = {
           }): boolean {
             return stepValues["inside-property"] === "no";
           },
-          defaultValue: { value: "", isPostVisitAction: false },
-          emptyValue: { value: "", isPostVisitAction: false },
+          defaultValue: [] as Notes,
+          emptyValue: [] as Notes,
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "isVisitInside"

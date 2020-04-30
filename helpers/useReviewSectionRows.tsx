@@ -1,5 +1,6 @@
+import { useRouter } from "next/router";
 import React, { useMemo } from "react";
-import { UseAsyncReturn, useAsync } from "react-async-hook";
+import { useAsync, UseAsyncReturn } from "react-async-hook";
 import {
   ComponentDatabaseMap,
   ComponentValue,
@@ -14,14 +15,15 @@ import {
   StoreValue,
 } from "remultiform/database";
 import { DatabaseContext } from "remultiform/database-context";
-
-import Thumbnail from "../components/Thumbnail";
+import { StepDefinition } from "remultiform/step";
+import { ReviewSectionRow } from "../components/ReviewSectionRow";
+import PageSlugs, { repeatingStepSlugs } from "../steps/PageSlugs";
 import ResidentDatabaseSchema, {
   ResidentRef,
   residentStoreNames,
 } from "../storage/ResidentDatabaseSchema";
-
 import ProcessStepDefinition from "./ProcessStepDefinition";
+import slugWithId from "./slugWithId";
 import useDatabase from "./useDatabase";
 
 interface Value<
@@ -29,7 +31,9 @@ interface Value<
   Name extends StoreNames<DBSchema["schema"]>
 > {
   databaseMap: ComponentDatabaseMap<DBSchema, Name>;
-  renderValue(value: ComponentValue<DBSchema, Name>): React.ReactNode;
+  renderValue(
+    value: ComponentValue<DBSchema, Name>
+  ): React.ReactNode | Promise<React.ReactNode>;
 }
 
 interface Row<
@@ -39,6 +43,7 @@ interface Row<
   label: string;
   values: Value<DBSchema, Names>[];
   images: ComponentDatabaseMap<DBSchema, Names>[];
+  changeSlug: PageSlugs;
 }
 
 export interface SectionRow {
@@ -72,7 +77,7 @@ const findValue = <
   databaseMap: ComponentDatabaseMap<DBSchema, Name>
 ): ComponentValue<DBSchema, Name> | undefined => {
   if (storeValue === undefined) {
-    return undefined;
+    return;
   }
 
   const propertyMap = databaseMap.property as
@@ -89,7 +94,7 @@ const findValue = <
   })[propertyMap[0]];
 
   if (child === undefined) {
-    return undefined;
+    return;
   }
 
   if (propertyMap.length === 1) {
@@ -103,10 +108,80 @@ const findValue = <
   })[propertyMap[0]][propertyMap[1]];
 
   if (grandChild === undefined) {
-    return undefined;
+    return;
   }
 
   return (grandChild as unknown) as ComponentValue<DBSchema, Name>;
+};
+
+const getValues = <
+  DBSchema extends NamedSchema<string, number, Schema>,
+  Names extends StoreNames<DBSchema["schema"]>
+>(
+  step: StepDefinition<DBSchema, Names>,
+  values: Required<
+    ProcessStepDefinition<DBSchema, Names>
+  >["review"]["rows"][number]["values"]
+): Value<DBSchema, Names>[] => {
+  if (step.componentWrappers.length === 0) {
+    const valueValues = Object.values(values).filter(Boolean) as NonNullable<
+      typeof values[keyof typeof values]
+    >[];
+
+    return valueValues.filter(({ databaseMap, renderValue }) =>
+      Boolean(databaseMap && renderValue)
+    ) as Value<DBSchema, Names>[];
+  }
+
+  return step.componentWrappers
+    .map(({ key, databaseMap }) => ({ databaseMap, value: values[key] }))
+    .filter(({ databaseMap, value }) => Boolean(databaseMap && value))
+    .map(({ databaseMap, value }) => {
+      return {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        databaseMap: databaseMap!,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/unbound-method
+        renderValue: value!.renderValue,
+      };
+    });
+};
+
+const getImages = <
+  DBSchema extends NamedSchema<string, number, Schema>,
+  Names extends StoreNames<DBSchema["schema"]>
+>(
+  step: StepDefinition<DBSchema, Names>,
+  images: Required<
+    ProcessStepDefinition<DBSchema, Names>
+  >["review"]["rows"][number]["images"]
+): ComponentDatabaseMap<DBSchema, Names>[] => {
+  return [
+    step.componentWrappers.find(({ key, databaseMap }) =>
+      Boolean(databaseMap && images === key)
+    )?.databaseMap,
+  ].filter(Boolean) as ComponentDatabaseMap<DBSchema, Names>[];
+};
+
+const getRows = <
+  DBSchema extends NamedSchema<string, number, Schema>,
+  Names extends StoreNames<DBSchema["schema"]>
+>(
+  step: ProcessStepDefinition<DBSchema, Names>
+): Row<DBSchema, Names>[] => {
+  return step.review
+    ? step.review.rows.reduce<Row<DBSchema, Names>[]>(
+        (r, row) => [
+          ...r,
+          {
+            label: row.label,
+            values: getValues(step.step, row.values),
+            images: getImages(step.step, row.images),
+            changeSlug: step.step.slug as PageSlugs,
+          },
+        ],
+        []
+      )
+    : [];
 };
 
 const useRows = <
@@ -118,38 +193,7 @@ const useRows = <
   return useMemo(
     () =>
       steps.reduce<Row<DBSchema, Names>[]>(
-        (r, { review, step }) => [
-          ...r,
-          ...(review
-            ? review.rows.reduce<Row<DBSchema, Names>[]>(
-                (r, row) => [
-                  ...r,
-                  {
-                    label: row.label,
-                    values: step.componentWrappers
-                      .filter(({ key, databaseMap }) =>
-                        Boolean(databaseMap && row.values[key])
-                      )
-                      .map(({ key, databaseMap }) => {
-                        return {
-                          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                          databaseMap: databaseMap!,
-                          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/unbound-method
-                          renderValue: row.values[key]!.renderValue,
-                        };
-                      }),
-                    images: [
-                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                      step.componentWrappers.find(({ key, databaseMap }) =>
-                        Boolean(databaseMap && row.images === key)
-                      )?.databaseMap!,
-                    ].filter(Boolean),
-                  },
-                ],
-                []
-              )
-            : []),
-        ],
+        (rows, step) => [...rows, ...getRows(step)],
         []
       ),
     [steps]
@@ -320,111 +364,98 @@ const useReviewSectionRows = <
 >(
   context: DatabaseContext<DBSchema> | undefined,
   steps: ProcessStepDefinition<DBSchema, Names>[],
+  readOnly: boolean,
   tenantId?: ResidentRef
-): SectionRow[] => {
+): UseAsyncReturn<SectionRow[]> => {
   const rows = useRows(steps);
   const storeValues = useStoreValues(context, rows, tenantId);
+  const router = useRouter();
 
-  return useMemo(
-    () =>
-      rows
-        .map((row) => {
-          const values = row.values
-            .map((v) => {
-              if (storeValues.loading || storeValues.result === undefined) {
-                return undefined;
-              }
-
-              const { databaseMap, renderValue } = v;
-              const { storeName } = databaseMap;
-
-              const key = findKey(databaseMap, tenantId);
-              const values = storeValues.result[storeName];
-
-              if (key === undefined || values === undefined) {
-                return undefined;
-              }
-
-              const value = findValue(values[key], databaseMap);
-
-              if (value === undefined) {
-                return undefined;
-              }
-
-              return renderValue(value);
-            })
-            .filter(Boolean) as React.ReactNode[];
-
-          const images = (row.images
-            .map((databaseMap) => {
-              if (storeValues.loading || storeValues.result === undefined) {
-                return undefined;
-              }
-
-              const { storeName } = databaseMap;
-
-              const key = findKey(databaseMap, tenantId);
-              const values = storeValues.result[storeName];
-
-              if (key === undefined || values === undefined) {
-                return undefined;
-              }
-
-              return findValue(values[key], databaseMap);
-            })
-            .filter(Boolean) as string[][]).reduce<string[]>(
-            (i, images) => [...i, ...images],
-            []
-          );
-
-          if (!values.length && !images.length) {
-            return undefined;
-          }
-
-          return {
-            key: row.label,
-            value: (
-              <div className="row">
-                <div className="values">
-                  {values.map((value, index) => (
-                    <div key={index}>{value}</div>
-                  ))}
-                </div>
-                <div className="images">
-                  {images.map((src, index) => (
-                    <div key={index}>
-                      <Thumbnail
-                        src={src}
-                        alt="Thumbnail of an uploaded image"
-                      />
-                    </div>
-                  ))}
-                </div>
-                <style jsx>{`
-                  .row {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: stretch;
+  return useAsync(
+    async () =>
+      (
+        await Promise.all(
+          rows.map(async (row) => {
+            const values = (
+              await Promise.all(
+                row.values.map(async (v) => {
+                  if (storeValues.loading || storeValues.result === undefined) {
+                    return;
                   }
 
-                  .images {
-                    flex: 1;
-                    margin-left: 2em;
-                    display: flex;
-                    flex-wrap: wrap;
-                    justify-content: flex-end;
+                  const { databaseMap, renderValue } = v;
+                  const { storeName } = databaseMap;
+
+                  const key = findKey(databaseMap, tenantId);
+                  const values = storeValues.result[storeName];
+
+                  if (key === undefined || values === undefined) {
+                    return;
                   }
 
-                  .images > div {
-                    margin-left: 0.2em;
+                  const value = findValue(values[key], databaseMap);
+
+                  if (value === undefined) {
+                    return;
                   }
-                `}</style>
-              </div>
-            ),
-          };
-        })
-        .filter(Boolean) as SectionRow[],
-    [rows, storeValues.loading, storeValues.result, tenantId]
+
+                  return await renderValue(value);
+                })
+              )
+            ).filter(Boolean) as React.ReactNode[];
+
+            const images = (row.images
+              .map((databaseMap) => {
+                if (storeValues.loading || storeValues.result === undefined) {
+                  return;
+                }
+
+                const { storeName } = databaseMap;
+
+                const key = findKey(databaseMap, tenantId);
+                const values = storeValues.result[storeName];
+
+                if (key === undefined || values === undefined) {
+                  return;
+                }
+
+                return findValue(values[key], databaseMap);
+              })
+              .filter(Boolean) as string[][]).reduce<string[]>(
+              (i, images) => [...i, ...images],
+              []
+            );
+
+            if (!values.length && !images.length) {
+              return;
+            }
+
+            const changeSlug = readOnly
+              ? undefined
+              : tenantId && repeatingStepSlugs.includes(row.changeSlug)
+              ? slugWithId(row.changeSlug, tenantId)
+              : row.changeSlug;
+
+            return {
+              key: row.label,
+              value: (
+                <ReviewSectionRow
+                  values={values}
+                  images={images}
+                  changeSlug={changeSlug}
+                />
+              ),
+            };
+          })
+        )
+      ).filter(Boolean) as SectionRow[],
+    [
+      Boolean(router),
+      JSON.stringify(rows),
+      storeValues.loading,
+      JSON.stringify(storeValues.result),
+      tenantId,
+    ]
   );
 };
 

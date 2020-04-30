@@ -9,6 +9,9 @@ interface BaseStepDefinition<
   Names extends StoreNames<DBSchema["schema"]>
 > {
   context?: DatabaseContext<DBSchema>;
+  errors?: {
+    required?: { [key: string]: string };
+  };
   review?: {
     rows: {
       label: string;
@@ -18,7 +21,8 @@ interface BaseStepDefinition<
               renderValue(
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 value: any
-              ): React.ReactNode;
+              ): React.ReactNode | Promise<React.ReactNode>;
+              databaseMap?: ComponentDatabaseMap<DBSchema, Names>;
             }
           | undefined;
       };

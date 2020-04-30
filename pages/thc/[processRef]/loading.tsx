@@ -18,8 +18,10 @@ import useApiWithStorage, {
   UseApiWithStorageReturn,
 } from "../../../helpers/api/useApiWithStorage";
 import basePath from "../../../helpers/basePath";
+import getMatApiData from "../../../helpers/getMatApiData";
 import getProcessRef from "../../../helpers/getProcessRef";
 import isClient from "../../../helpers/isClient";
+import isManager from "../../../helpers/isManager";
 import isServer from "../../../helpers/isServer";
 import titleCase from "../../../helpers/titleCase";
 import urlsForRouter from "../../../helpers/urlsForRouter";
@@ -280,11 +282,7 @@ const useFetchResidentData = (): UseApiWithStorageReturn<
   const router = useRouter();
 
   const processRef = getProcessRef(router);
-
-  const data =
-    isClient && processRef
-      ? nullAsUndefined(sessionStorage.getItem(`${processRef}:matApiData`))
-      : undefined;
+  const data = getMatApiData(processRef);
 
   return useApiWithStorage({
     endpoint: "/v1/residents",
@@ -297,10 +295,11 @@ const useFetchResidentData = (): UseApiWithStorageReturn<
     parse(data: {
       results: {
         contactId: ResidentRef;
-        fullName: string;
-        responsible: boolean;
-        fullAddressDisplay: string;
         dateOfBirth: string;
+        fullAddressDisplay: string;
+        fullName: string;
+        relationship: string;
+        responsible: boolean;
       }[];
     }) {
       const fullAddress = data.results[0].fullAddressDisplay;
@@ -335,6 +334,7 @@ const useFetchResidentData = (): UseApiWithStorageReturn<
           id: contact.contactId,
           fullName: contact.fullName,
           dateOfBirth: new Date(contact.dateOfBirth),
+          relationship: contact.relationship || "Not available",
         }))
         .sort((a, b) => (a.id > b.id ? 1 : a.id < b.id ? -1 : 0));
 
@@ -359,11 +359,7 @@ const useFetchTenancyData = (): UseApiWithStorageReturn<
   const router = useRouter();
 
   const processRef = getProcessRef(router);
-
-  const data =
-    isClient && processRef
-      ? nullAsUndefined(sessionStorage.getItem(`${processRef}:matApiData`))
-      : undefined;
+  const data = getMatApiData(processRef);
 
   return useApiWithStorage({
     endpoint: "/v1/tenancies",
@@ -377,14 +373,17 @@ const useFetchTenancyData = (): UseApiWithStorageReturn<
       results: {
         tenuretype: string;
         tenancyStartDate: string;
+        currentBalance: string;
       };
     }) {
       const tenureType = data.results.tenuretype;
       const tenancyStartDate = data.results.tenancyStartDate;
+      const currentBalance = data.results.currentBalance;
 
       return {
         tenureType,
         startDate: new Date(tenancyStartDate),
+        currentBalance,
       };
     },
     databaseContext: Storage.ExternalContext,
@@ -395,14 +394,48 @@ const useFetchTenancyData = (): UseApiWithStorageReturn<
   });
 };
 
+const useOfficerData = (): UseApiWithStorageReturn<
+  ExternalDatabaseSchema,
+  "officer"
+> => {
+  const router = useRouter();
+
+  const processRef = getProcessRef(router);
+  const data = getMatApiData(processRef);
+
+  return useApiWithStorage({
+    endpoint: "/v1/officer",
+    query: { data },
+    jwt: {
+      sessionStorageKey:
+        isClient && processRef ? `${processRef}:matApiJwt` : undefined,
+    },
+    execute: Boolean(processRef),
+    parse(data: { fullName: string }) {
+      return { fullName: data.fullName };
+    },
+    databaseContext: Storage.ExternalContext,
+    databaseMap: {
+      storeName: "officer",
+      key: processRef,
+    },
+  });
+};
+
 export const LoadingPage: NextPage = () => {
   const router = useRouter();
   const processDataSyncStatus = useFetchAndStoreProcessJson();
   const residentData = useFetchResidentData();
   const tenancyData = useFetchTenancyData();
+  const officerData = useOfficerData();
   const precacheProcessPages = usePrecacheAll();
 
-  const extraResults = [residentData, tenancyData, precacheProcessPages];
+  const extraResults = [
+    residentData,
+    tenancyData,
+    officerData,
+    precacheProcessPages,
+  ];
 
   const loading =
     processDataSyncStatus.loading ||
@@ -432,9 +465,12 @@ export const LoadingPage: NextPage = () => {
       processDataSyncStatus.completedStepCount) /
     (extraResults.length + processDataSyncStatus.expectedStepCount);
 
+  const isManagerPage = isManager(router);
+  const nextSlug = isManagerPage ? PageSlugs.ManagerReview : PageSlugs.Outside;
+
   const { href, as } = urlsForRouter(
     router,
-    urlObjectForSlug(router, PageSlugs.Outside)
+    urlObjectForSlug(router, nextSlug)
   );
 
   const button = (
@@ -485,8 +521,9 @@ export const LoadingPage: NextPage = () => {
 
       <Heading level={HeadingLevels.H2}>Loading</Heading>
       <Paragraph>
-        The system is updating the information you need for this process so that
-        you can go offline at any point.
+        {isManagerPage
+          ? "The system is fetching the information you need for this process."
+          : "The system is updating the information you need for this process so that you can go offline at any point."}
       </Paragraph>
 
       <ProgressBar

@@ -1,7 +1,6 @@
 import formatDate from "date-fns/format";
 import { SummaryList } from "lbh-frontend-react/components";
 import React from "react";
-
 import PropTypes from "../helpers/PropTypes";
 
 interface Props {
@@ -11,39 +10,48 @@ interface Props {
     tenureType?: string;
     startDate?: string | Date;
   };
+  extraRows?: { key: string; value: React.ReactNode }[];
 }
 
 export const TenancySummary: React.FunctionComponent<Props> = (props) => {
-  const { details } = props;
+  const { details, extraRows } = props;
   const { address, tenants, tenureType, startDate } = details || {};
 
   const loading = "Loading...";
+
+  const rows = [
+    {
+      key: "Address",
+      value: address ? address.join(", ") : loading,
+    },
+    {
+      key: "Tenants",
+      value: tenants ? tenants.join(", ") : loading,
+    },
+    {
+      key: "Tenure type",
+      value: tenureType ? tenureType : loading,
+    },
+    {
+      key: "Tenancy start date",
+      value: startDate
+        ? typeof startDate === "string"
+          ? startDate
+          : formatDate(startDate, "d MMMM yyyy")
+        : loading,
+    },
+  ];
 
   return (
     <>
       <SummaryList
         className="govuk-summary-list--no-border mat-tenancy-summary"
         rows={[
-          {
-            key: "Address",
-            value: address ? address.join(", ") : loading,
-          },
-          {
-            key: "Tenants",
-            value: tenants ? tenants.join(", ") : loading,
-          },
-          {
-            key: "Tenure type",
-            value: tenureType ? tenureType : loading,
-          },
-          {
-            key: "Tenancy start date",
-            value: startDate
-              ? typeof startDate === "string"
-                ? startDate
-                : formatDate(startDate, "d MMMM yyyy")
-              : loading,
-          },
+          ...rows,
+          ...(((extraRows || []) as unknown) as {
+            key: string;
+            value: string;
+          }[]),
         ]}
       />
 
@@ -68,4 +76,10 @@ TenancySummary.propTypes = {
       PropTypes.instanceOf(Date).isRequired,
     ]),
   }),
+  extraRows: PropTypes.arrayOf(
+    PropTypes.shape({
+      key: PropTypes.string.isRequired,
+      value: PropTypes.string.isRequired,
+    }).isRequired
+  ),
 };

@@ -1,21 +1,22 @@
 import {
   Heading,
   HeadingLevels,
-  Textarea,
   LabelProps,
+  Textarea,
 } from "lbh-frontend-react";
 import {
   ComponentDatabaseMap,
   ComponentWrapper,
   DynamicComponent,
-  StaticComponent,
   makeDynamic,
+  StaticComponent,
 } from "remultiform/component-wrapper";
+import { CurrentTenantNames } from "../../components/CurrentTenantNames";
 import { makeSubmit } from "../../components/makeSubmit";
 import { TextInput } from "../../components/TextInput";
 import keyFromSlug from "../../helpers/keyFromSlug";
-import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import slugForRepeatingStep from "../../helpers/slugForRepeatingStep";
 import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
 import Storage from "../../storage/Storage";
 import PageSlugs from "../PageSlugs";
@@ -70,13 +71,20 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "nextOfKin"> = {
   },
   step: {
     slug: PageSlugs.NextOfKin,
-    nextSlug: nextSlugWithId(PageSlugs.Carer),
+    nextSlug: slugForRepeatingStep(PageSlugs.Carer),
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
         value: "Save and continue",
       }),
     componentWrappers: [
+      ComponentWrapper.wrapStatic(
+        new StaticComponent({
+          key: "previous-attempts",
+          Component: CurrentTenantNames,
+          props: {},
+        })
+      ),
       ComponentWrapper.wrapStatic<ResidentDatabaseSchema, "nextOfKin">(
         new StaticComponent({
           key: "next-of-kin-heading",

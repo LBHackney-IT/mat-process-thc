@@ -1,9 +1,13 @@
+import formatDate from "date-fns/format";
 import {
+  Heading,
+  HeadingLevels,
   Link,
   List,
   ListTypes,
   Paragraph,
 } from "lbh-frontend-react/components";
+import { useRouter } from "next/router";
 import React from "react";
 import {
   ComponentDatabaseMap,
@@ -13,17 +17,54 @@ import {
 } from "remultiform/component-wrapper";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
-import { Table } from "../../components/Table";
 import {
-  TextAreaDetails,
-  TextAreaDetailsProps,
-} from "../../components/TextAreaDetails";
+  PostVisitActionInputDetails,
+  PostVisitActionInputDetailsProps,
+} from "../../components/PostVisitActionInputDetails";
+import { ReviewNotes } from "../../components/ReviewNotes";
+import { Table } from "../../components/Table";
+import getProcessRef from "../../helpers/getProcessRef";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
-import { Note } from "../../storage/DatabaseSchema";
+import useDataValue from "../../helpers/useDataValue";
+import { Notes } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
+import Storage from "../../storage/Storage";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
+
+const HouseholdMembersTable: React.FunctionComponent = () => {
+  const router = useRouter();
+  const processRef = getProcessRef(router);
+  const householdMembers = useDataValue(
+    Storage.ExternalContext,
+    "residents",
+    processRef,
+    (values) => (processRef ? values[processRef]?.householdMembers : undefined)
+  );
+
+  return (
+    <>
+      <Heading level={HeadingLevels.H2}>Household members</Heading>
+      <Table
+        headings={["Full name", "Relationship to tenant", "Date of birth"]}
+        rows={
+          householdMembers.loading
+            ? [["Loading..."]]
+            : householdMembers.result && householdMembers.result.length > 0
+            ? householdMembers.result.map(
+                ({ fullName, relationship, dateOfBirth }) => [
+                  fullName,
+                  relationship,
+                  formatDate(dateOfBirth, "d MMMM yyyy"),
+                ]
+              )
+            : [["None"]]
+        }
+      />
+    </>
+  );
+};
 
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
   title: PageTitles.Household,
@@ -34,8 +75,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
         label: "Change in household members",
         values: {
           "member-changes": {
-            renderValue(memberChanges: Note): React.ReactNode {
-              return memberChanges.value;
+            renderValue(memberChanges: Notes): React.ReactNode {
+              return <ReviewNotes notes={memberChanges} />;
             },
           },
         },
@@ -45,8 +86,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
         label: "Housing move schemes",
         values: {
           "house-moving-schemes": {
-            renderValue(houseMovingSchemes: Note): React.ReactNode {
-              return houseMovingSchemes.value;
+            renderValue(houseMovingSchemes: Notes): React.ReactNode {
+              return <ReviewNotes notes={houseMovingSchemes} />;
             },
           },
         },
@@ -65,14 +106,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
       ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "household">(
         new StaticComponent({
           key: "household-members-table",
-          Component: Table,
-          props: {
-            headings: ["Full name", "Relationship to tenant", "Date of birth"],
-            rows: [
-              ["Household member 1", "Father", "10/04/1967"],
-              ["Household member 2", "Uncle", "12/03/1978"],
-            ],
-          },
+          Component: HouseholdMembersTable,
+          props: {},
         })
       ),
       ComponentWrapper.wrapDynamic(
@@ -82,11 +117,11 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
           props: {
             label: "Take photos of any household change documents",
             name: "household-document-images",
-            hintText: "You can take up to 3 different photos" as
+            hintText: "You can take up to 5 different photos" as
               | string
               | null
               | undefined,
-            maxCount: 3 as number | null | undefined,
+            maxCount: 5 as number | null | undefined,
           },
           defaultValue: [],
           emptyValue: [] as string[],
@@ -103,7 +138,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "house-moving-schemes",
-          Component: TextAreaDetails,
+          Component: PostVisitActionInputDetails,
           props: {
             summary:
               "House moving schemes: downsizing, overcrowding or aged over 60",
@@ -111,7 +146,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
             label: {
               value: "House moving schemes notes",
             },
-            contentBeforeTextArea: (
+            contentBefore: (
               <>
                 <Paragraph>Schemes cover:</Paragraph>
                 <List
@@ -149,10 +184,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
                 />
               </>
             ),
-            includeCheckbox: true,
-          } as TextAreaDetailsProps,
-          defaultValue: { value: "", isPostVisitAction: false },
-          emptyValue: { value: "", isPostVisitAction: false },
+          } as PostVisitActionInputDetailsProps,
+          defaultValue: [] as Notes,
+          emptyValue: [] as Notes,
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "household"
@@ -166,15 +200,14 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "member-changes",
-          Component: TextAreaDetails,
+          Component: PostVisitActionInputDetails,
           props: {
             summary: "Add note about any changes in household members",
             label: { value: "Notes" },
             name: "member-changes-notes",
-            includeCheckbox: true,
-          } as TextAreaDetailsProps,
-          defaultValue: { value: "", isPostVisitAction: false },
-          emptyValue: { value: "", isPostVisitAction: false },
+          } as PostVisitActionInputDetailsProps,
+          defaultValue: [] as Notes,
+          emptyValue: [] as Notes,
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "household"

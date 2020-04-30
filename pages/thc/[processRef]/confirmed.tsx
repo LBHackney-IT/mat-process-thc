@@ -1,43 +1,65 @@
-import { Button } from "lbh-frontend-react/components/Button";
-import { PageAnnouncement } from "lbh-frontend-react/components/PageAnnouncement";
 import {
+  Button,
   Heading,
   HeadingLevels,
-} from "lbh-frontend-react/components/typography/Heading";
-import { Paragraph } from "lbh-frontend-react/components/typography/Paragraph";
+  PageAnnouncement,
+  Paragraph,
+} from "lbh-frontend-react";
 import { NextPage } from "next";
+import { useRouter } from "next/router";
 import React from "react";
+import isManager from "../../../helpers/isManager";
 import MainLayout from "../../../layouts/MainLayout";
 import PageTitles from "../../../steps/PageTitles";
 
 const ConfirmedPage: NextPage = () => {
-  // TODO: Replace these with the real values!
-  const address = "1 Mare Street, London, E8 3AA";
-  const tenants = ["Jane Doe", "John Doe"];
+  const router = useRouter();
+  const isManagerPage = isManager(router);
+
+  const { status } = router.query;
+
+  const managerApprovedText = `The Tenancy and Household Check has been approved by you.`;
+  const managerDeclinedText = `The Tenancy and Household Check has been declined by you. The Housing Officer will be notified.`;
+  const officerText = `The Tenancy and Household Check has been submitted for manager review.`;
+
+  const managerText = status
+    ? status === "2"
+      ? managerApprovedText
+      : managerDeclinedText
+    : "Loading...";
 
   return (
     <MainLayout title={PageTitles.Confirmed}>
       <PageAnnouncement title="Process submission confirmed">
-        <Paragraph>
-          The Tenancy and Household Check for the tenancy at {address}, occupied
-          by {tenants.join(", ")} has been submitted for manager review.
-        </Paragraph>
+        <Paragraph>{isManagerPage ? managerText : officerText}</Paragraph>
       </PageAnnouncement>
 
       <Heading level={HeadingLevels.H3}>What to do next?</Heading>
+      {isManagerPage || (
+        <Paragraph>
+          <Button
+            disabled={!process.env.DIVERSITY_FORM_URL}
+            onClick={(): void => {
+              if (process.env.DIVERSITY_FORM_URL) {
+                location.assign(process.env.DIVERSITY_FORM_URL);
+              }
+            }}
+          >
+            Go to diversity monitoring form
+          </Button>
+        </Paragraph>
+      )}
       <Paragraph>
         <Button
+          disabled={!process.env.WORKTRAY_URL}
           onClick={(): void => {
-            location.assign(
-              "https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform?usp=sf_link"
-            );
+            if (process.env.WORKTRAY_URL) {
+              location.assign(process.env.WORKTRAY_URL);
+            }
           }}
         >
-          Go to diversity monitoring form
+          Return to my work tray
         </Button>
-      </Paragraph>
-      <Paragraph>
-        <Button>Return to my work tray</Button>
       </Paragraph>
     </MainLayout>
   );

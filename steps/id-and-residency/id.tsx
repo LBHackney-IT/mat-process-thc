@@ -1,22 +1,25 @@
-import { FieldsetLegend } from "lbh-frontend-react/components";
+import { FieldsetLegend } from "lbh-frontend-react";
 import React from "react";
 import {
   ComponentDatabaseMap,
   ComponentWrapper,
   DynamicComponent,
+  StaticComponent,
 } from "remultiform/component-wrapper";
+import { CurrentTenantNames } from "../../components/CurrentTenantNames";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
-import { RadioButtons } from "../../components/RadioButtons";
 import {
-  TextAreaDetails,
-  TextAreaDetailsProps,
-} from "../../components/TextAreaDetails";
+  PostVisitActionInputDetails,
+  PostVisitActionInputDetailsProps,
+} from "../../components/PostVisitActionInputDetails";
+import { RadioButtons } from "../../components/RadioButtons";
+import { ReviewNotes } from "../../components/ReviewNotes";
 import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
-import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
-import { Note } from "../../storage/DatabaseSchema";
+import slugForRepeatingStep from "../../helpers/slugForRepeatingStep";
+import { Notes } from "../../storage/DatabaseSchema";
 import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
 import Storage from "../../storage/Storage";
 import PageSlugs from "../PageSlugs";
@@ -47,12 +50,21 @@ const idTypeRadios = [
     label: "Unable to verify ID",
     value: "no id",
   },
+  {
+    label: "Tenant not present",
+    value: "tenant not present",
+  },
 ];
 
 const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
   title: PageTitles.Id,
   heading: "Verify proof of ID",
   context: Storage.ResidentContext,
+  errors: {
+    required: {
+      "id-type": "You must specify the type of the ID",
+    },
+  },
   review: {
     rows: [
       {
@@ -64,8 +76,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
             },
           },
           "id-notes": {
-            renderValue(notes: Note): React.ReactNode {
-              return notes.value;
+            renderValue(notes: Notes): React.ReactNode {
+              return <ReviewNotes notes={notes} />;
             },
           },
         },
@@ -75,13 +87,20 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
   },
   step: {
     slug: PageSlugs.Id,
-    nextSlug: nextSlugWithId(PageSlugs.Residency),
+    nextSlug: slugForRepeatingStep(PageSlugs.Residency),
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
         value: "Save and continue",
       }),
     componentWrappers: [
+      ComponentWrapper.wrapStatic(
+        new StaticComponent({
+          key: "previous-attempts",
+          Component: CurrentTenantNames,
+          props: {},
+        })
+      ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "id-type",
@@ -93,6 +112,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
             ) as React.ReactNode,
             radios: idTypeRadios,
           },
+          required: true,
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<ResidentDatabaseSchema, "id">({
@@ -128,15 +148,14 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "id-notes",
-          Component: TextAreaDetails,
+          Component: PostVisitActionInputDetails,
           props: {
             summary: "Add note about ID if necessary" as React.ReactNode,
             label: { value: "Notes" },
             name: "id-notes",
-            includeCheckbox: true,
-          } as TextAreaDetailsProps,
-          defaultValue: { value: "", isPostVisitAction: false },
-          emptyValue: { value: "", isPostVisitAction: false },
+          } as PostVisitActionInputDetailsProps,
+          defaultValue: [] as Notes,
+          emptyValue: [] as Notes,
           databaseMap: new ComponentDatabaseMap<ResidentDatabaseSchema, "id">({
             storeName: "id",
             key: keyFromSlug(true),

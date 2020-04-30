@@ -6,13 +6,24 @@
 # base
 # ------------------------------------------------------------------------------
 
-FROM node:12.16.1-alpine AS base
+FROM node:12.16.2-alpine AS base
 
 RUN apk add --no-cache bash
 
 WORKDIR /app
 
+ARG ENVIRONMENT_NAME
+ARG PROCESS_NAME
+ARG WORKTRAY_URL
+ARG TENANCY_URL
+ARG DIVERSITY_FORM_URL
+
 ENV NODE_ENV production
+ENV ENVIRONMENT_NAME ${ENVIRONMENT_NAME}
+ENV PROCESS_NAME ${PROCESS_NAME}
+ENV WORKTRAY_URL ${WORKTRAY_URL}
+ENV TENANCY_URL ${TENANCY_URL}
+ENV DIVERSITY_FORM_URL ${DIVERSITY_FORM_URL}
 
 # ------------------------------------------------------------------------------
 # dependencies

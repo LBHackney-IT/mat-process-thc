@@ -9,9 +9,14 @@ const basePath = require("./server/helpers/basePath");
 
 const dev = process.env.NODE_ENV !== "production";
 
+// Environment variables need to be set at build time to have them be included
+// in the client files.
 const env = {
   ENVIRONMENT_NAME: process.env.ENVIRONMENT_NAME,
   PROCESS_NAME: process.env.PROCESS_NAME,
+  WORKTRAY_URL: process.env.WORKTRAY_URL,
+  TENANCY_URL: process.env.TENANCY_URL,
+  DIVERSITY_FORM_URL: process.env.DIVERSITY_FORM_URL,
 };
 
 if (dev) {
@@ -20,7 +25,14 @@ if (dev) {
     TEST_PROCESS_API_JWT: process.env.TEST_PROCESS_API_JWT,
     TEST_MAT_API_JWT: process.env.TEST_MAT_API_JWT,
     TEST_MAT_API_DATA: process.env.TEST_MAT_API_DATA,
+    TEST_PROCESS_STAGE: process.env.TEST_PROCESS_STAGE,
   });
+}
+
+for (const [key, value] of Object.entries(env)) {
+  if (value === undefined) {
+    throw new Error(`Environment value ${key} is required but missing`);
+  }
 }
 
 module.exports = withOffline({
@@ -36,4 +48,31 @@ module.exports = withOffline({
   env,
   registerSwPrefix: basePath,
   scope: `${basePath}/`,
+  workboxOpts: {
+    exclude: [/\/api\//],
+    runtimeCaching: [
+      {
+        urlPattern: /^https?.*/,
+        handler: "NetworkFirst",
+        method: "GET",
+        options: {
+          cacheName: "offlinePageCache",
+          expiration: {
+            maxEntries: 200,
+          },
+        },
+      },
+      {
+        urlPattern: /\.(?:css|js)$/,
+        handler: "CacheFirst",
+        method: "GET",
+        options: {
+          cacheName: "offlineFileCache",
+          expiration: {
+            maxEntries: 200,
+          },
+        },
+      },
+    ],
+  },
 });

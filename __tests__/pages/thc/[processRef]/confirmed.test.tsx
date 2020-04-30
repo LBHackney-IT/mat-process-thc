@@ -85,6 +85,34 @@ it("renders correctly", () => {
         <div
           className="govuk-container lbh-container"
         >
+          <div
+            className="phase-banner"
+          >
+            <p
+              className="lbh-body"
+            >
+              <strong
+                className="govuk-tag lbh-tag"
+              >
+                BETA
+              </strong>
+               This is a new service – your
+               
+              <a
+                className="govuk-link lbh-link"
+                href="https://diversity.form"
+                target="_blank"
+              >
+                feedback
+              </a>
+               
+              will help us to improve it.
+            </p>
+            <hr />
+          </div>
+          <div
+            className="heading"
+          />
           <section
             className="lbh-page-announcement"
           >
@@ -99,11 +127,7 @@ it("renders correctly", () => {
               <p
                 className="lbh-body"
               >
-                The Tenancy and Household Check for the tenancy at 
-                1 Mare Street, London, E8 3AA
-                , occupied by 
-                Jane Doe, John Doe
-                 has been submitted for manager review.
+                The Tenancy and Household Check has been submitted for manager review.
               </p>
             </div>
           </section>
@@ -116,7 +140,9 @@ it("renders correctly", () => {
             className="lbh-body"
           >
             <button
+              aria-disabled={false}
               className="govuk-button lbh-button"
+              disabled={false}
               onClick={[Function]}
             >
               Go to diversity monitoring form
@@ -126,7 +152,9 @@ it("renders correctly", () => {
             className="lbh-body"
           >
             <button
+              aria-disabled={false}
               className="govuk-button lbh-button"
+              disabled={false}
               onClick={[Function]}
             >
               Return to my work tray
@@ -138,7 +166,19 @@ it("renders correctly", () => {
         jsx={true}
       >
         
-            :global(.pause-button) {
+            :global(#main-content) {
+              padding-top: 0;
+            }
+
+            .phase-banner {
+              margin-top: 1.5em;
+            }
+
+            .phase-banner :global(.lbh-tag) {
+              margin-right: 1em;
+            }
+
+            .heading :global(.pause-button) {
               float: right;
               margin-top: 0;
               margin-left: 2em;

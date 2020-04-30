@@ -1,3 +1,4 @@
+import querystring from "querystring";
 import {
   Browser,
   Builder,
@@ -132,11 +133,12 @@ class WebDriverWrapper implements WebDriver {
     }
 
     if (includeParameters) {
-      relativeUrl +=
-        `?processRef=${process.env.TEST_PROCESS_REF}` +
-        `&processApiJwt=${process.env.TEST_PROCESS_API_JWT}` +
-        `&matApiJwt=${process.env.TEST_MAT_API_JWT}` +
-        `&data=${process.env.TEST_MAT_API_DATA}`;
+      relativeUrl += `?${querystring.stringify({
+        processRef: process.env.TEST_PROCESS_REF,
+        processApiJwt: process.env.TEST_PROCESS_API_JWT,
+        matApiJwt: process.env.TEST_MAT_API_JWT,
+        data: process.env.TEST_MAT_API_DATA,
+      })}`;
     }
 
     const url = `${this.baseUrl}${relativeUrl}`;

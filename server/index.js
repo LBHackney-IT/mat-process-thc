@@ -2,9 +2,9 @@
 require("dotenv/config");
 
 const express = require("express");
+const { readFileSync } = require("fs");
 const { join } = require("path");
 const nextjs = require("next");
-const { parse } = require("url");
 
 const nextConfig = require("../next.config");
 
@@ -38,21 +38,17 @@ app
       });
     }
 
+    const sw = readFileSync(
+      join(__dirname, "..", nextConfig.distDir, "service-worker.js")
+    );
+
     server
       .head("/", (_req, res) => {
         res.sendStatus(200);
       })
       .use(basePath + "/api", api)
-      .get(basePath + "/service-worker.js", (req, res) => {
-        const { pathname } = parse(req.url, true);
-        const filePath = join(
-          __dirname,
-          "..",
-          nextConfig.distDir,
-          ...pathname.replace(basePath, "").split("/")
-        );
-
-        app.serveStatic(req, res, filePath);
+      .get(basePath + "/service-worker.js", (_req, res) => {
+        res.send(sw);
       })
       .get("*", (req, res) => {
         if (req.url.startsWith(`${nextConfig.assetPrefix}/_next`)) {

@@ -7,13 +7,17 @@ import {
   DynamicComponent,
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
+import {
+  PostVisitActionInput,
+  PostVisitActionInputProps,
+} from "../../components/PostVisitActionInput";
 import { RadioButtons } from "../../components/RadioButtons";
-import { TextArea, TextAreaProps } from "../../components/TextArea";
+import { ReviewNotes } from "../../components/ReviewNotes";
 import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import yesNoRadios from "../../helpers/yesNoRadios";
-import { Note } from "../../storage/DatabaseSchema";
+import { Notes } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
@@ -35,8 +39,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
             },
           },
           "other-property-notes": {
-            renderValue(otherPropertyNotes: Note): React.ReactNode {
-              return otherPropertyNotes.value;
+            renderValue(otherPropertyNotes: Notes): React.ReactNode {
+              return <ReviewNotes notes={otherPropertyNotes} />;
             },
           },
         },
@@ -78,15 +82,14 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "other-property-notes",
-          Component: TextArea,
+          Component: PostVisitActionInput,
           props: {
             label: {
               value:
                 "Provide details: with / without mortgage, address of property",
             },
             name: "other-property-notes",
-            includeCheckbox: true,
-          } as TextAreaProps,
+          } as PostVisitActionInputProps,
           renderWhen(stepValues: {
             "has-other-property"?: ComponentValue<
               ProcessDatabaseSchema,
@@ -95,8 +98,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
           }): boolean {
             return stepValues["has-other-property"] === "yes";
           },
-          defaultValue: { value: "", isPostVisitAction: false },
-          emptyValue: { value: "", isPostVisitAction: false },
+          defaultValue: [] as Notes,
+          emptyValue: [] as Notes,
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "household"

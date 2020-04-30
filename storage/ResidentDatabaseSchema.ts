@@ -1,5 +1,5 @@
 import { NamedSchema, StoreNames } from "remultiform/database";
-import { Note } from "./DatabaseSchema";
+import { Notes } from "./DatabaseSchema";
 import databaseSchemaVersion from "./databaseSchemaVersion";
 
 export type ResidentRef = string;
@@ -17,7 +17,7 @@ type ResidentDatabaseSchema = NamedSchema<
       value: {
         type: string;
         images: string[];
-        notes: Note;
+        notes: Notes;
       };
     };
 
@@ -26,7 +26,7 @@ type ResidentDatabaseSchema = NamedSchema<
       value: {
         type: string;
         images: string[];
-        notes: Note;
+        notes: Notes;
       };
     };
 
@@ -35,7 +35,7 @@ type ResidentDatabaseSchema = NamedSchema<
       value: {
         isWilling: string;
         images: string[];
-        notes: Note;
+        notes: Notes;
       };
     };
 
@@ -62,7 +62,7 @@ type ResidentDatabaseSchema = NamedSchema<
         phoneNumber: string;
         relationship: string;
         address: string;
-        notes: Note;
+        notes: Notes;
       };
     };
 
@@ -72,6 +72,13 @@ type ResidentDatabaseSchema = NamedSchema<
         fullName: string;
         role: string;
         phoneNumber: string;
+      };
+    };
+
+    disabilities: {
+      key: ResidentRef;
+      value: {
+        what: string[];
       };
     };
 
@@ -91,6 +98,7 @@ const storeNames: {
   nextOfKin: true,
   carer: true,
   otherSupport: true,
+  disabilities: true,
   signature: true,
 };
 
@@ -103,5 +111,58 @@ export const residentStoreNames = Object.entries(storeNames)
     ],
     [] as StoreNames<ResidentDatabaseSchema["schema"]>[]
   );
+
+export const residentNotesPaths: {
+  [Name in StoreNames<ResidentDatabaseSchema["schema"]>]: string[] | never[];
+} = {
+  carer: ["notes"],
+  id: ["notes"],
+  nextOfKin: [],
+  otherSupport: ["notes"],
+  photo: ["notes"],
+  residency: ["notes"],
+  disabilities: [],
+  signature: [],
+};
+
+export const residentPostVisitActionMap: {
+  [storeName in StoreNames<ResidentDatabaseSchema["schema"]>]: {
+    [path: string]: { category: string; subcategory: string };
+  };
+} = {
+  id: {
+    notes: {
+      category: "19",
+      subcategory: "100000196",
+    },
+  },
+  residency: {
+    notes: {
+      category: "19",
+      subcategory: "100000196",
+    },
+  },
+  photo: {
+    notes: {
+      category: "19",
+      subcategory: "100000185",
+    },
+  },
+  carer: {
+    notes: {
+      category: "19",
+      subcategory: "100000582",
+    },
+  },
+  nextOfKin: {},
+  otherSupport: {
+    notes: {
+      category: "19",
+      subcategory: "100000300",
+    },
+  },
+  disabilities: {},
+  signature: {},
+};
 
 export default ResidentDatabaseSchema;

@@ -10,6 +10,7 @@ import {
   StaticComponent,
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
+import { makeUnableToEnterSubmit } from "../../components/makeUnableToEnterSubmit";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
@@ -20,16 +21,10 @@ const step = {
     slug: PageSlugs.Start,
     nextSlug: PageSlugs.AboutVisit,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
-      makeSubmit([
-        {
-          slug: nextSlug as PageSlugs | undefined,
-          value: "Start visit with tenant",
-        },
-        {
-          slug: PageSlugs.Loading,
-          value: "Unable to enter property",
-        },
-      ]),
+      makeUnableToEnterSubmit({
+        slug: nextSlug as PageSlugs | undefined,
+        value: "Start visit with tenant",
+      }),
     componentWrappers: [
       ComponentWrapper.wrapStatic(
         new StaticComponent({

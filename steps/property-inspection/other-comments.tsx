@@ -5,6 +5,7 @@ import {
   ListTypes,
   Paragraph,
 } from "lbh-frontend-react/components";
+import React from "react";
 import {
   ComponentDatabaseMap,
   ComponentWrapper,
@@ -13,9 +14,13 @@ import {
 } from "remultiform/component-wrapper";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
-import { TextArea, TextAreaProps } from "../../components/TextArea";
+import {
+  PostVisitActionInput,
+  PostVisitActionInputProps,
+} from "../../components/PostVisitActionInput";
+import { ReviewNotes } from "../../components/ReviewNotes";
 import keyFromSlug from "../../helpers/keyFromSlug";
-import { Note } from "../../storage/DatabaseSchema";
+import { Notes } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
@@ -30,8 +35,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           "Add notes about any other comments or points to investigate for the property",
         values: {
           "other-comments-notes": {
-            renderValue(notes: Note): React.ReactNode {
-              return notes.value;
+            renderValue(notes: Notes): React.ReactNode {
+              return <ReviewNotes notes={notes} />;
             },
           },
         },
@@ -101,17 +106,16 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "other-comments-notes",
-          Component: TextArea,
+          Component: PostVisitActionInput,
           props: {
             label: {
               value:
                 "Add notes about any other comments or points to investigate for the property",
             },
             name: "other-comments-notes",
-            includeCheckbox: true,
-          } as TextAreaProps,
-          defaultValue: { value: "", isPostVisitAction: false },
-          emptyValue: { value: "", isPostVisitAction: false },
+          } as PostVisitActionInputProps,
+          defaultValue: [] as Notes,
+          emptyValue: [] as Notes,
           databaseMap: new ComponentDatabaseMap<
             ProcessDatabaseSchema,
             "property"

@@ -15,20 +15,22 @@ import {
   makeDynamic,
   StaticComponent,
 } from "remultiform/component-wrapper";
+import { CurrentTenantNames } from "../../components/CurrentTenantNames";
 import { DateInput } from "../../components/DateInput";
 import { makeSubmit } from "../../components/makeSubmit";
-import { RadioButtons } from "../../components/RadioButtons";
 import {
-  TextAreaDetails,
-  TextAreaDetailsProps,
-} from "../../components/TextAreaDetails";
+  PostVisitActionInputDetails,
+  PostVisitActionInputDetailsProps,
+} from "../../components/PostVisitActionInputDetails";
+import { RadioButtons } from "../../components/RadioButtons";
+import { ReviewNotes } from "../../components/ReviewNotes";
 import { TextInput } from "../../components/TextInput";
 import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
-import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
+import slugForRepeatingStep from "../../helpers/slugForRepeatingStep";
 import yesNoRadios from "../../helpers/yesNoRadios";
-import { Note } from "../../storage/DatabaseSchema";
+import { Notes } from "../../storage/DatabaseSchema";
 import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
 import Storage from "../../storage/Storage";
 import PageSlugs from "../PageSlugs";
@@ -129,8 +131,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             },
           },
           "carer-notes": {
-            renderValue(notes: Note): React.ReactNode {
-              return notes.value;
+            renderValue(notes: Notes): React.ReactNode {
+              return <ReviewNotes notes={notes} />;
             },
           },
         },
@@ -139,13 +141,20 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
   },
   step: {
     slug: PageSlugs.Carer,
-    nextSlug: nextSlugWithId(PageSlugs.OtherSupport),
+    nextSlug: slugForRepeatingStep(PageSlugs.OtherSupport),
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
         value: "Save and continue",
       }),
     componentWrappers: [
+      ComponentWrapper.wrapStatic(
+        new StaticComponent({
+          key: "previous-attempts",
+          Component: CurrentTenantNames,
+          props: {},
+        })
+      ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "carer-needed",
@@ -233,9 +242,13 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             children: "When did the carer start living in the property?",
           },
           renderWhen(stepValues: {
+            "carer-needed"?: ComponentValue<ResidentDatabaseSchema, "carer">;
             "carer-live-in"?: ComponentValue<ResidentDatabaseSchema, "carer">;
           }): boolean {
-            return stepValues["carer-live-in"] === "yes";
+            return (
+              stepValues["carer-needed"] === "yes" &&
+              stepValues["carer-live-in"] === "yes"
+            );
           },
         })
       ),
@@ -247,9 +260,13 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             name: "carer-live-in-start-date",
           },
           renderWhen(stepValues: {
+            "carer-needed"?: ComponentValue<ResidentDatabaseSchema, "carer">;
             "carer-live-in"?: ComponentValue<ResidentDatabaseSchema, "carer">;
           }): boolean {
-            return stepValues["carer-live-in"] === "yes";
+            return (
+              stepValues["carer-needed"] === "yes" &&
+              stepValues["carer-live-in"] === "yes"
+            );
           },
           defaultValue: {},
           emptyValue: {} as { month?: number; year?: number },
@@ -374,9 +391,13 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             rows: 4 as number | undefined,
           },
           renderWhen(stepValues: {
+            "carer-needed"?: ComponentValue<ResidentDatabaseSchema, "carer">;
             "carer-live-in"?: ComponentValue<ResidentDatabaseSchema, "carer">;
           }): boolean {
-            return stepValues["carer-live-in"] === "no";
+            return (
+              stepValues["carer-needed"] === "yes" &&
+              stepValues["carer-live-in"] !== "yes"
+            );
           },
           defaultValue: "",
           emptyValue: "",
@@ -393,20 +414,19 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "carer-notes",
-          Component: TextAreaDetails,
+          Component: PostVisitActionInputDetails,
           props: {
             summary: "Add note about carer if necessary",
             label: { value: "Notes" },
             name: "carer-notes",
-            includeCheckbox: true,
-          } as TextAreaDetailsProps,
+          } as PostVisitActionInputDetailsProps,
           renderWhen(stepValues: {
             "carer-needed"?: ComponentValue<ResidentDatabaseSchema, "carer">;
           }): boolean {
             return stepValues["carer-needed"] === "yes";
           },
-          defaultValue: { value: "", isPostVisitAction: false },
-          emptyValue: { value: "", isPostVisitAction: false },
+          defaultValue: [] as Notes,
+          emptyValue: [] as Notes,
           databaseMap: new ComponentDatabaseMap<
             ResidentDatabaseSchema,
             "carer"

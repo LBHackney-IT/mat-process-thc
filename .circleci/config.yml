@@ -38,7 +38,7 @@ commands:
 jobs:
   install-and-test:
     docker:
-      - image: circleci/node:12.16.1-browsers
+      - image: circleci/node:12.16.2-browsers
 
     steps:
       - checkout
@@ -50,17 +50,36 @@ jobs:
       - run:
           name: Run tests in Chrome
           command: TEST_BROWSER=chrome npm test
+          no_output_timeout: 20m
 
   build:
+    parameters:
+      environment-name:
+        type: string
+      worktray-url:
+        type: string
+      tenancy-url:
+        type: string
+      diversity-form-url:
+        type: string
+
     docker:
       - image: docker:stable-git
+
     steps:
       - checkout
       - setup_remote_docker
 
       - run:
           name: Build Docker image
-          command: docker build .
+          command: |
+            docker build \
+              --build-arg ENVIRONMENT_NAME="<<parameters.environment-name>>" \
+              --build-arg PROCESS_NAME="thc" \
+              --build-arg WORKTRAY_URL="<<parameters.worktray-url>>" \
+              --build-arg TENANCY_URL="<<parameters.tenancy-url>>" \
+              --build-arg DIVERSITY_FORM_URL="<<parameters.diversity-form-url>>" \
+              .
 
   deploy:
     parameters:
@@ -95,8 +114,12 @@ workflows:
           name: build-image-on-branch
           requires:
             - install-and-test-branch
+          environment-name: branch
+          worktray-url: https://work.tray
+          tenancy-url: https://tenancy.management
+          diversity-form-url: https://diversity.form
 
-  check-and-deploy-to-development:
+  check-and-deploy-to-development-and-staging:
     jobs:
       - install-and-test:
           name: install-and-test-development
@@ -111,6 +134,12 @@ workflows:
           account-url: AWS_ECR_HOST
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          extra-build-args: |
+            --build-arg ENVIRONMENT_NAME="development" \
+            --build-arg PROCESS_NAME="thc" \
+            --build-arg WORKTRAY_URL="https://hlbctrial-dev.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx" \
+            --build-arg TENANCY_URL="https://hlbctrial-dev.outsystemsenterprise.com/manageatenancy/CustomerDashboard.aspx" \
+            --build-arg DIVERSITY_FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform" \
           region: AWS_REGION
           repo: $AWS_ECR_PATH_DEV
           tag: $CIRCLE_SHA1
@@ -123,21 +152,19 @@ workflows:
           service-name: $AWS_SERVICE_DEV
           image-tag: $CIRCLE_SHA1
 
-  check-and-deploy-to-staging-and-production:
-    jobs:
-      - install-and-test:
-          name: install-and-test-master
-          filters:
-            branches:
-              only: master
-
       - aws-ecr/build-and-push-image:
           name: build-and-push-to-staging
           requires:
-            - install-and-test-master
+            - deploy-to-development
           account-url: AWS_ECR_HOST
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          extra-build-args: |
+            --build-arg ENVIRONMENT_NAME="staging" \
+            --build-arg PROCESS_NAME="thc" \
+            --build-arg WORKTRAY_URL="https://hlbctrial-tst.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx" \
+            --build-arg TENANCY_URL="https://hlbctrial-tst.outsystemsenterprise.com/manageatenancy/CustomerDashboard.aspx" \
+            --build-arg DIVERSITY_FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform" \
           region: AWS_REGION
           repo: $AWS_ECR_PATH_STAGING
           tag: $CIRCLE_SHA1
@@ -150,21 +177,35 @@ workflows:
           service-name: $AWS_SERVICE_STAGING
           image-tag: $CIRCLE_SHA1
 
+  check-and-deploy-to-production:
+    jobs:
+      - install-and-test:
+          name: install-and-test-master
+          filters:
+            branches:
+              only: master
+
       - aws-ecr/build-and-push-image:
           name: build-and-push-to-production
           requires:
-            - deploy-to-staging
+            - install-and-test-master
           account-url: AWS_ECR_HOST
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          extra-build-args: |
+            --build-arg ENVIRONMENT_NAME="production" \
+            --build-arg PROCESS_NAME="thc" \
+            --build-arg WORKTRAY_URL="https://hlbctrial.outsystemsenterprise.com/manageatenancy/OfficerDashboard.aspx" \
+            --build-arg TENANCY_URL="https://hlbctrial.outsystemsenterprise.com/manageatenancy/CustomerDashboard.aspx" \
+            --build-arg DIVERSITY_FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform" \
           region: AWS_REGION
-          repo: $AWS_ECR_PATH_PROD
+          repo: $AWS_ECR_PATH_PRODUCTION
           tag: $CIRCLE_SHA1
 
       - deploy:
           name: deploy-to-production
           requires:
             - build-and-push-to-production
-          cluster-name: $AWS_CLUSTER_PROD
-          service-name: $AWS_SERVICE_PROD
+          cluster-name: $AWS_CLUSTER_PRODUCTION
+          service-name: $AWS_SERVICE_PRODUCTION
           image-tag: $CIRCLE_SHA1

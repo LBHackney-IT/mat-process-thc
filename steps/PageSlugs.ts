@@ -55,12 +55,20 @@ enum PageSlugs {
 
   // Review and submit
   Review = "review",
+  ManagerReview = "manager-review",
   Submit = "submit",
   Confirmed = "confirmed",
 
   // Pause
   Pause = "pause",
   Paused = "paused",
+
+  // Unable to enter
+  FirstFailedAttempt = "first-failed-attempt",
+  SecondFailedAttempt = "second-failed-attempt",
+  ThirdFailedAttempt = "third-failed-attempt",
+  FourthFailedAttempt = "fourth-failed-attempt",
+  UnableToEnterReview = "unable-to-enter-review",
 }
 
 const slugs: {
@@ -103,13 +111,19 @@ const slugs: {
   "other-comments": true,
   "home-check": true,
   health: true,
-  disability: true,
+  disability: false,
   "support-needs": true,
   review: false,
+  "manager-review": false,
   submit: false,
   confirmed: false,
   pause: false,
   paused: false,
+  "first-failed-attempt": true,
+  "second-failed-attempt": true,
+  "third-failed-attempt": true,
+  "fourth-failed-attempt": true,
+  "unable-to-enter-review": false,
 };
 
 export const stepSlugs = Object.entries(slugs)
@@ -127,9 +141,14 @@ export const repeatingStepSlugs = [
 
 export const urlObjectForSlug = (
   router: NextRouter,
-  slug: string | undefined
+  slug: string,
+  query?:
+    | {
+        [s: string]: string;
+      }
+    | undefined
 ): { pathname: string } => {
-  return prefixUrl(router, { pathname: slug === undefined ? "" : `/${slug}` });
+  return prefixUrl(router, { pathname: `/${slug}`, query: query });
 };
 
 export default PageSlugs;

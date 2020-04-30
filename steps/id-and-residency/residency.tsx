@@ -4,18 +4,21 @@ import {
   ComponentDatabaseMap,
   ComponentWrapper,
   DynamicComponent,
+  StaticComponent,
 } from "remultiform/component-wrapper";
+import { CurrentTenantNames } from "../../components/CurrentTenantNames";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
-import { RadioButtons } from "../../components/RadioButtons";
 import {
-  TextAreaDetails,
-  TextAreaDetailsProps,
-} from "../../components/TextAreaDetails";
+  PostVisitActionInputDetails,
+  PostVisitActionInputDetailsProps,
+} from "../../components/PostVisitActionInputDetails";
+import { RadioButtons } from "../../components/RadioButtons";
+import { ReviewNotes } from "../../components/ReviewNotes";
 import keyFromSlug from "../../helpers/keyFromSlug";
-import nextSlugWithId from "../../helpers/nextSlugWithId";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
-import { Note } from "../../storage/DatabaseSchema";
+import slugForRepeatingStep from "../../helpers/slugForRepeatingStep";
+import { Notes } from "../../storage/DatabaseSchema";
 import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
 import Storage from "../../storage/Storage";
 import PageSlugs from "../PageSlugs";
@@ -64,6 +67,12 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
   title: PageTitles.Residency,
   heading: "Verify proof of residency",
   context: Storage.ResidentContext,
+  errors: {
+    required: {
+      "residency-proof-type":
+        "You must specify the type of the proof of residency",
+    },
+  },
   review: {
     rows: [
       {
@@ -77,8 +86,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
             },
           },
           "residency-notes": {
-            renderValue(notes: Note): React.ReactNode {
-              return notes.value;
+            renderValue(notes: Notes): React.ReactNode {
+              return <ReviewNotes notes={notes} />;
             },
           },
         },
@@ -88,13 +97,20 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
   },
   step: {
     slug: PageSlugs.Residency,
-    nextSlug: nextSlugWithId(PageSlugs.TenantPhoto),
+    nextSlug: slugForRepeatingStep(PageSlugs.TenantPhoto),
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
         value: "Save and continue",
       }),
     componentWrappers: [
+      ComponentWrapper.wrapStatic(
+        new StaticComponent({
+          key: "previous-attempts",
+          Component: CurrentTenantNames,
+          props: {},
+        })
+      ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "residency-proof-type",
@@ -106,6 +122,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
             ) as React.ReactNode,
             radios: residencyProofTypeRadios,
           },
+          required: true,
           defaultValue: "",
           emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
@@ -147,15 +164,14 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "residency-notes",
-          Component: TextAreaDetails,
+          Component: PostVisitActionInputDetails,
           props: {
             summary: "Add note about residency if necessary",
             name: "residency-notes",
             label: { value: "Notes" },
-            includeCheckbox: true,
-          } as TextAreaDetailsProps,
-          defaultValue: { value: "", isPostVisitAction: false },
-          emptyValue: { value: "", isPostVisitAction: false },
+          } as PostVisitActionInputDetailsProps,
+          defaultValue: [] as Notes,
+          emptyValue: [] as Notes,
           databaseMap: new ComponentDatabaseMap<
             ResidentDatabaseSchema,
             "residency"

@@ -102,6 +102,34 @@ it("renders correctly when online", async () => {
         <div
           className="govuk-container lbh-container"
         >
+          <div
+            className="phase-banner"
+          >
+            <p
+              className="lbh-body"
+            >
+              <strong
+                className="govuk-tag lbh-tag"
+              >
+                BETA
+              </strong>
+               This is a new service – your
+               
+              <a
+                className="govuk-link lbh-link"
+                href="https://diversity.form"
+                target="_blank"
+              >
+                feedback
+              </a>
+               
+              will help us to improve it.
+            </p>
+            <hr />
+          </div>
+          <div
+            className="heading"
+          />
           <section
             className="lbh-page-announcement"
           >
@@ -122,9 +150,8 @@ it("renders correctly when online", async () => {
                 className="lbh-body"
               >
                 The Tenancy and Household Check for the tenancy at 
-                1 Mare Street, London, E8 3AA
                 , occupied by 
-                Jane Doe, John Doe
+                
                  has been saved to your device ready to be sent to your manager for review.
               </p>
               <p
@@ -170,7 +197,19 @@ it("renders correctly when online", async () => {
         jsx={true}
       >
         
-            :global(.pause-button) {
+            :global(#main-content) {
+              padding-top: 0;
+            }
+
+            .phase-banner {
+              margin-top: 1.5em;
+            }
+
+            .phase-banner :global(.lbh-tag) {
+              margin-right: 1em;
+            }
+
+            .heading :global(.pause-button) {
               float: right;
               margin-top: 0;
               margin-left: 2em;
@@ -272,6 +311,34 @@ it("renders correctly when offline", async () => {
         <div
           className="govuk-container lbh-container"
         >
+          <div
+            className="phase-banner"
+          >
+            <p
+              className="lbh-body"
+            >
+              <strong
+                className="govuk-tag lbh-tag"
+              >
+                BETA
+              </strong>
+               This is a new service – your
+               
+              <a
+                className="govuk-link lbh-link"
+                href="https://diversity.form"
+                target="_blank"
+              >
+                feedback
+              </a>
+               
+              will help us to improve it.
+            </p>
+            <hr />
+          </div>
+          <div
+            className="heading"
+          />
           <section
             className="lbh-page-announcement"
           >
@@ -292,9 +359,8 @@ it("renders correctly when offline", async () => {
                 className="lbh-body"
               >
                 The Tenancy and Household Check for the tenancy at 
-                1 Mare Street, London, E8 3AA
                 , occupied by 
-                Jane Doe, John Doe
+                
                  has been saved to your device ready to be sent to your manager for review.
               </p>
               <p
@@ -332,7 +398,19 @@ it("renders correctly when offline", async () => {
         jsx={true}
       >
         
-            :global(.pause-button) {
+            :global(#main-content) {
+              padding-top: 0;
+            }
+
+            .phase-banner {
+              margin-top: 1.5em;
+            }
+
+            .phase-banner :global(.lbh-tag) {
+              margin-right: 1em;
+            }
+
+            .heading :global(.pause-button) {
               float: right;
               margin-top: 0;
               margin-left: 2em;

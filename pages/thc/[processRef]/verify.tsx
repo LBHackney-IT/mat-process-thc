@@ -13,7 +13,7 @@ import React from "react";
 import { Table } from "../../../components/Table";
 import { TenancySummary } from "../../../components/TenancySummary";
 import getProcessRef from "../../../helpers/getProcessRef";
-import nextSlugWithId from "../../../helpers/nextSlugWithId";
+import slugWithId from "../../../helpers/slugWithId";
 import urlsForRouter from "../../../helpers/urlsForRouter";
 import useDataSet from "../../../helpers/useDataSet";
 import useDataValue from "../../../helpers/useDataValue";
@@ -45,35 +45,35 @@ export const VerifyPage: NextPage = () => {
     processRef,
     (values) => (processRef ? values[processRef] : undefined)
   );
-  const idData = useDataSet(
-    Storage.ResidentContext,
-    "id",
-    tenantsPresent.result
-  );
+
+  const tenants = residentData.result?.tenants || [];
+  const tenantIds = tenants.map((tenant) => tenant.id);
+
+  const idData = useDataSet(Storage.ResidentContext, "id", tenantIds);
   const residencyData = useDataSet(
     Storage.ResidentContext,
     "residency",
-    residentData.result?.tenants.map((tenant) => tenant.id)
+    tenantIds
   );
 
-  const tenantData =
-    residentData.result?.tenants.map((tenant) => {
-      return {
-        id: tenant.id,
-        name: tenant.fullName,
-        dateOfBirth: tenant.dateOfBirth,
-        verified: {
-          id: tenantsPresent.result?.includes(tenant.id)
-            ? idData.result
-              ? Boolean(idData.result[tenant.id])
-              : false
-            : undefined,
-          residency: residencyData.result
-            ? Boolean(residencyData.result[tenant.id])
-            : false,
-        },
-      };
-    }) || [];
+  const tenantData = tenants.map((tenant) => ({
+    id: tenant.id,
+    name: tenant.fullName,
+    dateOfBirth: tenant.dateOfBirth,
+    verified: {
+      id:
+        idData.result &&
+        idData.result[tenant.id]?.type &&
+        idData.result[tenant.id]?.type !== "tenant not present"
+          ? true
+          : tenantsPresent.result?.includes(tenant.id)
+          ? false
+          : undefined,
+      residency: residencyData.result
+        ? Boolean(residencyData.result[tenant.id])
+        : false,
+    },
+  }));
 
   const allVerified =
     !residentData.loading &&
@@ -103,8 +103,7 @@ export const VerifyPage: NextPage = () => {
       <Link
         key="verify-link"
         href={
-          urlObjectForSlug(router, nextSlugWithId(PageSlugs.Id, tenant.id)())
-            .pathname
+          urlObjectForSlug(router, slugWithId(PageSlugs.Id, tenant.id)).pathname
         }
       >
         {tenantsPresent.loading

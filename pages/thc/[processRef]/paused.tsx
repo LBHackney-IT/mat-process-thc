@@ -7,22 +7,26 @@ import MainLayout from "../../../layouts/MainLayout";
 import PageTitles from "../../../steps/PageTitles";
 
 const PausedPage: NextPage = () => {
-  // TODO: Replace these with the real values!
-  const address = "1 Mare Street, London, E8 3AA";
-  const tenants = ["Jane Doe", "John Doe"];
-
   return (
-    <MainLayout title={PageTitles.Confirmed}>
+    <MainLayout title={PageTitles.Paused}>
       <PageAnnouncement title="Process paused">
         <Paragraph>
-          The Tenancy and Household Check for the tenancy at {address}, occupied
-          by {tenants.join(", ")} has been paused and saved to your work tray
-          ready to continue later.
+          The Tenancy and Household Check has been paused and saved to your work
+          tray ready to continue later.
         </Paragraph>
       </PageAnnouncement>
 
       <Paragraph>
-        <Button>Return to my work tray</Button>
+        <Button
+          disabled={!process.env.WORKTRAY_URL}
+          onClick={(): void => {
+            if (process.env.WORKTRAY_URL) {
+              location.assign(process.env.WORKTRAY_URL);
+            }
+          }}
+        >
+          Return to my work tray
+        </Button>
       </Paragraph>
     </MainLayout>
   );

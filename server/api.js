@@ -4,6 +4,8 @@ const { Router, json } = require("express");
 const { request } = require("https");
 const jwt = require("jsonwebtoken");
 
+const { DISABLE_MAT_PROCESS_ACTIONS } = process.env;
+
 const processApiHost = process.env.PROCESS_API_HOST;
 const processApiBaseUrl = process.env.PROCESS_API_BASE_URL;
 const processApiJwtSecret = process.env.PROCESS_API_JWT_SECRET;
@@ -204,6 +206,225 @@ router.post("/v1/processes/:ref/images", (req, res) => {
   proxy(options, req, res);
 });
 
+router.put("/v1/processes/:ref/transfer", (req, res) => {
+  if (!verifyJwt(req.query.jwt, matApiJwtSecret)) {
+    res.status(401).send("Invalid JWT");
+
+    return;
+  }
+
+  const { ref } = req.params;
+
+  const { processStage } = req.query;
+  const { data } = req.body;
+
+  const {
+    matApiToken,
+    officerId,
+    officerFullName,
+    patchId,
+    subjectId,
+    serviceRequestId,
+    managerId,
+    areaId,
+  } = decryptJson(
+    data,
+    matApiDataSharedKey,
+    matApiDataSalt,
+    matApiDataIterations,
+    matApiDataKeyLength,
+    matApiDataAlgorithm,
+    matApiDataIV
+  );
+
+  if (DISABLE_MAT_PROCESS_ACTIONS) {
+    res.status(200).send("Short circuit OK");
+
+    return;
+  }
+
+  const assignedToManager = processStage === "1";
+  const description = assignedToManager
+    ? `Transferred from ${officerFullName} to manager for review`
+    : `Transferred back to ${officerFullName} after manager review`;
+
+  const options = {
+    host: matApiHost,
+    port: 443,
+    path: `${matApiBaseUrl}/v1/TenancyManagementInteractions/TransferCall`,
+    method: req.method,
+    headers: {
+      Authorization: matApiToken,
+      "Content-Type": "application/json",
+    },
+    timeout: 10 * 1000,
+  };
+
+  req.body = {
+    interactionId: ref,
+    estateOfficerId: officerId,
+    estateOfficerName: officerFullName,
+    officerPatchId: patchId,
+    areaName: areaId,
+    managerId: managerId,
+    assignedToPatch: !assignedToManager,
+    assignedToManager: assignedToManager,
+    processStage: processStage,
+    serviceRequest: {
+      id: serviceRequestId,
+      title: "Tenancy Management",
+      description: description,
+      subject: subjectId,
+    },
+  };
+
+  proxy(options, req, res);
+});
+
+router.patch("/v1/processes/:ref/appraise", (req, res) => {
+  if (!verifyJwt(req.query.jwt, matApiJwtSecret)) {
+    res.status(401).send("Invalid JWT");
+
+    return;
+  }
+
+  const { ref } = req.params;
+
+  const { processStage } = req.query;
+
+  if (processStage !== "2" && processStage !== "3") {
+    res.status(401).send("Invalid Process Stage");
+
+    return;
+  }
+
+  const { data } = req.body;
+
+  const {
+    matApiToken,
+    officerId,
+    officerFullName,
+    subjectId,
+    serviceRequestId,
+  } = decryptJson(
+    data,
+    matApiDataSharedKey,
+    matApiDataSalt,
+    matApiDataIterations,
+    matApiDataKeyLength,
+    matApiDataAlgorithm,
+    matApiDataIV
+  );
+
+  if (DISABLE_MAT_PROCESS_ACTIONS) {
+    res.status(200).send("Short circuit OK");
+
+    return;
+  }
+
+  const approved = processStage === "2";
+
+  const description = approved
+    ? `Closure: Approved by manager`
+    : `Closure: Declined by manager`;
+
+  const options = {
+    host: matApiHost,
+    port: 443,
+    path: `${matApiBaseUrl}/v1/TenancyManagementInteractions`,
+    method: req.method,
+    headers: {
+      Authorization: matApiToken,
+      "Content-Type": "application/json",
+    },
+    timeout: 10 * 1000,
+  };
+
+  req.body = {
+    interactionId: ref,
+    estateOfficerId: officerId,
+    estateOfficerName: officerFullName,
+    serviceRequest: {
+      id: serviceRequestId,
+      description: description,
+      subjectId: subjectId,
+    },
+    processStage: processStage,
+    status: 0,
+  };
+
+  proxy(options, req, res);
+});
+
+router.post("/v1/processes/:ref/post-visit-actions", (req, res) => {
+  if (!verifyJwt(req.query.jwt, matApiJwtSecret)) {
+    res.status(401).send("Invalid JWT");
+
+    return;
+  }
+
+  const { ref } = req.params;
+  const { description, category, subcategory, data } = req.body;
+
+  const {
+    matApiToken,
+    areaId,
+    contactId,
+    subjectId,
+    patchId,
+    householdId,
+    officerFullName,
+    officerId,
+  } = decryptJson(
+    data,
+    matApiDataSharedKey,
+    matApiDataSalt,
+    matApiDataIterations,
+    matApiDataKeyLength,
+    matApiDataAlgorithm,
+    matApiDataIV
+  );
+
+  const options = {
+    host: matApiHost,
+    port: 443,
+    path: `${matApiBaseUrl}/v1/TenancyManagementInteractions/CreateTenancyManagementInteraction`,
+    method: req.method,
+    headers: {
+      Authorization: matApiToken,
+      "Content-Type": "application/json",
+    },
+    timeout: 10 * 1000,
+  };
+
+  const estateOfficerSource = "1";
+  const postVisitActionProcessType = "2";
+  const serviceRequestTitle = process.env.PROCESS_TYPE_NAME;
+
+  req.body = {
+    subject: subjectId,
+    source: estateOfficerSource,
+    processType: postVisitActionProcessType,
+    ServiceRequest: {
+      title: serviceRequestTitle,
+      subject: subjectId,
+      contactId: contactId,
+      description: description,
+    },
+    officerPatchId: patchId,
+    estateOfficerId: officerId,
+    contactId: contactId,
+    estateOfficerName: officerFullName,
+    areaName: areaId,
+    householdId: householdId,
+    parentInteractionId: ref,
+    natureofEnquiry: category,
+    enquirySubject: subcategory,
+  };
+
+  proxy(options, req, res);
+});
+
 router.get("/v1/tenancies", (req, res) => {
   if (!verifyJwt(req.query.jwt, matApiJwtSecret)) {
     res.status(401).send("Invalid JWT");
@@ -267,6 +488,30 @@ router.get("/v1/residents", (req, res) => {
   };
 
   proxy(options, req, res);
+});
+
+router.get("/v1/officer", (req, res) => {
+  if (!verifyJwt(req.query.jwt, matApiJwtSecret)) {
+    res.status(401).send("Invalid JWT");
+
+    return;
+  }
+
+  const { data } = req.query;
+
+  const { officerFullName } = decryptJson(
+    data,
+    matApiDataSharedKey,
+    matApiDataSalt,
+    matApiDataIterations,
+    matApiDataKeyLength,
+    matApiDataAlgorithm,
+    matApiDataIV
+  );
+
+  res.send({
+    fullName: officerFullName,
+  });
 });
 
 module.exports = router;
