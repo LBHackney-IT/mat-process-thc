@@ -251,6 +251,7 @@ type ProcessDatabaseSchema = NamedSchema<
           needsFraudInvestigationReminder: boolean;
           needsFraudInvestigationLetterReminder: boolean;
         };
+        otherNotes: string;
       };
     };
 

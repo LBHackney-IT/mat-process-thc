@@ -17,17 +17,46 @@ import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { makeSubmit } from "../../components/makeSubmit";
 import PreviousAttemptsAnnouncement from "../../components/PreviousAttemptsAnnouncement";
 import failedAttemptReasonCheckboxes from "../../helpers/failedAttemptReasonCheckboxes";
+import { getCheckboxLabelsFromValues } from "../../helpers/getCheckboxLabelsFromValues";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import { persistUnableToEnterDate } from "../../helpers/persistUnableToEnterDate";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import PageSlugs from "../../steps/PageSlugs";
 import PageTitles from "../../steps/PageTitles";
 import ProcessDatabaseSchema, {
   UnableToEnterPropertyNames,
 } from "../../storage/ProcessDatabaseSchema";
 
-const step = {
+const questions = {
+  "why-unable-to-enter":
+    "Why were you unable to enter the property? Did you observe anything of concern?",
+};
+
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "unableToEnter"> = {
   title: PageTitles.SecondFailedAttempt,
   heading: "Unable to enter the property",
+  review: {
+    rows: [
+      {
+        label: questions["why-unable-to-enter"],
+        values: {
+          "why-unable-to-enter": {
+            renderValue(reasons: string[]): React.ReactNode {
+              return getCheckboxLabelsFromValues(
+                failedAttemptReasonCheckboxes,
+                reasons
+              );
+            },
+          },
+          "second-attempt-notes": {
+            renderValue(secondAttemptNotes: string): React.ReactNode {
+              return secondAttemptNotes;
+            },
+          },
+        },
+      },
+    ],
+  },
   step: {
     slug: PageSlugs.SecondFailedAttempt,
     nextSlug: PageSlugs.Pause,
@@ -70,8 +99,7 @@ const step = {
             name: "why-unable-to-enter",
             legend: (
               <FieldsetLegend>
-                Why were you unable to enter the property? Did you observe
-                anything of concern?
+                {questions["why-unable-to-enter"]}
               </FieldsetLegend>
             ) as React.ReactNode,
             checkboxes: failedAttemptReasonCheckboxes,

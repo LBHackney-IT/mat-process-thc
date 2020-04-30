@@ -18,20 +18,69 @@ import { makeSubmit } from "../../components/makeSubmit";
 import PreviousAttemptsAnnouncement from "../../components/PreviousAttemptsAnnouncement";
 import SingleCheckbox from "../../components/SingleCheckbox";
 import failedAttemptReasonCheckboxes from "../../helpers/failedAttemptReasonCheckboxes";
+import { getCheckboxLabelsFromValues } from "../../helpers/getCheckboxLabelsFromValues";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import { persistUnableToEnterDate } from "../../helpers/persistUnableToEnterDate";
+import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import ProcessDatabaseSchema, {
   UnableToEnterPropertyNames,
 } from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
-const step = {
+const questions = {
+  "why-unable-to-enter":
+    "Why were you unable to enter the property? Did you observe anything of concern?",
+  "what-action": "What did you do?",
+};
+
+const step: ProcessStepDefinition<ProcessDatabaseSchema, "unableToEnter"> = {
   title: PageTitles.FourthFailedAttempt,
   heading: "Unable to enter the property",
+  review: {
+    rows: [
+      {
+        label: questions["why-unable-to-enter"],
+        values: {
+          "why-unable-to-enter": {
+            renderValue(reasons: string[]): React.ReactNode {
+              return getCheckboxLabelsFromValues(
+                failedAttemptReasonCheckboxes,
+                reasons
+              );
+            },
+          },
+          "fourth-attempt-notes": {
+            renderValue(fourthAttemptNotes: string): React.ReactNode {
+              return fourthAttemptNotes;
+            },
+          },
+        },
+      },
+      {
+        label: "Actions",
+        values: {
+          "fraud-reminder": {
+            renderValue(created: boolean): React.ReactNode {
+              if (created) {
+                return "Created reminder to start fraud investigation";
+              }
+            },
+          },
+          "fraud-letter-reminder": {
+            renderValue(created: boolean): React.ReactNode {
+              if (created) {
+                return "Created reminder to send fraud investigation letter (T&HC3)";
+              }
+            },
+          },
+        },
+      },
+    ],
+  },
   step: {
     slug: PageSlugs.FourthFailedAttempt,
-    nextSlug: PageSlugs.Pause,
+    nextSlug: PageSlugs.UnableToEnterReview,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit([
         {
@@ -71,8 +120,7 @@ const step = {
             name: "why-unable-to-enter",
             legend: (
               <FieldsetLegend>
-                Why were you unable to enter the property? Did you observe
-                anything of concern?
+                {questions["why-unable-to-enter"]}
               </FieldsetLegend>
             ) as React.ReactNode,
             checkboxes: failedAttemptReasonCheckboxes,
