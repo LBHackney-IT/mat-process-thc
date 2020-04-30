@@ -10,6 +10,7 @@ import React, { useState } from "react";
 import ProgressBar from "../../../components/ProgressBar";
 import getProcessRef from "../../../helpers/getProcessRef";
 import persistProcessData from "../../../helpers/persistProcessData";
+import stringifyArray from "../../../helpers/stringifyArray";
 import { transferProcessToManager } from "../../../helpers/transferProcess";
 import urlsForRouter from "../../../helpers/urlsForRouter";
 import useDataValue from "../../../helpers/useDataValue";
@@ -35,9 +36,10 @@ const SubmitPage: NextPage = () => {
   );
 
   const address = residentData.result?.address.join(", ");
-  const tenants = (residentData.result?.tenants || [])
-    .map((tenant) => tenant.fullName)
-    .join(", ");
+  const tenantNames = (residentData.result?.tenants || []).map(
+    (tenant) => tenant.fullName
+  );
+  const tenants = stringifyArray(tenantNames);
 
   let content: React.ReactElement;
 
@@ -61,7 +63,7 @@ const SubmitPage: NextPage = () => {
           <>
             <Paragraph>
               The Tenancy and Household Check for the tenancy at {address},
-              occupied by {tenants} has been saved to your device ready to be
+              occupied by {tenants}, has been saved to your device ready to be
               sent to your manager for review.
             </Paragraph>
             <Paragraph>

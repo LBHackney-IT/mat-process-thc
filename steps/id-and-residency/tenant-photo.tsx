@@ -20,7 +20,9 @@ import { ReviewNotes } from "../../components/ReviewNotes";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import slugForRepeatingStep from "../../helpers/slugForRepeatingStep";
-import yesNoNotPresentRadio from "../../helpers/yesNoNotPresentRadio";
+import yesNoNotPresentRadio, {
+  tenantNotPresent,
+} from "../../helpers/yesNoNotPresentRadio";
 import { Notes } from "../../storage/DatabaseSchema";
 import ResidentDatabaseSchema from "../../storage/ResidentDatabaseSchema";
 import Storage from "../../storage/Storage";
@@ -42,7 +44,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
                 ? "Tenant agreed to be photographed"
                 : willing === "no"
                 ? "Tenant does not want to be photographed"
-                : willing === "tenant not present"
+                : willing === tenantNotPresent.value
                 ? "Tenant not present"
                 : undefined;
             },

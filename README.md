@@ -212,7 +212,8 @@ in `docs/adr` and contributed to with
 
 ## Access
 
-TODO: Document how people can find the service and its different environments.
+To access this process running on live infrastructure, start a new Tenancy and
+Household Check from the Manage a Tenancy hub.
 
 ## Source
 

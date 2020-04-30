@@ -152,7 +152,7 @@ it("renders correctly when online", async () => {
                 The Tenancy and Household Check for the tenancy at 
                 , occupied by 
                 
-                 has been saved to your device ready to be sent to your manager for review.
+                , has been saved to your device ready to be sent to your manager for review.
               </p>
               <p
                 className="lbh-body"
@@ -361,7 +361,7 @@ it("renders correctly when offline", async () => {
                 The Tenancy and Household Check for the tenancy at 
                 , occupied by 
                 
-                 has been saved to your device ready to be sent to your manager for review.
+                , has been saved to your device ready to be sent to your manager for review.
               </p>
               <p
                 className="lbh-body"
