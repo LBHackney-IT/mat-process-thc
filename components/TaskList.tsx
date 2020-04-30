@@ -1,7 +1,6 @@
 import { Link, List, Tag } from "lbh-frontend-react/components";
 import querystring from "querystring";
 import React from "react";
-import PropTypes, { PropTypesTypes } from "../helpers/PropTypes";
 
 export enum TaskListStatus {
   Unavailable = "unavailable",
@@ -24,7 +23,7 @@ export interface TaskListItem {
   /**
    * The status to display against the task.
    */
-  status: TaskListStatus;
+  status: TaskListStatus | undefined;
 
   /**
    * @ignore
@@ -53,7 +52,7 @@ export const TaskList: React.FunctionComponent<Props> = (props) => {
           return (
             <>
               <span>{name}</span>
-              {status !== TaskListStatus.Unavailable && (
+              {status && status !== TaskListStatus.Unavailable && (
                 <span>
                   {status !== TaskListStatus.NotStarted && <Tag>{status}</Tag>}
                   <Link href={href} data-testid={testId}>
@@ -92,18 +91,3 @@ export const TaskList: React.FunctionComponent<Props> = (props) => {
 };
 
 TaskList.displayName = "TaskList";
-
-TaskList.propTypes = {
-  items: PropTypes.arrayOf(
-    PropTypes.exact({
-      name: PropTypes.string.isRequired,
-      url: PropTypes.shape({
-        pathname: PropTypes.string.isRequired,
-        query: PropTypes.object,
-      }).isRequired,
-      status: (PropTypes.string as PropTypesTypes.Requireable<TaskListStatus>)
-        .isRequired,
-      "data-testid": PropTypes.string,
-    }).isRequired
-  ).isRequired,
-};
