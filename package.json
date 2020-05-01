@@ -34,7 +34,7 @@
     "lbh-frontend-react": "0.0.14",
     "lodash": "^4.17.15",
     "next": "^9.3.6",
-    "next-offline": "^5.0.0",
+    "next-offline": "^5.0.2",
     "null-as-undefined": "^0.2.1",
     "prop-types": "^15.7.2",
     "querystring": "^0.2.0",
