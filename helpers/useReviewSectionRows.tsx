@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { useMemo } from "react";
+import React from "react";
 import { useAsync, UseAsyncReturn } from "react-async-hook";
 import {
   ComponentDatabaseMap,
@@ -190,13 +190,9 @@ const useRows = <
 >(
   steps: ProcessStepDefinition<DBSchema, Names>[]
 ): Row<DBSchema, Names>[] => {
-  return useMemo(
-    () =>
-      steps.reduce<Row<DBSchema, Names>[]>(
-        (rows, step) => [...rows, ...getRows(step)],
-        []
-      ),
-    [steps]
+  return steps.reduce<Row<DBSchema, Names>[]>(
+    (rows, step) => [...rows, ...getRows(step)],
+    []
   );
 };
 
@@ -207,40 +203,38 @@ const useStoreInfo = <
   rows: Row<DBSchema, Names>[],
   tenantId: ResidentRef | undefined
 ): { [Name in Names]?: StoreKey<DBSchema["schema"], Names>[] } => {
-  return useMemo(() => {
-    const databaseMaps = rows.reduce<ComponentDatabaseMap<DBSchema, Names>[]>(
-      (maps, { values, images }) => [
-        ...maps,
-        ...values.map(({ databaseMap }) => databaseMap),
-        ...images,
-      ],
-      []
-    );
+  const databaseMaps = rows.reduce<ComponentDatabaseMap<DBSchema, Names>[]>(
+    (maps, { values, images }) => [
+      ...maps,
+      ...values.map(({ databaseMap }) => databaseMap),
+      ...images,
+    ],
+    []
+  );
 
-    const storeInfo: {
-      [Name in Names]?: StoreKey<DBSchema["schema"], Names>[];
-    } = {};
+  const storeInfo: {
+    [Name in Names]?: StoreKey<DBSchema["schema"], Names>[];
+  } = {};
 
-    for (const databaseMap of databaseMaps) {
-      const { storeName } = databaseMap;
+  for (const databaseMap of databaseMaps) {
+    const { storeName } = databaseMap;
 
-      const key = findKey(databaseMap, tenantId);
+    const key = findKey(databaseMap, tenantId);
 
-      if (key === undefined || storeInfo[storeName]?.includes(key)) {
-        continue;
-      }
-
-      storeInfo[storeName] = [
-        ...((storeInfo[storeName] || []) as StoreKey<
-          DBSchema["schema"],
-          Names
-        >[]),
-        key,
-      ];
+    if (key === undefined || storeInfo[storeName]?.includes(key)) {
+      continue;
     }
 
-    return storeInfo;
-  }, [rows, tenantId]);
+    storeInfo[storeName] = [
+      ...((storeInfo[storeName] || []) as StoreKey<
+        DBSchema["schema"],
+        Names
+      >[]),
+      key,
+    ];
+  }
+
+  return storeInfo;
 };
 
 const useStoreValues = <
