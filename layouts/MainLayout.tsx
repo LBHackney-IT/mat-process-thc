@@ -259,7 +259,7 @@ const MainLayout = ({
           <div className="phase-banner">
             <Paragraph>
               <Tag>BETA</Tag> This is a new service – your{" "}
-              <Link href={process.env.DIVERSITY_FORM_URL || ""} target="_blank">
+              <Link href={process.env.FEEDBACK_FORM_URL || ""} target="_blank">
                 feedback
               </Link>{" "}
               will help us to improve it.

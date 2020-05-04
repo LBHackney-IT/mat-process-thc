@@ -17,6 +17,7 @@ const env = {
   WORKTRAY_URL: process.env.WORKTRAY_URL,
   TENANCY_URL: process.env.TENANCY_URL,
   DIVERSITY_FORM_URL: process.env.DIVERSITY_FORM_URL,
+  FEEDBACK_FORM_URL: process.env.FEEDBACK_FORM_URL,
 };
 
 if (dev) {
