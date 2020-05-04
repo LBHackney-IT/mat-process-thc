@@ -93,7 +93,6 @@ const ReviewPage: NextPage = () => {
   const tenantsPresent = tenantsValue.filter((tenant) =>
     tenantIdsPresentForCheckValue.includes(tenant.id)
   );
-  const presentTenantNames = tenantsPresent.map(({ fullName }) => fullName);
   const presentTenantIds = tenantsPresent.map(({ id }) => id);
 
   const outsidePropertyImages = useDataValue(
@@ -147,12 +146,6 @@ const ReviewPage: NextPage = () => {
       <Paragraph>
         The Tenancy and Household Check has now been completed. Please review
         the answers with all present tenants and ask them to sign.
-      </Paragraph>
-      <Paragraph>
-        Present for check:{" "}
-        {presentTenantNames.length > 0
-          ? presentTenantNames.join(", ")
-          : "Loading..."}
       </Paragraph>
       <IdAndResidencyReviewSection tenants={tenantsWithPresentStatus} />
       <HouseholdReviewSection />
