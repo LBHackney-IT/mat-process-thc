@@ -108,8 +108,10 @@ const CurrentBalance: React.FunctionComponent = () => {
       {tenancyUrl && (
         <>
           <Paragraph className="rent-details">
-            <Link href={tenancyUrl}>Full rent account details</Link> (opens in a
-            new tab)
+            <Link href={tenancyUrl} target="_blank">
+              Full rent account details
+            </Link>{" "}
+            (opens in a new tab)
           </Paragraph>
           <style jsx>
             {`
