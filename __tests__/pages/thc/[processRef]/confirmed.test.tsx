@@ -100,7 +100,7 @@ it("renders correctly", () => {
                
               <a
                 className="govuk-link lbh-link"
-                href="https://diversity.form"
+                href="https://feedback.form"
                 target="_blank"
               >
                 feedback

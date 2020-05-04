@@ -104,7 +104,7 @@ it("renders correctly for all props", () => {
                
               <a
                 className="govuk-link lbh-link"
-                href="https://diversity.form"
+                href="https://feedback.form"
                 target="_blank"
               >
                 feedback
@@ -261,7 +261,7 @@ it("renders correctly without optional props", () => {
                
               <a
                 className="govuk-link lbh-link"
-                href="https://diversity.form"
+                href="https://feedback.form"
                 target="_blank"
               >
                 feedback
