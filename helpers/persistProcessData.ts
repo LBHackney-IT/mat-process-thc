@@ -39,17 +39,19 @@ const persistProcessData = async (
     return;
   }
 
-  const json = await Storage.getProcessJson(processRef);
+  let json = await Storage.getProcessJson(processRef);
 
-  if (!json) {
+  let processJson = json?.processJson || {};
+
+  if (!processJson.processData) {
     console.warn("No process data to persist");
 
     return;
   }
 
-  const { processJson, imagesJson } = json;
+  const imagesJson = json?.imagesJson || [];
 
-  const progressIncrement = 1 / (imagesJson.length + 2);
+  const progressIncrement = 1 / (imagesJson.length + 3);
 
   await Promise.all(
     imagesJson.map(async ({ id, image }) => {
@@ -76,13 +78,25 @@ const persistProcessData = async (
     })
   );
 
-  if (!processJson || !processJson.processData) {
+  {
+    await persistPostVisitActions(processJson, processRef);
+
+    progress += progressIncrement;
+
+    if (setProgress) {
+      setProgress(progress);
+    }
+
+    json = await Storage.getProcessJson(processRef);
+
+    processJson = json?.processJson || {};
+  }
+
+  if (!processJson.processData) {
     console.warn("No process data to persist");
 
     return;
   }
-
-  await persistPostVisitActions(processJson, processRef);
 
   const response = await fetch(
     `${basePath}/api/v1/processes/${processRef}/processData?jwt=${processApiJwt}`,
