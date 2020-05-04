@@ -119,7 +119,6 @@ const UnableToEnterReviewPage: NextPage = () => {
     <MainLayout
       title={PageTitles.UnableToEnterReview}
       heading="Submit Tenancy and Household Check"
-      pausable
     >
       <React.Fragment>
         <TenancySummary
