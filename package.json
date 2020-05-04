@@ -69,7 +69,7 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^3.0.0",
     "husky": "^4.2.5",
-    "jest": "^25.3.0",
+    "jest": "^25.5.4",
     "jest-axe": "^3.4.0",
     "jest-circus": "^25.5.1",
     "jest-cucumber": "^2.0.11",
