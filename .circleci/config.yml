@@ -172,7 +172,8 @@ workflows:
             --build-arg TENANCY_URL="https://hlbctrial-tst.outsystemsenterprise.com/manageatenancy/CustomerDashboard.aspx" \
             --build-arg DIVERSITY_FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform" \
             --build-arg FEEDBACK_FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLSdpefefhPQJ9fSu-fX6-Uvyanppp480ZRUNAe5dQAr8F2dexw/viewform" \
-            region: AWS_REGION
+
+          region: AWS_REGION
           repo: $AWS_ECR_PATH_STAGING
           tag: $CIRCLE_SHA1
 
@@ -206,7 +207,8 @@ workflows:
             --build-arg TENANCY_URL="https://hlbctrial.outsystemsenterprise.com/manageatenancy/CustomerDashboard.aspx" \
             --build-arg DIVERSITY_FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLScDI85GMCFl8c02DYGpf_cOxsjD83FNbNFEIWKs4u_HOydhKA/viewform" \
             --build-arg FEEDBACK_FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLSdpefefhPQJ9fSu-fX6-Uvyanppp480ZRUNAe5dQAr8F2dexw/viewform" \
-            region: AWS_REGION
+
+          region: AWS_REGION
           repo: $AWS_ECR_PATH_PRODUCTION
           tag: $CIRCLE_SHA1
 
