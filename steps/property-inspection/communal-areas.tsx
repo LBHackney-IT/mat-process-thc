@@ -133,7 +133,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           Component: PostVisitActionInput,
           props: {
             label: {
-              value: "Add note about door mats / potted plants if necessary.",
+              value:
+                "Add note about combustible items in communal areas if necessary.",
             },
             name: "communal-areas-notes",
           } as PostVisitActionInputProps,
