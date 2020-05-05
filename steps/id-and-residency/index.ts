@@ -4,13 +4,13 @@ import carer from "./carer";
 import id from "./id";
 import nextOfKin from "./next-of-kin";
 import otherSupport from "./other-support";
-import presentToCheck from "./present-for-check";
+import presentForCheck from "./present-for-check";
 import residency from "./residency";
 import tenantPhoto from "./tenant-photo";
 
 export type IdAndResidencyProcessStoreNames = "tenantsPresent";
 
-export const idAndResidencyProcessSteps = [presentToCheck];
+export const idAndResidencyProcessSteps = [presentForCheck];
 
 export type IdAndResidencyResidentStoreNames =
   | "id"

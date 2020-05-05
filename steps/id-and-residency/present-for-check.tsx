@@ -1,5 +1,5 @@
 import { FieldsetLegend } from "lbh-frontend-react/components";
-import { useRouter } from "next/router";
+import router, { useRouter } from "next/router";
 import React from "react";
 import {
   ComponentDatabaseMap,
@@ -13,6 +13,7 @@ import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
 import useDataValue from "../../helpers/useDataValue";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
+import { ResidentRef } from "../../storage/ResidentDatabaseSchema";
 import Storage from "../../storage/Storage";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
@@ -48,9 +49,50 @@ const TenantsSelect: React.FunctionComponent<Omit<
   );
 };
 
+const questions = {
+  "tenants-present": "Which tenants are present for this check?",
+};
+
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenantsPresent"> = {
   title: PageTitles.PresentForCheck,
   heading: "Tenants present",
+  review: {
+    rows: [
+      {
+        label: questions["tenants-present"],
+        values: {
+          "tenants-present": {
+            async renderValue(
+              tenantIds: ResidentRef[]
+            ): Promise<React.ReactNode> {
+              const db = await Storage.ExternalContext?.database;
+
+              if (!db) {
+                return;
+              }
+
+              const processRef = getProcessRef(router);
+
+              if (!processRef) {
+                return;
+              }
+
+              const { tenants } = (await db.get("residents", processRef)) || {};
+
+              if (!tenants || tenants.length === 0) {
+                return;
+              }
+
+              return tenants
+                .filter(({ id }) => tenantIds.includes(id))
+                .map(({ fullName }) => fullName)
+                .join(", ");
+            },
+          },
+        },
+      },
+    ],
+  },
   errors: {
     required: {
       "tenants-present": "At least one tenant must be present",
@@ -72,9 +114,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenantsPresent"> = {
           props: {
             name: "tenants-present",
             legend: (
-              <FieldsetLegend>
-                Which tenants are present for this check?
-              </FieldsetLegend>
+              <FieldsetLegend>{questions["tenants-present"]}</FieldsetLegend>
             ) as React.ReactNode,
           },
           required: true,

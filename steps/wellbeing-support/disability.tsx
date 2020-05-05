@@ -1,7 +1,12 @@
 import router from "next/router";
 import React from "react";
 import { ComponentDatabaseMap } from "remultiform/component-wrapper";
+import { StoreValue } from "remultiform/database";
+import ResidentDatabaseSchema, {
+  ResidentRef,
+} from "storage/ResidentDatabaseSchema";
 import { ReviewNotes } from "../../components/ReviewNotes";
+import { getCheckboxLabelsFromValues } from "../../helpers/getCheckboxLabelsFromValues";
 import getProcessRef from "../../helpers/getProcessRef";
 import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
@@ -139,6 +144,92 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
               key: keyFromSlug(),
               property: ["notes"],
             }),
+          },
+        },
+      },
+      {
+        label: "What disabilities do those residents have?",
+        values: {
+          "what-disability": {
+            async renderValue(): Promise<React.ReactNode> {
+              const externalDatabase = await Storage.ExternalContext?.database;
+              const residentDatabase = await Storage.ResidentContext?.database;
+
+              if (!externalDatabase || !residentDatabase) {
+                return;
+              }
+
+              const processRef = getProcessRef(router);
+
+              if (!processRef) {
+                return;
+              }
+
+              const { tenants, householdMembers } =
+                (await externalDatabase.get("residents", processRef)) || {};
+              const residents = [
+                ...(tenants || []),
+                ...(householdMembers || []),
+              ];
+
+              let disabilitiesByResident:
+                | {
+                    id: ResidentRef;
+                    disabilities:
+                      | StoreValue<
+                          ResidentDatabaseSchema["schema"],
+                          "disabilities"
+                        >
+                      | undefined;
+                  }[]
+                | undefined;
+
+              await residentDatabase.transaction(
+                ["disabilities"],
+                async (stores) => {
+                  const { disabilities } = stores;
+
+                  disabilitiesByResident = await Promise.all(
+                    residents.map(async ({ id }) => ({
+                      id,
+                      disabilities: await disabilities.get(id),
+                    }))
+                  );
+                }
+              );
+
+              if (
+                !disabilitiesByResident ||
+                disabilitiesByResident.length === 0
+              ) {
+                return;
+              }
+
+              return (
+                <>
+                  {disabilitiesByResident
+                    .filter(({ disabilities }) => Boolean(disabilities))
+                    .map(({ id, disabilities }) => {
+                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                      const { fullName } = residents.find(
+                        (resident) => resident.id === id
+                      )!;
+                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                      const { what } = disabilities!;
+
+                      return (
+                        <div key={id}>
+                          <strong>{fullName}</strong>:{" "}
+                          {getCheckboxLabelsFromValues(
+                            disabilityCheckboxes,
+                            what
+                          )}
+                        </div>
+                      );
+                    })}
+                </>
+              );
+            },
           },
         },
       },

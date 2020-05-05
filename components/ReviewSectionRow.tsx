@@ -69,6 +69,7 @@ export const ReviewSectionRow: React.FunctionComponent<Props> = (props) => {
         }
 
         .change-link {
+          margin-top: 0;
           margin-left: 2em;
         }
       `}</style>

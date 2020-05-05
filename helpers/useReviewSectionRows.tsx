@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
-import React, { useMemo } from "react";
+import { nullAsUndefined } from "null-as-undefined";
+import React from "react";
 import { useAsync, UseAsyncReturn } from "react-async-hook";
 import {
   ComponentDatabaseMap,
@@ -30,9 +31,9 @@ interface Value<
   DBSchema extends NamedSchema<string, number, Schema>,
   Name extends StoreNames<DBSchema["schema"]>
 > {
-  databaseMap: ComponentDatabaseMap<DBSchema, Name>;
+  databaseMap: ComponentDatabaseMap<DBSchema, Name> | undefined;
   renderValue(
-    value: ComponentValue<DBSchema, Name>
+    value: ComponentValue<DBSchema, Name> | undefined
   ): React.ReactNode | Promise<React.ReactNode>;
 }
 
@@ -128,18 +129,17 @@ const getValues = <
       typeof values[keyof typeof values]
     >[];
 
-    return valueValues.filter(({ databaseMap, renderValue }) =>
-      Boolean(databaseMap && renderValue)
+    return valueValues.filter(({ renderValue }) =>
+      Boolean(renderValue)
     ) as Value<DBSchema, Names>[];
   }
 
   return step.componentWrappers
     .map(({ key, databaseMap }) => ({ databaseMap, value: values[key] }))
-    .filter(({ databaseMap, value }) => Boolean(databaseMap && value))
+    .filter(({ value }) => Boolean(value))
     .map(({ databaseMap, value }) => {
       return {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        databaseMap: databaseMap!,
+        databaseMap: nullAsUndefined(databaseMap),
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/unbound-method
         renderValue: value!.renderValue,
       };
@@ -190,13 +190,9 @@ const useRows = <
 >(
   steps: ProcessStepDefinition<DBSchema, Names>[]
 ): Row<DBSchema, Names>[] => {
-  return useMemo(
-    () =>
-      steps.reduce<Row<DBSchema, Names>[]>(
-        (rows, step) => [...rows, ...getRows(step)],
-        []
-      ),
-    [steps]
+  return steps.reduce<Row<DBSchema, Names>[]>(
+    (rows, step) => [...rows, ...getRows(step)],
+    []
   );
 };
 
@@ -207,40 +203,40 @@ const useStoreInfo = <
   rows: Row<DBSchema, Names>[],
   tenantId: ResidentRef | undefined
 ): { [Name in Names]?: StoreKey<DBSchema["schema"], Names>[] } => {
-  return useMemo(() => {
-    const databaseMaps = rows.reduce<ComponentDatabaseMap<DBSchema, Names>[]>(
-      (maps, { values, images }) => [
-        ...maps,
-        ...values.map(({ databaseMap }) => databaseMap),
-        ...images,
-      ],
-      []
-    );
+  const databaseMaps = rows.reduce<ComponentDatabaseMap<DBSchema, Names>[]>(
+    (maps, { values, images }) => [
+      ...maps,
+      ...(values
+        .map(({ databaseMap }) => databaseMap)
+        .filter(Boolean) as ComponentDatabaseMap<DBSchema, Names>[]),
+      ...images,
+    ],
+    []
+  );
 
-    const storeInfo: {
-      [Name in Names]?: StoreKey<DBSchema["schema"], Names>[];
-    } = {};
+  const storeInfo: {
+    [Name in Names]?: StoreKey<DBSchema["schema"], Names>[];
+  } = {};
 
-    for (const databaseMap of databaseMaps) {
-      const { storeName } = databaseMap;
+  for (const databaseMap of databaseMaps) {
+    const { storeName } = databaseMap;
 
-      const key = findKey(databaseMap, tenantId);
+    const key = findKey(databaseMap, tenantId);
 
-      if (key === undefined || storeInfo[storeName]?.includes(key)) {
-        continue;
-      }
-
-      storeInfo[storeName] = [
-        ...((storeInfo[storeName] || []) as StoreKey<
-          DBSchema["schema"],
-          Names
-        >[]),
-        key,
-      ];
+    if (key === undefined || storeInfo[storeName]?.includes(key)) {
+      continue;
     }
 
-    return storeInfo;
-  }, [rows, tenantId]);
+    storeInfo[storeName] = [
+      ...((storeInfo[storeName] || []) as StoreKey<
+        DBSchema["schema"],
+        Names
+      >[]),
+      key,
+    ];
+  }
+
+  return storeInfo;
 };
 
 const useStoreValues = <
@@ -384,19 +380,24 @@ const useReviewSectionRows = <
                   }
 
                   const { databaseMap, renderValue } = v;
-                  const { storeName } = databaseMap;
 
-                  const key = findKey(databaseMap, tenantId);
-                  const values = storeValues.result[storeName];
+                  let value: ComponentValue<DBSchema, Names> | undefined;
 
-                  if (key === undefined || values === undefined) {
-                    return;
-                  }
+                  if (databaseMap) {
+                    const { storeName } = databaseMap;
 
-                  const value = findValue(values[key], databaseMap);
+                    const key = findKey(databaseMap, tenantId);
+                    const values = storeValues.result[storeName];
 
-                  if (value === undefined) {
-                    return;
+                    if (key === undefined || values === undefined) {
+                      return;
+                    }
+
+                    value = findValue(values[key], databaseMap);
+
+                    if (value === undefined) {
+                      return;
+                    }
                   }
 
                   return await renderValue(value);
