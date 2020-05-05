@@ -24,6 +24,7 @@ export default [
   roof,
   loft,
   garden,
+  repairs,
   storingMaterials,
   fireExit,
   smokeAlarm,
@@ -33,5 +34,4 @@ export default [
   pets,
   antisocialBehaviour,
   otherComments,
-  repairs,
 ];
