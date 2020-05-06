@@ -39,6 +39,7 @@ export const Details: React.FunctionComponent<Props> = (props) => {
         }
 
         summary {
+          outline: none;
           text-decoration: underline;
           font-family: "Montserrat";
         }
