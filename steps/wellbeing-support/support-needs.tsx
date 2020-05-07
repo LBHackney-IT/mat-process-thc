@@ -69,7 +69,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
       {
         label: "Domestic Violence & Sexual Abuse",
         values: {
-          "domestic-violences": {
+          "domestic-violence": {
             renderValue(notes: Notes): React.ReactNode {
               return <ReviewNotes notes={notes} />;
             },
