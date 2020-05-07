@@ -117,6 +117,16 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
           },
         })
       ),
+      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "supportNeeds">(
+        new StaticComponent({
+          key: "support-needs-paragraph",
+          Component: Paragraph,
+          props: {
+            children:
+              "Please consider whether the tenant(s) would benefit from being referred to any of the following services or agencies.",
+          },
+        })
+      ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "resident-sustainment",
