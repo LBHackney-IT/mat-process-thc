@@ -26,7 +26,7 @@
   "dependencies": {
     "classnames": "^2.2.6",
     "cross-fetch": "^3.0.4",
-    "date-fns": "^2.12.0",
+    "date-fns": "^2.13.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "is-online": "^8.3.1",
