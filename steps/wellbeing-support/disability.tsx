@@ -134,6 +134,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
           },
           "disability-notes": {
             renderValue(notes: Notes): React.ReactNode {
+              if (notes.length === 0) {
+                return;
+              }
+
               return <ReviewNotes notes={notes} />;
             },
             databaseMap: new ComponentDatabaseMap<

@@ -72,6 +72,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           },
           "metal-gates-notes": {
             renderValue(notes: Notes): React.ReactNode {
+              if (notes.length === 0) {
+                return;
+              }
+
               return <ReviewNotes notes={notes} />;
             },
           },

@@ -113,13 +113,11 @@ const CurrentBalance: React.FunctionComponent = () => {
             </Link>{" "}
             (opens in a new tab)
           </Paragraph>
-          <style jsx>
-            {`
-              :global(.rent-details) {
-                margin-top: 0;
-              }
-            `}
-          </style>
+          <style jsx>{`
+            :global(.rent-details) {
+              margin-top: 0;
+            }
+          `}</style>
         </>
       )}
     </>
@@ -140,8 +138,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
             },
           },
           "rent-arrears-notes": {
-            renderValue(rentArrearsNotes: Notes): React.ReactNode {
-              return <ReviewNotes notes={rentArrearsNotes} />;
+            renderValue(notes: Notes): React.ReactNode {
+              if (notes.length === 0) {
+                return;
+              }
+
+              return <ReviewNotes notes={notes} />;
             },
           },
         },
@@ -158,8 +160,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
             },
           },
           "housing-benefits-notes": {
-            renderValue(housingBenefitNotes: Notes): React.ReactNode {
-              return <ReviewNotes notes={housingBenefitNotes} />;
+            renderValue(notes: Notes): React.ReactNode {
+              if (notes.length === 0) {
+                return;
+              }
+
+              return <ReviewNotes notes={notes} />;
             },
           },
         },
@@ -173,8 +179,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
             },
           },
           "income-officer-notes": {
-            renderValue(incomeOfficerNotes: Notes): React.ReactNode {
-              return <ReviewNotes notes={incomeOfficerNotes} />;
+            renderValue(notes: Notes): React.ReactNode {
+              if (notes.length === 0) {
+                return;
+              }
+
+              return <ReviewNotes notes={notes} />;
             },
           },
         },

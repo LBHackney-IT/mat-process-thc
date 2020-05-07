@@ -31,6 +31,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
         values: {
           "resident-sustainment": {
             renderValue(notes: Notes): React.ReactNode {
+              if (notes.length === 0) {
+                return;
+              }
+
               return <ReviewNotes notes={notes} />;
             },
           },
@@ -41,6 +45,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
         values: {
           befriending: {
             renderValue(notes: Notes): React.ReactNode {
+              if (notes.length === 0) {
+                return;
+              }
+
               return <ReviewNotes notes={notes} />;
             },
           },
@@ -51,6 +59,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
         values: {
           "adult-safeguarding": {
             renderValue(notes: Notes): React.ReactNode {
+              if (notes.length === 0) {
+                return;
+              }
+
               return <ReviewNotes notes={notes} />;
             },
           },
@@ -61,6 +73,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
         values: {
           "childrens-safeguarding": {
             renderValue(notes: Notes): React.ReactNode {
+              if (notes.length === 0) {
+                return;
+              }
+
               return <ReviewNotes notes={notes} />;
             },
           },
@@ -71,6 +87,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
         values: {
           "domestic-violences": {
             renderValue(notes: Notes): React.ReactNode {
+              if (notes.length === 0) {
+                return;
+              }
+
               return <ReviewNotes notes={notes} />;
             },
           },
@@ -81,6 +101,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
         values: {
           "mental-health-18-65": {
             renderValue(notes: Notes): React.ReactNode {
+              if (notes.length === 0) {
+                return;
+              }
+
               return <ReviewNotes notes={notes} />;
             },
           },
@@ -91,6 +115,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "supportNeeds"> = {
         values: {
           "mental-health-over-65": {
             renderValue(notes: Notes): React.ReactNode {
+              if (notes.length === 0) {
+                return;
+              }
+
               return <ReviewNotes notes={notes} />;
             },
           },

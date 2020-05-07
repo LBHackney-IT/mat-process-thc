@@ -53,6 +53,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           },
           "door-mats-notes": {
             renderValue(notes: Notes): React.ReactNode {
+              if (notes.length === 0) {
+                return;
+              }
+
               return <ReviewNotes notes={notes} />;
             },
           },
