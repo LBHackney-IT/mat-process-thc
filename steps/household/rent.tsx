@@ -97,7 +97,9 @@ const CurrentBalance: React.FunctionComponent = () => {
   const tenancyUrl = process.env.TENANCY_URL;
 
   const currentBalanceValue = currentBalance.result
-    ? `£${currentBalance.result}`
+    ? `${
+        Math.sign(parseFloat(currentBalance.result)) > 0 ? "- " : ""
+      }£${Math.abs(parseFloat(currentBalance.result))}`
     : "Loading...";
 
   return (
