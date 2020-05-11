@@ -135,22 +135,22 @@ const UnableToEnterReviewPage: NextPage = () => {
         actions taken at each attempt have been recorded.
       </Paragraph>
       <ReviewSection
-        heading={`First Failed Attempt: ${firstFailedAttemptDate}`}
+        heading={`First failed attempt: ${firstFailedAttemptDate}`}
         loading={firstFailedAttemptReviewSection.loading}
         rows={firstFailedAttemptReviewSection.result}
       />
       <ReviewSection
-        heading={`Second Failed Attempt: ${secondFailedAttemptDate}`}
+        heading={`Second failed attempt: ${secondFailedAttemptDate}`}
         loading={secondFailedAttemptReviewSection.loading}
         rows={secondFailedAttemptReviewSection.result}
       />
       <ReviewSection
-        heading={`Third Failed Attempt: ${thirdFailedAttemptDate}`}
+        heading={`Third failed attempt: ${thirdFailedAttemptDate}`}
         loading={thirdFailedAttemptReviewSection.loading}
         rows={thirdFailedAttemptReviewSection.result}
       />
       <ReviewSection
-        heading={`Fourth Failed Attempt: ${fourthFailedAttemptDate}`}
+        heading={`Fourth failed attempt: ${fourthFailedAttemptDate}`}
         loading={fourthFailedAttemptReviewSection.loading}
         rows={fourthFailedAttemptReviewSection.result}
       />
