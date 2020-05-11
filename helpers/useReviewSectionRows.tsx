@@ -369,87 +369,92 @@ const useReviewSectionRows = <
 
   return useAsync(
     async () =>
-      (
-        await Promise.all(
-          rows.map(async (row) => {
-            const values = (
-              await Promise.all(
-                row.values.map(async (v) => {
-                  if (storeValues.loading || storeValues.result === undefined) {
-                    return;
-                  }
+      await Promise.all(
+        rows.map(async (row) => {
+          if (storeValues.loading || storeValues.result === undefined) {
+            return {
+              key: row.label,
+              value: <ReviewSectionRow values={["Loading..."]} />,
+            } as SectionRow;
+          }
 
-                  const { databaseMap, renderValue } = v;
-
-                  let value: ComponentValue<DBSchema, Names> | undefined;
-
-                  if (databaseMap) {
-                    const { storeName } = databaseMap;
-
-                    const key = findKey(databaseMap, tenantId);
-                    const values = storeValues.result[storeName];
-
-                    if (key === undefined || values === undefined) {
-                      return;
-                    }
-
-                    value = findValue(values[key], databaseMap);
-
-                    if (value === undefined) {
-                      return;
-                    }
-                  }
-
-                  return await renderValue(value);
-                })
-              )
-            ).filter(Boolean) as React.ReactNode[];
-
-            const images = (row.images
-              .map((databaseMap) => {
+          const rowValues = (
+            await Promise.all(
+              row.values.map(async (v) => {
                 if (storeValues.loading || storeValues.result === undefined) {
                   return;
                 }
 
-                const { storeName } = databaseMap;
+                const { databaseMap, renderValue } = v;
 
-                const key = findKey(databaseMap, tenantId);
-                const values = storeValues.result[storeName];
+                let value: ComponentValue<DBSchema, Names> | undefined;
 
-                if (key === undefined || values === undefined) {
-                  return;
+                if (databaseMap) {
+                  const { storeName } = databaseMap;
+
+                  const key = findKey(databaseMap, tenantId);
+                  const values = storeValues.result[storeName];
+
+                  if (key === undefined || values === undefined) {
+                    return;
+                  }
+
+                  value = findValue(values[key], databaseMap);
+
+                  if (value === undefined) {
+                    return;
+                  }
                 }
 
-                return findValue(values[key], databaseMap);
+                return await renderValue(value);
               })
-              .filter(Boolean) as string[][]).reduce<string[]>(
-              (i, images) => [...i, ...images],
-              []
-            );
+            )
+          ).filter(Boolean) as React.ReactNode[];
 
-            if (!values.length && !images.length) {
-              return;
-            }
+          const rowImages = (row.images
+            .map((databaseMap) => {
+              if (storeValues.loading || storeValues.result === undefined) {
+                return;
+              }
 
-            const changeSlug = readOnly
-              ? undefined
-              : tenantId && repeatingStepSlugs.includes(row.changeSlug)
-              ? slugWithId(row.changeSlug, tenantId)
-              : row.changeSlug;
+              const { storeName } = databaseMap;
 
-            return {
-              key: row.label,
-              value: (
-                <ReviewSectionRow
-                  values={values}
-                  images={images}
-                  changeSlug={changeSlug}
-                />
-              ),
-            };
-          })
-        )
-      ).filter(Boolean) as SectionRow[],
+              const key = findKey(databaseMap, tenantId);
+              const values = storeValues.result[storeName];
+
+              if (key === undefined || values === undefined) {
+                return;
+              }
+
+              return findValue(values[key], databaseMap);
+            })
+            .filter(Boolean) as string[][]).reduce<string[]>(
+            (i, images) => [...i, ...images],
+            []
+          );
+
+          if (rowValues.length === 0 && rowImages.length === 0) {
+            rowValues.push(<em>No answer</em>);
+          }
+
+          const changeSlug = readOnly
+            ? undefined
+            : tenantId && repeatingStepSlugs.includes(row.changeSlug)
+            ? slugWithId(row.changeSlug, tenantId)
+            : row.changeSlug;
+
+          return {
+            key: row.label,
+            value: (
+              <ReviewSectionRow
+                values={rowValues}
+                images={rowImages}
+                changeSlug={changeSlug}
+              />
+            ),
+          } as SectionRow;
+        })
+      ),
     [
       Boolean(router),
       JSON.stringify(rows),

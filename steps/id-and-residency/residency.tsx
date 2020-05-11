@@ -87,6 +87,10 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
           },
           "residency-notes": {
             renderValue(notes: Notes): React.ReactNode {
+              if (notes.length === 0) {
+                return;
+              }
+
               return <ReviewNotes notes={notes} />;
             },
           },

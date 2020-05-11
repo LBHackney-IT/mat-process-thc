@@ -39,8 +39,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
             },
           },
           "other-property-notes": {
-            renderValue(otherPropertyNotes: Notes): React.ReactNode {
-              return <ReviewNotes notes={otherPropertyNotes} />;
+            renderValue(notes: Notes): React.ReactNode {
+              if (notes.length === 0) {
+                return;
+              }
+
+              return <ReviewNotes notes={notes} />;
             },
           },
         },

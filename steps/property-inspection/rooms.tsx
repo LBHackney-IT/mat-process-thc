@@ -41,6 +41,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           },
           "room-entry-notes": {
             renderValue(notes: Notes): React.ReactNode {
+              if (notes.length === 0) {
+                return;
+              }
+
               return <ReviewNotes notes={notes} />;
             },
           },

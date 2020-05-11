@@ -75,8 +75,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
         label: "Change in household members",
         values: {
           "member-changes": {
-            renderValue(memberChanges: Notes): React.ReactNode {
-              return <ReviewNotes notes={memberChanges} />;
+            renderValue(notes: Notes): React.ReactNode {
+              if (notes.length === 0) {
+                return;
+              }
+
+              return <ReviewNotes notes={notes} />;
             },
           },
         },
@@ -86,8 +90,12 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
         label: "Housing move schemes",
         values: {
           "house-moving-schemes": {
-            renderValue(houseMovingSchemes: Notes): React.ReactNode {
-              return <ReviewNotes notes={houseMovingSchemes} />;
+            renderValue(notes: Notes): React.ReactNode {
+              if (notes.length === 0) {
+                return;
+              }
+
+              return <ReviewNotes notes={notes} />;
             },
           },
         },
