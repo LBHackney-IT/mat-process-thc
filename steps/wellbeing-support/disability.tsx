@@ -200,7 +200,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
 
               if (
                 !disabilitiesByResident ||
-                disabilitiesByResident.length === 0
+                disabilitiesByResident.length === 0 ||
+                disabilitiesByResident.every(
+                  ({ disabilities }) => disabilities?.what === undefined
+                )
               ) {
                 return;
               }
@@ -208,7 +211,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "disability"> = {
               return (
                 <>
                   {disabilitiesByResident
-                    .filter(({ disabilities }) => Boolean(disabilities))
+                    .filter(({ disabilities }) => Boolean(disabilities?.what))
                     .map(({ id, disabilities }) => {
                       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                       const { fullName } = residents.find(
