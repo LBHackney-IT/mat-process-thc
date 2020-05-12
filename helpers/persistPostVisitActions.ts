@@ -226,7 +226,7 @@ First attempt: ${firstAttemptDate}; notes: ${firstFailedAttemptNotes}
 Second attempt: ${secondAttemptDate}; notes: ${secondFailedAttemptNotes}
 Third attempt: ${thirdAttemptDate}; notes: ${thirdFailedAttemptNotes}`;
 
-    postValueToBackend(
+    await postValueToBackend(
       description,
       unableToEnterMap["thirdFailedAttempt.needsAppointmentLetterReminder"],
       processRef
@@ -242,7 +242,7 @@ Third attempt: ${thirdAttemptDate}; notes: ${thirdFailedAttemptNotes}
 Fourth attempt: ${fourthAttemptDate}; notes: ${fourthFailedAttemptNotes}`;
 
     if (fourthFailedAttempt.needsFraudInvestigationLetterReminder) {
-      postValueToBackend(
+      await postValueToBackend(
         `Action: Fourth failed attempt - fraud investigation letter reminder\n${details}`,
         unableToEnterMap[
           "fourthFailedAttempt.needsFraudInvestigationLetterReminder"
@@ -252,7 +252,7 @@ Fourth attempt: ${fourthAttemptDate}; notes: ${fourthFailedAttemptNotes}`;
     }
 
     if (fourthFailedAttempt.needsFraudInvestigationReminder) {
-      postValueToBackend(
+      await postValueToBackend(
         `Action: fourth failed attempt - fraud investigation reminder\n${details}`,
         unableToEnterMap["fourthFailedAttempt.needsFraudInvestigationReminder"],
         processRef
