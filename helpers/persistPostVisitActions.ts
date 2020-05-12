@@ -188,88 +188,75 @@ export const persistUnableToEnterPostVisitActions = async (
     return;
   }
 
-  const unableToEnterMap = processPostVisitActionMap["unableToEnter"];
   const externalDatabase = await Storage.ExternalContext?.database;
 
   if (!externalDatabase) {
     return;
   }
+
   const residents = await externalDatabase.get("residents", processRef);
   const tenantNames = residents
     ? residents.tenants.map((tenant) => tenant.fullName).join(", ")
     : "N/A";
   const address = residents ? residents.address.join(", ") : "N/A";
 
-  const firstFailedAttempt = unableToEnterData["firstFailedAttempt"];
-  const secondFailedAttempt = unableToEnterData["secondFailedAttempt"];
-  const thirdFailedAttempt = unableToEnterData["thirdFailedAttempt"];
-  const fourthFailedAttempt = unableToEnterData["fourthFailedAttempt"];
+  const unableToEnterMap = processPostVisitActionMap.unableToEnter;
 
-  const firstFailedAttemptNotes =
-    (firstFailedAttempt && firstFailedAttempt["notes"]) || "N/A";
+  const firstFailedAttempt = unableToEnterData.firstFailedAttempt;
+  const firstAttemptDate = firstFailedAttempt?.date || "N/A";
+  const firstFailedAttemptNotes = firstFailedAttempt?.notes || "N/A";
 
-  const secondFailedAttemptNotes =
-    (secondFailedAttempt && secondFailedAttempt["notes"]) || "N/A";
+  const secondFailedAttempt = unableToEnterData.secondFailedAttempt;
+  const secondAttemptDate = secondFailedAttempt?.date || "N/A";
+  const secondFailedAttemptNotes = secondFailedAttempt?.notes || "N/A";
 
-  const thirdFailedAttemptNotes =
-    (thirdFailedAttempt && thirdFailedAttempt["notes"]) || "N/A";
+  const thirdFailedAttempt = unableToEnterData.thirdFailedAttempt;
+  const thirdAttemptDate = thirdFailedAttempt?.date || "N/A";
+  const thirdFailedAttemptNotes = thirdFailedAttempt?.notes || "N/A";
 
-  const fourthFailedAttemptNotes =
-    (fourthFailedAttempt && fourthFailedAttempt["notes"]) || "N/A";
+  const fourthFailedAttempt = unableToEnterData.fourthFailedAttempt;
+  const fourthAttemptDate = fourthFailedAttempt?.date || "N/A";
+  const fourthFailedAttemptNotes = fourthFailedAttempt?.notes || "N/A";
 
-  const firstAttemptDate =
-    (firstFailedAttempt && firstFailedAttempt["date"]) || "N/A";
+  if (thirdFailedAttempt?.needsAppointmentLetterReminder) {
+    const description = `Action: Third failed attempt - appointment letter reminder
+Address: ${address}
+Resident(s) details: ${tenantNames}
+First attempt: ${firstAttemptDate}; notes: ${firstFailedAttemptNotes}
+Second attempt: ${secondAttemptDate}; notes: ${secondFailedAttemptNotes}
+Third attempt: ${thirdAttemptDate}; notes: ${thirdFailedAttemptNotes}`;
 
-  const secondAttemptDate =
-    (secondFailedAttempt && secondFailedAttempt["date"]) || "N/A";
-
-  const thirdAttemptDate =
-    (thirdFailedAttempt && thirdFailedAttempt["date"]) || "N/A";
-
-  const fourthAttemptDate =
-    (fourthFailedAttempt && fourthFailedAttempt["date"]) || "N/A";
-
-  if (thirdFailedAttempt) {
-    if (thirdFailedAttempt.needsAppointmentLetterReminder) {
-      const config =
-        unableToEnterMap["thirdFailedAttempt.needsAppointmentLetterReminder"];
-      const description = `Action: Third Failed Attempt - Appointment Letter Reminder
-Address: ${address}.
-Resident(s) details: ${tenantNames}.
-First Attempt: ${firstAttemptDate}, Notes: ${firstFailedAttemptNotes}.
-Second Attempt: ${secondAttemptDate}, Notes: ${secondFailedAttemptNotes}.
-Third Attempt: ${thirdAttemptDate}, Notes: ${thirdFailedAttemptNotes}`;
-
-      postValueToBackend(description, config, processRef);
-    }
+    postValueToBackend(
+      description,
+      unableToEnterMap["thirdFailedAttempt.needsAppointmentLetterReminder"],
+      processRef
+    );
   }
 
   if (fourthFailedAttempt) {
     const details = `Address: ${address}.
 Resident(s) details: ${tenantNames}.
-First Attempt: ${firstAttemptDate}, Notes: ${firstFailedAttemptNotes}.
-Second Attempt: ${secondAttemptDate}, Notes: ${secondFailedAttemptNotes}.
-Third Attempt: ${thirdAttemptDate}, Notes: ${thirdFailedAttemptNotes}.
-Fourth Attempt: ${fourthAttemptDate}, Notes: ${fourthFailedAttemptNotes}.`;
+First attempt: ${firstAttemptDate}; notes: ${firstFailedAttemptNotes}
+Second attempt: ${secondAttemptDate}; notes: ${secondFailedAttemptNotes}
+Third attempt: ${thirdAttemptDate}; notes: ${thirdFailedAttemptNotes}
+Fourth attempt: ${fourthAttemptDate}; notes: ${fourthFailedAttemptNotes}`;
 
     if (fourthFailedAttempt.needsFraudInvestigationLetterReminder) {
-      const config =
+      postValueToBackend(
+        `Action: Fourth failed attempt - fraud investigation letter reminder\n${details}`,
         unableToEnterMap[
           "fourthFailedAttempt.needsFraudInvestigationLetterReminder"
-        ];
-
-      const description = `Action: Fourth Failed Attempt - Fraud Investigation Letter Reminder\n${details}`;
-
-      postValueToBackend(description, config, processRef);
+        ],
+        processRef
+      );
     }
 
     if (fourthFailedAttempt.needsFraudInvestigationReminder) {
-      const config =
-        unableToEnterMap["fourthFailedAttempt.needsFraudInvestigationReminder"];
-
-      const description = `Action: Fourth Failed Attempt - Fraud Investigation Reminder\n${details}`;
-
-      postValueToBackend(description, config, processRef);
+      postValueToBackend(
+        `Action: fourth failed attempt - fraud investigation reminder\n${details}`,
+        unableToEnterMap["fourthFailedAttempt.needsFraudInvestigationReminder"],
+        processRef
+      );
     }
   }
 };
