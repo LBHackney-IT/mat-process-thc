@@ -465,8 +465,8 @@ export const LoadingPage: NextPage = () => {
       processDataSyncStatus.completedStepCount) /
     (extraResults.length + processDataSyncStatus.expectedStepCount);
 
-  const isManagerPage = isManager(router);
-  const nextSlug = isManagerPage ? PageSlugs.ManagerReview : PageSlugs.Outside;
+  const isInManagerStage = isManager(router);
+  const nextSlug = isInManagerStage ? PageSlugs.ManagerReview : PageSlugs.Outside;
 
   const { href, as } = urlsForRouter(
     router,
@@ -521,7 +521,7 @@ export const LoadingPage: NextPage = () => {
 
       <Heading level={HeadingLevels.H2}>Loading</Heading>
       <Paragraph>
-        {isManagerPage
+        {isInManagerStage
           ? "The system is fetching the information you need for this process."
           : "The system is updating the information you need for this process so that you can go offline at any point."}
       </Paragraph>

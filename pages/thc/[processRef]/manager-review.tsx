@@ -204,17 +204,15 @@ const ReviewPage: NextPage = () => {
       title={PageTitles.ManagerReview}
       heading="Review Tenancy and Household Check"
     >
-      <React.Fragment>
-        <TenancySummary
-          details={{
-            address: address.result,
-            tenants: allTenantNames,
-            tenureType: tenureType.result,
-            startDate: tenancyStartDate.result,
-          }}
-          extraRows={extraRows}
-        />
-      </React.Fragment>
+      <TenancySummary
+        details={{
+          address: address.result,
+          tenants: allTenantNames,
+          tenureType: tenureType.result,
+          startDate: tenancyStartDate.result,
+        }}
+        extraRows={extraRows}
+      />
       <IdAndResidencyReviewSection
         tenants={tenantsWithPresentStatus}
         readOnly
@@ -242,6 +240,7 @@ const ReviewPage: NextPage = () => {
         ({ fullName, id }) =>
           signatureValues[id] && (
             <React.Fragment key={id}>
+              <Heading level={HeadingLevels.H3}>{fullName}</Heading>
               <img
                 className="signature"
                 src={signatureValues[id]}

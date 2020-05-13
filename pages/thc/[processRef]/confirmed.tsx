@@ -14,7 +14,7 @@ import PageTitles from "../../../steps/PageTitles";
 
 const ConfirmedPage: NextPage = () => {
   const router = useRouter();
-  const isManagerPage = isManager(router);
+  const isInManagerStage = isManager(router);
 
   const { status } = router.query;
 
@@ -31,11 +31,11 @@ const ConfirmedPage: NextPage = () => {
   return (
     <MainLayout title={PageTitles.Confirmed}>
       <PageAnnouncement title="Process submission confirmed">
-        <Paragraph>{isManagerPage ? managerText : officerText}</Paragraph>
+        <Paragraph>{isInManagerStage ? managerText : officerText}</Paragraph>
       </PageAnnouncement>
 
       <Heading level={HeadingLevels.H3}>What to do next?</Heading>
-      {isManagerPage || (
+      {isInManagerStage || (
         <Paragraph>
           <Button
             disabled={!process.env.DIVERSITY_FORM_URL}
