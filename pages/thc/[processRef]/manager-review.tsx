@@ -1,7 +1,3 @@
-import {
-  approveProcess,
-  declineProcess,
-} from ".../../../helpers/transferProcess";
 import formatDate from "date-fns/format";
 import {
   Heading,
@@ -22,6 +18,10 @@ import { TenancySummary } from "../../../components/TenancySummary";
 import Thumbnail from "../../../components/Thumbnail";
 import getProcessRef from "../../../helpers/getProcessRef";
 import { ProcessStage } from "../../../helpers/ProcessStage";
+import {
+  approveProcess,
+  declineProcess,
+} from "../../../helpers/transferProcess";
 import useDatabase from "../../../helpers/useDatabase";
 import useDataSet from "../../../helpers/useDataSet";
 import useDataValue from "../../../helpers/useDataValue";
