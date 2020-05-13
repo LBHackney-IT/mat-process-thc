@@ -188,9 +188,10 @@ export const persistUnableToEnterPostVisitActions = async (
     return;
   }
 
+  const processDatabase = await Storage.ProcessContext?.database;
   const externalDatabase = await Storage.ExternalContext?.database;
 
-  if (!externalDatabase) {
+  if (!processDatabase || !externalDatabase) {
     return;
   }
 
@@ -214,11 +215,10 @@ export const persistUnableToEnterPostVisitActions = async (
   const thirdAttemptDate = thirdFailedAttempt?.date || "N/A";
   const thirdFailedAttemptNotes = thirdFailedAttempt?.notes || "N/A";
 
-  const fourthFailedAttempt = unableToEnterData.fourthFailedAttempt;
-  const fourthAttemptDate = fourthFailedAttempt?.date || "N/A";
-  const fourthFailedAttemptNotes = fourthFailedAttempt?.notes || "N/A";
-
-  if (thirdFailedAttempt?.needsAppointmentLetterReminder) {
+  if (
+    thirdFailedAttempt?.needsAppointmentLetterReminder &&
+    !thirdFailedAttempt.appointmentLetterReminderCreatedAt
+  ) {
     const description = `Action: Third failed attempt - appointment letter reminder
 Address: ${address}
 Resident(s) details: ${tenantNames}
@@ -231,7 +231,25 @@ Third attempt: ${thirdAttemptDate}; notes: ${thirdFailedAttemptNotes}`;
       unableToEnterMap["thirdFailedAttempt.needsAppointmentLetterReminder"],
       processRef
     );
+
+    unableToEnterData = {
+      ...unableToEnterData,
+      thirdFailedAttempt: {
+        ...thirdFailedAttempt,
+        appointmentLetterReminderCreatedAt: new Date().toISOString(),
+      },
+    };
+
+    await processDatabase.put(
+      "unableToEnter",
+      processRef,
+      unableToEnterData as ProcessDatabaseSchema["schema"]["unableToEnter"]["value"]
+    );
   }
+
+  const fourthFailedAttempt = unableToEnterData.fourthFailedAttempt;
+  const fourthAttemptDate = fourthFailedAttempt?.date || "N/A";
+  const fourthFailedAttemptNotes = fourthFailedAttempt?.notes || "N/A";
 
   if (fourthFailedAttempt) {
     const details = `Address: ${address}.
@@ -241,7 +259,35 @@ Second attempt: ${secondAttemptDate}; notes: ${secondFailedAttemptNotes}
 Third attempt: ${thirdAttemptDate}; notes: ${thirdFailedAttemptNotes}
 Fourth attempt: ${fourthAttemptDate}; notes: ${fourthFailedAttemptNotes}`;
 
-    if (fourthFailedAttempt.needsFraudInvestigationLetterReminder) {
+    if (
+      fourthFailedAttempt.needsFraudInvestigationReminder &&
+      !fourthFailedAttempt.fraudInvestigationReminderCreatedAt
+    ) {
+      await postValueToBackend(
+        `Action: fourth failed attempt - fraud investigation reminder\n${details}`,
+        unableToEnterMap["fourthFailedAttempt.needsFraudInvestigationReminder"],
+        processRef
+      );
+
+      unableToEnterData = {
+        ...unableToEnterData,
+        fourthFailedAttempt: {
+          ...fourthFailedAttempt,
+          fraudInvestigationReminderCreatedAt: new Date().toISOString(),
+        },
+      };
+
+      await processDatabase.put(
+        "unableToEnter",
+        processRef,
+        unableToEnterData as ProcessDatabaseSchema["schema"]["unableToEnter"]["value"]
+      );
+    }
+
+    if (
+      fourthFailedAttempt.needsFraudInvestigationLetterReminder &&
+      !fourthFailedAttempt.fraudInvestigationLetterReminderCreatedAt
+    ) {
       await postValueToBackend(
         `Action: Fourth failed attempt - fraud investigation letter reminder\n${details}`,
         unableToEnterMap[
@@ -249,19 +295,25 @@ Fourth attempt: ${fourthAttemptDate}; notes: ${fourthFailedAttemptNotes}`;
         ],
         processRef
       );
-    }
 
-    if (fourthFailedAttempt.needsFraudInvestigationReminder) {
-      await postValueToBackend(
-        `Action: fourth failed attempt - fraud investigation reminder\n${details}`,
-        unableToEnterMap["fourthFailedAttempt.needsFraudInvestigationReminder"],
-        processRef
+      unableToEnterData = {
+        ...unableToEnterData,
+        fourthFailedAttempt: {
+          ...fourthFailedAttempt,
+          fraudInvestigationLetterReminderCreatedAt: new Date().toISOString(),
+        },
+      };
+
+      await processDatabase.put(
+        "unableToEnter",
+        processRef,
+        unableToEnterData as ProcessDatabaseSchema["schema"]["unableToEnter"]["value"]
       );
     }
   }
 };
 
-const updateCreatedAt = async <
+const updateNotesCreatedAt = async <
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   DBSchema extends NamedSchema<string, number, any>,
   StoreName extends StoreNames<DBSchema["schema"]>
@@ -354,7 +406,7 @@ export const persistPostVisitActions = async (
           }
 
           await postValueToBackend(note.value, postVisitActionMap, processRef);
-          await updateCreatedAt(
+          await updateNotesCreatedAt(
             processDatabase,
             storeName as StoreNames<ProcessDatabaseSchema["schema"]>,
             processRef,
@@ -414,7 +466,7 @@ export const persistPostVisitActions = async (
               postVisitActionMap,
               processRef
             );
-            await updateCreatedAt(
+            await updateNotesCreatedAt(
               residentDatabase,
               storeName as StoreNames<ResidentDatabaseSchema["schema"]>,
               residentRef,
@@ -434,7 +486,5 @@ export const persistPostVisitActions = async (
         >)
       : {};
 
-  if (unableToEnterData) {
-    await persistUnableToEnterPostVisitActions(unableToEnterData, processRef);
-  }
+  await persistUnableToEnterPostVisitActions(unableToEnterData, processRef);
 };
