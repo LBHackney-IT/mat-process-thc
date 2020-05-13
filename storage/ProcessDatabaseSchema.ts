@@ -243,13 +243,16 @@ type ProcessDatabaseSchema = NamedSchema<
           notes: string;
           date: string;
           needsAppointmentLetterReminder: boolean;
+          appointmentLetterReminderCreatedAt: string;
         };
         fourthFailedAttempt: {
           reasons: string[];
           notes: string;
           date: string;
           needsFraudInvestigationReminder: boolean;
+          fraudInvestigationReminderCreatedAt: string;
           needsFraudInvestigationLetterReminder: boolean;
+          fraudInvestigationLetterReminderCreatedAt: string;
         };
         otherNotes: string;
       };
