@@ -21,6 +21,7 @@ import basePath from "../../../helpers/basePath";
 import getMatApiData from "../../../helpers/getMatApiData";
 import getProcessRef from "../../../helpers/getProcessRef";
 import isClient from "../../../helpers/isClient";
+import isClosed from "../../../helpers/isClosed";
 import isManager from "../../../helpers/isManager";
 import isServer from "../../../helpers/isServer";
 import titleCase from "../../../helpers/titleCase";
@@ -465,8 +466,14 @@ export const LoadingPage: NextPage = () => {
       processDataSyncStatus.completedStepCount) /
     (extraResults.length + processDataSyncStatus.expectedStepCount);
 
-  const isManagerPage = isManager(router);
-  const nextSlug = isManagerPage ? PageSlugs.ManagerReview : PageSlugs.Outside;
+  const isInManagerStage = isManager(router);
+  const isInClosedStage = isClosed(router);
+
+  const nextSlug = isInManagerStage
+    ? PageSlugs.ManagerReview
+    : isInClosedStage
+    ? PageSlugs.ClosedReview
+    : PageSlugs.Outside;
 
   const { href, as } = urlsForRouter(
     router,
@@ -521,7 +528,7 @@ export const LoadingPage: NextPage = () => {
 
       <Heading level={HeadingLevels.H2}>Loading</Heading>
       <Paragraph>
-        {isManagerPage
+        {isInManagerStage || isInClosedStage
           ? "The system is fetching the information you need for this process."
           : "The system is updating the information you need for this process so that you can go offline at any point."}
       </Paragraph>

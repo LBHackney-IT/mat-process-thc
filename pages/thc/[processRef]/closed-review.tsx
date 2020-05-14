@@ -7,9 +7,9 @@ import {
 } from "lbh-frontend-react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React from "react";
 import { Notes } from "storage/DatabaseSchema";
-import ManagerSubmitButton from "../../../components/ManagerSubmitButton";
+import { makeSubmit } from "../../../components/makeSubmit";
 import { HouseholdReviewSection } from "../../../components/review-sections/HouseholdReviewSection";
 import { IdAndResidencyReviewSection } from "../../../components/review-sections/IdAndResidencyReviewSection";
 import { PropertyInspectionReviewSection } from "../../../components/review-sections/PropertyInspectionReviewSection";
@@ -17,19 +17,14 @@ import { WellbeingSupportReviewSection } from "../../../components/review-sectio
 import { TenancySummary } from "../../../components/TenancySummary";
 import Thumbnail from "../../../components/Thumbnail";
 import getProcessRef from "../../../helpers/getProcessRef";
-import { ProcessStage } from "../../../helpers/ProcessStage";
-import {
-  approveProcess,
-  declineProcess,
-} from "../../../helpers/transferProcess";
-import useDatabase from "../../../helpers/useDatabase";
 import useDataSet from "../../../helpers/useDataSet";
 import useDataValue from "../../../helpers/useDataValue";
 import MainLayout from "../../../layouts/MainLayout";
+import PageSlugs from "../../../steps/PageSlugs";
 import PageTitles from "../../../steps/PageTitles";
 import Storage from "../../../storage/Storage";
 
-const getManagerSummaryText = (
+const getSummaryText = (
   yesValue: string,
   noValue: string,
   databaseValue: { value: string; notes: Notes }
@@ -46,7 +41,6 @@ const getManagerSummaryText = (
 const ReviewPage: NextPage = () => {
   const router = useRouter();
   const processRef = getProcessRef(router);
-  const processDatabase = useDatabase(Storage.ProcessContext);
 
   const tenants = useDataValue(
     Storage.ExternalContext,
@@ -119,14 +113,8 @@ const ReviewPage: NextPage = () => {
     (values) => (processRef ? values[processRef] : undefined)
   );
 
-  const [managerComment, setManagerComment] = useState("");
-
   const visitType = isUnannouncedVisit.result
-    ? getManagerSummaryText(
-        "Unannounced",
-        "Announced",
-        isUnannouncedVisit.result
-      )
+    ? getSummaryText("Unannounced", "Announced", isUnannouncedVisit.result)
     : "Loading...";
 
   const isVisitInside = useDataValue(
@@ -137,7 +125,7 @@ const ReviewPage: NextPage = () => {
   );
 
   const visitTookPlace = isVisitInside.result
-    ? getManagerSummaryText("Inside", "Outside", isVisitInside.result)
+    ? getSummaryText("Inside", "Outside", isVisitInside.result)
     : "Loading...";
 
   const otherNotes = useDataValue(
@@ -150,6 +138,13 @@ const ReviewPage: NextPage = () => {
   const otherNotesValues = otherNotes.result
     ? otherNotes.result.map(({ value }) => value)
     : [];
+
+  const managerComment = useDataValue(
+    Storage.ProcessContext,
+    "managerComment",
+    processRef,
+    (values) => (processRef ? values[processRef] : undefined)
+  );
 
   const signatures = useDataSet(
     Storage.ResidentContext,
@@ -199,9 +194,14 @@ const ReviewPage: NextPage = () => {
     },
   ].filter(({ value }) => value.length > 0);
 
+  const SubmitButton = makeSubmit({
+    slug: PageSlugs.Pause,
+    value: "Exit process",
+  });
+
   return (
     <MainLayout
-      title={PageTitles.ManagerReview}
+      title={PageTitles.ClosedReview}
       heading="Review Tenancy and Household Check"
     >
       <TenancySummary
@@ -256,54 +256,19 @@ const ReviewPage: NextPage = () => {
             <Heading level={HeadingLevels.H2}>Manager&apos;s comment</Heading>
           ),
         }}
-        onChange={(textValue: string): void => setManagerComment(textValue)}
-        value={managerComment}
+        value={managerComment.result || ""}
         rows={4}
+        disabled
       />
-      <ManagerSubmitButton
-        disabled={!processRef || !processDatabase.result}
-        onSubmit={async (): Promise<boolean> => {
-          if (!processRef || !processDatabase.result) {
-            return false;
-          }
-
-          await approveProcess(router);
-
-          await processDatabase.result.put(
-            "managerComment",
-            processRef,
-            managerComment
-          );
-          return true;
-        }}
-        status={ProcessStage.Approved}
-      />
-      <ManagerSubmitButton
-        disabled={!processRef || !processDatabase.result}
-        onSubmit={async (): Promise<boolean> => {
-          if (!processRef || !processDatabase.result) {
-            return false;
-          }
-
-          await declineProcess(router);
-
-          await processDatabase.result.put(
-            "managerComment",
-            processRef,
-            managerComment
-          );
-
-          return true;
-        }}
-        status={ProcessStage.Declined}
+      <SubmitButton
+        onSubmit={
+          // eslint-disable-next-line @typescript-eslint/require-await
+          async (): Promise<boolean> => true
+        }
       />
       <style jsx>{`
         .mat-tenancy-summary img {
           margin-right: 2em;
-        }
-
-        :global(.lbh-button--warning) {
-          margin-left: 1em;
         }
 
         .signature {
