@@ -57,44 +57,48 @@ const decryptJson = (
   return JSON.parse(Buffer.concat([decrypted, decipher.final()]));
 };
 
-const proxy = (options, req, res) => {
-  const clientReq = request(options, (proxyRes) => {
+const proxy = (options, originalReq, originalRes) => {
+  const proxyReq = request(options, (proxyRes) => {
     proxyRes.setEncoding("utf8");
 
-    res.status(proxyRes.statusCode);
+    originalRes.status(proxyRes.statusCode);
 
     proxyRes.on("data", (chunk) => {
-      res.write(chunk);
+      originalRes.write(chunk);
     });
 
     proxyRes.on("close", () => {
-      res.end();
+      originalRes.end();
     });
 
     proxyRes.on("end", () => {
-      res.end();
+      originalRes.end();
     });
   });
 
-  clientReq.on("error", (err) => {
-    console.error(`> An error occurred for ${req.method} ${req.path}`);
+  proxyReq.on("error", (err) => {
+    console.error(
+      `> An error occurred for ${originalReq.method} ${originalReq.path}`
+    );
     console.error(err);
 
     try {
-      res.status(500).send(err.message);
+      originalRes.status(500).send(err.message);
     } catch (e) {
-      console.error("> An error occurred while sending an error response");
+      console.error(
+        `> An error occurred while sending an error response for ${originalReq.method} ${originalReq.path}`
+      );
       console.error(e);
     }
 
-    res.end();
+    originalRes.end();
   });
 
-  if (req.body) {
-    clientReq.write(JSON.stringify(req.body));
+  if (options.body) {
+    proxyReq.write(JSON.stringify(options.body));
   }
 
-  clientReq.end();
+  proxyReq.end();
 };
 
 router.use(json({ limit: "500mb" }));
@@ -139,11 +143,10 @@ router.patch("/v1/processes/:ref/processData", (req, res) => {
       "Content-Type": "application/json",
       "X-API-KEY": processApiKey,
     },
-  };
-
-  req.body = {
-    processRef: ref,
-    processDataToUpdate: req.body,
+    body: {
+      processRef: ref,
+      processDataToUpdate: req.body,
+    },
   };
 
   proxy(options, req, res);
@@ -181,6 +184,10 @@ router.post("/v1/processes/:ref/images", (req, res) => {
     return;
   }
 
+  const { ref } = req.params;
+
+  const { id, image } = req.body;
+
   const options = {
     host: processApiHost,
     port: 443,
@@ -190,17 +197,13 @@ router.post("/v1/processes/:ref/images", (req, res) => {
       "Content-Type": "application/json",
       "X-API-KEY": processApiKey,
     },
+    body: {
+      processRef: ref,
+      imageId: id,
+      base64Image: image,
+      processType: process.env.PROCESS_TYPE_NAME,
+    },
     timeout: 10 * 1000,
-  };
-
-  const { ref } = req.params;
-  const { id, image } = req.body;
-
-  req.body = {
-    processRef: ref,
-    imageId: id,
-    base64Image: image,
-    processType: process.env.PROCESS_TYPE_NAME,
   };
 
   proxy(options, req, res);
@@ -237,12 +240,6 @@ router.put("/v1/processes/:ref/transfer", (req, res) => {
     matApiDataIV
   );
 
-  if (DISABLE_MAT_PROCESS_ACTIONS) {
-    res.status(200).send("Short circuit OK");
-
-    return;
-  }
-
   const assignedToManager = processStage === "1";
   const description = assignedToManager
     ? `Transferred from ${officerFullName} to manager for review`
@@ -257,26 +254,31 @@ router.put("/v1/processes/:ref/transfer", (req, res) => {
       Authorization: matApiToken,
       "Content-Type": "application/json",
     },
+    body: {
+      interactionId: ref,
+      areaName: areaId,
+      assignedToPatch: !assignedToManager,
+      assignedToManager,
+      estateOfficerId: officerId,
+      estateOfficerName: officerFullName,
+      managerId,
+      officerPatchId: patchId,
+      processStage,
+      serviceRequest: {
+        id: serviceRequestId,
+        subject: subjectId,
+        title: "Tenancy Management",
+        description,
+      },
+    },
     timeout: 10 * 1000,
   };
 
-  req.body = {
-    interactionId: ref,
-    estateOfficerId: officerId,
-    estateOfficerName: officerFullName,
-    officerPatchId: patchId,
-    areaName: areaId,
-    managerId: managerId,
-    assignedToPatch: !assignedToManager,
-    assignedToManager: assignedToManager,
-    processStage: processStage,
-    serviceRequest: {
-      id: serviceRequestId,
-      title: "Tenancy Management",
-      description: description,
-      subject: subjectId,
-    },
-  };
+  if (DISABLE_MAT_PROCESS_ACTIONS) {
+    res.status(200).send("Short circuit OK");
+
+    return;
+  }
 
   proxy(options, req, res);
 });
@@ -291,14 +293,13 @@ router.patch("/v1/processes/:ref/appraise", (req, res) => {
   const { ref } = req.params;
 
   const { processStage } = req.query;
+  const { data } = req.body;
 
   if (processStage !== "2" && processStage !== "3") {
     res.status(401).send("Invalid Process Stage");
 
     return;
   }
-
-  const { data } = req.body;
 
   const {
     matApiToken,
@@ -316,12 +317,6 @@ router.patch("/v1/processes/:ref/appraise", (req, res) => {
     matApiDataIV
   );
 
-  if (DISABLE_MAT_PROCESS_ACTIONS) {
-    res.status(200).send("Short circuit OK");
-
-    return;
-  }
-
   const approved = processStage === "2";
 
   const description = approved
@@ -337,21 +332,26 @@ router.patch("/v1/processes/:ref/appraise", (req, res) => {
       Authorization: matApiToken,
       "Content-Type": "application/json",
     },
+    body: {
+      interactionId: ref,
+      estateOfficerId: officerId,
+      estateOfficerName: officerFullName,
+      processStage,
+      serviceRequest: {
+        id: serviceRequestId,
+        subjectId,
+        description,
+      },
+      status: 0,
+    },
     timeout: 10 * 1000,
   };
 
-  req.body = {
-    interactionId: ref,
-    estateOfficerId: officerId,
-    estateOfficerName: officerFullName,
-    serviceRequest: {
-      id: serviceRequestId,
-      description: description,
-      subjectId: subjectId,
-    },
-    processStage: processStage,
-    status: 0,
-  };
+  if (DISABLE_MAT_PROCESS_ACTIONS) {
+    res.status(200).send("Short circuit OK");
+
+    return;
+  }
 
   proxy(options, req, res);
 });
@@ -364,6 +364,7 @@ router.post("/v1/processes/:ref/post-visit-actions", (req, res) => {
   }
 
   const { ref } = req.params;
+
   const { description, category, subcategory, data } = req.body;
 
   const {
@@ -385,6 +386,10 @@ router.post("/v1/processes/:ref/post-visit-actions", (req, res) => {
     matApiDataIV
   );
 
+  const estateOfficerSource = "1";
+  const postVisitActionProcessType = "2";
+  const serviceRequestTitle = process.env.PROCESS_TYPE_NAME;
+
   const options = {
     host: matApiHost,
     port: 443,
@@ -394,32 +399,27 @@ router.post("/v1/processes/:ref/post-visit-actions", (req, res) => {
       Authorization: matApiToken,
       "Content-Type": "application/json",
     },
-    timeout: 10 * 1000,
-  };
-
-  const estateOfficerSource = "1";
-  const postVisitActionProcessType = "2";
-  const serviceRequestTitle = process.env.PROCESS_TYPE_NAME;
-
-  req.body = {
-    subject: subjectId,
-    source: estateOfficerSource,
-    processType: postVisitActionProcessType,
-    ServiceRequest: {
-      title: serviceRequestTitle,
+    body: {
+      areaName: areaId,
+      contactId,
+      enquirySubject: subcategory,
+      estateOfficerId: officerId,
+      estateOfficerName: officerFullName,
+      householdId: householdId,
+      natureofEnquiry: category,
+      officerPatchId: patchId,
+      parentInteractionId: ref,
+      processType: postVisitActionProcessType,
+      ServiceRequest: {
+        subject: subjectId,
+        contactId,
+        title: serviceRequestTitle,
+        description,
+      },
+      source: estateOfficerSource,
       subject: subjectId,
-      contactId: contactId,
-      description: description,
     },
-    officerPatchId: patchId,
-    estateOfficerId: officerId,
-    contactId: contactId,
-    estateOfficerName: officerFullName,
-    areaName: areaId,
-    householdId: householdId,
-    parentInteractionId: ref,
-    natureofEnquiry: category,
-    enquirySubject: subcategory,
+    timeout: 10 * 1000,
   };
 
   proxy(options, req, res);
