@@ -240,8 +240,8 @@ router.put("/v1/processes/:ref/transfer", (req, res) => {
     matApiDataIV
   );
 
-  const assignedToManager = processStage === "1";
-  const description = assignedToManager
+  const transferToManager = processStage === "1";
+  const description = transferToManager
     ? `Transferred from ${officerFullName} to manager for review`
     : `Transferred back to ${officerFullName} after manager review`;
 
@@ -257,8 +257,8 @@ router.put("/v1/processes/:ref/transfer", (req, res) => {
     body: {
       interactionId: ref,
       areaName: areaId,
-      assignedToPatch: !assignedToManager,
-      assignedToManager,
+      assignedToPatch: transferToManager,
+      assignedToManager: !transferToManager,
       estateOfficerId: officerId,
       estateOfficerName: officerFullName,
       managerId,
