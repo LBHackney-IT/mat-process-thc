@@ -57,7 +57,7 @@ type ResidentDatabaseSchema = NamedSchema<
         hasCarer: string;
         type: string;
         isLiveIn: string;
-        liveInStartDate: { month?: number; year?: number };
+        liveInStartDate: string;
         fullName: string;
         phoneNumber: string;
         relationship: string;
