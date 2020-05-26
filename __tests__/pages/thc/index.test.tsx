@@ -152,7 +152,7 @@ it("renders correctly when offline", async () => {
                 feedback
               </a>
                
-              will help us to improve it.
+              (online only, opens in a new tab) will help us to improve it.
             </p>
             <hr />
           </div>

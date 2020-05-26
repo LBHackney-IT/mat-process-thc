@@ -262,7 +262,7 @@ const MainLayout = ({
               <Link href={process.env.FEEDBACK_FORM_URL || ""} target="_blank">
                 feedback
               </Link>{" "}
-              will help us to improve it.
+              (online only, opens in a new tab) will help us to improve it.
             </Paragraph>
             <hr />
           </div>
