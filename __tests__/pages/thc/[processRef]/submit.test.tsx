@@ -136,11 +136,16 @@ it("renders correctly when online", async () => {
             <h3
               className="lbh-page-announcement__title"
             >
-              Process submission pending
+              
             </h3>
             <div
               className="lbh-page-announcement__content"
             >
+              <h1
+                className="lbh-heading-h1"
+              >
+                Process submission pending
+              </h1>
               <p
                 className="lbh-body"
               >
@@ -345,11 +350,16 @@ it("renders correctly when offline", async () => {
             <h3
               className="lbh-page-announcement__title"
             >
-              Process submission pending
+              
             </h3>
             <div
               className="lbh-page-announcement__content"
             >
+              <h1
+                className="lbh-heading-h1"
+              >
+                Process submission pending
+              </h1>
               <p
                 className="lbh-body"
               >

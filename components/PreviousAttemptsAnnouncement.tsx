@@ -1,5 +1,7 @@
 import formatDate from "date-fns/format";
+import { Heading } from "lbh-frontend-react";
 import {
+  HeadingLevels,
   PageAnnouncement,
   Paragraph,
   SummaryList,
@@ -184,7 +186,8 @@ const PreviousAttemptsAnnouncement: React.FunctionComponent<{
   }
 
   return (
-    <PageAnnouncement title="Previous attempts">
+    <PageAnnouncement title="">
+      <Heading level={HeadingLevels.H1}>Previous Attempts</Heading>
       {unableToEnter.loading ? "Loading..." : <SummaryList rows={rows} />}
     </PageAnnouncement>
   );

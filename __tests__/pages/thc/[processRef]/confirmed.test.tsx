@@ -119,11 +119,16 @@ it("renders correctly", () => {
             <h3
               className="lbh-page-announcement__title"
             >
-              Process submission confirmed
+              
             </h3>
             <div
               className="lbh-page-announcement__content"
             >
+              <h1
+                className="lbh-heading-h1"
+              >
+                Process submission confirmed
+              </h1>
               <p
                 className="lbh-body"
               >

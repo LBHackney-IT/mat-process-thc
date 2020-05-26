@@ -1,6 +1,8 @@
 import {
   Button,
   ErrorMessage,
+  Heading,
+  HeadingLevels,
   PageAnnouncement,
   Paragraph,
 } from "lbh-frontend-react";
@@ -50,7 +52,8 @@ const PausePage: NextPage = () => {
     );
   } else {
     content = (
-      <PageAnnouncement title="Process pause pending">
+      <PageAnnouncement title="">
+        <Heading level={HeadingLevels.H1}>Process pause pending</Heading>
         {residentData.loading ? (
           "Loading..."
         ) : (
