@@ -41,7 +41,7 @@ const ConfirmedPage: NextPage = () => {
             disabled={!process.env.DIVERSITY_FORM_URL}
             onClick={(): void => {
               if (process.env.DIVERSITY_FORM_URL) {
-                location.assign(process.env.DIVERSITY_FORM_URL);
+                window.open(process.env.DIVERSITY_FORM_URL);
               }
             }}
           >
