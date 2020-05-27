@@ -106,7 +106,7 @@ it("renders correctly", () => {
                 feedback
               </a>
                
-              will help us to improve it.
+              (online only, opens in a new tab) will help us to improve it.
             </p>
             <hr />
           </div>
