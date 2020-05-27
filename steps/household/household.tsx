@@ -131,7 +131,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
           props: {
             label: "Take photos of any household change documents",
             name: "household-document-images",
-            hintText: "You can take up to 5 different photos" as
+            hintText: "You can take up to 5 different photos to support the household member change. For example: birth, marriage or civil partnership certificate" as
               | string
               | null
               | undefined,
