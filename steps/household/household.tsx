@@ -45,7 +45,6 @@ const HouseholdMembersTable: React.FunctionComponent = () => {
 
   return (
     <>
-      <Heading level={HeadingLevels.H2}>Household members</Heading>
       <Table
         headings={["Full name", "Relationship to tenant", "Date of birth"]}
         rows={
@@ -62,6 +61,13 @@ const HouseholdMembersTable: React.FunctionComponent = () => {
             : [["None"]]
         }
       />
+      <Heading level={HeadingLevels.H2}>
+        Has there been a change in household members?
+      </Heading>
+      <Paragraph>
+        Collect information about any household change eg birth, marriage or
+        civil partnership certificate.
+      </Paragraph>
     </>
   );
 };
@@ -145,68 +151,6 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "house-moving-schemes",
-          Component: PostVisitActionInputDetails,
-          props: {
-            summary:
-              "House moving schemes: downsizing, overcrowding or aged over 60",
-            name: "house-moving-schemes-notes",
-            label: {
-              value: "House moving schemes notes",
-            },
-            contentBefore: (
-              <>
-                <Paragraph>Schemes cover:</Paragraph>
-                <List
-                  type={ListTypes.Bullet}
-                  items={[
-                    <>
-                      <Link
-                        href="https://hackney.gov.uk/housing-moves"
-                        target="_blank"
-                      >
-                        Downsizing
-                      </Link>{" "}
-                      (online only, opens in a new tab): A payment made for
-                      downsizing
-                    </>,
-                    <>
-                      <Link
-                        href="https://hackney.gov.uk/housing-moves"
-                        target="_blank"
-                      >
-                        Overcrowding
-                      </Link>{" "}
-                      (online only, opens in a new tab)
-                    </>,
-                    <>
-                      <Link
-                        href="https://hackney.gov.uk/housing-moves"
-                        target="_blank"
-                      >
-                        Seaside and country
-                      </Link>{" "}
-                      (online only, opens in a new tab) if aged over 60
-                    </>,
-                  ]}
-                />
-              </>
-            ),
-          } as PostVisitActionInputDetailsProps,
-          defaultValue: [] as Notes,
-          emptyValue: [] as Notes,
-          databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "household"
-          >({
-            storeName: "household",
-            key: keyFromSlug(),
-            property: ["houseMovingSchemes", "notes"],
-          }),
-        })
-      ),
-      ComponentWrapper.wrapDynamic(
-        new DynamicComponent({
           key: "member-changes",
           Component: PostVisitActionInputDetails,
           props: {
@@ -223,6 +167,65 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
             storeName: "household",
             key: keyFromSlug(),
             property: ["memberChanges", "notes"],
+          }),
+        })
+      ),
+      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "household">(
+        new StaticComponent({
+          key: "tenant-wants-to-move",
+          Component: Heading,
+          props: {
+            level: HeadingLevels.H2,
+            children: "Is the tenant interested in moving?",
+          },
+        })
+      ),
+      ComponentWrapper.wrapDynamic(
+        new DynamicComponent({
+          key: "house-moving-schemes",
+          Component: PostVisitActionInputDetails,
+          props: {
+            summary: "House moving schemes",
+            name: "house-moving-schemes-notes",
+            label: {
+              value: "Add note about any interest in housing move schemes",
+            },
+            contentBefore: (
+              <>
+                <Paragraph>
+                  {" "}
+                  <>
+                    <Link
+                      href="https://hackney.gov.uk/housing-moves"
+                      target="_blank"
+                    >
+                      Housing moves schemes:
+                    </Link>{" "}
+                  </>
+                  (online only, opens in a new tab) include:
+                </Paragraph>
+                <List
+                  type={ListTypes.Bullet}
+                  items={[
+                    <>Downsizing: a payment may be made for downsizing</>,
+                    <>Moving out of London</>,
+                    <>Mutual exchange</>,
+                    <>Overcrowding</>,
+                    <>Seaside and country homes if aged 60 or over</>,
+                  ]}
+                />
+              </>
+            ),
+          } as PostVisitActionInputDetailsProps,
+          defaultValue: [] as Notes,
+          emptyValue: [] as Notes,
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "household"
+          >({
+            storeName: "household",
+            key: keyFromSlug(),
+            property: ["houseMovingSchemes", "notes"],
           }),
         })
       ),
