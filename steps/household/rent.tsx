@@ -128,7 +128,7 @@ const CurrentBalance: React.FunctionComponent = () => {
 
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
   title: PageTitles.Rent,
-  heading: "Rent, housing benefits, and income officer",
+  heading: "Rent, housing benefit and income officer role",
   review: {
     rows: [
       {
