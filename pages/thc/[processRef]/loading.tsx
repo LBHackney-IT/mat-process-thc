@@ -107,10 +107,13 @@ const useFetchImages = (
 
     return Promise.all(
       images.map(async ({ id, ext }) => {
-        const response = await fetch(
-          `${basePath}/api/v1/processes/${processRef}/images/${id}/${ext}?jwt=${jwt}`,
-          { method: "GET" }
-        );
+        const path = `${basePath}/api/v1/processes/${processRef}/images/${id}/${ext}?jwt=${jwt}}`;
+        let response: Response;
+        try {
+          response = await fetch(path, { method: "GET" });
+        } catch (err) {
+          throw new Error(`Fetch failed for ${path}`);
+        }
         const responseBody = await response.text();
 
         let image: { base64Image: string } | undefined = undefined;
