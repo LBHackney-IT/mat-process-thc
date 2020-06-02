@@ -1,3 +1,4 @@
+import { Link } from "lbh-frontend-react";
 import { List, ListProps, ListTypes } from "lbh-frontend-react/components/List";
 import {
   Heading,
@@ -118,8 +119,16 @@ const step = {
           key: "paragraph-7",
           Component: Paragraph,
           props: {
-            children:
-              "More about how we hold information about you and your access to it can be found on the privacy notice page of the Hackney Council website.",
+            children: (
+              <>
+                More about how we hold information about you and your access to
+                it can be found on the{" "}
+                <Link href={"https://hackney.gov.uk/privacy"} target="_blank">
+                  privacy notice page
+                </Link>{" "}
+                (opens in a new tab) of the Hackney Council website.
+              </>
+            ),
           },
         })
       ),
