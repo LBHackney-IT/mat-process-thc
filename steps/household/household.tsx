@@ -64,10 +64,6 @@ const HouseholdMembersTable: React.FunctionComponent = () => {
       <Heading level={HeadingLevels.H2}>
         Has there been a change in household members?
       </Heading>
-      <Paragraph>
-        Collect information about any household change eg birth, marriage or
-        civil partnership certificate.
-      </Paragraph>
     </>
   );
 };
