@@ -374,7 +374,7 @@ const processData = {
         hasCarer: "yes",
         type: "registered",
         isLiveIn: "yes",
-        liveInStartDate: { month: 1, year: 2019 },
+        liveInStartDate: "August 2018",
         fullName: "Carer name",
         phoneNumber: "0123455789",
         relationship: "Carer relationship",
@@ -666,22 +666,9 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
       ).click();
       (
         await browser!.waitForEnabledElement({
-          name: "carer-live-in-start-date-month",
+          name: "carer-live-in-start-date",
         })
-      ).sendKeys(
-        processData.residents[
-          presentTenantRef
-        ].carer.liveInStartDate.month.toString()
-      );
-      (
-        await browser!.waitForEnabledElement({
-          name: "carer-live-in-start-date-year",
-        })
-      ).sendKeys(
-        processData.residents[
-          presentTenantRef
-        ].carer.liveInStartDate.year.toString()
-      );
+      ).sendKeys(processData.residents[presentTenantRef].carer.liveInStartDate);
       (
         await browser!.waitForEnabledElement({
           name: "carer-full-name",

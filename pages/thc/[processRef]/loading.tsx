@@ -107,7 +107,7 @@ const useFetchImages = (
 
     return Promise.all(
       images.map(async ({ id, ext }) => {
-        const path = `${basePath}/api/v1/processes/${processRef}/images/${id}/${ext}?jwt=${jwt}`;
+        const path = `${basePath}/api/v1/processes/${processRef}/images/${id}/${ext}?jwt=${jwt}}`;
         let response: Response;
         try {
           response = await fetch(path, { method: "GET" });

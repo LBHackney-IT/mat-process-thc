@@ -12,17 +12,19 @@ const transferProcess = async (
   const processRef = getProcessRef(router);
   const matApiJwt = getMatApiJwt(processRef);
   const data = getMatApiData(processRef);
-
-  const response = await fetch(
-    `${basePath}/api/v1/processes/${processRef}/transfer?jwt=${matApiJwt}&processStage=${stage}`,
-    {
+  const path = `${basePath}/api/v1/processes/${processRef}/transfer?jwt=${matApiJwt}&processStage=${stage}`;
+  let response: Response;
+  try {
+    response = await fetch(path, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ data }),
-    }
-  );
+    });
+  } catch (err) {
+    throw new Error(`Fetch failed for ${path}`);
+  }
 
   if (!response.ok) {
     throw new Error(`${response.status}: ${response.statusText}`);
@@ -36,17 +38,19 @@ const appraiseProcess = async (
   const processRef = getProcessRef(router);
   const matApiJwt = getMatApiJwt(processRef);
   const data = getMatApiData(processRef);
-
-  const response = await fetch(
-    `${basePath}/api/v1/processes/${processRef}/appraise?jwt=${matApiJwt}&processStage=${stage}`,
-    {
+  let response: Response;
+  const path = `${basePath}/api/v1/processes/${processRef}/appraise?jwt=${matApiJwt}&processStage=${stage}`;
+  try {
+    response = await fetch(path, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ data }),
-    }
-  );
+    });
+  } catch (err) {
+    throw new Error(`Fetch failed for ${path}`);
+  }
 
   if (!response.ok) {
     throw new Error(`${response.status}: ${response.statusText}`);

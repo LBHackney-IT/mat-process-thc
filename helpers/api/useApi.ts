@@ -35,13 +35,16 @@ const useApi = <R>(
       if (!execute) {
         return;
       }
-
-      const response = await fetch(
-        `${basePath}/api${endpoint}?${queryString}`,
-        {
+      const path = `${basePath}/api${endpoint}?${queryString}`;
+      let response: Response;
+      try {
+        response = await fetch(path, {
           method,
-        }
-      );
+        });
+      } catch (err) {
+        throw new Error(`Fetch failed for ${method}: ${path}`);
+      }
+
       const responseBody = await response.text();
 
       let responseData: R | undefined = undefined;

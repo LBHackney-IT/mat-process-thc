@@ -1,9 +1,9 @@
-import formatDate from "date-fns/format";
 import {
   FieldsetLegend,
   Heading,
   HeadingLevels,
   LabelProps,
+  Paragraph,
   Textarea,
 } from "lbh-frontend-react/components";
 import React from "react";
@@ -16,7 +16,6 @@ import {
   StaticComponent,
 } from "remultiform/component-wrapper";
 import { CurrentTenantNames } from "../../components/CurrentTenantNames";
-import { DateInput } from "../../components/DateInput";
 import { makeSubmit } from "../../components/makeSubmit";
 import {
   PostVisitActionInputDetails,
@@ -89,20 +88,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
             },
           },
           "carer-live-in-start-date": {
-            renderValue(startDate: {
-              month?: number;
-              year?: number;
-            }): React.ReactNode {
-              return startDate.year
-                ? `Since ${
-                    startDate.month
-                      ? formatDate(
-                          new Date(startDate.year, startDate.month - 1),
-                          "MMMM yyyy"
-                        )
-                      : startDate.year
-                  }`
-                : null;
+            renderValue(dateString: string): React.ReactNode {
+              return dateString;
             },
           },
         },
@@ -241,9 +228,29 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
       ComponentWrapper.wrapStatic<ResidentDatabaseSchema, "carer">(
         new StaticComponent({
           key: "carer-live-in-start-date-heading",
-          Component: FieldsetLegend,
+          Component: Heading,
           props: {
+            level: HeadingLevels.H3,
             children: "When did the carer start living in the property?",
+          },
+          renderWhen(stepValues: {
+            "carer-needed"?: ComponentValue<ResidentDatabaseSchema, "carer">;
+            "carer-live-in"?: ComponentValue<ResidentDatabaseSchema, "carer">;
+          }): boolean {
+            return (
+              stepValues["carer-needed"] === "yes" &&
+              stepValues["carer-live-in"] === "yes"
+            );
+          },
+        })
+      ),
+      ComponentWrapper.wrapStatic<ResidentDatabaseSchema, "carer">(
+        new StaticComponent({
+          key: "carer-live-in-start-date-example",
+          Component: Paragraph,
+          props: {
+            children:
+              "Record at least month and year if possible eg MM / YYYY.",
           },
           renderWhen(stepValues: {
             "carer-needed"?: ComponentValue<ResidentDatabaseSchema, "carer">;
@@ -259,9 +266,10 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "carer-live-in-start-date",
-          Component: DateInput,
+          Component: TextInput,
           props: {
             name: "carer-live-in-start-date",
+            label: "",
           },
           renderWhen(stepValues: {
             "carer-needed"?: ComponentValue<ResidentDatabaseSchema, "carer">;
@@ -272,8 +280,8 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
               stepValues["carer-live-in"] === "yes"
             );
           },
-          defaultValue: {},
-          emptyValue: {} as { month?: number; year?: number },
+          defaultValue: "",
+          emptyValue: "",
           databaseMap: new ComponentDatabaseMap<
             ResidentDatabaseSchema,
             "carer"

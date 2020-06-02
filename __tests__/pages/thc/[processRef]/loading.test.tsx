@@ -432,58 +432,58 @@ it("renders correctly when offline", async () => {
   expect(consoleErrorSpy.mock.calls).toMatchInlineSnapshot(`
     Array [
       Array [
-        [Error: Request timed out],
+        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
       ],
       Array [
-        [Error: Request timed out],
+        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
       ],
       Array [
-        [Error: Request timed out],
+        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
       ],
       Array [
-        [Error: Request timed out],
+        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
       ],
       Array [
-        [Error: Request timed out],
+        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
       ],
       Array [
-        [Error: Request timed out],
+        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
       ],
       Array [
-        [Error: Request timed out],
+        [Error: Fetch failed for undefined: /thc/api/v1/residents?data=test-mat-api-data&jwt=test-mat-api-jwt],
       ],
       Array [
-        [Error: Request timed out],
+        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
       ],
       Array [
-        [Error: Request timed out],
+        [Error: Fetch failed for undefined: /thc/api/v1/residents?data=test-mat-api-data&jwt=test-mat-api-jwt],
       ],
       Array [
-        [Error: Request timed out],
+        [Error: Fetch failed for undefined: /thc/api/v1/tenancies?data=test-mat-api-data&jwt=test-mat-api-jwt],
       ],
       Array [
-        [Error: Request timed out],
+        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
       ],
       Array [
-        [Error: Request timed out],
+        [Error: Fetch failed for undefined: /thc/api/v1/residents?data=test-mat-api-data&jwt=test-mat-api-jwt],
       ],
       Array [
-        [Error: Request timed out],
+        [Error: Fetch failed for undefined: /thc/api/v1/tenancies?data=test-mat-api-data&jwt=test-mat-api-jwt],
       ],
       Array [
-        [Error: Request timed out],
+        [Error: Fetch failed for undefined: /thc/api/v1/officer?data=test-mat-api-data&jwt=test-mat-api-jwt],
       ],
       Array [
-        [Error: Request timed out],
+        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
       ],
       Array [
-        [Error: Request timed out],
+        [Error: Fetch failed for undefined: /thc/api/v1/residents?data=test-mat-api-data&jwt=test-mat-api-jwt],
       ],
       Array [
-        [Error: Request timed out],
+        [Error: Fetch failed for undefined: /thc/api/v1/tenancies?data=test-mat-api-data&jwt=test-mat-api-jwt],
       ],
       Array [
-        [Error: Request timed out],
+        [Error: Fetch failed for undefined: /thc/api/v1/officer?data=test-mat-api-data&jwt=test-mat-api-jwt],
       ],
     ]
   `);
