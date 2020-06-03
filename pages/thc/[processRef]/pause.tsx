@@ -1,6 +1,8 @@
 import {
   Button,
   ErrorMessage,
+  Heading,
+  HeadingLevels,
   PageAnnouncement,
   Paragraph,
 } from "lbh-frontend-react";
@@ -50,16 +52,19 @@ const PausePage: NextPage = () => {
     );
   } else {
     content = (
-      <PageAnnouncement title="Process pause pending">
+      <PageAnnouncement
+        title="Process pause is pending"
+        level={HeadingLevels.H1}
+      >
         {residentData.loading ? (
           "Loading..."
         ) : (
           <>
-            <Paragraph>
+            <Heading level={HeadingLevels.H2}>
               {online.result
                 ? "You are online."
                 : "You are currently working offline."}
-            </Paragraph>
+            </Heading>
             <Paragraph>
               The Tenancy and Household Check for the tenancy at {address},
               occupied by {tenants}, has been saved to your device but still
