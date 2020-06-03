@@ -1,10 +1,11 @@
-import { FieldsetLegend } from "lbh-frontend-react/components";
+import { FieldsetLegend, Paragraph, Link } from "lbh-frontend-react/components";
 import React from "react";
 import {
   ComponentDatabaseMap,
   ComponentValue,
   ComponentWrapper,
   DynamicComponent,
+  StaticComponent,
 } from "remultiform/component-wrapper";
 import { Checkboxes, CheckboxesProps } from "../../components/Checkboxes";
 import { ImageInput } from "../../components/ImageInput";
@@ -132,6 +133,27 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
         value: "Save and continue",
       }),
     componentWrappers: [
+      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "property">(
+        new StaticComponent({
+          key: "paragraph-1",
+          Component: Paragraph,
+          props: {
+            children: (
+              <>
+                Guidance on pets is covered in{" "}
+                <Link
+                  key="pet-guidance"
+                  href="https://hackney.gov.uk/your-tenancy-agreement"
+                  target="_blank"
+                >
+                  Your Tenancy conditions: section 4.21 - 4.22
+                </Link>{" "}
+                (online only, opens in a new tab).
+              </>
+            ),
+          },
+        })
+      ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "has-pets",
