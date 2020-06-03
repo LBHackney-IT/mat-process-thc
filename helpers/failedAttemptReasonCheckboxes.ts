@@ -16,6 +16,10 @@ export default [
     value: "subletting",
   },
   {
+    label: "Tenant refuses entry",
+    value: "refused",
+  },
+  {
     label: "Other",
     value: "other",
   },
