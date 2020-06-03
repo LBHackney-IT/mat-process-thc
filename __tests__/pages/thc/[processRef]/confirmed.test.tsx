@@ -116,14 +116,19 @@ it("renders correctly", () => {
           <section
             className="lbh-page-announcement"
           >
-            <h3
+            <h1
               className="lbh-page-announcement__title"
             >
-              Process submission confirmed
-            </h3>
+              Process submission
+            </h1>
             <div
               className="lbh-page-announcement__content"
             >
+              <h2
+                className="lbh-heading-h2"
+              >
+                Submission succesful
+              </h2>
               <p
                 className="lbh-body"
               >

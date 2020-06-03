@@ -1,6 +1,8 @@
 import {
   Button,
   ErrorMessage,
+  Heading,
+  HeadingLevels,
   PageAnnouncement,
   Paragraph,
 } from "lbh-frontend-react";
@@ -52,36 +54,41 @@ const SubmitPage: NextPage = () => {
   } else {
     content = (
       <PageAnnouncement title="Process submission pending">
-        <Paragraph>
+        <Heading level={HeadingLevels.H2}>
           {online.result
-            ? "You are online."
-            : "You are currently working offline."}
-        </Paragraph>
+            ? "You are online"
+            : "You are currently working offline"}
+        </Heading>
         {residentData.loading ? (
           "Loading..."
         ) : (
           <>
             <Paragraph>
-              The Tenancy and Household Check for the tenancy at {address},
-              occupied by {tenants}, has been saved to your device ready to be
-              sent to your manager for review.
+              The Tenancy and Household Check for {tenants} at {address}, has
+              been saved to your device, but still needs to be saved to your
+              work tray so that you can return to it later.
             </Paragraph>
             <Paragraph>
-              <strong>You need to be online on this device to continue.</strong>
+              {online.result ? (
+                <strong>
+                  {" "}
+                  As you are online, you can save this process to your work tray
+                  now.
+                </strong>
+              ) : (
+                <>
+                  <strong>
+                    You need to be online on this device to continue.
+                  </strong>
+                  <br />
+                  <br />
+                  If you can’t go online now, leave this page open in your web
+                  browser. When you are next online on this device, come back to
+                  this page and the ‘Save and continue later’ button will be
+                  available to be clicked.
+                </>
+              )}
             </Paragraph>
-            <Paragraph>
-              If you can&apos;t go online now, when you are next online{" "}
-              <strong>on this device</strong>, please come back to this Tenancy
-              and Household Check from your work tray and click on the
-              &lsquo;Save and submit to manager&rsquo; button below that will
-              become able to be clicked.
-            </Paragraph>
-            {!online.error && online.result && (
-              <Paragraph>
-                <strong>You are online</strong>, and can submit this Tenancy and
-                Household Check to your manager now.
-              </Paragraph>
-            )}
           </>
         )}
       </PageAnnouncement>
