@@ -1,4 +1,8 @@
-import { Paragraph } from "lbh-frontend-react/components";
+import {
+  Heading,
+  HeadingLevels,
+  Paragraph,
+} from "lbh-frontend-react/components";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React from "react";
@@ -84,9 +88,12 @@ export const IndexPage: NextPage = () => {
     );
   } else {
     content = (
-      <Paragraph>
-        We are currently checking your online status. Please wait...
-      </Paragraph>
+      <>
+        <Heading level={HeadingLevels.H1}>Checking online status</Heading>
+        <Paragraph>
+          We are currently checking your online status. Please wait...
+        </Paragraph>
+      </>
     );
   }
 
