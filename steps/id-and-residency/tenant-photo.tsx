@@ -159,7 +159,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
           props: {
             label: "Take a photo of the tenant",
             name: "tenant-photo",
-            hintText: "Take a passport style photo of the tenant" as
+            hintText: "Take a head and shoulders style photo of the tenant" as
               | string
               | null
               | undefined,
