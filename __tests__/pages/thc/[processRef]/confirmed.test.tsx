@@ -147,6 +147,11 @@ it("renders correctly", () => {
             >
               Go to diversity monitoring form
             </button>
+            <p
+              className="lbh-body"
+            >
+              (online only, opens in a new tab)
+            </p>
           </p>
           <p
             className="lbh-body"

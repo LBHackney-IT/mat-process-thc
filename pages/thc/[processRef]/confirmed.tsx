@@ -47,6 +47,7 @@ const ConfirmedPage: NextPage = () => {
           >
             Go to diversity monitoring form
           </Button>
+          <Paragraph>(online only, opens in a new tab)</Paragraph>
         </Paragraph>
       )}
       <Paragraph>
