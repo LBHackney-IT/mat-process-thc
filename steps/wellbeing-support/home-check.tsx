@@ -66,7 +66,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "homeCheck"> = {
           Component: Paragraph,
           props: {
             children:
-              "The wellbeing support section is the Home Check part of the Tenancy and Household Check process. It includes questions about health, disability, antisocial behaviour, and referrals.",
+              "The wellbeing support section is the Home Check part of the Tenancy and Household Check process. It includes questions about health, disability and support needs.",
           },
         })
       ),
