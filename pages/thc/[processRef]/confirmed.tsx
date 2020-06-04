@@ -35,7 +35,7 @@ const ConfirmedPage: NextPage = () => {
         <Paragraph>{isInManagerStage ? managerText : officerText}</Paragraph>
       </PageAnnouncement>
 
-      <Heading level={HeadingLevels.H3}>What to do next?</Heading>
+      <Heading level={HeadingLevels.H2}>What to do next?</Heading>
       {isInManagerStage || (
         <Paragraph>
           <Button
