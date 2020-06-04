@@ -136,11 +136,11 @@ it("renders correctly", () => {
               </p>
             </div>
           </section>
-          <h3
-            className="lbh-heading-h3"
+          <h2
+            className="lbh-heading-h2"
           >
             What to do next?
-          </h3>
+          </h2>
           <p
             className="lbh-body"
           >
