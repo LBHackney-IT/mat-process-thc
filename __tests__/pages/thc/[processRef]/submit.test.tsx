@@ -141,11 +141,7 @@ it("renders correctly when online", async () => {
             <div
               className="lbh-page-announcement__content"
             >
-              <h2
-                className="lbh-heading-h2"
-              >
-                You are online
-              </h2>
+              You are online
               <p
                 className="lbh-body"
               >
@@ -333,11 +329,7 @@ it("renders correctly when offline", async () => {
             <div
               className="lbh-page-announcement__content"
             >
-              <h2
-                className="lbh-heading-h2"
-              >
-                You are currently working offline
-              </h2>
+              You are currently working offline
               <p
                 className="lbh-body"
               >
