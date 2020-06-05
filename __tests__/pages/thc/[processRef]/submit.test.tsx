@@ -133,11 +133,11 @@ it("renders correctly when online", async () => {
           <section
             className="lbh-page-announcement"
           >
-            <h1
+            <h3
               className="lbh-page-announcement__title"
             >
               Process submission pending
-            </h1>
+            </h3>
             <div
               className="lbh-page-announcement__content"
             >
@@ -325,11 +325,11 @@ it("renders correctly when offline", async () => {
           <section
             className="lbh-page-announcement"
           >
-            <h1
+            <h3
               className="lbh-page-announcement__title"
             >
               Process submission pending
-            </h1>
+            </h3>
             <div
               className="lbh-page-announcement__content"
             >

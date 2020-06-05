@@ -116,11 +116,11 @@ it("renders correctly", () => {
           <section
             className="lbh-page-announcement"
           >
-            <h1
+            <h3
               className="lbh-page-announcement__title"
             >
               Process submission
-            </h1>
+            </h3>
             <div
               className="lbh-page-announcement__content"
             >

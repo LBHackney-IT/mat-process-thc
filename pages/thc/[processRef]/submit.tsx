@@ -1,7 +1,6 @@
 import {
   Button,
   ErrorMessage,
-  Heading,
   HeadingLevels,
   PageAnnouncement,
   Paragraph,
@@ -53,12 +52,11 @@ const SubmitPage: NextPage = () => {
     );
   } else {
     content = (
-      <PageAnnouncement title="Process submission pending">
-        <Heading level={HeadingLevels.H2}>
-          {online.result
-            ? "You are online"
-            : "You are currently working offline"}
-        </Heading>
+      <PageAnnouncement
+        headingLevel={HeadingLevels.H2}
+        title="Process submission pending"
+      >
+        {online.result ? "You are online" : "You are currently working offline"}
         {residentData.loading ? (
           "Loading..."
         ) : (
