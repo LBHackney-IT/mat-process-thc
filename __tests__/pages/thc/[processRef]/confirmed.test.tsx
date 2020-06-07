@@ -119,11 +119,21 @@ it("renders correctly", () => {
             <h3
               className="lbh-page-announcement__title"
             >
-              Process submission confirmed
+              
             </h3>
             <div
               className="lbh-page-announcement__content"
             >
+              <h1
+                className="lbh-heading-h1"
+              >
+                Process submission
+              </h1>
+              <h2
+                className="lbh-heading-h2"
+              >
+                Submission successful
+              </h2>
               <p
                 className="lbh-body"
               >
@@ -131,11 +141,11 @@ it("renders correctly", () => {
               </p>
             </div>
           </section>
-          <h3
-            className="lbh-heading-h3"
+          <h2
+            className="lbh-heading-h2"
           >
             What to do next?
-          </h3>
+          </h2>
           <p
             className="lbh-body"
           >

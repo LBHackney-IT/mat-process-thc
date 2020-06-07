@@ -1,3 +1,4 @@
+import { Heading, HeadingLevels } from "lbh-frontend-react";
 import { Button } from "lbh-frontend-react/components/Button";
 import { PageAnnouncement } from "lbh-frontend-react/components/PageAnnouncement";
 import { Paragraph } from "lbh-frontend-react/components/typography/Paragraph";
@@ -9,7 +10,9 @@ import PageTitles from "../../../steps/PageTitles";
 const PausedPage: NextPage = () => {
   return (
     <MainLayout title={PageTitles.Paused}>
-      <PageAnnouncement title="Process paused">
+      <PageAnnouncement title="" headingLevel={HeadingLevels.H1}>
+        <Heading level={HeadingLevels.H1}>Process paused</Heading>
+        <Heading level={HeadingLevels.H2}>Save successful</Heading>
         <Paragraph>
           The Tenancy and Household Check has been paused and saved to your work
           tray ready to continue later.

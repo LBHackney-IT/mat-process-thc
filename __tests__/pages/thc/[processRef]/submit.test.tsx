@@ -136,48 +136,36 @@ it("renders correctly when online", async () => {
             <h3
               className="lbh-page-announcement__title"
             >
-              Process submission pending
+              
             </h3>
             <div
               className="lbh-page-announcement__content"
             >
-              <p
-                className="lbh-body"
+              <h1
+                className="lbh-heading-h1"
+              >
+                Process submission pending
+              </h1>
+              <h2
+                className="lbh-heading-h2"
               >
                 You are online.
-              </p>
+              </h2>
               <p
                 className="lbh-body"
               >
-                The Tenancy and Household Check for the tenancy at 
-                , occupied by 
+                The Tenancy and Household Check for 
                 
-                , has been saved to your device ready to be sent to your manager for review.
+                 at 
+                , has been saved to your device, but still needs to be saved to your work tray so that you can return to it later.
               </p>
               <p
                 className="lbh-body"
               >
                 <strong>
-                  You need to be online on this device to continue.
+                   
+                  As you are online, you can save this process to your work tray now.
                 </strong>
-              </p>
-              <p
-                className="lbh-body"
-              >
-                If you can't go online now, when you are next online
-                 
-                <strong>
-                  on this device
-                </strong>
-                , please come back to this Tenancy and Household Check from your work tray and click on the ‘Save and submit to manager’ button below that will become able to be clicked.
-              </p>
-              <p
-                className="lbh-body"
-              >
-                <strong>
-                  You are online
-                </strong>
-                , and can submit this Tenancy and Household Check to your manager now.
               </p>
             </div>
           </section>
@@ -345,23 +333,28 @@ it("renders correctly when offline", async () => {
             <h3
               className="lbh-page-announcement__title"
             >
-              Process submission pending
+              
             </h3>
             <div
               className="lbh-page-announcement__content"
             >
-              <p
-                className="lbh-body"
+              <h1
+                className="lbh-heading-h1"
+              >
+                Process submission pending
+              </h1>
+              <h2
+                className="lbh-heading-h2"
               >
                 You are currently working offline.
-              </p>
+              </h2>
               <p
                 className="lbh-body"
               >
-                The Tenancy and Household Check for the tenancy at 
-                , occupied by 
+                The Tenancy and Household Check for 
                 
-                , has been saved to your device ready to be sent to your manager for review.
+                 at 
+                , has been saved to your device, but still needs to be saved to your work tray so that you can return to it later.
               </p>
               <p
                 className="lbh-body"
@@ -369,16 +362,9 @@ it("renders correctly when offline", async () => {
                 <strong>
                   You need to be online on this device to continue.
                 </strong>
-              </p>
-              <p
-                className="lbh-body"
-              >
-                If you can't go online now, when you are next online
-                 
-                <strong>
-                  on this device
-                </strong>
-                , please come back to this Tenancy and Household Check from your work tray and click on the ‘Save and submit to manager’ button below that will become able to be clicked.
+                <br />
+                <br />
+                If you can’t go online now, leave this page open in your web browser. When you are next online on this device, come back to this page and the ‘Save and continue later’ button will be available to be clicked.
               </p>
             </div>
           </section>

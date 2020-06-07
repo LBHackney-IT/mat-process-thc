@@ -165,6 +165,11 @@ it("renders correctly when offline", async () => {
               Tenancy and Household Check
             </h1>
           </div>
+          <h2
+            className="lbh-heading-h2"
+          >
+            Checking online status
+          </h2>
           <p
             className="lbh-body"
           >

@@ -30,11 +30,13 @@ const ConfirmedPage: NextPage = () => {
 
   return (
     <MainLayout title={PageTitles.Confirmed}>
-      <PageAnnouncement title="Process submission confirmed">
+      <PageAnnouncement title="" headingLevel={HeadingLevels.H1}>
+        <Heading level={HeadingLevels.H1}>Process submission</Heading>
+        <Heading level={HeadingLevels.H2}>Submission successful</Heading>
         <Paragraph>{isInManagerStage ? managerText : officerText}</Paragraph>
       </PageAnnouncement>
 
-      <Heading level={HeadingLevels.H3}>What to do next?</Heading>
+      <Heading level={HeadingLevels.H2}>What to do next?</Heading>
       {isInManagerStage || (
         <Paragraph>
           <Button
