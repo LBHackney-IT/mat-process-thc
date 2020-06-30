@@ -3,6 +3,7 @@ import {
   PageAnnouncement,
   Paragraph,
   SummaryList,
+  HeadingLevels,
 } from "lbh-frontend-react/components";
 import { useRouter } from "next/router";
 import React from "react";
@@ -184,7 +185,7 @@ const PreviousAttemptsAnnouncement: React.FunctionComponent<{
   }
 
   return (
-    <PageAnnouncement title="Previous attempts">
+    <PageAnnouncement title="Previous attempts" headingLevel={HeadingLevels.H1}>
       {unableToEnter.loading ? "Loading..." : <SummaryList rows={rows} />}
     </PageAnnouncement>
   );
