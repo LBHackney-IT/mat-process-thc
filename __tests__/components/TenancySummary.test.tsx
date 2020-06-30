@@ -9,7 +9,7 @@ it("renders correctly with all props", () => {
         address: ["1 Test Street", "Test Town"],
         tenants: ["TestTenant1", "TestTenant2"],
         tenureType: "TestTenureType",
-        startDate: new Date(2019, 0, 1),
+        startDate: new Date(1, 1, 2019),
       }}
     />
   );
@@ -72,7 +72,7 @@ it("renders correctly with all props", () => {
           <dd
             className="govuk-summary-list__value lbh-summary-list__value"
           >
-            1 January 2019
+            12 August 1906
           </dd>
         </div>
       </dl>,

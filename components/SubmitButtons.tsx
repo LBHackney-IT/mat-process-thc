@@ -88,15 +88,15 @@ export const SubmitButtons: React.FunctionComponent<Props> = (props) => {
   );
 };
 
-SubmitButtons.propTypes = {
-  buttons: PropTypes.arrayOf(
-    PropTypes.shape({
-      slug: PropTypes.string,
-      cancel: PropTypes.bool,
-      value: PropTypes.string.isRequired,
-      afterSubmit: PropTypes.func,
-    }).isRequired
-  ).isRequired,
-  disabled: PropTypes.bool,
-  onSubmit: PropTypes.func.isRequired,
-};
+// SubmitButtons.propTypes = {
+//   buttons: PropTypes.arrayOf(
+//     PropTypes.shape({
+//       slug: PropTypes.string,
+//       cancel: PropTypes.bool,
+//       value: PropTypes.string.isRequired,
+//       afterSubmit: PropTypes.func,
+//     }).isRequired
+//   ).isRequired,
+//   disabled: PropTypes.bool,
+//   onSubmit: PropTypes.func.isRequired,
+// };

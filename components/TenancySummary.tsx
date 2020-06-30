@@ -66,20 +66,20 @@ export const TenancySummary: React.FunctionComponent<Props> = (props) => {
 
 TenancySummary.displayName = "TenancySummary";
 
-TenancySummary.propTypes = {
-  details: PropTypes.shape({
-    address: PropTypes.arrayOf(PropTypes.string.isRequired),
-    tenants: PropTypes.arrayOf(PropTypes.string.isRequired),
-    tenureType: PropTypes.string,
-    startDate: PropTypes.oneOfType([
-      PropTypes.string.isRequired,
-      PropTypes.instanceOf(Date).isRequired,
-    ]),
-  }),
-  extraRows: PropTypes.arrayOf(
-    PropTypes.shape({
-      key: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
-    }).isRequired
-  ),
-};
+// TenancySummary.propTypes = {
+//   details: PropTypes.shape({
+//     address: PropTypes.arrayOf(PropTypes.string.isRequired),
+//     tenants: PropTypes.arrayOf(PropTypes.string.isRequired),
+//     tenureType: PropTypes.string,
+//     startDate: PropTypes.oneOfType([
+//       PropTypes.string,
+//       PropTypes.instanceOf(Date),
+//     ]),
+//   }),
+//   extraRows: PropTypes.arrayOf(
+//     PropTypes.shape({
+//       key: PropTypes.string.isRequired,
+//       value: PropTypes.string.isRequired,
+//     }).isRequired
+//   ),
+// };

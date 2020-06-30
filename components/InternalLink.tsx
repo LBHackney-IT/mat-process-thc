@@ -25,12 +25,12 @@ const InternalLink: React.FunctionComponent<Props> = (props) => {
   return <Link href={combinePathAndQueryString(url)}>{children}</Link>;
 };
 
-InternalLink.propTypes = {
-  url: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
-    query: PropTypes.object,
-  }).isRequired,
-  children: PropTypes.node.isRequired,
-};
+// InternalLink.propTypes = {
+//   url: PropTypes.shape({
+//     pathname: PropTypes.string.isRequired,
+//     query: PropTypes.object,
+//   }).isRequired,
+//   children: PropTypes.node.isRequired,
+// };
 
 export default InternalLink;
