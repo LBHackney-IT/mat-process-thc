@@ -1,6 +1,7 @@
 import {
   Button,
   ErrorMessage,
+  HeadingLevels,
   PageAnnouncement,
   Paragraph,
 } from "lbh-frontend-react";
@@ -51,7 +52,10 @@ const SubmitPage: NextPage = () => {
     );
   } else {
     content = (
-      <PageAnnouncement title="Process submission pending">
+      <PageAnnouncement
+        title="Process submission pending"
+        headingLevel={HeadingLevels.H1}
+      >
         <Paragraph>
           {online.result
             ? "You are online."

@@ -23,6 +23,14 @@ import { makeSubmit } from "../../../components/makeSubmit";
 import PageSlugs from "../../../steps/PageSlugs";
 import useDataValue from "../../../helpers/useDataValue";
 import Thumbnail from "../../../components/Thumbnail";
+import {
+  ComponentDatabaseMap,
+  // ComponentWrapper,
+  DynamicComponent,
+  makeDynamic,
+  // StaticComponent,
+} from "remultiform/component-wrapper";
+import ProcessDatabaseSchema from "storage/ProcessDatabaseSchema";
 
 const UnableToEnterClosedReviewPage: NextPage = () => {
   const router = useRouter();
@@ -177,6 +185,38 @@ const UnableToEnterClosedReviewPage: NextPage = () => {
     value: "Exit process",
   });
 
+  const storeName = "managerComment";
+
+  const myDatabaseMap = new ComponentDatabaseMap<
+    ProcessDatabaseSchema,
+    typeof storeName
+  >({
+    storeName,
+    key: "input-0",
+    property: ["value"],
+  });
+
+  const ManagersNotes = new DynamicComponent({
+    key: "managerComment",
+    Component: makeDynamic(
+      Textarea,
+      {
+        value: "value",
+        onValueChange: "onChange",
+        required: "required",
+        disabled: "disabled",
+      },
+      (value) => value
+    ),
+    props: {
+      className: "my-input-class",
+      name: "manager-comment",
+    },
+    defaultValue: "Nothing here...",
+    emptyValue: "",
+    databaseMap: myDatabaseMap,
+  });
+
   return (
     <MainLayout
       title={PageTitles.UnableToEnterReview}
@@ -221,6 +261,9 @@ const UnableToEnterClosedReviewPage: NextPage = () => {
         may amount to fraud and would put my tenancy at risk with the result
         that I may lose my home.
       </Paragraph>
+
+      {ManagersNotes}
+
       <Textarea
         name="manager-comment"
         label={{
