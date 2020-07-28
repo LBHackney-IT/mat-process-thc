@@ -7,7 +7,7 @@ import {
 } from "lbh-frontend-react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ReviewSection } from "../../../components/ReviewSection";
 import { TenancySummary } from "../../../components/TenancySummary";
 import getProcessRef from "../../../helpers/getProcessRef";
@@ -24,12 +24,13 @@ import PageSlugs from "../../../steps/PageSlugs";
 import useDataValue from "../../../helpers/useDataValue";
 import Thumbnail from "../../../components/Thumbnail";
 import useDatabase from "helpers/useDatabase";
-import { TransactionMode } from "remultiform/database";
+import isManager from "helpers/isManager";
 
 const UnableToEnterClosedReviewPage: NextPage = () => {
   const router = useRouter();
   const processRef = getProcessRef(router);
   const processDatabase = useDatabase(Storage.ProcessContext);
+  const isInManagerStage = isManager(router);
 
   const managerComment = useDataValue(
     Storage.ProcessContext,
@@ -37,13 +38,13 @@ const UnableToEnterClosedReviewPage: NextPage = () => {
     processRef,
     (values) => (processRef ? values[processRef] : undefined)
   );
-  console.log(
-    "UnableToEnterClosedReviewPage -> managerComment",
-    managerComment.result
-  );
-  const [managerCommentState, setManagerCommentState] = useState(
-    managerComment.result ?? ""
-  );
+
+  const [managerCommentState, setManagerCommentState] = useState("");
+  useEffect(() => {
+    if (managerComment.result !== undefined) {
+      setManagerCommentState(managerComment.result);
+    }
+  }, [managerComment.result]);
 
   const tenants = useDataValue(
     Storage.ExternalContext,
@@ -232,53 +233,35 @@ const UnableToEnterClosedReviewPage: NextPage = () => {
         may amount to fraud and would put my tenancy at risk with the result
         that I may lose my home.
       </Paragraph>
-      {managerComment.result}
-      <Textarea
-        name="manager-comment"
-        label={{
-          children: (
-            <Heading level={HeadingLevels.H2}>Manager&apos;s comment</Heading>
-          ),
-        }}
-        value={managerCommentState}
-        rows={4}
-        onChange={(value): void => setManagerCommentState(value)}
-      />
+      {isInManagerStage && (
+        <Textarea
+          name="manager-comment"
+          label={{
+            children: (
+              <Heading level={HeadingLevels.H2}>Manager&apos;s comment</Heading>
+            ),
+          }}
+          value={managerCommentState}
+          rows={4}
+          onChange={(value): void => setManagerCommentState(value)}
+        />
+      )}
       <SubmitButton
         onSubmit={
           // eslint-disable-next-line @typescript-eslint/require-await
           async (): Promise<boolean> => {
-            console.log("UnableToEnterClosedReviewPage -> onSubmit");
-            console.log(
-              "UnableToEnterClosedReviewPage -> processRef",
-              processRef
-            );
-            console.log(
-              "UnableToEnterClosedReviewPage -> processDatabase.result",
-              processDatabase.result
-            );
-            console.log(
-              "UnableToEnterClosedReviewPage -> processDatabase",
-              processDatabase
-            );
-
             if (!processRef || !processDatabase.result) {
               return false;
             }
 
-            await processDatabase.result.transaction(
-              ["managerComment"],
-              async (stores) => {
-                const value = await stores.managerComment.get(processRef);
-                console.log("UnableToEnterClosedReviewPage -> value", value);
-
-                await stores.managerComment.put(
-                  processRef,
-                  managerCommentState
-                );
-              },
-              TransactionMode.ReadWrite
-            );
+            if (isInManagerStage) {
+              // FIXME: This will overwrite the existing "managerComment" if there is one
+              await processDatabase.result.put(
+                "managerComment",
+                processRef,
+                managerCommentState
+              );
+            }
 
             await processDatabase.result.put(
               "submitted",
