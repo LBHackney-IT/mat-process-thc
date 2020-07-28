@@ -7,7 +7,7 @@ import {
 } from "lbh-frontend-react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import { Notes } from "storage/DatabaseSchema";
 import { makeSubmit } from "../../../components/makeSubmit";
 import { HouseholdReviewSection } from "../../../components/review-sections/HouseholdReviewSection";
@@ -23,6 +23,8 @@ import MainLayout from "../../../layouts/MainLayout";
 import PageSlugs from "../../../steps/PageSlugs";
 import PageTitles from "../../../steps/PageTitles";
 import Storage from "../../../storage/Storage";
+import useDatabase from "helpers/useDatabase";
+import { TransactionMode } from "remultiform/database";
 
 const getSummaryText = (
   yesValue: string,
@@ -41,6 +43,18 @@ const getSummaryText = (
 const ReviewPage: NextPage = () => {
   const router = useRouter();
   const processRef = getProcessRef(router);
+  const processDatabase = useDatabase(Storage.ProcessContext);
+
+  const managerComment = useDataValue(
+    Storage.ProcessContext,
+    "managerComment",
+    processRef,
+    (values) => (processRef ? values[processRef] : undefined)
+  );
+  console.log("ReviewPage -> managerComment", managerComment.result);
+  const [managerCommentState, setManagerCommentState] = useState(
+    managerComment.result ?? ""
+  );
 
   const tenants = useDataValue(
     Storage.ExternalContext,
@@ -138,13 +152,6 @@ const ReviewPage: NextPage = () => {
   const otherNotesValues = otherNotes.result
     ? otherNotes.result.map(({ value }) => value)
     : [];
-
-  const managerComment = useDataValue(
-    Storage.ProcessContext,
-    "managerComment",
-    processRef,
-    (values) => (processRef ? values[processRef] : undefined)
-  );
 
   const signatures = useDataSet(
     Storage.ResidentContext,
@@ -256,14 +263,48 @@ const ReviewPage: NextPage = () => {
             <Heading level={HeadingLevels.H2}>Manager&apos;s comment</Heading>
           ),
         }}
-        value={managerComment.result || ""}
+        value={managerCommentState}
         rows={4}
-        disabled
+        onChange={(value): void => setManagerCommentState(value)}
       />
       <SubmitButton
         onSubmit={
           // eslint-disable-next-line @typescript-eslint/require-await
-          async (): Promise<boolean> => true
+          async (): Promise<boolean> => {
+            console.log("ReviewPage -> onSubmit");
+            console.log("ReviewPage -> processRef", processRef);
+            console.log(
+              "ReviewPage -> processDatabase.result",
+              processDatabase.result
+            );
+            console.log("ReviewPage -> processDatabase", processDatabase);
+
+            if (!processRef || !processDatabase.result) {
+              return false;
+            }
+
+            await processDatabase.result.transaction(
+              ["managerComment"],
+              async (stores) => {
+                const value = await stores.managerComment.get(processRef);
+                console.log("ReviewPage -> value", value);
+
+                await stores.managerComment.put(
+                  processRef,
+                  managerCommentState
+                );
+              },
+              TransactionMode.ReadWrite
+            );
+
+            await processDatabase.result.put(
+              "submitted",
+              processRef,
+              new Date().toISOString()
+            );
+
+            return true;
+          }
         }
       />
       <style jsx>{`

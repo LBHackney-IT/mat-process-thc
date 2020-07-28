@@ -7,7 +7,7 @@ import {
 } from "lbh-frontend-react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import { ReviewSection } from "../../../components/ReviewSection";
 import { TenancySummary } from "../../../components/TenancySummary";
 import getProcessRef from "../../../helpers/getProcessRef";
@@ -23,18 +23,27 @@ import { makeSubmit } from "../../../components/makeSubmit";
 import PageSlugs from "../../../steps/PageSlugs";
 import useDataValue from "../../../helpers/useDataValue";
 import Thumbnail from "../../../components/Thumbnail";
-import {
-  ComponentDatabaseMap,
-  // ComponentWrapper,
-  DynamicComponent,
-  makeDynamic,
-  // StaticComponent,
-} from "remultiform/component-wrapper";
-import ProcessDatabaseSchema from "storage/ProcessDatabaseSchema";
+import useDatabase from "helpers/useDatabase";
+import { TransactionMode } from "remultiform/database";
 
 const UnableToEnterClosedReviewPage: NextPage = () => {
   const router = useRouter();
   const processRef = getProcessRef(router);
+  const processDatabase = useDatabase(Storage.ProcessContext);
+
+  const managerComment = useDataValue(
+    Storage.ProcessContext,
+    "managerComment",
+    processRef,
+    (values) => (processRef ? values[processRef] : undefined)
+  );
+  console.log(
+    "UnableToEnterClosedReviewPage -> managerComment",
+    managerComment.result
+  );
+  const [managerCommentState, setManagerCommentState] = useState(
+    managerComment.result ?? ""
+  );
 
   const tenants = useDataValue(
     Storage.ExternalContext,
@@ -61,13 +70,6 @@ const UnableToEnterClosedReviewPage: NextPage = () => {
   );
 
   const allTenantNames = tenantsValue.map(({ fullName }) => fullName);
-
-  const managerComment = useDataValue(
-    Storage.ProcessContext,
-    "managerComment",
-    processRef,
-    (values) => (processRef ? values[processRef] : undefined)
-  );
 
   const officerFullName = useDataValue(
     Storage.ExternalContext,
@@ -180,41 +182,10 @@ const UnableToEnterClosedReviewPage: NextPage = () => {
           : "Loading...",
     },
   ].filter(({ value }) => value.length > 0);
+
   const SubmitButton = makeSubmit({
     slug: PageSlugs.Pause,
     value: "Exit process",
-  });
-
-  const storeName = "managerComment";
-
-  const myDatabaseMap = new ComponentDatabaseMap<
-    ProcessDatabaseSchema,
-    typeof storeName
-  >({
-    storeName,
-    key: "input-0",
-    property: ["value"],
-  });
-
-  const ManagersNotes = new DynamicComponent({
-    key: "managerComment",
-    Component: makeDynamic(
-      Textarea,
-      {
-        value: "value",
-        onValueChange: "onChange",
-        required: "required",
-        disabled: "disabled",
-      },
-      (value) => value
-    ),
-    props: {
-      className: "my-input-class",
-      name: "manager-comment",
-    },
-    defaultValue: "Nothing here...",
-    emptyValue: "",
-    databaseMap: myDatabaseMap,
   });
 
   return (
@@ -261,9 +232,7 @@ const UnableToEnterClosedReviewPage: NextPage = () => {
         may amount to fraud and would put my tenancy at risk with the result
         that I may lose my home.
       </Paragraph>
-
-      {ManagersNotes}
-
+      {managerComment.result}
       <Textarea
         name="manager-comment"
         label={{
@@ -271,14 +240,54 @@ const UnableToEnterClosedReviewPage: NextPage = () => {
             <Heading level={HeadingLevels.H2}>Manager&apos;s comment</Heading>
           ),
         }}
-        value={managerComment.result || ""}
+        value={managerCommentState}
         rows={4}
-        disabled
+        onChange={(value): void => setManagerCommentState(value)}
       />
       <SubmitButton
         onSubmit={
           // eslint-disable-next-line @typescript-eslint/require-await
-          async (): Promise<boolean> => true
+          async (): Promise<boolean> => {
+            console.log("UnableToEnterClosedReviewPage -> onSubmit");
+            console.log(
+              "UnableToEnterClosedReviewPage -> processRef",
+              processRef
+            );
+            console.log(
+              "UnableToEnterClosedReviewPage -> processDatabase.result",
+              processDatabase.result
+            );
+            console.log(
+              "UnableToEnterClosedReviewPage -> processDatabase",
+              processDatabase
+            );
+
+            if (!processRef || !processDatabase.result) {
+              return false;
+            }
+
+            await processDatabase.result.transaction(
+              ["managerComment"],
+              async (stores) => {
+                const value = await stores.managerComment.get(processRef);
+                console.log("UnableToEnterClosedReviewPage -> value", value);
+
+                await stores.managerComment.put(
+                  processRef,
+                  managerCommentState
+                );
+              },
+              TransactionMode.ReadWrite
+            );
+
+            await processDatabase.result.put(
+              "submitted",
+              processRef,
+              new Date().toISOString()
+            );
+
+            return true;
+          }
         }
       />
       <style jsx>{`

@@ -260,9 +260,7 @@ type ProcessDatabaseSchema = NamedSchema<
 
     managerComment: {
       key: ProcessRef;
-      value: {
-        value: string;
-      };
+      value: string;
     };
   }
 >;
