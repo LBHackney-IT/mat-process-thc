@@ -444,6 +444,8 @@ export const LoadingPage: NextPage = () => {
   const loading =
     processDataSyncStatus.loading ||
     extraResults.some((result) => result.loading);
+  console.log("LoadingPage:NextPage -> loading", loading);
+
   const errored =
     Boolean(processDataSyncStatus.error) ||
     extraResults.some((result) => result.error);
@@ -529,7 +531,8 @@ export const LoadingPage: NextPage = () => {
         </ErrorMessage>
       )}
 
-      <Heading level={HeadingLevels.H2}>Loading</Heading>
+      {loading && <Heading level={HeadingLevels.H2}>Loading</Heading>}
+
       <Paragraph>
         {isInManagerStage || isInClosedStage
           ? "The system is fetching the information you need for this process."
