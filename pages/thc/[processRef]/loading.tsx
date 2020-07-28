@@ -444,7 +444,6 @@ export const LoadingPage: NextPage = () => {
   const loading =
     processDataSyncStatus.loading ||
     extraResults.some((result) => result.loading);
-  console.log("LoadingPage:NextPage -> loading", loading);
 
   const errored =
     Boolean(processDataSyncStatus.error) ||
