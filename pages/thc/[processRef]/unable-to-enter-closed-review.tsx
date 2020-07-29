@@ -191,7 +191,7 @@ const UnableToEnterClosedReviewPage: NextPage = () => {
 
   return (
     <MainLayout
-      title={PageTitles.UnableToEnterReview}
+      title={PageTitles.UnableToEnterClosedReview}
       heading="Review Tenancy and Household Check"
     >
       <React.Fragment>
