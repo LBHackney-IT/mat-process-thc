@@ -2,7 +2,6 @@ import { Button } from "lbh-frontend-react";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { onClickSubmit } from "../helpers/onClickSubmit";
-import PropTypes from "../helpers/PropTypes";
 import urlsForRouter from "../helpers/urlsForRouter";
 import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 
@@ -86,17 +85,4 @@ export const SubmitButtons: React.FunctionComponent<Props> = (props) => {
       `}</style>
     </>
   );
-};
-
-SubmitButtons.propTypes = {
-  buttons: PropTypes.arrayOf(
-    PropTypes.shape({
-      slug: PropTypes.string,
-      cancel: PropTypes.bool,
-      value: PropTypes.string.isRequired,
-      afterSubmit: PropTypes.func,
-    }).isRequired
-  ).isRequired,
-  disabled: PropTypes.bool,
-  onSubmit: PropTypes.func.isRequired,
 };

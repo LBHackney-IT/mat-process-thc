@@ -1,7 +1,6 @@
 import { Link } from "lbh-frontend-react";
 import querystring from "querystring";
 import React from "react";
-import PropTypes from "../helpers/PropTypes";
 
 interface Url {
   pathname: string;
@@ -23,14 +22,6 @@ const InternalLink: React.FunctionComponent<Props> = (props) => {
   const { url, children } = props;
 
   return <Link href={combinePathAndQueryString(url)}>{children}</Link>;
-};
-
-InternalLink.propTypes = {
-  url: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
-    query: PropTypes.object,
-  }).isRequired,
-  children: PropTypes.node.isRequired,
 };
 
 export default InternalLink;
