@@ -65,7 +65,7 @@ const MainLayout = ({
         <title>{fullTitle}</title>
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,400&display=swap"
         />
         <link rel="manifest" href={`${basePath}/manifest.webmanifest`} />
         <link rel="shortcut icon" href={`${basePath}/favicons/favicon.ico`} />
