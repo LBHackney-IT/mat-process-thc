@@ -247,31 +247,28 @@ const UnableToEnterClosedReviewPage: NextPage = () => {
         />
       )}
       <SubmitButton
-        onSubmit={
-          // eslint-disable-next-line @typescript-eslint/require-await
-          async (): Promise<boolean> => {
-            if (!processRef || !processDatabase.result) {
-              return false;
-            }
-
-            if (isInManagerStage) {
-              // FIXME: This will overwrite the existing "managerComment" if there is one
-              await processDatabase.result.put(
-                "managerComment",
-                processRef,
-                managerCommentState
-              );
-            }
-
-            await processDatabase.result.put(
-              "submitted",
-              processRef,
-              new Date().toISOString()
-            );
-
-            return true;
+        onSubmit={async (): Promise<boolean> => {
+          if (!processRef || !processDatabase.result) {
+            return false;
           }
-        }
+
+          if (isInManagerStage) {
+            // FIXME: This will overwrite the existing "managerComment" if there is one
+            await processDatabase.result.put(
+              "managerComment",
+              processRef,
+              managerCommentState
+            );
+          }
+
+          await processDatabase.result.put(
+            "submitted",
+            processRef,
+            new Date().toISOString()
+          );
+
+          return true;
+        }}
       />
       <style jsx>{`
         .mat-tenancy-summary img {
