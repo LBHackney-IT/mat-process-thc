@@ -33,7 +33,7 @@
     "express": "^4.17.1",
     "is-online": "^8.4.0",
     "jsonwebtoken": "^8.5.1",
-    "lbh-frontend-react": "^0.3.1",
+    "lbh-frontend-react": "^0.3.2",
     "lodash": "^4.17.19",
     "next": "9.4.4",
     "next-offline": "^5.0.2",
