@@ -521,21 +521,18 @@ export const LoadingPage: NextPage = () => {
             : undefined,
         }}
       />
-
       {errored && (
         <ErrorMessage>
           Something went wrong. Please try reopening this process from your
           worktray.
         </ErrorMessage>
       )}
-
-      <Heading level={HeadingLevels.H2}>Loading</Heading>
+      {loading && <Heading level={HeadingLevels.H2}>Loading</Heading>}
       <Paragraph>
         {isInManagerStage || isInClosedStage
           ? "The system is fetching the information you need for this process."
           : "The system is updating the information you need for this process so that you can go offline at any point."}
       </Paragraph>
-
       <ProgressBar
         progress={progress}
         incompleteLabel={errored ? "Error" : "Loading..."}
@@ -547,7 +544,6 @@ export const LoadingPage: NextPage = () => {
             : "Ready (no update needed)"
         }
       />
-
       {href.pathname && as.pathname ? (
         <NextLink href={href} as={as}>
           {button}
