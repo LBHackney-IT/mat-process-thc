@@ -23,13 +23,12 @@ import { ProcessStage } from "helpers/ProcessStage";
 import useDatabase from "../../../helpers/useDatabase";
 import MainLayout from "../../../layouts/MainLayout";
 import PageTitles from "../../../steps/PageTitles";
-import { Notes } from "storage/DatabaseSchema";
 import {
   approveProcess,
   declineProcess,
 } from "../../../helpers/transferProcess";
 
-const UnableToEnterReviewPage: NextPage = () => {
+const UnableToEnterManagerReviewPage: NextPage = () => {
   const router = useRouter();
   const processRef = getProcessRef(router);
   const processDatabase = useDatabase(Storage.ProcessContext);
@@ -63,15 +62,6 @@ const UnableToEnterReviewPage: NextPage = () => {
     processRef,
     (values) => (processRef ? values[processRef]?.startDate : undefined)
   );
-
-  const officerFullName = useDataValue(
-    Storage.ExternalContext,
-    "officer",
-    processRef,
-    (values) => (processRef ? values[processRef]?.fullName : undefined)
-  );
-
-  const officerFullNameValue = officerFullName.result || "Loading...";
 
   const submittedDate = useDataValue(
     Storage.ProcessContext,
@@ -137,7 +127,7 @@ const UnableToEnterReviewPage: NextPage = () => {
 
   return (
     <MainLayout
-      title={PageTitles.UnableToEnterReview}
+      title={PageTitles.UnableToEnterManagerReview}
       heading="Review Tenancy and Household Check"
     >
       <React.Fragment>
@@ -247,4 +237,4 @@ const UnableToEnterReviewPage: NextPage = () => {
   );
 };
 
-export default UnableToEnterReviewPage;
+export default UnableToEnterManagerReviewPage;
