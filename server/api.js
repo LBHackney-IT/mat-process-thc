@@ -3,7 +3,11 @@ const { createDecipheriv, pbkdf2Sync } = require("crypto");
 const { Router, json } = require("express");
 const { request } = require("https");
 const jwt = require("jsonwebtoken");
-
+const {
+  mockResidentsData,
+  mockTenanciesData,
+  mockProcessData,
+} = require("./mockData");
 const { DISABLE_MAT_PROCESS_ACTIONS } = process.env;
 
 const processApiHost = process.env.PROCESS_API_HOST;
@@ -24,6 +28,7 @@ const matApiDataKeyLength =
   parseInt(process.env.MAT_API_DATA_KEY_SIZE) / 8;
 const matApiDataAlgorithm = process.env.MAT_API_DATA_ALGORITHM;
 const matApiDataIV = process.env.MAT_API_DATA_IV;
+const usingMockData = process.env.USE_MOCK_DATA === "true";
 
 const router = Router();
 
@@ -104,25 +109,29 @@ const proxy = (options, originalReq, originalRes) => {
 router.use(json({ limit: "500mb" }));
 
 router.get("/v1/processes/:ref/processData", (req, res) => {
-  if (!verifyJwt(req.query.jwt, processApiJwtSecret)) {
-    res.status(401).send("Invalid JWT");
+  if (usingMockData) {
+    res.send(mockProcessData);
+  } else {
+    if (!verifyJwt(req.query.jwt, processApiJwtSecret)) {
+      res.status(401).send("Invalid JWT");
 
-    return;
+      return;
+    }
+
+    const { ref } = req.params;
+
+    const options = {
+      host: processApiHost,
+      port: 443,
+      path: `${processApiBaseUrl}/v1/processData/${ref}`,
+      method: req.method,
+      headers: {
+        "X-API-KEY": processApiKey,
+      },
+    };
+
+    proxy(options, req, res);
   }
-
-  const { ref } = req.params;
-
-  const options = {
-    host: processApiHost,
-    port: 443,
-    path: `${processApiBaseUrl}/v1/processData/${ref}`,
-    method: req.method,
-    headers: {
-      "X-API-KEY": processApiKey,
-    },
-  };
-
-  proxy(options, req, res);
 });
 
 router.patch("/v1/processes/:ref/processData", (req, res) => {
@@ -426,68 +435,76 @@ router.post("/v1/processes/:ref/post-visit-actions", (req, res) => {
 });
 
 router.get("/v1/tenancies", (req, res) => {
-  if (!verifyJwt(req.query.jwt, matApiJwtSecret)) {
-    res.status(401).send("Invalid JWT");
+  if (usingMockData) {
+    res.send(mockTenanciesData);
+  } else {
+    if (!verifyJwt(req.query.jwt, matApiJwtSecret)) {
+      res.status(401).send("Invalid JWT");
 
-    return;
+      return;
+    }
+
+    const { data } = req.query;
+
+    const { matApiToken, contactId } = decryptJson(
+      data,
+      matApiDataSharedKey,
+      matApiDataSalt,
+      matApiDataIterations,
+      matApiDataKeyLength,
+      matApiDataAlgorithm,
+      matApiDataIV
+    );
+
+    const options = {
+      host: matApiHost,
+      port: 443,
+      path: `${matApiBaseUrl}/v1/Accounts/AccountDetailsByContactId?contactid=${contactId}`,
+      method: req.method,
+      headers: {
+        Authorization: matApiToken,
+      },
+    };
+
+    proxy(options, req, res);
   }
-
-  const { data } = req.query;
-
-  const { matApiToken, contactId } = decryptJson(
-    data,
-    matApiDataSharedKey,
-    matApiDataSalt,
-    matApiDataIterations,
-    matApiDataKeyLength,
-    matApiDataAlgorithm,
-    matApiDataIV
-  );
-
-  const options = {
-    host: matApiHost,
-    port: 443,
-    path: `${matApiBaseUrl}/v1/Accounts/AccountDetailsByContactId?contactid=${contactId}`,
-    method: req.method,
-    headers: {
-      Authorization: matApiToken,
-    },
-  };
-
-  proxy(options, req, res);
 });
 
 router.get("/v1/residents", (req, res) => {
-  if (!verifyJwt(req.query.jwt, matApiJwtSecret)) {
-    res.status(401).send("Invalid JWT");
+  if (usingMockData) {
+    res.send(mockResidentsData);
+  } else {
+    if (!verifyJwt(req.query.jwt, matApiJwtSecret)) {
+      res.status(401).send("Invalid JWT");
 
-    return;
+      return;
+    }
+
+    const { data } = req.query;
+
+    const { matApiToken, uprn } = decryptJson(
+      data,
+      matApiDataSharedKey,
+      matApiDataSalt,
+      matApiDataIterations,
+      matApiDataKeyLength,
+      matApiDataAlgorithm,
+      matApiDataIV
+    );
+
+    const options = {
+      host: matApiHost,
+      port: 443,
+      // This is intentionally `urpn` due to it being misnamed in the API.
+      path: `${matApiBaseUrl}/v1/Contacts/GetContactsByUprn?urpn=${uprn}`,
+      method: req.method,
+      headers: {
+        Authorization: matApiToken,
+      },
+    };
+
+    proxy(options, req, res);
   }
-
-  const { data } = req.query;
-
-  const { matApiToken, uprn } = decryptJson(
-    data,
-    matApiDataSharedKey,
-    matApiDataSalt,
-    matApiDataIterations,
-    matApiDataKeyLength,
-    matApiDataAlgorithm,
-    matApiDataIV
-  );
-
-  const options = {
-    host: matApiHost,
-    port: 443,
-    // This is intentionally `urpn` due to it being misnamed in the API.
-    path: `${matApiBaseUrl}/v1/Contacts/GetContactsByUprn?urpn=${uprn}`,
-    method: req.method,
-    headers: {
-      Authorization: matApiToken,
-    },
-  };
-
-  proxy(options, req, res);
 });
 
 router.get("/v1/officer", (req, res) => {
