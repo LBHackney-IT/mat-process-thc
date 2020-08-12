@@ -1,7 +1,7 @@
-import from12 from "./from12";
 import from3 from "./from3";
 import from4 from "./from4";
 import from8 from "./from8";
+import from12 from "./from12";
 
 export default {
   3: from3,
