@@ -40,7 +40,6 @@ export const Details: React.FunctionComponent<Props> = (props) => {
 
         summary {
           text-decoration: underline;
-          font-family: "Montserrat";
         }
 
         summary:hover {
@@ -52,7 +51,6 @@ export const Details: React.FunctionComponent<Props> = (props) => {
           margin: 0;
           color: #025ea6;
           font-size: 19px;
-          font-family: "Montserrat";
           font-weight: 400;
         }
 
@@ -60,7 +58,6 @@ export const Details: React.FunctionComponent<Props> = (props) => {
           margin-left: 18px;
           color: #0b0c0c;
           font-size: 19px;
-          font-family: "Montserrat";
           font-weight: 300;
           display: inline-block;
         }

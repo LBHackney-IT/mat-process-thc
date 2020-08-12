@@ -71,6 +71,7 @@ enum PageSlugs {
   FourthFailedAttempt = "fourth-failed-attempt",
   UnableToEnterReview = "unable-to-enter-review",
   UnableToEnterManagerReview = "unable-to-enter-manager-review",
+  UnableToEnterClosedReview = "unable-to-enter-closed-review",
 }
 
 const slugs: {
@@ -128,6 +129,7 @@ const slugs: {
   "fourth-failed-attempt": true,
   "unable-to-enter-review": false,
   "unable-to-enter-manager-review": false,
+  "unable-to-enter-closed-review": false,
 };
 
 export const stepSlugs = Object.entries(slugs)

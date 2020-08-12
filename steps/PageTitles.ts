@@ -52,8 +52,8 @@ enum PageTitles {
 
   // Review and submit
   Review = "Review",
-  ManagerReview = "Review",
-  ClosedReview = "Review",
+  ManagerReview = "Manager review",
+  ClosedReview = "Closed review",
   Submit = "Submit",
   Confirmed = "Confirmed",
 
@@ -68,6 +68,7 @@ enum PageTitles {
   FourthFailedAttempt = "Fourth failed attempt",
   UnableToEnterReview = "Unable to enter review",
   UnableToEnterManagerReview = "Unable to enter manager review",
+  UnableToEnterClosedReview = "Unable to enter closed review",
 }
 
 export default PageTitles;

@@ -1,46 +1,32 @@
 import formatDate from "date-fns/format";
 import {
-  Heading,
-  HeadingLevels,
   Paragraph,
   Textarea,
+  Heading,
+  HeadingLevels,
 } from "lbh-frontend-react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
-import { Notes } from "storage/DatabaseSchema";
-import { makeSubmit } from "../../../components/makeSubmit";
-import { HouseholdReviewSection } from "../../../components/review-sections/HouseholdReviewSection";
-import { IdAndResidencyReviewSection } from "../../../components/review-sections/IdAndResidencyReviewSection";
-import { PropertyInspectionReviewSection } from "../../../components/review-sections/PropertyInspectionReviewSection";
-import { WellbeingSupportReviewSection } from "../../../components/review-sections/WellbeingSupportReviewSection";
+import { ReviewSection } from "../../../components/ReviewSection";
 import { TenancySummary } from "../../../components/TenancySummary";
-import Thumbnail from "../../../components/Thumbnail";
 import getProcessRef from "../../../helpers/getProcessRef";
-import useDataSet from "../../../helpers/useDataSet";
-import useDataValue from "../../../helpers/useDataValue";
-import MainLayout from "../../../layouts/MainLayout";
-import PageSlugs from "../../../steps/PageSlugs";
-import PageTitles from "../../../steps/PageTitles";
+import useReviewSectionRows from "../../../helpers/useReviewSectionRows";
+import firstFailedAttempt from "../../../steps/unable-to-enter/first-failed-attempt";
+import fourthFailedAttempt from "../../../steps/unable-to-enter/fourth-failed-attempt";
+import secondFailedAttempt from "../../../steps/unable-to-enter/second-failed-attempt";
+import thirdFailedAttempt from "../../../steps/unable-to-enter/third-failed-attempt";
 import Storage from "../../../storage/Storage";
+import MainLayout from "../../../layouts/MainLayout";
+import PageTitles from "../../../steps/PageTitles";
+import { makeSubmit } from "../../../components/makeSubmit";
+import PageSlugs from "../../../steps/PageSlugs";
+import useDataValue from "../../../helpers/useDataValue";
+import Thumbnail from "../../../components/Thumbnail";
 import useDatabase from "helpers/useDatabase";
 import isManager from "helpers/isManager";
 
-const getSummaryText = (
-  yesValue: string,
-  noValue: string,
-  databaseValue: { value: string; notes: Notes }
-): string => {
-  if (databaseValue.value === "yes") {
-    return yesValue;
-  } else {
-    return databaseValue.notes.length > 0
-      ? `${noValue}. Note: ${databaseValue.notes[0].value}`
-      : `${noValue}`;
-  }
-};
-
-const ReviewPage: NextPage = () => {
+const UnableToEnterClosedReviewPage: NextPage = () => {
   const router = useRouter();
   const processRef = getProcessRef(router);
   const processDatabase = useDatabase(Storage.ProcessContext);
@@ -75,13 +61,7 @@ const ReviewPage: NextPage = () => {
     processRef,
     (values) => (processRef ? values[processRef] : undefined)
   );
-
   const tenantIdsPresentForCheckValue = tenantIdsPresentForCheck.result || [];
-
-  const tenantsWithPresentStatus = tenantsValue.map((tenant) => ({
-    ...tenant,
-    present: tenantIdsPresentForCheckValue.includes(tenant.id),
-  }));
 
   const address = useDataValue(
     Storage.ExternalContext,
@@ -89,6 +69,16 @@ const ReviewPage: NextPage = () => {
     processRef,
     (values) => (processRef ? values[processRef]?.address : undefined)
   );
+
+  const allTenantNames = tenantsValue.map(({ fullName }) => fullName);
+
+  const officerFullName = useDataValue(
+    Storage.ExternalContext,
+    "officer",
+    processRef,
+    (values) => (processRef ? values[processRef]?.fullName : undefined)
+  );
+  const officerFullNameValue = officerFullName.result || "Loading...";
 
   const tenureType = useDataValue(
     Storage.ExternalContext,
@@ -104,15 +94,6 @@ const ReviewPage: NextPage = () => {
     (values) => (processRef ? values[processRef]?.startDate : undefined)
   );
 
-  const officerFullName = useDataValue(
-    Storage.ExternalContext,
-    "officer",
-    processRef,
-    (values) => (processRef ? values[processRef]?.fullName : undefined)
-  );
-
-  const officerFullNameValue = officerFullName.result || "Loading...";
-
   const submittedDate = useDataValue(
     Storage.ProcessContext,
     "submitted",
@@ -124,62 +105,63 @@ const ReviewPage: NextPage = () => {
     ? formatDate(new Date(submittedDate.result), "d MMMM yyyy")
     : "Loading...";
 
-  const isUnannouncedVisit = useDataValue(
+  const failedAttempts = useDataValue(
     Storage.ProcessContext,
-    "isUnannouncedVisit",
+    "unableToEnter",
     processRef,
     (values) => (processRef ? values[processRef] : undefined)
   );
+  const formatDateWithTime = (date: string): string => {
+    return formatDate(new Date(date), "HH:mm 'on' d MMMM yyyy");
+  };
 
-  const visitType = isUnannouncedVisit.result
-    ? getSummaryText("Unannounced", "Announced", isUnannouncedVisit.result)
+  const firstFailedAttemptDate = failedAttempts.result
+    ? formatDateWithTime(failedAttempts.result.firstFailedAttempt.date)
+    : "Loading...";
+  const secondFailedAttemptDate = failedAttempts.result
+    ? formatDateWithTime(failedAttempts.result.secondFailedAttempt.date)
+    : "Loading...";
+  const thirdFailedAttemptDate = failedAttempts.result
+    ? formatDateWithTime(failedAttempts.result.thirdFailedAttempt.date)
+    : "Loading...";
+  const fourthFailedAttemptDate = failedAttempts.result
+    ? formatDateWithTime(failedAttempts.result.fourthFailedAttempt.date)
     : "Loading...";
 
-  const isVisitInside = useDataValue(
+  const firstFailedAttemptReviewSection = useReviewSectionRows(
     Storage.ProcessContext,
-    "isVisitInside",
-    processRef,
-    (values) => (processRef ? values[processRef] : undefined)
+    [firstFailedAttempt],
+    true
   );
 
-  const visitTookPlace = isVisitInside.result
-    ? getSummaryText("Inside", "Outside", isVisitInside.result)
-    : "Loading...";
-
-  const otherNotes = useDataValue(
+  const secondFailedAttemptReviewSection = useReviewSectionRows(
     Storage.ProcessContext,
-    "other",
-    processRef,
-    (values) => (processRef && values[processRef]?.notes) || []
+    [secondFailedAttempt],
+    true
   );
 
-  const otherNotesValues = otherNotes.result
-    ? otherNotes.result.map(({ value }) => value)
-    : [];
-
-  const signatures = useDataSet(
-    Storage.ResidentContext,
-    "signature",
-    tenantIdsPresentForCheckValue
+  const thirdFailedAttemptReviewSection = useReviewSectionRows(
+    Storage.ProcessContext,
+    [thirdFailedAttempt],
+    true
   );
 
-  const signatureValues = signatures.result ? signatures.result : {};
-
-  const allTenantNames = tenantsValue.map(({ fullName }) => fullName);
+  const fourthFailedAttemptReviewSection = useReviewSectionRows(
+    Storage.ProcessContext,
+    [fourthFailedAttempt],
+    true
+  );
 
   const tenantsPresent = tenantsValue.filter((tenant) =>
     tenantIdsPresentForCheckValue.includes(tenant.id)
   );
-
   const presentTenantNames = tenantsPresent.map(({ fullName }) => fullName);
-
   const outsidePropertyImages = useDataValue(
     Storage.ProcessContext,
     "property",
     processRef,
     (values) => (processRef ? values[processRef]?.outside : undefined)
   );
-
   const outsidePropertyImageThumbnails = outsidePropertyImages.result
     ? outsidePropertyImages.result.images.map((image) => (
         <Thumbnail
@@ -189,13 +171,10 @@ const ReviewPage: NextPage = () => {
         />
       ))
     : [];
-
   const extraRows = [
     { key: "Outside property", value: outsidePropertyImageThumbnails },
     { key: "Completed by", value: officerFullNameValue },
     { key: "Date completed", value: submittedDateValue },
-    { key: "The visit was", value: visitType },
-    { key: "The visit took place", value: visitTookPlace },
     {
       key: "Present for check",
       value:
@@ -212,33 +191,41 @@ const ReviewPage: NextPage = () => {
 
   return (
     <MainLayout
-      title={PageTitles.ClosedReview}
+      title={PageTitles.UnableToEnterClosedReview}
       heading="Review Tenancy and Household Check"
     >
-      <TenancySummary
-        details={{
-          address: address.result,
-          tenants: allTenantNames,
-          tenureType: tenureType.result,
-          startDate: tenancyStartDate.result,
-        }}
-        extraRows={extraRows}
+      <React.Fragment>
+        <TenancySummary
+          details={{
+            address: address.result,
+            tenants: allTenantNames,
+            tenureType: tenureType.result,
+            startDate: tenancyStartDate.result,
+          }}
+          extraRows={extraRows}
+        />
+      </React.Fragment>
+
+      <ReviewSection
+        heading={`First failed attempt: ${firstFailedAttemptDate}`}
+        loading={firstFailedAttemptReviewSection.loading}
+        rows={firstFailedAttemptReviewSection.result}
       />
-      <IdAndResidencyReviewSection
-        tenants={tenantsWithPresentStatus}
-        readOnly
+      <ReviewSection
+        heading={`Second failed attempt: ${secondFailedAttemptDate}`}
+        loading={secondFailedAttemptReviewSection.loading}
+        rows={secondFailedAttemptReviewSection.result}
       />
-      <HouseholdReviewSection readOnly />
-      <PropertyInspectionReviewSection readOnly />
-      <WellbeingSupportReviewSection readOnly />
-      {otherNotesValues.length > 0 && (
-        <>
-          <Heading level={HeadingLevels.H2}>Other Notes</Heading>
-          {otherNotesValues.map((note, index) => (
-            <Paragraph key={index}>{note}</Paragraph>
-          ))}
-        </>
-      )}
+      <ReviewSection
+        heading={`Third failed attempt: ${thirdFailedAttemptDate}`}
+        loading={thirdFailedAttemptReviewSection.loading}
+        rows={thirdFailedAttemptReviewSection.result}
+      />
+      <ReviewSection
+        heading={`Fourth failed attempt: ${fourthFailedAttemptDate}`}
+        loading={fourthFailedAttemptReviewSection.loading}
+        rows={fourthFailedAttemptReviewSection.result}
+      />
       <Heading level={HeadingLevels.H2}>Declaration</Heading>
       <Paragraph>
         I confirm that the information I have given for the purposes of this
@@ -246,20 +233,6 @@ const ReviewPage: NextPage = () => {
         may amount to fraud and would put my tenancy at risk with the result
         that I may lose my home.
       </Paragraph>
-      <Paragraph>Date of visit: {submittedDateValue}</Paragraph>
-      {tenantsPresent.map(
-        ({ fullName, id }) =>
-          signatureValues[id] && (
-            <React.Fragment key={id}>
-              <Heading level={HeadingLevels.H3}>{fullName}</Heading>
-              <img
-                className="signature"
-                src={signatureValues[id]}
-                alt={`${fullName}'s signature`}
-              />
-            </React.Fragment>
-          )
-      )}
       {isInManagerStage && (
         <Textarea
           name="manager-comment"
@@ -287,17 +260,23 @@ const ReviewPage: NextPage = () => {
               managerCommentState
             );
           }
+
           await processDatabase.result.put(
             "submitted",
             processRef,
             new Date().toISOString()
           );
+
           return true;
         }}
       />
       <style jsx>{`
         .mat-tenancy-summary img {
           margin-right: 2em;
+        }
+
+        :global(.lbh-button--warning) {
+          margin-left: 1em;
         }
 
         .signature {
@@ -308,4 +287,4 @@ const ReviewPage: NextPage = () => {
   );
 };
 
-export default ReviewPage;
+export default UnableToEnterClosedReviewPage;

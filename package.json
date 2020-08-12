@@ -21,7 +21,8 @@
     "lint:fix": "npm run lint -- --fix",
     "lint:codeowners": "codeowners-enforcer -i 'package.json' -i 'package-lock.json'",
     "format": "prettier --write '**/*'",
-    "format:check": "prettier --check '**/*'"
+    "format:check": "prettier --check '**/*'",
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
     "@babel/core": "^7.10.2",
@@ -32,7 +33,7 @@
     "express": "^4.17.1",
     "is-online": "^8.4.0",
     "jsonwebtoken": "^8.5.1",
-    "lbh-frontend-react": "0.0.14",
+    "lbh-frontend-react": "^0.3.2",
     "lodash": "^4.17.19",
     "next": "9.4.4",
     "next-offline": "^5.0.2",
