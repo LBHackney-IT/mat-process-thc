@@ -338,20 +338,21 @@ it("renders correctly when online", async () => {
             }
           
           </style>
-          <h2
-            className="lbh-heading-h2"
+          <span
+            className="govuk-error-message lbh-error-message"
           >
-            Loading
-          </h2>
-          <p
-            className="lbh-body"
-          >
-            The system is updating the information you need for this process so that you can go offline at any point.
-          </p>
+            <span
+              className="govuk-visually-hidden"
+            >
+              Error
+              :
+            </span>
+            Something went wrong. Please try reopening this process from your worktray.
+          </span>
           <label
             className="govuk-label lbh-label"
           >
-            Ready (updated)
+            Error
             <div>
               <div
                 style={
@@ -379,13 +380,13 @@ it("renders correctly when online", async () => {
             </style>
           </label>
           <button
-            aria-disabled={false}
+            aria-disabled={true}
             className="govuk-button lbh-button"
             data-testid="submit"
-            disabled={false}
+            disabled={true}
             onClick={[Function]}
           >
-            Go
+            Loading...
           </button>
         </div>
       </main>,

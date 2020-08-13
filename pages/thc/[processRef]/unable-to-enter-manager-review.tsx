@@ -18,15 +18,12 @@ import fourthFailedAttempt from "../../../steps/unable-to-enter/fourth-failed-at
 import secondFailedAttempt from "../../../steps/unable-to-enter/second-failed-attempt";
 import thirdFailedAttempt from "../../../steps/unable-to-enter/third-failed-attempt";
 import Storage from "../../../storage/Storage";
-import ManagerSubmitButton from "components/ManagerSubmitButton";
 import { ProcessStage } from "helpers/ProcessStage";
 import useDatabase from "../../../helpers/useDatabase";
 import MainLayout from "../../../layouts/MainLayout";
 import PageTitles from "../../../steps/PageTitles";
-import {
-  approveProcess,
-  declineProcess,
-} from "../../../helpers/transferProcess";
+import { approveProcess } from "../../../helpers/transferProcess";
+import ManagerApprovedButton from "components/managerApprovedButton";
 
 const UnableToEnterManagerReviewPage: NextPage = () => {
   const router = useRouter();
@@ -195,7 +192,7 @@ const UnableToEnterManagerReviewPage: NextPage = () => {
         may amount to fraud and would put my tenancy at risk with the result
         that I may lose my home.
       </Paragraph>
-      <Paragraph>Date of visit: {submittedDateValue}</Paragraph>
+      <Paragraph>Date of submission: {submittedDateValue}</Paragraph>
       <Textarea
         name="manager-comment"
         label={{
@@ -207,7 +204,7 @@ const UnableToEnterManagerReviewPage: NextPage = () => {
         value={managerComment}
         rows={4}
       />
-      <ManagerSubmitButton
+      <ManagerApprovedButton
         disabled={!processRef || !processDatabase.result}
         onSubmit={async (): Promise<boolean> => {
           if (!processRef || !processDatabase.result) {
@@ -226,25 +223,7 @@ const UnableToEnterManagerReviewPage: NextPage = () => {
         }}
         status={ProcessStage.Approved}
       />
-      <ManagerSubmitButton
-        disabled={!processRef || !processDatabase.result}
-        onSubmit={async (): Promise<boolean> => {
-          if (!processRef || !processDatabase.result) {
-            return false;
-          }
 
-          await declineProcess(router);
-
-          await processDatabase.result.put(
-            "managerComments",
-            processRef,
-            comments
-          );
-
-          return true;
-        }}
-        status={ProcessStage.Declined}
-      />
       <style jsx>{`
         .mat-tenancy-summary img {
           margin-right: 2em;
