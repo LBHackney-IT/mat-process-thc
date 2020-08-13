@@ -29,8 +29,7 @@ const ManagerApprovedButton: React.FunctionComponent<Props> = (props) => {
       preventDoubleClick
       disabled={disabled}
       className={classNames({
-        "lbh-button--warning govuk-button--warning":
-          status === ProcessStage.Approved,
+        "lbh-button govuk-button": status === ProcessStage.Approved,
       })}
       onClick={async (): Promise<void> => {
         await onClickSubmit(router, href, as, onSubmit);
