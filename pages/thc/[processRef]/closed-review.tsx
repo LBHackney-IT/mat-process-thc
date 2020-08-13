@@ -3,11 +3,11 @@ import {
   Heading,
   HeadingLevels,
   Paragraph,
-  Textarea,
+  PageAnnouncement,
 } from "lbh-frontend-react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Notes } from "storage/DatabaseSchema";
 import { makeSubmit } from "../../../components/makeSubmit";
 import { HouseholdReviewSection } from "../../../components/review-sections/HouseholdReviewSection";
@@ -24,7 +24,6 @@ import PageSlugs from "../../../steps/PageSlugs";
 import PageTitles from "../../../steps/PageTitles";
 import Storage from "../../../storage/Storage";
 import useDatabase from "helpers/useDatabase";
-import isManager from "helpers/isManager";
 
 const getSummaryText = (
   yesValue: string,
@@ -44,7 +43,6 @@ const ReviewPage: NextPage = () => {
   const router = useRouter();
   const processRef = getProcessRef(router);
   const processDatabase = useDatabase(Storage.ProcessContext);
-  const isInManagerStage = isManager(router);
 
   const managerComments = useDataValue(
     Storage.ProcessContext,
@@ -52,13 +50,6 @@ const ReviewPage: NextPage = () => {
     processRef,
     (values) => (processRef ? values[processRef] : undefined)
   );
-
-  const [managerComment, setManagerComment] = useState<string>("");
-  useEffect(() => {
-    if (managerComments.result !== undefined) {
-      setManagerComment(managerComments.result.closedReview);
-    }
-  }, [managerComments.result]);
 
   const tenants = useDataValue(
     Storage.ExternalContext,
@@ -209,7 +200,6 @@ const ReviewPage: NextPage = () => {
     slug: PageSlugs.Pause,
     value: "Exit process",
   });
-
   return (
     <MainLayout
       title={PageTitles.ClosedReview}
@@ -224,6 +214,13 @@ const ReviewPage: NextPage = () => {
         }}
         extraRows={extraRows}
       />
+
+      {managerComments.result?.managerReview && (
+        <PageAnnouncement title="Manager comment">
+          {managerComments.result?.managerReview}
+        </PageAnnouncement>
+      )}
+
       <IdAndResidencyReviewSection
         tenants={tenantsWithPresentStatus}
         readOnly
@@ -260,44 +257,12 @@ const ReviewPage: NextPage = () => {
             </React.Fragment>
           )
       )}
-      {isInManagerStage && (
-        <Textarea
-          name="manager-comment"
-          label={{
-            children: (
-              <Heading level={HeadingLevels.H2}>Manager&apos;s comment</Heading>
-            ),
-          }}
-          value={managerComment}
-          rows={4}
-          onChange={(value): void => setManagerComment(value)}
-        />
-      )}
       <SubmitButton
         onSubmit={async (): Promise<boolean> => {
           if (!processRef || !processDatabase.result) {
             return false;
           }
 
-          if (isInManagerStage) {
-            const comments = Object.assign(
-              {
-                closedReview: "",
-                managerReview: "",
-                unableToEnterClosedReview: "",
-                unableToEnterManagerReview: "",
-              },
-              managerComments.result,
-              {
-                closedReview: managerComment,
-              }
-            );
-            await processDatabase.result.put(
-              "managerComments",
-              processRef,
-              comments
-            );
-          }
           await processDatabase.result.put(
             "submitted",
             processRef,
