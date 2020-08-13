@@ -65,9 +65,7 @@ const ReviewPage: NextPage = () => {
 
   const comments = Object.assign(
     {
-      closedReview: "",
       managerReview: "",
-      unableToEnterClosedReview: "",
       unableToEnterManagerReview: "",
     },
     managerComments.result,

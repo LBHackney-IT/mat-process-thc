@@ -48,6 +48,17 @@ const UnableToEnterManagerReviewPage: NextPage = () => {
     }
   }, [managerComments.result]);
 
+  const comments = Object.assign(
+    {
+      managerReview: "",
+      unableToEnterManagerReview: "",
+    },
+    managerComments.result,
+    {
+      unableToEnterManagerReview: managerComment,
+    }
+  );
+
   const tenants = useDataValue(
     Storage.ExternalContext,
     "residents",
@@ -205,18 +216,6 @@ const UnableToEnterManagerReviewPage: NextPage = () => {
 
           await approveProcess(router);
 
-          const comments = Object.assign(
-            {
-              closedReview: "",
-              managerReview: "",
-              unableToEnterClosedReview: "",
-              unableToEnterManagerReview: "",
-            },
-            managerComments.result,
-            {
-              unableToEnterManagerReview: managerComment,
-            }
-          );
           await processDatabase.result.put(
             "managerComments",
             processRef,
@@ -236,18 +235,6 @@ const UnableToEnterManagerReviewPage: NextPage = () => {
 
           await declineProcess(router);
 
-          const comments = Object.assign(
-            {
-              closedReview: "",
-              managerReview: "",
-              unableToEnterClosedReview: "",
-              unableToEnterManagerReview: "",
-            },
-            managerComments.result,
-            {
-              unableToEnterManagerReview: managerComment,
-            }
-          );
           await processDatabase.result.put(
             "managerComments",
             processRef,

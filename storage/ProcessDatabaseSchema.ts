@@ -263,9 +263,7 @@ type ProcessDatabaseSchema = NamedSchema<
     managerComments: {
       key: ProcessRef;
       value: {
-        closedReview: string;
         managerReview: string;
-        unableToEnterClosedReview: string;
         unableToEnterManagerReview: string;
       };
     };
@@ -383,12 +381,7 @@ export const processNotesPaths: {
   ],
   other: ["notes"],
   unableToEnter: [],
-  managerComments: [
-    "closedReview",
-    "managerReview",
-    "unableToEnterClosedReview",
-    "unableToEnterManagerReview",
-  ],
+  managerComments: ["managerReview", "unableToEnterManagerReview"],
 
   // DEPRECATED. DO NOT REMOVE
   managerComment: [],
@@ -574,15 +567,7 @@ export const processPostVisitActionMap: {
     },
   },
   managerComments: {
-    closedReview: {
-      category: "30",
-      subcategory: "XXXXXXX",
-    },
     managerReview: {
-      category: "30",
-      subcategory: "XXXXXXX",
-    },
-    unableToEnterClosedReview: {
       category: "30",
       subcategory: "XXXXXXX",
     },
