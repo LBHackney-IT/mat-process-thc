@@ -4,12 +4,12 @@ import {
   HeadingLevels,
   Paragraph,
   PageAnnouncement,
+  Button,
 } from "lbh-frontend-react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React from "react";
 import { Notes } from "storage/DatabaseSchema";
-import { makeSubmit } from "../../../components/makeSubmit";
 import { HouseholdReviewSection } from "../../../components/review-sections/HouseholdReviewSection";
 import { IdAndResidencyReviewSection } from "../../../components/review-sections/IdAndResidencyReviewSection";
 import { PropertyInspectionReviewSection } from "../../../components/review-sections/PropertyInspectionReviewSection";
@@ -20,10 +20,8 @@ import getProcessRef from "../../../helpers/getProcessRef";
 import useDataSet from "../../../helpers/useDataSet";
 import useDataValue from "../../../helpers/useDataValue";
 import MainLayout from "../../../layouts/MainLayout";
-import PageSlugs from "../../../steps/PageSlugs";
 import PageTitles from "../../../steps/PageTitles";
 import Storage from "../../../storage/Storage";
-import useDatabase from "helpers/useDatabase";
 
 const getSummaryText = (
   yesValue: string,
@@ -42,7 +40,6 @@ const getSummaryText = (
 const ReviewPage: NextPage = () => {
   const router = useRouter();
   const processRef = getProcessRef(router);
-  const processDatabase = useDatabase(Storage.ProcessContext);
 
   const managerComments = useDataValue(
     Storage.ProcessContext,
@@ -196,10 +193,6 @@ const ReviewPage: NextPage = () => {
     },
   ].filter(({ value }) => value.length > 0);
 
-  const SubmitButton = makeSubmit({
-    slug: PageSlugs.Pause,
-    value: "Exit process",
-  });
   return (
     <MainLayout
       title={PageTitles.ClosedReview}
@@ -243,7 +236,7 @@ const ReviewPage: NextPage = () => {
         may amount to fraud and would put my tenancy at risk with the result
         that I may lose my home.
       </Paragraph>
-      <Paragraph>Date of visit: {submittedDateValue}</Paragraph>
+      <Paragraph>Date of submission: {submittedDateValue}</Paragraph>
       {tenantsPresent.map(
         ({ fullName, id }) =>
           signatureValues[id] && (
@@ -257,20 +250,15 @@ const ReviewPage: NextPage = () => {
             </React.Fragment>
           )
       )}
-      <SubmitButton
-        onSubmit={async (): Promise<boolean> => {
-          if (!processRef || !processDatabase.result) {
-            return false;
+      <Button
+        onClick={(): void => {
+          if (process.env.WORKTRAY_URL) {
+            location.assign(process.env.WORKTRAY_URL);
           }
-
-          await processDatabase.result.put(
-            "submitted",
-            processRef,
-            new Date().toISOString()
-          );
-          return true;
         }}
-      />
+      >
+        Exit process
+      </Button>
       <style jsx>{`
         .mat-tenancy-summary img {
           margin-right: 2em;
