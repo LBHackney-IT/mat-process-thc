@@ -1,13 +1,13 @@
 import formatDate from "date-fns/format";
 import {
   Paragraph,
-  Textarea,
   Heading,
   HeadingLevels,
+  PageAnnouncement,
 } from "lbh-frontend-react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { ReviewSection } from "../../../components/ReviewSection";
 import { TenancySummary } from "../../../components/TenancySummary";
 import getProcessRef from "../../../helpers/getProcessRef";
@@ -24,13 +24,11 @@ import PageSlugs from "../../../steps/PageSlugs";
 import useDataValue from "../../../helpers/useDataValue";
 import Thumbnail from "../../../components/Thumbnail";
 import useDatabase from "helpers/useDatabase";
-import isManager from "helpers/isManager";
 
 const UnableToEnterClosedReviewPage: NextPage = () => {
   const router = useRouter();
   const processRef = getProcessRef(router);
   const processDatabase = useDatabase(Storage.ProcessContext);
-  const isInManagerStage = isManager(router);
 
   const managerComments = useDataValue(
     Storage.ProcessContext,
@@ -38,14 +36,6 @@ const UnableToEnterClosedReviewPage: NextPage = () => {
     processRef,
     (values) => (processRef ? values[processRef] : undefined)
   );
-
-  const [managerComment, setManagerComment] = useState<string>("");
-
-  useEffect(() => {
-    if (managerComments.result !== undefined) {
-      setManagerComment(managerComments.result.unableToEnterClosedReview);
-    }
-  }, [managerComments.result]);
 
   const tenants = useDataValue(
     Storage.ExternalContext,
@@ -195,17 +185,21 @@ const UnableToEnterClosedReviewPage: NextPage = () => {
       title={PageTitles.UnableToEnterClosedReview}
       heading="Review Tenancy and Household Check"
     >
-      <React.Fragment>
-        <TenancySummary
-          details={{
-            address: address.result,
-            tenants: allTenantNames,
-            tenureType: tenureType.result,
-            startDate: tenancyStartDate.result,
-          }}
-          extraRows={extraRows}
-        />
-      </React.Fragment>
+      <TenancySummary
+        details={{
+          address: address.result,
+          tenants: allTenantNames,
+          tenureType: tenureType.result,
+          startDate: tenancyStartDate.result,
+        }}
+        extraRows={extraRows}
+      />
+
+      {managerComments.result?.unableToEnterManagerReview && (
+        <PageAnnouncement title="Manager comment">
+          {managerComments.result?.unableToEnterManagerReview}
+        </PageAnnouncement>
+      )}
 
       <ReviewSection
         heading={`First failed attempt: ${firstFailedAttemptDate}`}
@@ -234,43 +228,10 @@ const UnableToEnterClosedReviewPage: NextPage = () => {
         may amount to fraud and would put my tenancy at risk with the result
         that I may lose my home.
       </Paragraph>
-      {isInManagerStage && (
-        <Textarea
-          name="manager-comment"
-          label={{
-            children: (
-              <Heading level={HeadingLevels.H2}>Manager&apos;s comment</Heading>
-            ),
-          }}
-          value={managerComment}
-          rows={4}
-          onChange={(value): void => setManagerComment(value)}
-        />
-      )}
       <SubmitButton
         onSubmit={async (): Promise<boolean> => {
           if (!processRef || !processDatabase.result) {
             return false;
-          }
-
-          if (isInManagerStage) {
-            const comments = Object.assign(
-              {
-                closedReview: "",
-                managerReview: "",
-                unableToEnterClosedReview: "",
-                unableToEnterManagerReview: "",
-              },
-              managerComments.result,
-              {
-                unableToEnterClosedReview: managerComment,
-              }
-            );
-            await processDatabase.result.put(
-              "managerComments",
-              processRef,
-              comments
-            );
           }
 
           await processDatabase.result.put(
