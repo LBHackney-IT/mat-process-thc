@@ -9,14 +9,16 @@ export default <
   processData: T
 ): T => {
   for (const resident of Object.values(processData.residents)) {
-    const { month, year } = resident.carer.liveInStartDate as {
-      month?: number;
-      year?: number;
-    };
-    resident.carer.liveInStartDate = [
-      month === undefined ? `month: ${month}` : "",
-      year === undefined ? `year: ${year}` : "",
-    ].join(" / ");
+    if (resident.carer.liveInStartDate) {
+      const { month, year } = resident.carer.liveInStartDate as {
+        month?: number;
+        year?: number;
+      };
+      resident.carer.liveInStartDate = [
+        month === undefined ? `month: ${month}` : "",
+        year === undefined ? `year: ${year}` : "",
+      ].join(" / ");
+    }
   }
   return processData;
 };

@@ -254,10 +254,21 @@ type ProcessDatabaseSchema = NamedSchema<
           needsFraudInvestigationLetterReminder: boolean;
           fraudInvestigationLetterReminderCreatedAt: string;
         };
+
+        // DEPRECATED. DO NOT REMOVE
         otherNotes: string;
       };
     };
 
+    managerComments: {
+      key: ProcessRef;
+      value: {
+        managerReview: string;
+        unableToEnterManagerReview: string;
+      };
+    };
+
+    // DEPRECATED. DO NOT REMOVE
     managerComment: {
       key: ProcessRef;
       value: string;
@@ -305,6 +316,9 @@ const storeNames: {
   supportNeeds: true,
   other: true,
   unableToEnter: true,
+  managerComments: true,
+
+  // DEPRECATED. DO NOT REMOVE
   managerComment: true,
 };
 
@@ -367,6 +381,9 @@ export const processNotesPaths: {
   ],
   other: ["notes"],
   unableToEnter: [],
+  managerComments: ["managerReview", "unableToEnterManagerReview"],
+
+  // DEPRECATED. DO NOT REMOVE
   managerComment: [],
 };
 
@@ -549,6 +566,18 @@ export const processPostVisitActionMap: {
       subcategory: "100000310",
     },
   },
+  managerComments: {
+    managerReview: {
+      category: "30",
+      subcategory: "XXXXXXX",
+    },
+    unableToEnterManagerReview: {
+      category: "30",
+      subcategory: "XXXXXXX",
+    },
+  },
+
+  // DEPRECATED. DO NOT REMOVE
   managerComment: {},
 };
 

@@ -7,7 +7,7 @@ import {
 } from "lbh-frontend-react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ReviewSection } from "../../../components/ReviewSection";
 import { TenancySummary } from "../../../components/TenancySummary";
 import getProcessRef from "../../../helpers/getProcessRef";
@@ -32,6 +32,32 @@ const UnableToEnterManagerReviewPage: NextPage = () => {
   const router = useRouter();
   const processRef = getProcessRef(router);
   const processDatabase = useDatabase(Storage.ProcessContext);
+
+  const managerComments = useDataValue(
+    Storage.ProcessContext,
+    "managerComments",
+    processRef,
+    (values) => (processRef ? values[processRef] : undefined)
+  );
+
+  const [managerComment, setManagerComment] = useState<string>("");
+
+  useEffect(() => {
+    if (managerComments.result !== undefined) {
+      setManagerComment(managerComments.result.unableToEnterManagerReview);
+    }
+  }, [managerComments.result]);
+
+  const comments = Object.assign(
+    {
+      managerReview: "",
+      unableToEnterManagerReview: "",
+    },
+    managerComments.result,
+    {
+      unableToEnterManagerReview: managerComment,
+    }
+  );
 
   const tenants = useDataValue(
     Storage.ExternalContext,
@@ -121,8 +147,6 @@ const UnableToEnterManagerReviewPage: NextPage = () => {
     true
   );
 
-  const [managerComment, setManagerComment] = useState("");
-
   const allTenantNames = tenantsValue.map(({ fullName }) => fullName);
 
   return (
@@ -193,10 +217,11 @@ const UnableToEnterManagerReviewPage: NextPage = () => {
           await approveProcess(router);
 
           await processDatabase.result.put(
-            "managerComment",
+            "managerComments",
             processRef,
-            managerComment
+            comments
           );
+
           return true;
         }}
         status={ProcessStage.Approved}
@@ -211,9 +236,9 @@ const UnableToEnterManagerReviewPage: NextPage = () => {
           await declineProcess(router);
 
           await processDatabase.result.put(
-            "managerComment",
+            "managerComments",
             processRef,
-            managerComment
+            comments
           );
 
           return true;
