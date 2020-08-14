@@ -1,4 +1,8 @@
-import { FieldsetLegend } from "lbh-frontend-react/components";
+import {
+  FieldsetLegend,
+  HeadingLevels,
+  Heading,
+} from "lbh-frontend-react/components";
 import router, { useRouter } from "next/router";
 import React from "react";
 import {
@@ -114,7 +118,11 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "tenantsPresent"> = {
           props: {
             name: "tenants-present",
             legend: (
-              <FieldsetLegend>{questions["tenants-present"]}</FieldsetLegend>
+              <FieldsetLegend>
+                <Heading level={HeadingLevels.H3}>
+                  {questions["tenants-present"]}
+                </Heading>
+              </FieldsetLegend>
             ) as React.ReactNode,
           },
           required: true,

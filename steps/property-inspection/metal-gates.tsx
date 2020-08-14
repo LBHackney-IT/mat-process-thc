@@ -1,4 +1,8 @@
-import { FieldsetLegend } from "lbh-frontend-react/components";
+import {
+  FieldsetLegend,
+  Heading,
+  HeadingLevels,
+} from "lbh-frontend-react/components";
 import React from "react";
 import {
   ComponentDatabaseMap,
@@ -100,7 +104,11 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           props: {
             name: "has-metal-gates",
             legend: (
-              <FieldsetLegend>{questions["has-metal-gates"]}</FieldsetLegend>
+              <FieldsetLegend>
+                <Heading level={HeadingLevels.H3}>
+                  {questions["has-metal-gates"]}
+                </Heading>
+              </FieldsetLegend>
             ) as React.ReactNode,
             radios: yesNoRadios,
           },
@@ -124,7 +132,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             name: "combustible-items-behind-gates",
             legend: (
               <FieldsetLegend>
-                {questions["combustible-items-behind-gates"]}
+                <Heading level={HeadingLevels.H3}>
+                  {questions["combustible-items-behind-gates"]}
+                </Heading>
               </FieldsetLegend>
             ) as React.ReactNode,
             radios: yesNoRadios,
@@ -157,7 +167,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             name: "further-action-required",
             legend: (
               <FieldsetLegend>
-                {questions["further-action-required"]}
+                <Heading level={HeadingLevels.H3}>
+                  {questions["further-action-required"]}
+                </Heading>
               </FieldsetLegend>
             ) as React.ReactNode,
             radios: yesNoRadios,

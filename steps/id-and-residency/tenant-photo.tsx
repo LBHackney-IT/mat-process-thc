@@ -87,7 +87,9 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "photo"> = {
             name: "tenant-photo-willing",
             legend: (
               <FieldsetLegend>
-                Is the tenant willing to be photographed?
+                <Heading level={HeadingLevels.H3}>
+                  Is the tenant willing to be photographed?
+                </Heading>
               </FieldsetLegend>
             ) as React.ReactNode,
             radios: yesNoNotPresentRadio,

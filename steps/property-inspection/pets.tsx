@@ -1,4 +1,10 @@
-import { FieldsetLegend, Paragraph, Link } from "lbh-frontend-react/components";
+import {
+  FieldsetLegend,
+  Paragraph,
+  Link,
+  HeadingLevels,
+  Heading,
+} from "lbh-frontend-react/components";
 import React from "react";
 import {
   ComponentDatabaseMap,
@@ -161,7 +167,11 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           props: {
             name: "has-pets",
             legend: (
-              <FieldsetLegend>{questions["has-pets"]}</FieldsetLegend>
+              <FieldsetLegend>
+                <Heading level={HeadingLevels.H3}>
+                  {questions["has-pets"]}
+                </Heading>
+              </FieldsetLegend>
             ) as React.ReactNode,
             radios: yesNoRadios,
           },
@@ -184,7 +194,11 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           props: {
             name: "pet-type",
             legend: (
-              <FieldsetLegend>{questions["pet-type"]}</FieldsetLegend>
+              <FieldsetLegend>
+                <Heading level={HeadingLevels.H3}>
+                  {questions["pet-type"]}
+                </Heading>
+              </FieldsetLegend>
             ) as React.ReactNode,
             checkboxes: petRadios,
           } as CheckboxesProps,
@@ -212,7 +226,11 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           props: {
             name: "has-permission",
             legend: (
-              <FieldsetLegend>{questions["has-permission"]}</FieldsetLegend>
+              <FieldsetLegend>
+                <Heading level={HeadingLevels.H3}>
+                  {questions["has-permission"]}
+                </Heading>
+              </FieldsetLegend>
             ) as React.ReactNode,
             radios: yesNoRadios,
           },

@@ -127,7 +127,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "unableToEnter"> = {
             name: "why-unable-to-enter",
             legend: (
               <FieldsetLegend>
-                {questions["why-unable-to-enter"]}
+                <Heading level={HeadingLevels.H3}>
+                  {questions["why-unable-to-enter"]}
+                </Heading>
               </FieldsetLegend>
             ) as React.ReactNode,
             checkboxes: failedAttemptReasonCheckboxes,
@@ -151,7 +153,11 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "unableToEnter"> = {
           props: {
             name: "what-action",
             legend: (
-              <FieldsetLegend>{questions["what-action"]}</FieldsetLegend>
+              <FieldsetLegend>
+                <Heading level={HeadingLevels.H3}>
+                  {questions["what-action"]}
+                </Heading>
+              </FieldsetLegend>
             ) as React.ReactNode,
             checkboxes: failedAttemptActionCheckboxes,
           } as CheckboxesProps,

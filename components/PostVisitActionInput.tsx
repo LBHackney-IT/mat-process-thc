@@ -113,6 +113,12 @@ export const PostVisitActionInput: React.FunctionComponent<PostVisitActionInputP
           />
         </Details>
       )}
+
+      <style jsx>{`
+        :global(.lbh-form-group.postVisitActionInput.lbh-textarea) {
+          margin: 20px 0;
+        }
+      `}</style>
     </>
   );
 };

@@ -1,4 +1,8 @@
-import { FieldsetLegend } from "lbh-frontend-react/components";
+import {
+  FieldsetLegend,
+  Heading,
+  HeadingLevels,
+} from "lbh-frontend-react/components";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -132,7 +136,11 @@ export const DisabilityPage: NextPage = () => {
       <RadioButtons
         name="disability"
         legend={
-          <FieldsetLegend>{disabilityQuestions["disability"]}</FieldsetLegend>
+          <FieldsetLegend>
+            <Heading level={HeadingLevels.H3}>
+              {disabilityQuestions["disability"]}
+            </Heading>
+          </FieldsetLegend>
         }
         radios={yesNoRadios}
         disabled={disabled}
@@ -151,7 +159,9 @@ export const DisabilityPage: NextPage = () => {
             name="who-disability"
             legend={
               <FieldsetLegend>
-                {disabilityQuestions["who-disability"]}
+                <Heading level={HeadingLevels.H3}>
+                  {disabilityQuestions["who-disability"]}
+                </Heading>
               </FieldsetLegend>
             }
             disabled={disabled}
@@ -172,7 +182,11 @@ export const DisabilityPage: NextPage = () => {
                   key={id}
                   name={`what-disabilities-${id}`}
                   legend={
-                    <FieldsetLegend>How is {fullName} disabled?</FieldsetLegend>
+                    <FieldsetLegend>
+                      <Heading level={HeadingLevels.H3}>
+                        How is {fullName} disabled?
+                      </Heading>
+                    </FieldsetLegend>
                   }
                   checkboxes={disabilityCheckboxes}
                   disabled={disabled}
@@ -195,7 +209,9 @@ export const DisabilityPage: NextPage = () => {
             name="pip-or-dla"
             legend={
               <FieldsetLegend>
-                {disabilityQuestions["pip-or-dla"]}
+                <Heading level={HeadingLevels.H3}>
+                  {disabilityQuestions["pip-or-dla"]}
+                </Heading>
               </FieldsetLegend>
             }
             radios={yesNoRadios}
@@ -217,7 +233,9 @@ export const DisabilityPage: NextPage = () => {
                 name="who-pip"
                 legend={
                   <FieldsetLegend>
-                    {disabilityQuestions["who-pip"]}
+                    <Heading level={HeadingLevels.H3}>
+                      {disabilityQuestions["who-pip"]}
+                    </Heading>
                   </FieldsetLegend>
                 }
                 disabled={disabled}
@@ -236,7 +254,9 @@ export const DisabilityPage: NextPage = () => {
                 name="who-dla"
                 legend={
                   <FieldsetLegend>
-                    {disabilityQuestions["who-dla"]}
+                    <Heading level={HeadingLevels.H3}>
+                      {disabilityQuestions["who-dla"]}
+                    </Heading>
                   </FieldsetLegend>
                 }
                 disabled={disabled}
