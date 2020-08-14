@@ -259,7 +259,7 @@ const ReviewPage: NextPage = () => {
         may amount to fraud and would put my tenancy at risk with the result
         that I may lose my home.
       </Paragraph>
-      <Paragraph>Date of visit: {submittedDateValue}</Paragraph>
+      <Paragraph>Date of submission: {submittedDateValue}</Paragraph>
       {tenantsPresent.map(
         ({ fullName, id }) =>
           signatureValues[id] && (
