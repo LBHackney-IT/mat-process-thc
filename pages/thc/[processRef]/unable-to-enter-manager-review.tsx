@@ -23,6 +23,7 @@ import useDatabase from "../../../helpers/useDatabase";
 import MainLayout from "../../../layouts/MainLayout";
 import PageTitles from "../../../steps/PageTitles";
 import ManagerApprovedButton from "components/managerApprovedButton";
+import { approveProcess } from "helpers/transferProcess";
 
 const UnableToEnterManagerReviewPage: NextPage = () => {
   const router = useRouter();
@@ -210,7 +211,7 @@ const UnableToEnterManagerReviewPage: NextPage = () => {
             return false;
           }
 
-          // await approveProcess(router);
+          await approveProcess(router);
 
           await processDatabase.result.put(
             "managerComments",

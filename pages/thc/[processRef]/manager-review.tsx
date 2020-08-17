@@ -18,7 +18,10 @@ import { TenancySummary } from "../../../components/TenancySummary";
 import Thumbnail from "../../../components/Thumbnail";
 import getProcessRef from "../../../helpers/getProcessRef";
 import { ProcessStage } from "../../../helpers/ProcessStage";
-import { declineProcess } from "../../../helpers/transferProcess";
+import {
+  declineProcess,
+  approveProcess,
+} from "../../../helpers/transferProcess";
 import useDatabase from "../../../helpers/useDatabase";
 import useDataSet from "../../../helpers/useDataSet";
 import useDataValue from "../../../helpers/useDataValue";
@@ -288,7 +291,7 @@ const ReviewPage: NextPage = () => {
             return false;
           }
 
-          // await approveProcess(router);
+          await approveProcess(router);
 
           await processDatabase.result.put(
             "managerComments",
