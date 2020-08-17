@@ -1,4 +1,8 @@
-import { FieldsetLegend } from "lbh-frontend-react/components";
+import {
+  FieldsetLegend,
+  HeadingLevels,
+  Heading,
+} from "lbh-frontend-react/components";
 import router from "next/router";
 import React from "react";
 import {
@@ -137,7 +141,11 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "healthConcerns"> = {
           props: {
             name: "health-concerns",
             legend: (
-              <FieldsetLegend>{questions["health-concerns"]}</FieldsetLegend>
+              <FieldsetLegend>
+                <Heading level={HeadingLevels.H3}>
+                  {questions["health-concerns"]}
+                </Heading>
+              </FieldsetLegend>
             ) as React.ReactNode,
             radios: yesNoRadios,
           },
@@ -161,7 +169,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "healthConcerns"> = {
             name: "health-concerns-who",
             legend: (
               <FieldsetLegend>
-                {questions["health-concerns-who"]}
+                <Heading level={HeadingLevels.H3}>
+                  {questions["health-concerns-who"]}
+                </Heading>
               </FieldsetLegend>
             ) as React.ReactNode,
           },
@@ -193,7 +203,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "healthConcerns"> = {
             name: "health-concerns-more-info",
             legend: (
               <FieldsetLegend>
-                {questions["health-concerns-more-info"]}
+                <Heading level={HeadingLevels.H3}>
+                  {questions["health-concerns-more-info"]}
+                </Heading>
               </FieldsetLegend>
             ) as React.ReactNode,
             checkboxes: healthConcernsCheckboxes,

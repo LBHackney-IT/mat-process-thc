@@ -4,6 +4,8 @@ import {
   ListProps,
   ListTypes,
   Paragraph,
+  HeadingLevels,
+  Heading,
 } from "lbh-frontend-react/components";
 import React from "react";
 import {
@@ -73,9 +75,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           key: "paragraph-1",
           Component: Paragraph,
           props: {
-            children: `Antisocial behaviour is defined as "behaviour by a 
-            person which causes, or is likely to cause, harassment, alarm or 
-            distress to one or more persons not of the same household as the 
+            children: `Antisocial behaviour is defined as "behaviour by a
+            person which causes, or is likely to cause, harassment, alarm or
+            distress to one or more persons not of the same household as the
             person".`,
           },
         })
@@ -110,7 +112,11 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           props: {
             name: "tenant-understands",
             legend: (
-              <FieldsetLegend>{questions["tenant-understands"]}</FieldsetLegend>
+              <FieldsetLegend>
+                <Heading level={HeadingLevels.H3}>
+                  {questions["tenant-understands"]}
+                </Heading>
+              </FieldsetLegend>
             ) as React.ReactNode,
             radios: yesNoRadios,
           },

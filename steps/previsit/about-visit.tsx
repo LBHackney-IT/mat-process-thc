@@ -1,4 +1,8 @@
-import { FieldsetLegend } from "lbh-frontend-react/components";
+import {
+  FieldsetLegend,
+  Heading,
+  HeadingLevels,
+} from "lbh-frontend-react/components";
 import React from "react";
 import {
   ComponentDatabaseMap,
@@ -34,7 +38,11 @@ const step = {
           props: {
             name: "unannounced-visit",
             legend: (
-              <FieldsetLegend>Is this an unannounced visit?</FieldsetLegend>
+              <FieldsetLegend>
+                <Heading level={HeadingLevels.H3}>
+                  Is this an unannounced visit?
+                </Heading>
+              </FieldsetLegend>
             ) as React.ReactNode,
             radios: [
               {
@@ -97,7 +105,9 @@ const step = {
             name: "inside-property",
             legend: (
               <FieldsetLegend>
-                Is it taking place inside a tenant&apos;s home?
+                <Heading level={HeadingLevels.H3}>
+                  Is it taking place inside a tenant&apos;s home?
+                </Heading>
               </FieldsetLegend>
             ) as React.ReactNode,
             radios: [

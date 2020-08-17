@@ -153,7 +153,11 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
           props: {
             name: "carer-needed",
             legend: (
-              <FieldsetLegend>{questions["carer-needed"]}</FieldsetLegend>
+              <FieldsetLegend>
+                <Heading level={HeadingLevels.H3}>
+                  {questions["carer-needed"]}
+                </Heading>
+              </FieldsetLegend>
             ) as React.ReactNode,
             radios: yesNoRadios,
           },
@@ -176,7 +180,11 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
           props: {
             name: "carer-type",
             legend: (
-              <FieldsetLegend>{questions["carer-type"]}</FieldsetLegend>
+              <FieldsetLegend>
+                <Heading level={HeadingLevels.H3}>
+                  {questions["carer-type"]}
+                </Heading>
+              </FieldsetLegend>
             ) as React.ReactNode,
             radios: carerTypeRadios,
           },
@@ -204,7 +212,11 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "carer"> = {
           props: {
             name: "carer-live-in",
             legend: (
-              <FieldsetLegend>{questions["carer-live-in"]}</FieldsetLegend>
+              <FieldsetLegend>
+                <Heading level={HeadingLevels.H3}>
+                  {questions["carer-live-in"]}
+                </Heading>
+              </FieldsetLegend>
             ) as React.ReactNode,
             radios: yesNoRadios,
           },

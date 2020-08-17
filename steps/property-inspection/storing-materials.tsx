@@ -1,5 +1,9 @@
 import ProcessStepDefinition from "helpers/ProcessStepDefinition";
-import { FieldsetLegend } from "lbh-frontend-react/components";
+import {
+  FieldsetLegend,
+  Heading,
+  HeadingLevels,
+} from "lbh-frontend-react/components";
 import React from "react";
 import {
   ComponentDatabaseMap,
@@ -81,7 +85,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             name: "is-storing-materials",
             legend: (
               <FieldsetLegend>
-                {questions["is-storing-materials"]}
+                <Heading level={HeadingLevels.H3}>
+                  {questions["is-storing-materials"]}
+                </Heading>
               </FieldsetLegend>
             ) as React.ReactNode,
             radios: yesNoRadios,
@@ -106,7 +112,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             name: "further-action-required",
             legend: (
               <FieldsetLegend>
-                {questions["further-action-required"]}
+                <Heading level={HeadingLevels.H3}>
+                  {questions["further-action-required"]}
+                </Heading>
               </FieldsetLegend>
             ) as React.ReactNode,
             radios: yesNoRadios,

@@ -1,4 +1,4 @@
-import { FieldsetLegend } from "lbh-frontend-react";
+import { FieldsetLegend, Heading, HeadingLevels } from "lbh-frontend-react";
 import React from "react";
 import {
   ComponentDatabaseMap,
@@ -110,7 +110,9 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "id"> = {
           props: {
             name: "id-type",
             legend: (
-              <FieldsetLegend>What type of ID?</FieldsetLegend>
+              <FieldsetLegend>
+                <Heading level={HeadingLevels.H3}>What type of ID?</Heading>
+              </FieldsetLegend>
             ) as React.ReactNode,
             radios: idTypeRadios,
           },

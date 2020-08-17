@@ -1,4 +1,8 @@
-import { FieldsetLegend } from "lbh-frontend-react/components";
+import {
+  FieldsetLegend,
+  Heading,
+  HeadingLevels,
+} from "lbh-frontend-react/components";
 import React from "react";
 import {
   ComponentDatabaseMap,
@@ -69,7 +73,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             name: "can-enter-all-rooms",
             legend: (
               <FieldsetLegend>
-                {questions["can-enter-all-rooms"]}
+                <Heading level={HeadingLevels.H3}>
+                  {questions["can-enter-all-rooms"]}
+                </Heading>
               </FieldsetLegend>
             ) as React.ReactNode,
             radios: yesNoRadios,

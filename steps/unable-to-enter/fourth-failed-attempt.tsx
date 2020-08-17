@@ -120,7 +120,9 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "unableToEnter"> = {
             name: "why-unable-to-enter",
             legend: (
               <FieldsetLegend>
-                {questions["why-unable-to-enter"]}
+                <Heading level={HeadingLevels.H3}>
+                  {questions["why-unable-to-enter"]}
+                </Heading>
               </FieldsetLegend>
             ) as React.ReactNode,
             checkboxes: failedAttemptReasonCheckboxes,

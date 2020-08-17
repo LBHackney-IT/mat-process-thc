@@ -1,4 +1,8 @@
-import { FieldsetLegend } from "lbh-frontend-react/components";
+import {
+  FieldsetLegend,
+  HeadingLevels,
+  Heading,
+} from "lbh-frontend-react/components";
 import { Paragraph } from "lbh-frontend-react/components/typography/Paragraph";
 import React from "react";
 import {
@@ -77,7 +81,11 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "homeCheck"> = {
           props: {
             name: "home-check",
             legend: (
-              <FieldsetLegend>{questions["home-check"]}</FieldsetLegend>
+              <FieldsetLegend>
+                <Heading level={HeadingLevels.H3}>
+                  {questions["home-check"]}
+                </Heading>
+              </FieldsetLegend>
             ) as React.ReactNode,
             radios: yesNoRadios,
           },

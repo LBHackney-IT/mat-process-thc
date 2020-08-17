@@ -22,8 +22,8 @@ import { ProcessStage } from "helpers/ProcessStage";
 import useDatabase from "../../../helpers/useDatabase";
 import MainLayout from "../../../layouts/MainLayout";
 import PageTitles from "../../../steps/PageTitles";
-import { approveProcess } from "../../../helpers/transferProcess";
 import ManagerApprovedButton from "components/managerApprovedButton";
+import { approveProcess } from "helpers/transferProcess";
 
 const UnableToEnterManagerReviewPage: NextPage = () => {
   const router = useRouter();

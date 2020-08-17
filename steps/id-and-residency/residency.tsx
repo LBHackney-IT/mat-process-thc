@@ -1,4 +1,8 @@
-import { FieldsetLegend } from "lbh-frontend-react/components";
+import {
+  FieldsetLegend,
+  HeadingLevels,
+  Heading,
+} from "lbh-frontend-react/components";
 import React from "react";
 import {
   ComponentDatabaseMap,
@@ -122,7 +126,11 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "residency"> = {
           props: {
             name: "residency-proof-type",
             legend: (
-              <FieldsetLegend>What type of proof of residency?</FieldsetLegend>
+              <FieldsetLegend>
+                <Heading level={HeadingLevels.H3}>
+                  What type of proof of residency?
+                </Heading>
+              </FieldsetLegend>
             ) as React.ReactNode,
             radios: residencyProofTypeRadios,
           },
