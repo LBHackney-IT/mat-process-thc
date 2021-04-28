@@ -1,0 +1,46 @@
+version: 2
+updates:
+- package-ecosystem: docker
+  directory: "/"
+  schedule:
+    interval: weekly
+    time: "10:00"
+  open-pull-requests-limit: 10
+  allow:
+  - dependency-type: all
+  ignore:
+  - dependency-name: node
+    versions:
+    - ">= 13.a, < 14"
+  - dependency-name: node
+    versions:
+    - 15.10.0.pre.alpine
+    - 15.11.0.pre.alpine
+    - 15.12.0.pre.alpine
+    - 15.13.0.pre.alpine
+    - 15.6.0.pre.alpine
+    - 15.7.0.pre.alpine
+    - 15.8.0.pre.alpine
+    - 15.9.0.pre.alpine
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: weekly
+    time: "10:00"
+  open-pull-requests-limit: 10
+  versioning-strategy: increase
+  allow:
+  - dependency-type: all
+  ignore:
+  - dependency-name: "@types/node"
+    versions:
+    - ">= 13.a, < 14"
+  - dependency-name: y18n
+    versions:
+    - 4.0.1
+  - dependency-name: "@babel/plugin-transform-sticky-regex"
+    versions:
+    - 7.10.4
+  - dependency-name: lodash
+    versions:
+    - 4.17.20
