@@ -35,7 +35,7 @@
     "jsonwebtoken": "^8.5.1",
     "lbh-frontend-react": "^0.3.2",
     "lodash": "^4.17.19",
-    "next": "9.4.4",
+    "next": "11.1.0",
     "next-offline": "^5.0.2",
     "null-as-undefined": "^0.2.1",
     "prop-types": "^15.7.2",
